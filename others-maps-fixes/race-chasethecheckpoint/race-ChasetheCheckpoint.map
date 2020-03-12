@@ -1,0 +1,398 @@
+<map edf:definitions="race,editor_main">
+    <checkpoint id="CP1" type="corona" color="#FFFFFF" size="0.001" nextid="CP2" posX="80" posY="4077.5" posZ="105" rotX="0" rotY="0" rotZ="0"></checkpoint>
+    <checkpoint id="CP2" type="corona" color="#FFFFFF" size="0.001" nextid="CP3" posX="80" posY="4077.5" posZ="105" rotX="0" rotY="0" rotZ="0"></checkpoint>
+    <checkpoint id="CP3" type="corona" color="#FFFFFF" size="0.001" nextid="CP4" posX="80" posY="4077.5" posZ="105" rotX="0" rotY="0" rotZ="0"></checkpoint>
+    <checkpoint id="CP4" type="corona" color="#FFFFFF" size="0.001" nextid="CP5" posX="80" posY="4077.5" posZ="105" rotX="0" rotY="0" rotZ="0"></checkpoint>
+    <checkpoint id="CP5" type="corona" color="#FFFFFF" size="0.001" nextid="CP6" posX="80" posY="4077.5" posZ="105" rotX="0" rotY="0" rotZ="0"></checkpoint>
+    <checkpoint id="CP6" type="corona" color="#FFFFFF" size="0.001" nextid="CP7" posX="80" posY="4077.5" posZ="105" rotX="0" rotY="0" rotZ="0"></checkpoint>
+    <checkpoint id="CP7" type="corona" color="#FFFFFF" size="0.001" nextid="CP8" posX="80" posY="4077.5" posZ="105" rotX="0" rotY="0" rotZ="0"></checkpoint>
+    <checkpoint id="CP8" type="corona" color="#FFFFFF" size="0.001" nextid="CP9" posX="80" posY="4077.5" posZ="105" rotX="0" rotY="0" rotZ="0"></checkpoint>
+    <checkpoint id="CP9" type="corona" color="#FFFFFF" size="0.001" nextid="CP0" posX="80" posY="4077.5" posZ="105" rotX="0" rotY="0" rotZ="0"></checkpoint>
+    
+	<object id="plank11N1" breakable="true" interior="0" collisions="true" alpha="255" model="3458" doublesided="false" scale="1" dimension="0" posX="20" posY="4000" posZ="59.9" rotX="0" rotY="0" rotZ="0"></object>
+    <object id="plank11N2" breakable="true" interior="0" collisions="true" alpha="255" model="3458" doublesided="false" scale="1" dimension="0" posX="20" posY="4005" posZ="59.9" rotX="0" rotY="0" rotZ="0"></object>
+    <object id="plank11N3" breakable="true" interior="0" collisions="true" alpha="255" model="3458" doublesided="false" scale="1" dimension="0" posX="20" posY="4030" posZ="59.9" rotX="0" rotY="0" rotZ="0"></object>
+    <object id="plank11N4" breakable="true" interior="0" collisions="true" alpha="255" model="3458" doublesided="false" scale="1" dimension="0" posX="20" posY="4035" posZ="59.9" rotX="0" rotY="0" rotZ="0"></object>
+    <object id="plank11D1" breakable="true" interior="0" collisions="true" alpha="255" model="3458" doublesided="false" scale="1" dimension="0" posX="2.5" posY="4017.5" posZ="60" rotX="0" rotY="0" rotZ="90"></object>
+    <object id="plank11D2" breakable="true" interior="0" collisions="true" alpha="255" model="3458" doublesided="false" scale="1" dimension="0" posX="7.5" posY="4017.5" posZ="60" rotX="0" rotY="0" rotZ="90"></object>
+    <object id="plank11D3" breakable="true" interior="0" collisions="true" alpha="255" model="3458" doublesided="false" scale="1" dimension="0" posX="32.5" posY="4017.5" posZ="60" rotX="0" rotY="0" rotZ="90"></object>
+    <object id="plank11D4" breakable="true" interior="0" collisions="true" alpha="255" model="3458" doublesided="false" scale="1" dimension="0" posX="37.5" posY="4017.5" posZ="60" rotX="0" rotY="0" rotZ="90"></object>
+    <object id="plank21N1" breakable="true" interior="0" collisions="true" alpha="255" model="3458" doublesided="false" scale="1" dimension="0" posX="60" posY="4000" posZ="59.9" rotX="0" rotY="0" rotZ="0"></object>
+    <object id="plank21N2" breakable="true" interior="0" collisions="true" alpha="255" model="3458" doublesided="false" scale="1" dimension="0" posX="60" posY="4005" posZ="59.9" rotX="0" rotY="0" rotZ="0"></object>
+    <object id="plank21N3" breakable="true" interior="0" collisions="true" alpha="255" model="3458" doublesided="false" scale="1" dimension="0" posX="60" posY="4030" posZ="59.9" rotX="0" rotY="0" rotZ="0"></object>
+    <object id="plank21N4" breakable="true" interior="0" collisions="true" alpha="255" model="3458" doublesided="false" scale="1" dimension="0" posX="60" posY="4035" posZ="59.9" rotX="0" rotY="0" rotZ="0"></object>
+    <object id="plank21D1" breakable="true" interior="0" collisions="true" alpha="255" model="3458" doublesided="false" scale="1" dimension="0" posX="42.5" posY="4017.5" posZ="60" rotX="0" rotY="0" rotZ="90"></object>
+    <object id="plank21D2" breakable="true" interior="0" collisions="true" alpha="255" model="3458" doublesided="false" scale="1" dimension="0" posX="47.5" posY="4017.5" posZ="60" rotX="0" rotY="0" rotZ="90"></object>
+    <object id="plank21D3" breakable="true" interior="0" collisions="true" alpha="255" model="3458" doublesided="false" scale="1" dimension="0" posX="72.5" posY="4017.5" posZ="60" rotX="0" rotY="0" rotZ="90"></object>
+    <object id="plank21D4" breakable="true" interior="0" collisions="true" alpha="255" model="3458" doublesided="false" scale="1" dimension="0" posX="77.5" posY="4017.5" posZ="60" rotX="0" rotY="0" rotZ="90"></object>
+    <object id="plank31N1" breakable="true" interior="0" collisions="true" alpha="255" model="3458" doublesided="false" scale="1" dimension="0" posX="100" posY="4000" posZ="59.9" rotX="0" rotY="0" rotZ="0"></object>
+    <object id="plank31N2" breakable="true" interior="0" collisions="true" alpha="255" model="3458" doublesided="false" scale="1" dimension="0" posX="100" posY="4005" posZ="59.9" rotX="0" rotY="0" rotZ="0"></object>
+    <object id="plank31N3" breakable="true" interior="0" collisions="true" alpha="255" model="3458" doublesided="false" scale="1" dimension="0" posX="100" posY="4030" posZ="59.9" rotX="0" rotY="0" rotZ="0"></object>
+    <object id="plank31N4" breakable="true" interior="0" collisions="true" alpha="255" model="3458" doublesided="false" scale="1" dimension="0" posX="100" posY="4035" posZ="59.9" rotX="0" rotY="0" rotZ="0"></object>
+    <object id="plank31D1" breakable="true" interior="0" collisions="true" alpha="255" model="3458" doublesided="false" scale="1" dimension="0" posX="82.5" posY="4017.5" posZ="60" rotX="0" rotY="0" rotZ="90"></object>
+    <object id="plank31D2" breakable="true" interior="0" collisions="true" alpha="255" model="3458" doublesided="false" scale="1" dimension="0" posX="87.5" posY="4017.5" posZ="60" rotX="0" rotY="0" rotZ="90"></object>
+    <object id="plank31D3" breakable="true" interior="0" collisions="true" alpha="255" model="3458" doublesided="false" scale="1" dimension="0" posX="112.5" posY="4017.5" posZ="60" rotX="0" rotY="0" rotZ="90"></object>
+    <object id="plank31D4" breakable="true" interior="0" collisions="true" alpha="255" model="3458" doublesided="false" scale="1" dimension="0" posX="117.5" posY="4017.5" posZ="60" rotX="0" rotY="0" rotZ="90"></object>
+    <object id="plank41N1" breakable="true" interior="0" collisions="true" alpha="255" model="3458" doublesided="false" scale="1" dimension="0" posX="140" posY="4000" posZ="59.9" rotX="0" rotY="0" rotZ="0"></object>
+    <object id="plank41N2" breakable="true" interior="0" collisions="true" alpha="255" model="3458" doublesided="false" scale="1" dimension="0" posX="140" posY="4005" posZ="59.9" rotX="0" rotY="0" rotZ="0"></object>
+    <object id="plank41N3" breakable="true" interior="0" collisions="true" alpha="255" model="3458" doublesided="false" scale="1" dimension="0" posX="140" posY="4030" posZ="59.9" rotX="0" rotY="0" rotZ="0"></object>
+    <object id="plank41N4" breakable="true" interior="0" collisions="true" alpha="255" model="3458" doublesided="false" scale="1" dimension="0" posX="140" posY="4035" posZ="59.9" rotX="0" rotY="0" rotZ="0"></object>
+    <object id="plank41D1" breakable="true" interior="0" collisions="true" alpha="255" model="3458" doublesided="false" scale="1" dimension="0" posX="122.5" posY="4017.5" posZ="60" rotX="0" rotY="0" rotZ="90"></object>
+    <object id="plank41D2" breakable="true" interior="0" collisions="true" alpha="255" model="3458" doublesided="false" scale="1" dimension="0" posX="127.5" posY="4017.5" posZ="60" rotX="0" rotY="0" rotZ="90"></object>
+    <object id="plank41D3" breakable="true" interior="0" collisions="true" alpha="255" model="3458" doublesided="false" scale="1" dimension="0" posX="152.5" posY="4017.5" posZ="60" rotX="0" rotY="0" rotZ="90"></object>
+    <object id="plank41D4" breakable="true" interior="0" collisions="true" alpha="255" model="3458" doublesided="false" scale="1" dimension="0" posX="157.5" posY="4017.5" posZ="60" rotX="0" rotY="0" rotZ="90"></object>
+    
+	<object id="plank12N1" breakable="true" interior="0" collisions="true" alpha="255" model="3458" doublesided="false" scale="1" dimension="0" posX="20" posY="4040" posZ="59.9" rotX="0" rotY="0" rotZ="0"></object>
+    <object id="plank12N2" breakable="true" interior="0" collisions="true" alpha="255" model="3458" doublesided="false" scale="1" dimension="0" posX="20" posY="4045" posZ="59.9" rotX="0" rotY="0" rotZ="0"></object>
+    <object id="plank12N3" breakable="true" interior="0" collisions="true" alpha="255" model="3458" doublesided="false" scale="1" dimension="0" posX="20" posY="4070" posZ="59.9" rotX="0" rotY="0" rotZ="0"></object>
+    <object id="plank12N4" breakable="true" interior="0" collisions="true" alpha="255" model="3458" doublesided="false" scale="1" dimension="0" posX="20" posY="4075" posZ="59.9" rotX="0" rotY="0" rotZ="0"></object>
+    <object id="plank12D1" breakable="true" interior="0" collisions="true" alpha="255" model="3458" doublesided="false" scale="1" dimension="0" posX="2.5" posY="4057.5" posZ="60" rotX="0" rotY="0" rotZ="90"></object>
+    <object id="plank12D2" breakable="true" interior="0" collisions="true" alpha="255" model="3458" doublesided="false" scale="1" dimension="0" posX="7.5" posY="4057.5" posZ="60" rotX="0" rotY="0" rotZ="90"></object>
+    <object id="plank12D3" breakable="true" interior="0" collisions="true" alpha="255" model="3458" doublesided="false" scale="1" dimension="0" posX="32.5" posY="4057.5" posZ="60" rotX="0" rotY="0" rotZ="90"></object>
+    <object id="plank12D4" breakable="true" interior="0" collisions="true" alpha="255" model="3458" doublesided="false" scale="1" dimension="0" posX="37.5" posY="4057.5" posZ="60" rotX="0" rotY="0" rotZ="90"></object>
+    <object id="plank22N1" breakable="true" interior="0" collisions="true" alpha="255" model="3458" doublesided="false" scale="1" dimension="0" posX="60" posY="4040" posZ="59.9" rotX="0" rotY="0" rotZ="0"></object>
+    <object id="plank22N2" breakable="true" interior="0" collisions="true" alpha="255" model="3458" doublesided="false" scale="1" dimension="0" posX="60" posY="4045" posZ="59.9" rotX="0" rotY="0" rotZ="0"></object>
+    <object id="plank22N3" breakable="true" interior="0" collisions="true" alpha="255" model="3458" doublesided="false" scale="1" dimension="0" posX="60" posY="4070" posZ="59.9" rotX="0" rotY="0" rotZ="0"></object>
+    <object id="plank22N4" breakable="true" interior="0" collisions="true" alpha="255" model="3458" doublesided="false" scale="1" dimension="0" posX="60" posY="4075" posZ="59.9" rotX="0" rotY="0" rotZ="0"></object>
+    <object id="plank22D1" breakable="true" interior="0" collisions="true" alpha="255" model="3458" doublesided="false" scale="1" dimension="0" posX="42.5" posY="4057.5" posZ="60" rotX="0" rotY="0" rotZ="90"></object>
+    <object id="plank22D2" breakable="true" interior="0" collisions="true" alpha="255" model="3458" doublesided="false" scale="1" dimension="0" posX="47.5" posY="4057.5" posZ="60" rotX="0" rotY="0" rotZ="90"></object>
+    <object id="plank22D3" breakable="true" interior="0" collisions="true" alpha="255" model="3458" doublesided="false" scale="1" dimension="0" posX="72.5" posY="4057.5" posZ="60" rotX="0" rotY="0" rotZ="90"></object>
+    <object id="plank22D4" breakable="true" interior="0" collisions="true" alpha="255" model="3458" doublesided="false" scale="1" dimension="0" posX="77.5" posY="4057.5" posZ="60" rotX="0" rotY="0" rotZ="90"></object>
+    <object id="plank32N1" breakable="true" interior="0" collisions="true" alpha="255" model="3458" doublesided="false" scale="1" dimension="0" posX="100" posY="4040" posZ="59.9" rotX="0" rotY="0" rotZ="0"></object>
+    <object id="plank32N2" breakable="true" interior="0" collisions="true" alpha="255" model="3458" doublesided="false" scale="1" dimension="0" posX="100" posY="4045" posZ="59.9" rotX="0" rotY="0" rotZ="0"></object>
+    <object id="plank32N3" breakable="true" interior="0" collisions="true" alpha="255" model="3458" doublesided="false" scale="1" dimension="0" posX="100" posY="4070" posZ="59.9" rotX="0" rotY="0" rotZ="0"></object>
+    <object id="plank32N4" breakable="true" interior="0" collisions="true" alpha="255" model="3458" doublesided="false" scale="1" dimension="0" posX="100" posY="4075" posZ="59.9" rotX="0" rotY="0" rotZ="0"></object>
+    <object id="plank32D1" breakable="true" interior="0" collisions="true" alpha="255" model="3458" doublesided="false" scale="1" dimension="0" posX="82.5" posY="4057.5" posZ="60" rotX="0" rotY="0" rotZ="90"></object>
+    <object id="plank32D2" breakable="true" interior="0" collisions="true" alpha="255" model="3458" doublesided="false" scale="1" dimension="0" posX="87.5" posY="4057.5" posZ="60" rotX="0" rotY="0" rotZ="90"></object>
+    <object id="plank32D3" breakable="true" interior="0" collisions="true" alpha="255" model="3458" doublesided="false" scale="1" dimension="0" posX="112.5" posY="4057.5" posZ="60" rotX="0" rotY="0" rotZ="90"></object>
+    <object id="plank32D4" breakable="true" interior="0" collisions="true" alpha="255" model="3458" doublesided="false" scale="1" dimension="0" posX="117.5" posY="4057.5" posZ="60" rotX="0" rotY="0" rotZ="90"></object>
+    <object id="plank42N1" breakable="true" interior="0" collisions="true" alpha="255" model="3458" doublesided="false" scale="1" dimension="0" posX="140" posY="4040" posZ="59.9" rotX="0" rotY="0" rotZ="0"></object>
+    <object id="plank42N2" breakable="true" interior="0" collisions="true" alpha="255" model="3458" doublesided="false" scale="1" dimension="0" posX="140" posY="4045" posZ="59.9" rotX="0" rotY="0" rotZ="0"></object>
+    <object id="plank42N3" breakable="true" interior="0" collisions="true" alpha="255" model="3458" doublesided="false" scale="1" dimension="0" posX="140" posY="4070" posZ="59.9" rotX="0" rotY="0" rotZ="0"></object>
+    <object id="plank42N4" breakable="true" interior="0" collisions="true" alpha="255" model="3458" doublesided="false" scale="1" dimension="0" posX="140" posY="4075" posZ="59.9" rotX="0" rotY="0" rotZ="0"></object>
+    <object id="plank42D1" breakable="true" interior="0" collisions="true" alpha="255" model="3458" doublesided="false" scale="1" dimension="0" posX="122.5" posY="4057.5" posZ="60" rotX="0" rotY="0" rotZ="90"></object>
+    <object id="plank42D2" breakable="true" interior="0" collisions="true" alpha="255" model="3458" doublesided="false" scale="1" dimension="0" posX="127.5" posY="4057.5" posZ="60" rotX="0" rotY="0" rotZ="90"></object>
+    <object id="plank42D3" breakable="true" interior="0" collisions="true" alpha="255" model="3458" doublesided="false" scale="1" dimension="0" posX="152.5" posY="4057.5" posZ="60" rotX="0" rotY="0" rotZ="90"></object>
+    <object id="plank42D4" breakable="true" interior="0" collisions="true" alpha="255" model="3458" doublesided="false" scale="1" dimension="0" posX="157.5" posY="4057.5" posZ="60" rotX="0" rotY="0" rotZ="90"></object>
+    
+	<object id="plank13N1" breakable="true" interior="0" collisions="true" alpha="255" model="3458" doublesided="false" scale="1" dimension="0" posX="20" posY="4080" posZ="59.9" rotX="0" rotY="0" rotZ="0"></object>
+    <object id="plank13N2" breakable="true" interior="0" collisions="true" alpha="255" model="3458" doublesided="false" scale="1" dimension="0" posX="20" posY="4085" posZ="59.9" rotX="0" rotY="0" rotZ="0"></object>
+    <object id="plank13N3" breakable="true" interior="0" collisions="true" alpha="255" model="3458" doublesided="false" scale="1" dimension="0" posX="20" posY="4110" posZ="59.9" rotX="0" rotY="0" rotZ="0"></object>
+    <object id="plank13N4" breakable="true" interior="0" collisions="true" alpha="255" model="3458" doublesided="false" scale="1" dimension="0" posX="20" posY="4115" posZ="59.9" rotX="0" rotY="0" rotZ="0"></object>
+    <object id="plank13D1" breakable="true" interior="0" collisions="true" alpha="255" model="3458" doublesided="false" scale="1" dimension="0" posX="2.5" posY="4097.5" posZ="60" rotX="0" rotY="0" rotZ="90"></object>
+    <object id="plank13D2" breakable="true" interior="0" collisions="true" alpha="255" model="3458" doublesided="false" scale="1" dimension="0" posX="7.5" posY="4097.5" posZ="60" rotX="0" rotY="0" rotZ="90"></object>
+    <object id="plank13D3" breakable="true" interior="0" collisions="true" alpha="255" model="3458" doublesided="false" scale="1" dimension="0" posX="32.5" posY="4097.5" posZ="60" rotX="0" rotY="0" rotZ="90"></object>
+    <object id="plank13D4" breakable="true" interior="0" collisions="true" alpha="255" model="3458" doublesided="false" scale="1" dimension="0" posX="37.5" posY="4097.5" posZ="60" rotX="0" rotY="0" rotZ="90"></object>
+    <object id="plank23N1" breakable="true" interior="0" collisions="true" alpha="255" model="3458" doublesided="false" scale="1" dimension="0" posX="60" posY="4080" posZ="59.9" rotX="0" rotY="0" rotZ="0"></object>
+    <object id="plank23N2" breakable="true" interior="0" collisions="true" alpha="255" model="3458" doublesided="false" scale="1" dimension="0" posX="60" posY="4085" posZ="59.9" rotX="0" rotY="0" rotZ="0"></object>
+    <object id="plank23N3" breakable="true" interior="0" collisions="true" alpha="255" model="3458" doublesided="false" scale="1" dimension="0" posX="60" posY="4110" posZ="59.9" rotX="0" rotY="0" rotZ="0"></object>
+    <object id="plank23N4" breakable="true" interior="0" collisions="true" alpha="255" model="3458" doublesided="false" scale="1" dimension="0" posX="60" posY="4115" posZ="59.9" rotX="0" rotY="0" rotZ="0"></object>
+    <object id="plank23D1" breakable="true" interior="0" collisions="true" alpha="255" model="3458" doublesided="false" scale="1" dimension="0" posX="42.5" posY="4097.5" posZ="60" rotX="0" rotY="0" rotZ="90"></object>
+    <object id="plank23D2" breakable="true" interior="0" collisions="true" alpha="255" model="3458" doublesided="false" scale="1" dimension="0" posX="47.5" posY="4097.5" posZ="60" rotX="0" rotY="0" rotZ="90"></object>
+    <object id="plank23D3" breakable="true" interior="0" collisions="true" alpha="255" model="3458" doublesided="false" scale="1" dimension="0" posX="72.5" posY="4097.5" posZ="60" rotX="0" rotY="0" rotZ="90"></object>
+    <object id="plank23D4" breakable="true" interior="0" collisions="true" alpha="255" model="3458" doublesided="false" scale="1" dimension="0" posX="77.5" posY="4097.5" posZ="60" rotX="0" rotY="0" rotZ="90"></object>
+    <object id="plank33N1" breakable="true" interior="0" collisions="true" alpha="255" model="3458" doublesided="false" scale="1" dimension="0" posX="100" posY="4080" posZ="59.9" rotX="0" rotY="0" rotZ="0"></object>
+    <object id="plank33N2" breakable="true" interior="0" collisions="true" alpha="255" model="3458" doublesided="false" scale="1" dimension="0" posX="100" posY="4085" posZ="59.9" rotX="0" rotY="0" rotZ="0"></object>
+    <object id="plank33N3" breakable="true" interior="0" collisions="true" alpha="255" model="3458" doublesided="false" scale="1" dimension="0" posX="100" posY="4110" posZ="59.9" rotX="0" rotY="0" rotZ="0"></object>
+    <object id="plank33N4" breakable="true" interior="0" collisions="true" alpha="255" model="3458" doublesided="false" scale="1" dimension="0" posX="100" posY="4115" posZ="59.9" rotX="0" rotY="0" rotZ="0"></object>
+    <object id="plank33D1" breakable="true" interior="0" collisions="true" alpha="255" model="3458" doublesided="false" scale="1" dimension="0" posX="82.5" posY="4097.5" posZ="60" rotX="0" rotY="0" rotZ="90"></object>
+    <object id="plank33D2" breakable="true" interior="0" collisions="true" alpha="255" model="3458" doublesided="false" scale="1" dimension="0" posX="87.5" posY="4097.5" posZ="60" rotX="0" rotY="0" rotZ="90"></object>
+    <object id="plank33D3" breakable="true" interior="0" collisions="true" alpha="255" model="3458" doublesided="false" scale="1" dimension="0" posX="112.5" posY="4097.5" posZ="60" rotX="0" rotY="0" rotZ="90"></object>
+    <object id="plank33D4" breakable="true" interior="0" collisions="true" alpha="255" model="3458" doublesided="false" scale="1" dimension="0" posX="117.5" posY="4097.5" posZ="60" rotX="0" rotY="0" rotZ="90"></object>
+    <object id="plank43N1" breakable="true" interior="0" collisions="true" alpha="255" model="3458" doublesided="false" scale="1" dimension="0" posX="140" posY="4080" posZ="59.9" rotX="0" rotY="0" rotZ="0"></object>
+    <object id="plank43N2" breakable="true" interior="0" collisions="true" alpha="255" model="3458" doublesided="false" scale="1" dimension="0" posX="140" posY="4085" posZ="59.9" rotX="0" rotY="0" rotZ="0"></object>
+    <object id="plank43N3" breakable="true" interior="0" collisions="true" alpha="255" model="3458" doublesided="false" scale="1" dimension="0" posX="140" posY="4110" posZ="59.9" rotX="0" rotY="0" rotZ="0"></object>
+    <object id="plank43N4" breakable="true" interior="0" collisions="true" alpha="255" model="3458" doublesided="false" scale="1" dimension="0" posX="140" posY="4115" posZ="59.9" rotX="0" rotY="0" rotZ="0"></object>
+    <object id="plank43D1" breakable="true" interior="0" collisions="true" alpha="255" model="3458" doublesided="false" scale="1" dimension="0" posX="122.5" posY="4097.5" posZ="60" rotX="0" rotY="0" rotZ="90"></object>
+    <object id="plank43D2" breakable="true" interior="0" collisions="true" alpha="255" model="3458" doublesided="false" scale="1" dimension="0" posX="127.5" posY="4097.5" posZ="60" rotX="0" rotY="0" rotZ="90"></object>
+    <object id="plank43D3" breakable="true" interior="0" collisions="true" alpha="255" model="3458" doublesided="false" scale="1" dimension="0" posX="152.5" posY="4097.5" posZ="60" rotX="0" rotY="0" rotZ="90"></object>
+    <object id="plank43D4" breakable="true" interior="0" collisions="true" alpha="255" model="3458" doublesided="false" scale="1" dimension="0" posX="157.5" posY="4097.5" posZ="60" rotX="0" rotY="0" rotZ="90"></object>
+    
+	<object id="plank14N1" breakable="true" interior="0" collisions="true" alpha="255" model="3458" doublesided="false" scale="1" dimension="0" posX="20" posY="4120" posZ="59.9" rotX="0" rotY="0" rotZ="0"></object>
+    <object id="plank14N2" breakable="true" interior="0" collisions="true" alpha="255" model="3458" doublesided="false" scale="1" dimension="0" posX="20" posY="4125" posZ="59.9" rotX="0" rotY="0" rotZ="0"></object>
+    <object id="plank14N3" breakable="true" interior="0" collisions="true" alpha="255" model="3458" doublesided="false" scale="1" dimension="0" posX="20" posY="4150" posZ="59.9" rotX="0" rotY="0" rotZ="0"></object>
+    <object id="plank14N4" breakable="true" interior="0" collisions="true" alpha="255" model="3458" doublesided="false" scale="1" dimension="0" posX="20" posY="4155" posZ="59.9" rotX="0" rotY="0" rotZ="0"></object>
+    <object id="plank14D1" breakable="true" interior="0" collisions="true" alpha="255" model="3458" doublesided="false" scale="1" dimension="0" posX="2.5" posY="4137.5" posZ="60" rotX="0" rotY="0" rotZ="90"></object>
+    <object id="plank14D2" breakable="true" interior="0" collisions="true" alpha="255" model="3458" doublesided="false" scale="1" dimension="0" posX="7.5" posY="4137.5" posZ="60" rotX="0" rotY="0" rotZ="90"></object>
+    <object id="plank14D3" breakable="true" interior="0" collisions="true" alpha="255" model="3458" doublesided="false" scale="1" dimension="0" posX="32.5" posY="4137.5" posZ="60" rotX="0" rotY="0" rotZ="90"></object>
+    <object id="plank14D4" breakable="true" interior="0" collisions="true" alpha="255" model="3458" doublesided="false" scale="1" dimension="0" posX="37.5" posY="4137.5" posZ="60" rotX="0" rotY="0" rotZ="90"></object>
+    <object id="plank24N1" breakable="true" interior="0" collisions="true" alpha="255" model="3458" doublesided="false" scale="1" dimension="0" posX="60" posY="4120" posZ="59.9" rotX="0" rotY="0" rotZ="0"></object>
+    <object id="plank24N2" breakable="true" interior="0" collisions="true" alpha="255" model="3458" doublesided="false" scale="1" dimension="0" posX="60" posY="4125" posZ="59.9" rotX="0" rotY="0" rotZ="0"></object>
+    <object id="plank24N3" breakable="true" interior="0" collisions="true" alpha="255" model="3458" doublesided="false" scale="1" dimension="0" posX="60" posY="4150" posZ="59.9" rotX="0" rotY="0" rotZ="0"></object>
+    <object id="plank24N4" breakable="true" interior="0" collisions="true" alpha="255" model="3458" doublesided="false" scale="1" dimension="0" posX="60" posY="4155" posZ="59.9" rotX="0" rotY="0" rotZ="0"></object>
+    <object id="plank24D1" breakable="true" interior="0" collisions="true" alpha="255" model="3458" doublesided="false" scale="1" dimension="0" posX="42.5" posY="4137.5" posZ="60" rotX="0" rotY="0" rotZ="90"></object>
+    <object id="plank24D2" breakable="true" interior="0" collisions="true" alpha="255" model="3458" doublesided="false" scale="1" dimension="0" posX="47.5" posY="4137.5" posZ="60" rotX="0" rotY="0" rotZ="90"></object>
+    <object id="plank24D3" breakable="true" interior="0" collisions="true" alpha="255" model="3458" doublesided="false" scale="1" dimension="0" posX="72.5" posY="4137.5" posZ="60" rotX="0" rotY="0" rotZ="90"></object>
+    <object id="plank24D4" breakable="true" interior="0" collisions="true" alpha="255" model="3458" doublesided="false" scale="1" dimension="0" posX="77.5" posY="4137.5" posZ="60" rotX="0" rotY="0" rotZ="90"></object>
+    <object id="plank34N1" breakable="true" interior="0" collisions="true" alpha="255" model="3458" doublesided="false" scale="1" dimension="0" posX="100" posY="4120" posZ="59.9" rotX="0" rotY="0" rotZ="0"></object>
+    <object id="plank34N2" breakable="true" interior="0" collisions="true" alpha="255" model="3458" doublesided="false" scale="1" dimension="0" posX="100" posY="4125" posZ="59.9" rotX="0" rotY="0" rotZ="0"></object>
+    <object id="plank34N3" breakable="true" interior="0" collisions="true" alpha="255" model="3458" doublesided="false" scale="1" dimension="0" posX="100" posY="4150" posZ="59.9" rotX="0" rotY="0" rotZ="0"></object>
+    <object id="plank34N4" breakable="true" interior="0" collisions="true" alpha="255" model="3458" doublesided="false" scale="1" dimension="0" posX="100" posY="4155" posZ="59.9" rotX="0" rotY="0" rotZ="0"></object>
+    <object id="plank34D1" breakable="true" interior="0" collisions="true" alpha="255" model="3458" doublesided="false" scale="1" dimension="0" posX="82.5" posY="4137.5" posZ="60" rotX="0" rotY="0" rotZ="90"></object>
+    <object id="plank34D2" breakable="true" interior="0" collisions="true" alpha="255" model="3458" doublesided="false" scale="1" dimension="0" posX="87.5" posY="4137.5" posZ="60" rotX="0" rotY="0" rotZ="90"></object>
+    <object id="plank34D3" breakable="true" interior="0" collisions="true" alpha="255" model="3458" doublesided="false" scale="1" dimension="0" posX="112.5" posY="4137.5" posZ="60" rotX="0" rotY="0" rotZ="90"></object>
+    <object id="plank34D4" breakable="true" interior="0" collisions="true" alpha="255" model="3458" doublesided="false" scale="1" dimension="0" posX="117.5" posY="4137.5" posZ="60" rotX="0" rotY="0" rotZ="90"></object>
+    <object id="plank44N1" breakable="true" interior="0" collisions="true" alpha="255" model="3458" doublesided="false" scale="1" dimension="0" posX="140" posY="4120" posZ="59.9" rotX="0" rotY="0" rotZ="0"></object>
+    <object id="plank44N2" breakable="true" interior="0" collisions="true" alpha="255" model="3458" doublesided="false" scale="1" dimension="0" posX="140" posY="4125" posZ="59.9" rotX="0" rotY="0" rotZ="0"></object>
+    <object id="plank44N3" breakable="true" interior="0" collisions="true" alpha="255" model="3458" doublesided="false" scale="1" dimension="0" posX="140" posY="4150" posZ="59.9" rotX="0" rotY="0" rotZ="0"></object>
+    <object id="plank44N4" breakable="true" interior="0" collisions="true" alpha="255" model="3458" doublesided="false" scale="1" dimension="0" posX="140" posY="4155" posZ="59.9" rotX="0" rotY="0" rotZ="0"></object>
+    <object id="plank44D1" breakable="true" interior="0" collisions="true" alpha="255" model="3458" doublesided="false" scale="1" dimension="0" posX="122.5" posY="4137.5" posZ="60" rotX="0" rotY="0" rotZ="90"></object>
+    <object id="plank44D2" breakable="true" interior="0" collisions="true" alpha="255" model="3458" doublesided="false" scale="1" dimension="0" posX="127.5" posY="4137.5" posZ="60" rotX="0" rotY="0" rotZ="90"></object>
+    <object id="plank44D3" breakable="true" interior="0" collisions="true" alpha="255" model="3458" doublesided="false" scale="1" dimension="0" posX="152.5" posY="4137.5" posZ="60" rotX="0" rotY="0" rotZ="90"></object>
+    <object id="plank44D4" breakable="true" interior="0" collisions="true" alpha="255" model="3458" doublesided="false" scale="1" dimension="0" posX="157.5" posY="4137.5" posZ="60" rotX="0" rotY="0" rotZ="90"></object>
+    
+	<spawnpoint id="buffalo S101" vehicle="402" posX="32.5" posY="4000" posZ="62.5" rotX="0" rotY="0" rotZ="0"></spawnpoint>
+    <spawnpoint id="buffalo S102" vehicle="402" posX="37.5" posY="4000" posZ="62.5" rotX="0" rotY="0" rotZ="0"></spawnpoint>
+    <spawnpoint id="buffalo S103" vehicle="402" posX="42.5" posY="4000" posZ="62.5" rotX="0" rotY="0" rotZ="0"></spawnpoint>
+    <spawnpoint id="buffalo S104" vehicle="402" posX="47.5" posY="4000" posZ="62.5" rotX="0" rotY="0" rotZ="0"></spawnpoint>
+    <spawnpoint id="buffalo S105" vehicle="402" posX="72.5" posY="4000" posZ="62.5" rotX="0" rotY="0" rotZ="0"></spawnpoint>
+    <spawnpoint id="buffalo S106" vehicle="402" posX="77.5" posY="4000" posZ="62.5" rotX="0" rotY="0" rotZ="0"></spawnpoint>
+    <spawnpoint id="buffalo S107" vehicle="402" posX="82.5" posY="4000" posZ="62.5" rotX="0" rotY="0" rotZ="0"></spawnpoint>
+    <spawnpoint id="buffalo S108" vehicle="402" posX="87.5" posY="4000" posZ="62.5" rotX="0" rotY="0" rotZ="0"></spawnpoint>
+    <spawnpoint id="buffalo S109" vehicle="402" posX="112.5" posY="4000" posZ="62.5" rotX="0" rotY="0" rotZ="0"></spawnpoint>
+    <spawnpoint id="buffalo S110" vehicle="402" posX="117.5" posY="4000" posZ="62.5" rotX="0" rotY="0" rotZ="0"></spawnpoint>
+    <spawnpoint id="buffalo S111" vehicle="402" posX="122.5" posY="4000" posZ="62.5" rotX="0" rotY="0" rotZ="0"></spawnpoint>
+    <spawnpoint id="buffalo S112" vehicle="402" posX="127.5" posY="4000" posZ="62.5" rotX="0" rotY="0" rotZ="0"></spawnpoint>
+    <spawnpoint id="buffalo S201" vehicle="402" posX="32.5" posY="4007" posZ="62.5" rotX="0" rotY="0" rotZ="0"></spawnpoint>
+    <spawnpoint id="buffalo S202" vehicle="402" posX="37.5" posY="4007" posZ="62.5" rotX="0" rotY="0" rotZ="0"></spawnpoint>
+    <spawnpoint id="buffalo S203" vehicle="402" posX="42.5" posY="4007" posZ="62.5" rotX="0" rotY="0" rotZ="0"></spawnpoint>
+    <spawnpoint id="buffalo S204" vehicle="402" posX="47.5" posY="4007" posZ="62.5" rotX="0" rotY="0" rotZ="0"></spawnpoint>
+    <spawnpoint id="buffalo S205" vehicle="402" posX="72.5" posY="4007" posZ="62.5" rotX="0" rotY="0" rotZ="0"></spawnpoint>
+    <spawnpoint id="buffalo S206" vehicle="402" posX="77.5" posY="4007" posZ="62.5" rotX="0" rotY="0" rotZ="0"></spawnpoint>
+    <spawnpoint id="buffalo S207" vehicle="402" posX="82.5" posY="4007" posZ="62.5" rotX="0" rotY="0" rotZ="0"></spawnpoint>
+    <spawnpoint id="buffalo S208" vehicle="402" posX="87.5" posY="4007" posZ="62.5" rotX="0" rotY="0" rotZ="0"></spawnpoint>
+    <spawnpoint id="buffalo S209" vehicle="402" posX="112.5" posY="4007" posZ="62.5" rotX="0" rotY="0" rotZ="0"></spawnpoint>
+    <spawnpoint id="buffalo S210" vehicle="402" posX="117.5" posY="4007" posZ="62.5" rotX="0" rotY="0" rotZ="0"></spawnpoint>
+    <spawnpoint id="buffalo S211" vehicle="402" posX="122.5" posY="4007" posZ="62.5" rotX="0" rotY="0" rotZ="0"></spawnpoint>
+    <spawnpoint id="buffalo S212" vehicle="402" posX="127.5" posY="4007" posZ="62.5" rotX="0" rotY="0" rotZ="0"></spawnpoint>
+    <spawnpoint id="buffalo N101" vehicle="402" posX="32.5" posY="4155" posZ="62.5" rotX="0" rotY="0" rotZ="180"></spawnpoint>
+    <spawnpoint id="buffalo N102" vehicle="402" posX="37.5" posY="4155" posZ="62.5" rotX="0" rotY="0" rotZ="180"></spawnpoint>
+    <spawnpoint id="buffalo N103" vehicle="402" posX="42.5" posY="4155" posZ="62.5" rotX="0" rotY="0" rotZ="180"></spawnpoint>
+    <spawnpoint id="buffalo N104" vehicle="402" posX="47.5" posY="4155" posZ="62.5" rotX="0" rotY="0" rotZ="180"></spawnpoint>
+    <spawnpoint id="buffalo N105" vehicle="402" posX="72.5" posY="4155" posZ="62.5" rotX="0" rotY="0" rotZ="180"></spawnpoint>
+    <spawnpoint id="buffalo N106" vehicle="402" posX="77.5" posY="4155" posZ="62.5" rotX="0" rotY="0" rotZ="180"></spawnpoint>
+    <spawnpoint id="buffalo N107" vehicle="402" posX="82.5" posY="4155" posZ="62.5" rotX="0" rotY="0" rotZ="180"></spawnpoint>
+    <spawnpoint id="buffalo N108" vehicle="402" posX="87.5" posY="4155" posZ="62.5" rotX="0" rotY="0" rotZ="180"></spawnpoint>
+    <spawnpoint id="buffalo N109" vehicle="402" posX="112.5" posY="4155" posZ="62.5" rotX="0" rotY="0" rotZ="180"></spawnpoint>
+    <spawnpoint id="buffalo N110" vehicle="402" posX="117.5" posY="4155" posZ="62.5" rotX="0" rotY="0" rotZ="180"></spawnpoint>
+    <spawnpoint id="buffalo N111" vehicle="402" posX="122.5" posY="4155" posZ="62.5" rotX="0" rotY="0" rotZ="180"></spawnpoint>
+    <spawnpoint id="buffalo N112" vehicle="402" posX="127.5" posY="4155" posZ="62.5" rotX="0" rotY="0" rotZ="180"></spawnpoint>
+    <spawnpoint id="buffalo N201" vehicle="402" posX="32.5" posY="4148" posZ="62.5" rotX="0" rotY="0" rotZ="180"></spawnpoint>
+    <spawnpoint id="buffalo N202" vehicle="402" posX="37.5" posY="4148" posZ="62.5" rotX="0" rotY="0" rotZ="180"></spawnpoint>
+    <spawnpoint id="buffalo N203" vehicle="402" posX="42.5" posY="4148" posZ="62.5" rotX="0" rotY="0" rotZ="180"></spawnpoint>
+    <spawnpoint id="buffalo N204" vehicle="402" posX="47.5" posY="4148" posZ="62.5" rotX="0" rotY="0" rotZ="180"></spawnpoint>
+    <spawnpoint id="buffalo N205" vehicle="402" posX="72.5" posY="4148" posZ="62.5" rotX="0" rotY="0" rotZ="180"></spawnpoint>
+    <spawnpoint id="buffalo N206" vehicle="402" posX="77.5" posY="4148" posZ="62.5" rotX="0" rotY="0" rotZ="180"></spawnpoint>
+    <spawnpoint id="buffalo N207" vehicle="402" posX="82.5" posY="4148" posZ="62.5" rotX="0" rotY="0" rotZ="180"></spawnpoint>
+    <spawnpoint id="buffalo N208" vehicle="402" posX="87.5" posY="4148" posZ="62.5" rotX="0" rotY="0" rotZ="180"></spawnpoint>
+    <spawnpoint id="buffalo N209" vehicle="402" posX="112.5" posY="4148" posZ="62.5" rotX="0" rotY="0" rotZ="180"></spawnpoint>
+    <spawnpoint id="buffalo N210" vehicle="402" posX="117.5" posY="4148" posZ="62.5" rotX="0" rotY="0" rotZ="180"></spawnpoint>
+    <spawnpoint id="buffalo N211" vehicle="402" posX="122.5" posY="4148" posZ="62.5" rotX="0" rotY="0" rotZ="180"></spawnpoint>
+    <spawnpoint id="buffalo N212" vehicle="402" posX="127.5" posY="4148" posZ="62.5" rotX="0" rotY="0" rotZ="180"></spawnpoint>
+    <spawnpoint id="buffalo E101" vehicle="402" posX="2.5" posY="4030" posZ="62.5" rotX="0" rotY="0" rotZ="270"></spawnpoint>
+    <spawnpoint id="buffalo E102" vehicle="402" posX="2.5" posY="4035" posZ="62.5" rotX="0" rotY="0" rotZ="270"></spawnpoint>
+    <spawnpoint id="buffalo E103" vehicle="402" posX="2.5" posY="4040" posZ="62.5" rotX="0" rotY="0" rotZ="270"></spawnpoint>
+    <spawnpoint id="buffalo E104" vehicle="402" posX="2.5" posY="4045" posZ="62.5" rotX="0" rotY="0" rotZ="270"></spawnpoint>
+    <spawnpoint id="buffalo E105" vehicle="402" posX="2.5" posY="4070" posZ="62.5" rotX="0" rotY="0" rotZ="270"></spawnpoint>
+    <spawnpoint id="buffalo E106" vehicle="402" posX="2.5" posY="4075" posZ="62.5" rotX="0" rotY="0" rotZ="270"></spawnpoint>
+    <spawnpoint id="buffalo E107" vehicle="402" posX="2.5" posY="4080" posZ="62.5" rotX="0" rotY="0" rotZ="270"></spawnpoint>
+    <spawnpoint id="buffalo E108" vehicle="402" posX="2.5" posY="4085" posZ="62.5" rotX="0" rotY="0" rotZ="270"></spawnpoint>
+    <spawnpoint id="buffalo E109" vehicle="402" posX="2.5" posY="4110" posZ="62.5" rotX="0" rotY="0" rotZ="270"></spawnpoint>
+    <spawnpoint id="buffalo E110" vehicle="402" posX="2.5" posY="4115" posZ="62.5" rotX="0" rotY="0" rotZ="270"></spawnpoint>
+    <spawnpoint id="buffalo E111" vehicle="402" posX="2.5" posY="4120" posZ="62.5" rotX="0" rotY="0" rotZ="270"></spawnpoint>
+    <spawnpoint id="buffalo E112" vehicle="402" posX="2.5" posY="4125" posZ="62.5" rotX="0" rotY="0" rotZ="270"></spawnpoint>
+    <spawnpoint id="buffalo E201" vehicle="402" posX="9.5" posY="4030" posZ="62.5" rotX="0" rotY="0" rotZ="270"></spawnpoint>
+    <spawnpoint id="buffalo E202" vehicle="402" posX="9.5" posY="4035" posZ="62.5" rotX="0" rotY="0" rotZ="270"></spawnpoint>
+    <spawnpoint id="buffalo E203" vehicle="402" posX="9.5" posY="4040" posZ="62.5" rotX="0" rotY="0" rotZ="270"></spawnpoint>
+    <spawnpoint id="buffalo E204" vehicle="402" posX="9.5" posY="4045" posZ="62.5" rotX="0" rotY="0" rotZ="270"></spawnpoint>
+    <spawnpoint id="buffalo E205" vehicle="402" posX="9.5" posY="4070" posZ="62.5" rotX="0" rotY="0" rotZ="270"></spawnpoint>
+    <spawnpoint id="buffalo E206" vehicle="402" posX="9.5" posY="4075" posZ="62.5" rotX="0" rotY="0" rotZ="270"></spawnpoint>
+    <spawnpoint id="buffalo E207" vehicle="402" posX="9.5" posY="4080" posZ="62.5" rotX="0" rotY="0" rotZ="270"></spawnpoint>
+    <spawnpoint id="buffalo E208" vehicle="402" posX="9.5" posY="4085" posZ="62.5" rotX="0" rotY="0" rotZ="270"></spawnpoint>
+    <spawnpoint id="buffalo E209" vehicle="402" posX="9.5" posY="4110" posZ="62.5" rotX="0" rotY="0" rotZ="270"></spawnpoint>
+    <spawnpoint id="buffalo E210" vehicle="402" posX="9.5" posY="4115" posZ="62.5" rotX="0" rotY="0" rotZ="270"></spawnpoint>
+    <spawnpoint id="buffalo E211" vehicle="402" posX="9.5" posY="4120" posZ="62.5" rotX="0" rotY="0" rotZ="270"></spawnpoint>
+    <spawnpoint id="buffalo E212" vehicle="402" posX="9.5" posY="4125" posZ="62.5" rotX="0" rotY="0" rotZ="270"></spawnpoint>
+    <spawnpoint id="buffalo W101" vehicle="402" posX="157.5" posY="4030" posZ="62.5" rotX="0" rotY="0" rotZ="90"></spawnpoint>
+    <spawnpoint id="buffalo W102" vehicle="402" posX="157.5" posY="4035" posZ="62.5" rotX="0" rotY="0" rotZ="90"></spawnpoint>
+    <spawnpoint id="buffalo W103" vehicle="402" posX="157.5" posY="4040" posZ="62.5" rotX="0" rotY="0" rotZ="90"></spawnpoint>
+    <spawnpoint id="buffalo W104" vehicle="402" posX="157.5" posY="4045" posZ="62.5" rotX="0" rotY="0" rotZ="90"></spawnpoint>
+    <spawnpoint id="buffalo W105" vehicle="402" posX="157.5" posY="4070" posZ="62.5" rotX="0" rotY="0" rotZ="90"></spawnpoint>
+    <spawnpoint id="buffalo W106" vehicle="402" posX="157.5" posY="4075" posZ="62.5" rotX="0" rotY="0" rotZ="90"></spawnpoint>
+    <spawnpoint id="buffalo W107" vehicle="402" posX="157.5" posY="4080" posZ="62.5" rotX="0" rotY="0" rotZ="90"></spawnpoint>
+    <spawnpoint id="buffalo W108" vehicle="402" posX="157.5" posY="4085" posZ="62.5" rotX="0" rotY="0" rotZ="90"></spawnpoint>
+    <spawnpoint id="buffalo W109" vehicle="402" posX="157.5" posY="4110" posZ="62.5" rotX="0" rotY="0" rotZ="90"></spawnpoint>
+    <spawnpoint id="buffalo W110" vehicle="402" posX="157.5" posY="4115" posZ="62.5" rotX="0" rotY="0" rotZ="90"></spawnpoint>
+    <spawnpoint id="buffalo W111" vehicle="402" posX="157.5" posY="4120" posZ="62.5" rotX="0" rotY="0" rotZ="90"></spawnpoint>
+    <spawnpoint id="buffalo W112" vehicle="402" posX="157.5" posY="4125" posZ="62.5" rotX="0" rotY="0" rotZ="90"></spawnpoint>
+    <spawnpoint id="buffalo W201" vehicle="402" posX="150.5" posY="4030" posZ="62.5" rotX="0" rotY="0" rotZ="90"></spawnpoint>
+    <spawnpoint id="buffalo W202" vehicle="402" posX="150.5" posY="4035" posZ="62.5" rotX="0" rotY="0" rotZ="90"></spawnpoint>
+    <spawnpoint id="buffalo W203" vehicle="402" posX="150.5" posY="4040" posZ="62.5" rotX="0" rotY="0" rotZ="90"></spawnpoint>
+    <spawnpoint id="buffalo W204" vehicle="402" posX="150.5" posY="4045" posZ="62.5" rotX="0" rotY="0" rotZ="90"></spawnpoint>
+    <spawnpoint id="buffalo W205" vehicle="402" posX="150.5" posY="4070" posZ="62.5" rotX="0" rotY="0" rotZ="90"></spawnpoint>
+    <spawnpoint id="buffalo W206" vehicle="402" posX="150.5" posY="4075" posZ="62.5" rotX="0" rotY="0" rotZ="90"></spawnpoint>
+    <spawnpoint id="buffalo W207" vehicle="402" posX="150.5" posY="4080" posZ="62.5" rotX="0" rotY="0" rotZ="90"></spawnpoint>
+    <spawnpoint id="buffalo W208" vehicle="402" posX="150.5" posY="4085" posZ="62.5" rotX="0" rotY="0" rotZ="90"></spawnpoint>
+    <spawnpoint id="buffalo W209" vehicle="402" posX="150.5" posY="4110" posZ="62.5" rotX="0" rotY="0" rotZ="90"></spawnpoint>
+    <spawnpoint id="buffalo W210" vehicle="402" posX="150.5" posY="4115" posZ="62.5" rotX="0" rotY="0" rotZ="90"></spawnpoint>
+    <spawnpoint id="buffalo W211" vehicle="402" posX="150.5" posY="4120" posZ="62.5" rotX="0" rotY="0" rotZ="90"></spawnpoint>
+    <spawnpoint id="buffalo W212" vehicle="402" posX="150.5" posY="4125" posZ="62.5" rotX="0" rotY="0" rotZ="90"></spawnpoint>
+	
+    <object id="plank DS01" breakable="true" interior="0" collisions="true" alpha="255" model="3458" doublesided="false" scale="1" dimension="0" posX="75" posY="4068.5" posZ="105" rotX="0" rotY="90" rotZ="90"></object>
+    <object id="plank DS02" breakable="true" interior="0" collisions="true" alpha="255" model="3458" doublesided="false" scale="1" dimension="0" posX="80" posY="4068.5" posZ="105" rotX="0" rotY="90" rotZ="90"></object>
+    <object id="plank DS03" breakable="true" interior="0" collisions="true" alpha="255" model="3458" doublesided="false" scale="1" dimension="0" posX="85" posY="4068.5" posZ="105" rotX="0" rotY="90" rotZ="90"></object>
+    <object id="plank DE01" breakable="true" interior="0" collisions="true" alpha="255" model="3458" doublesided="false" scale="1" dimension="0" posX="71" posY="4072.5" posZ="105" rotX="0" rotY="90" rotZ="0"></object>
+    <object id="plank DE02" breakable="true" interior="0" collisions="true" alpha="255" model="3458" doublesided="false" scale="1" dimension="0" posX="71" posY="4077.5" posZ="105" rotX="0" rotY="90" rotZ="0"></object>
+    <object id="plank DE03" breakable="true" interior="0" collisions="true" alpha="255" model="3458" doublesided="false" scale="1" dimension="0" posX="71" posY="4082.5" posZ="105" rotX="0" rotY="90" rotZ="0"></object>
+    <object id="plank DN01" breakable="true" interior="0" collisions="true" alpha="255" model="3458" doublesided="false" scale="1" dimension="0" posX="75" posY="4086.5" posZ="105" rotX="0" rotY="90" rotZ="270"></object>
+    <object id="plank DN02" breakable="true" interior="0" collisions="true" alpha="255" model="3458" doublesided="false" scale="1" dimension="0" posX="80" posY="4086.5" posZ="105" rotX="0" rotY="90" rotZ="270"></object>
+    <object id="plank DN03" breakable="true" interior="0" collisions="true" alpha="255" model="3458" doublesided="false" scale="1" dimension="0" posX="85" posY="4086.5" posZ="105" rotX="0" rotY="90" rotZ="270"></object>
+    <object id="plank DW01" breakable="true" interior="0" collisions="true" alpha="255" model="3458" doublesided="false" scale="1" dimension="0" posX="89" posY="4072.5" posZ="105" rotX="0" rotY="90" rotZ="180"></object>
+    <object id="plank DW02" breakable="true" interior="0" collisions="true" alpha="255" model="3458" doublesided="false" scale="1" dimension="0" posX="89" posY="4077.5" posZ="105" rotX="0" rotY="90" rotZ="180"></object>
+    <object id="plank DW03" breakable="true" interior="0" collisions="true" alpha="255" model="3458" doublesided="false" scale="1" dimension="0" posX="89" posY="4082.5" posZ="105" rotX="0" rotY="90" rotZ="180"></object>
+    
+	<object id="plank RS01" posX="080.000" posY="4030.716" posZ="105" rotX="90" rotY="0" rotZ="000" breakable="true" interior="0" collisions="true" alpha="255" model="3458" doublesided="false" scale="1" dimension="0"></object>
+    <object id="plank RS02" posX="113.081" posY="4044.419" posZ="105" rotX="90" rotY="0" rotZ="045" breakable="true" interior="0" collisions="true" alpha="255" model="3458" doublesided="false" scale="1" dimension="0"></object>
+    <object id="plank RE01" posX="126.784" posY="4077.500" posZ="105" rotX="90" rotY="0" rotZ="090" breakable="true" interior="0" collisions="true" alpha="255" model="3458" doublesided="false" scale="1" dimension="0"></object>
+    <object id="plank RE02" posX="113.081" posY="4110.581" posZ="105" rotX="90" rotY="0" rotZ="135" breakable="true" interior="0" collisions="true" alpha="255" model="3458" doublesided="false" scale="1" dimension="0"></object>
+    <object id="plank RN01" posX="080.000" posY="4124.284" posZ="105" rotX="90" rotY="0" rotZ="180" breakable="true" interior="0" collisions="true" alpha="255" model="3458" doublesided="false" scale="1" dimension="0"></object>
+    <object id="plank RN02" posX="046.919" posY="4110.581" posZ="105" rotX="90" rotY="0" rotZ="225" breakable="true" interior="0" collisions="true" alpha="255" model="3458" doublesided="false" scale="1" dimension="0"></object>
+    <object id="plank RW01" posX="033.216" posY="4077.500" posZ="105" rotX="90" rotY="0" rotZ="270" breakable="true" interior="0" collisions="true" alpha="255" model="3458" doublesided="false" scale="1" dimension="0"></object>
+    <object id="plank RW02" posX="046.919" posY="4044.419" posZ="105" rotX="90" rotY="0" rotZ="315" breakable="true" interior="0" collisions="true" alpha="255" model="3458" doublesided="false" scale="1" dimension="0"></object>
+	
+	<object id="object (lawncluckbel) (24)" breakable="true" interior="0" alpha="255" model="5814" doublesided="false" scale="1" dimension="0" posX="-43.2" posY="4072.1001" posZ="65.3" rotX="270" rotY="0.258" rotZ="272.258"></object>
+    <object id="object (lawncluckbel) (26)" breakable="true" interior="0" alpha="255" model="5814" doublesided="false" scale="1" dimension="0" posX="-43.20019" posY="4072.1006" posZ="65.3" rotX="286" rotY="270" rotZ="182.005"></object>
+    <object id="object (lawncluckbel) (27)" breakable="true" interior="0" alpha="255" model="5814" doublesided="false" scale="1" dimension="0" posX="-43.20019" posY="4072.1006" posZ="65.3" rotX="301.996" rotY="270" rotZ="182.005"></object>
+    <object id="object (lawncluckbel) (28)" breakable="true" interior="0" alpha="255" model="5814" doublesided="false" scale="1" dimension="0" posX="-43.20019" posY="4072.1006" posZ="65.3" rotX="313.992" rotY="270" rotZ="182.005"></object>
+    <object id="object (lawncluckbel) (29)" breakable="true" interior="0" alpha="255" model="5814" doublesided="false" scale="1" dimension="0" posX="-43.20019" posY="4072.1006" posZ="65.3" rotX="327.989" rotY="270" rotZ="182.005"></object>
+    <object id="object (lawncluckbel) (30)" breakable="true" interior="0" alpha="255" model="5814" doublesided="false" scale="1" dimension="0" posX="-43.20019" posY="4072.1006" posZ="65.3" rotX="339.986" rotY="270" rotZ="182.005"></object>
+    <object id="object (lawncluckbel) (31)" breakable="true" interior="0" alpha="255" model="5814" doublesided="false" scale="1" dimension="0" posX="-43.20019" posY="4072.1006" posZ="65.3" rotX="351.983" rotY="270" rotZ="182.005"></object>
+    <object id="object (lawncluckbel) (32)" breakable="true" interior="0" alpha="255" model="5814" doublesided="false" scale="1" dimension="0" posX="-43.20019" posY="4072.1006" posZ="65.3" rotX="1.98" rotY="270" rotZ="182.005"></object>
+    <object id="object (lawncluckbel) (33)" breakable="true" interior="0" alpha="255" model="5814" doublesided="false" scale="1" dimension="0" posX="-43.20019" posY="4072.1006" posZ="65.3" rotX="15.978" rotY="270" rotZ="182.005"></object>
+    <object id="object (lawncluckbel) (34)" breakable="true" interior="0" alpha="255" model="5814" doublesided="false" scale="1" dimension="0" posX="-43.20019" posY="4072.1006" posZ="65.3" rotX="27.974" rotY="270" rotZ="182.005"></object>
+    <object id="object (lawncluckbel) (35)" breakable="true" interior="0" alpha="255" model="5814" doublesided="false" scale="1" dimension="0" posX="-43.20019" posY="4072.1006" posZ="65.3" rotX="41.971" rotY="270" rotZ="182.005"></object>
+    <object id="object (lawncluckbel) (36)" breakable="true" interior="0" alpha="255" model="5814" doublesided="false" scale="1" dimension="0" posX="-43.20019" posY="4072.1006" posZ="65.3" rotX="55.968" rotY="270" rotZ="182.005"></object>
+    <object id="object (lawncluckbel) (37)" breakable="true" interior="0" alpha="255" model="5814" doublesided="false" scale="1" dimension="0" posX="-43.20019" posY="4072.1006" posZ="65.3" rotX="69.964" rotY="270" rotZ="182.005"></object>
+    <object id="object (lawncluckbel) (38)" breakable="true" interior="0" alpha="255" model="5814" doublesided="false" scale="1" dimension="0" posX="-43.20019" posY="4072.1006" posZ="65.3" rotX="81.961" rotY="270" rotZ="182.005"></object>
+    <object id="object (lawncluckbel) (39)" breakable="true" interior="0" alpha="255" model="5814" doublesided="false" scale="1" dimension="0" posX="-43.20019" posY="4072.1006" posZ="65.3" rotX="86.042" rotY="90" rotZ="2.005"></object>
+    <object id="object (lawncluckbel) (40)" breakable="true" interior="0" alpha="255" model="5814" doublesided="false" scale="1" dimension="0" posX="-43.20019" posY="4072.1006" posZ="65.3" rotX="74.039" rotY="90" rotZ="2.005"></object>
+    <object id="object (lawncluckbel) (41)" breakable="true" interior="0" alpha="255" model="5814" doublesided="false" scale="1" dimension="0" posX="-43.20019" posY="4072.1006" posZ="65.3" rotX="60.037" rotY="90" rotZ="2.005"></object>
+    <object id="object (lawncluckbel) (42)" breakable="true" interior="0" alpha="255" model="5814" doublesided="false" scale="1" dimension="0" posX="-43.20019" posY="4072.1006" posZ="65.3" rotX="52.035" rotY="90" rotZ="2.005"></object>
+    <object id="object (lawncluckbel) (43)" breakable="true" interior="0" alpha="255" model="5814" doublesided="false" scale="1" dimension="0" posX="-43.20019" posY="4072.1006" posZ="65.3" rotX="42.031" rotY="90" rotZ="2.005"></object>
+    <object id="object (lawncluckbel) (44)" breakable="true" interior="0" alpha="255" model="5814" doublesided="false" scale="1" dimension="0" posX="-43.20019" posY="4072.1006" posZ="65.3" rotX="30.028" rotY="90" rotZ="2.005"></object>
+    <object id="object (lawncluckbel) (45)" breakable="true" interior="0" alpha="255" model="5814" doublesided="false" scale="1" dimension="0" posX="-43.20019" posY="4072.1006" posZ="65.3" rotX="18.026" rotY="90" rotZ="2.005"></object>
+    <object id="object (lawncluckbel) (46)" breakable="true" interior="0" alpha="255" model="5814" doublesided="false" scale="1" dimension="0" posX="-43.20019" posY="4072.1006" posZ="65.3" rotX="6.023" rotY="90" rotZ="2.005"></object>
+    <object id="object (lawncluckbel) (47)" breakable="true" interior="0" alpha="255" model="5814" doublesided="false" scale="1" dimension="0" posX="-43.20019" posY="4072.1006" posZ="65.3" rotX="352.021" rotY="90" rotZ="2.005"></object>
+    <object id="object (lawncluckbel) (48)" breakable="true" interior="0" alpha="255" model="5814" doublesided="false" scale="1" dimension="0" posX="-43.20019" posY="4072.1006" posZ="65.3" rotX="336.018" rotY="90" rotZ="2.005"></object>
+    <object id="object (lawncluckbel) (49)" breakable="true" interior="0" alpha="255" model="5814" doublesided="false" scale="1" dimension="0" posX="-43.20019" posY="4072.1006" posZ="65.3" rotX="320.017" rotY="90" rotZ="2.005"></object>
+    <object id="object (lawncluckbel) (50)" breakable="true" interior="0" alpha="255" model="5814" doublesided="false" scale="1" dimension="0" posX="-43.20019" posY="4072.1006" posZ="65.3" rotX="302.015" rotY="90" rotZ="2.005"></object>
+    <object id="object (lawncluckbel) (51)" breakable="true" interior="0" alpha="255" model="5814" doublesided="false" scale="1" dimension="0" posX="-43.20019" posY="4072.1006" posZ="65.3" rotX="290.014" rotY="90" rotZ="2.005"></object>
+    <object id="object (lawncluckbel) (52)" breakable="true" interior="0" alpha="255" model="5814" doublesided="false" scale="1" dimension="0" posX="-43.20019" posY="4072.1006" posZ="65.3" rotX="282.012" rotY="90" rotZ="2.005"></object>
+    <object id="object (des_ufosign) (1)" breakable="true" interior="0" alpha="255" model="16778" doublesided="false" scale="6" dimension="0" posX="-84.7" posY="4069.1001" posZ="59" rotX="359.653" rotY="80.006" rotZ="3.97"></object>
+    <object id="object (INDUS_MAGNET) (1)" breakable="true" interior="0" alpha="255" model="3053" doublesided="false" scale="8" dimension="0" posX="-45.9" posY="4072.3999" posZ="65.6" rotX="0" rotY="270" rotZ="0"></object>
+    <object id="object (vegcandysign1) (1)" breakable="true" interior="0" alpha="255" model="7392" doublesided="false" scale="1" dimension="0" posX="76.2" posY="4174" posZ="63.2" rotX="0" rotY="0" rotZ="270"></object>
+    <object id="object (fountain_SFW) (1)" breakable="true" interior="0" alpha="255" model="9833" doublesided="false" scale="1" dimension="0" posX="73.9" posY="4177.1001" posZ="65.5" rotX="0" rotY="84" rotZ="310"></object>
+    <object id="object (monkeyman) (1)" breakable="true" interior="0" alpha="255" model="13667" doublesided="false" scale="1" dimension="0" posX="174.7" posY="4078.3999" posZ="64.3" rotX="0" rotY="0" rotZ="188"></object>
+    <object id="object (bballintvgn1) (24)" breakable="true" interior="0" alpha="255" model="3452" doublesided="false" scale="1" dimension="0" posX="38.2" posY="3930.6001" posZ="70.8" rotX="0" rotY="0" rotZ="359.967"></object>
+    <object id="object (kickcrowd01) (1)" breakable="true" interior="0" alpha="255" model="13650" doublesided="false" scale="3" dimension="0" posX="121.9" posY="4100.8999" posZ="75.4" rotX="0" rotY="0" rotZ="0"></object>
+    <object id="object (trdlamp01) (1)" breakable="true" interior="0" alpha="255" model="3534" doublesided="false" scale="1" dimension="0" posX="174.3" posY="4078.5" posZ="76.5" rotX="0" rotY="0" rotZ="0"></object>
+    <object id="object (trdlamp01) (2)" breakable="true" interior="0" alpha="255" model="3534" doublesided="false" scale="1" dimension="0" posX="174.3" posY="4078.5" posZ="77.3" rotX="0" rotY="0" rotZ="0"></object>
+    <object id="object (trdlamp01) (3)" breakable="true" interior="0" alpha="255" model="3534" doublesided="false" scale="1" dimension="0" posX="174.3" posY="4078.5" posZ="79.6" rotX="0" rotY="0" rotZ="0"></object>
+    <object id="object (trdlamp01) (4)" breakable="true" interior="0" alpha="255" model="3534" doublesided="false" scale="1" dimension="0" posX="174.3" posY="4078.5" posZ="80.8" rotX="0" rotY="0" rotZ="0"></object>
+    <object id="object (trdlamp01) (5)" breakable="true" interior="0" alpha="255" model="3534" doublesided="false" scale="1" dimension="0" posX="174.3" posY="4078.5" posZ="81.6" rotX="0" rotY="0" rotZ="0"></object>
+    <object id="object (trdlamp01) (6)" breakable="true" interior="0" alpha="255" model="3534" doublesided="false" scale="1" dimension="0" posX="174.3" posY="4077.5" posZ="82.3" rotX="0" rotY="0" rotZ="0"></object>
+    <object id="object (trdlamp01) (7)" breakable="true" interior="0" alpha="255" model="3534" doublesided="false" scale="1" dimension="0" posX="174.3" posY="4076.8" posZ="83.3" rotX="0" rotY="0" rotZ="0"></object>
+    <object id="object (trdlamp01) (8)" breakable="true" interior="0" alpha="255" model="3534" doublesided="false" scale="1" dimension="0" posX="174.3" posY="4076.1001" posZ="84.6" rotX="0" rotY="0" rotZ="0"></object>
+    <object id="object (trdlamp01) (9)" breakable="true" interior="0" alpha="255" model="3534" doublesided="false" scale="1" dimension="0" posX="174.3" posY="4076.1001" posZ="85.8" rotX="0" rotY="0" rotZ="0"></object>
+    <object id="object (trdlamp01) (10)" breakable="true" interior="0" alpha="255" model="3534" doublesided="false" scale="1" dimension="0" posX="174.3" posY="4076.1001" posZ="86.6" rotX="0" rotY="0" rotZ="0"></object>
+    <object id="object (trdlamp01) (11)" breakable="true" interior="0" alpha="255" model="3534" doublesided="false" scale="1" dimension="0" posX="174.3" posY="4076.6001" posZ="87.3" rotX="0" rotY="0" rotZ="0"></object>
+    <object id="object (trdlamp01) (12)" breakable="true" interior="0" alpha="255" model="3534" doublesided="false" scale="1" dimension="0" posX="174.3" posY="4077.3999" posZ="87.8" rotX="0" rotY="0" rotZ="0"></object>
+    <object id="object (trdlamp01) (13)" breakable="true" interior="0" alpha="255" model="3534" doublesided="false" scale="1" dimension="0" posX="174.3" posY="4077.8999" posZ="87.8" rotX="0" rotY="0" rotZ="0"></object>
+    <object id="object (trdlamp01) (14)" breakable="true" interior="0" alpha="255" model="3534" doublesided="false" scale="1" dimension="0" posX="174.3" posY="4078.7" posZ="87.8" rotX="0" rotY="0" rotZ="0"></object>
+    <object id="object (trdlamp01) (15)" breakable="true" interior="0" alpha="255" model="3534" doublesided="false" scale="1" dimension="0" posX="174.3" posY="4079.3999" posZ="87.6" rotX="0" rotY="0" rotZ="0"></object>
+    <object id="object (trdlamp01) (16)" breakable="true" interior="0" alpha="255" model="3534" doublesided="false" scale="1" dimension="0" posX="174.3" posY="4079.8999" posZ="87.1" rotX="0" rotY="0" rotZ="0"></object>
+    <object id="object (trdlamp01) (17)" breakable="true" interior="0" alpha="255" model="3534" doublesided="false" scale="1" dimension="0" posX="174.3" posY="4080.3999" posZ="86.6" rotX="0" rotY="0" rotZ="0"></object>
+    <object id="object (trdlamp01) (18)" breakable="true" interior="0" alpha="255" model="3534" doublesided="false" scale="1" dimension="0" posX="174.3" posY="4080.7" posZ="86.1" rotX="0" rotY="0" rotZ="0"></object>
+    <object id="object (bballintvgn1) (39)" breakable="true" interior="0" alpha="255" model="3452" doublesided="false" scale="1" dimension="0" posX="10.2" posY="3928" posZ="70.8" rotX="0" rotY="0" rotZ="359.967"></object>
+    <object id="object (bballintvgn1) (40)" breakable="true" interior="0" alpha="255" model="3452" doublesided="false" scale="1" dimension="0" posX="-20.3" posY="3930.1001" posZ="70.8" rotX="0" rotY="0" rotZ="359.967"></object>
+    <object id="object (bballintvgn1) (41)" breakable="true" interior="0" alpha="255" model="3452" doublesided="false" scale="1" dimension="0" posX="-46.1" posY="3929.8999" posZ="70.8" rotX="0" rotY="0" rotZ="359.967"></object>
+    <object id="object (bballintvgn1) (42)" breakable="true" interior="0" alpha="255" model="3452" doublesided="false" scale="1" dimension="0" posX="-69.6" posY="3930.1001" posZ="70.8" rotX="0" rotY="0" rotZ="359.967"></object>
+    <object id="object (bballintvgn1) (43)" breakable="true" interior="0" alpha="255" model="3452" doublesided="false" scale="1" dimension="0" posX="-75.4" posY="3929.7" posZ="70.8" rotX="0" rotY="0" rotZ="359.967"></object>
+    <object id="object (bballintvgn1) (44)" breakable="true" interior="0" alpha="255" model="3452" doublesided="false" scale="1" dimension="0" posX="-110.1" posY="3956.8" posZ="76.8" rotX="0" rotY="0" rotZ="277.967"></object>
+    <object id="object (bballintvgn1) (45)" breakable="true" interior="0" alpha="255" model="3452" doublesided="false" scale="1" dimension="0" posX="-109.8" posY="3976.7" posZ="76.8" rotX="0" rotY="0" rotZ="277.965"></object>
+    <object id="object (bballintvgn1) (46)" breakable="true" interior="0" alpha="255" model="3452" doublesided="false" scale="1" dimension="0" posX="-108.9" posY="3998.2" posZ="76.8" rotX="0" rotY="0" rotZ="277.965"></object>
+    <object id="object (bballintvgn1) (47)" breakable="true" interior="0" alpha="255" model="3452" doublesided="false" scale="1" dimension="0" posX="-113.2" posY="4020.3" posZ="76.8" rotX="0" rotY="0" rotZ="277.965"></object>
+    <object id="object (bballintvgn1) (48)" breakable="true" interior="0" alpha="255" model="3452" doublesided="false" scale="1" dimension="0" posX="-118.7" posY="4043.5" posZ="76.8" rotX="0" rotY="0" rotZ="277.965"></object>
+    <object id="object (bballintvgn1) (49)" breakable="true" interior="0" alpha="255" model="3452" doublesided="false" scale="1" dimension="0" posX="-117.7" posY="4069.1001" posZ="76.8" rotX="0" rotY="0" rotZ="277.965"></object>
+    <object id="object (bballintvgn1) (50)" breakable="true" interior="0" alpha="255" model="3452" doublesided="false" scale="1" dimension="0" posX="-109.9" posY="4095.8" posZ="76.8" rotX="0" rotY="0" rotZ="277.965"></object>
+    <object id="object (bballintvgn1) (51)" breakable="true" interior="0" alpha="255" model="3452" doublesided="false" scale="1" dimension="0" posX="-110.6" posY="4127.5" posZ="76.8" rotX="0" rotY="0" rotZ="271.965"></object>
+    <object id="object (bballintvgn1) (52)" breakable="true" interior="0" alpha="255" model="3452" doublesided="false" scale="1" dimension="0" posX="-109.9" posY="4150.7002" posZ="76.8" rotX="0" rotY="0" rotZ="267.963"></object>
+    <object id="object (bballintvgn1) (53)" breakable="true" interior="0" alpha="255" model="3452" doublesided="false" scale="1" dimension="0" posX="-109.7" posY="4160.3999" posZ="76.8" rotX="0" rotY="0" rotZ="271.961"></object>
+    <object id="object (bballintvgn1) (54)" breakable="true" interior="0" alpha="255" model="3452" doublesided="false" scale="1" dimension="0" posX="-108.9" posY="4190.5" posZ="76.8" rotX="0" rotY="0" rotZ="271.961"></object>
+    <object id="object (bballintvgn1) (55)" breakable="true" interior="0" alpha="255" model="3452" doublesided="false" scale="1" dimension="0" posX="-107.8" posY="4217.1001" posZ="76.8" rotX="0" rotY="0" rotZ="271.961"></object>
+    <object id="object (bballintvgn1) (56)" breakable="true" interior="0" alpha="255" model="3452" doublesided="false" scale="1" dimension="0" posX="-107.8" posY="4230.1001" posZ="76.8" rotX="0" rotY="0" rotZ="271.961"></object>
+    <object id="object (bballintvgn1) (57)" breakable="true" interior="0" alpha="255" model="3452" doublesided="false" scale="1" dimension="0" posX="-77.8" posY="4265.8999" posZ="70.6" rotX="0" rotY="0" rotZ="179.961"></object>
+    <object id="object (bballintvgn1) (58)" breakable="true" interior="0" alpha="255" model="3452" doublesided="false" scale="1" dimension="0" posX="-54.3" posY="4266.5" posZ="70.6" rotX="0" rotY="0" rotZ="179.956"></object>
+    <object id="object (bballintvgn1) (59)" breakable="true" interior="0" alpha="255" model="3452" doublesided="false" scale="1" dimension="0" posX="-35.3" posY="4266.3999" posZ="70.6" rotX="0" rotY="0" rotZ="179.956"></object>
+    <object id="object (bballintvgn1) (60)" breakable="true" interior="0" alpha="255" model="3452" doublesided="false" scale="1" dimension="0" posX="-10.9" posY="4266" posZ="70.6" rotX="0" rotY="0" rotZ="179.956"></object>
+    <object id="object (bballintvgn1) (61)" breakable="true" interior="0" alpha="255" model="3452" doublesided="false" scale="1" dimension="0" posX="13" posY="4264.6001" posZ="70.6" rotX="0" rotY="0" rotZ="179.956"></object>
+    <object id="object (bballintvgn1) (62)" breakable="true" interior="0" alpha="255" model="3452" doublesided="false" scale="1" dimension="0" posX="35.8" posY="4264.3999" posZ="70.6" rotX="0" rotY="0" rotZ="179.956"></object>
+    <object id="object (bballintvgn1) (63)" breakable="true" interior="0" alpha="255" model="3452" doublesided="false" scale="1" dimension="0" posX="64.1" posY="4264.7002" posZ="70.6" rotX="0" rotY="0" rotZ="179.956"></object>
+    <object id="object (bballintvgn1) (64)" breakable="true" interior="0" alpha="255" model="3452" doublesided="false" scale="1" dimension="0" posX="85.2" posY="4265.6001" posZ="70.6" rotX="0" rotY="0" rotZ="179.956"></object>
+    <object id="object (bballintvgn1) (65)" breakable="true" interior="0" alpha="255" model="3452" doublesided="false" scale="1" dimension="0" posX="106.8" posY="4267.6001" posZ="70.6" rotX="0" rotY="0" rotZ="179.956"></object>
+    <object id="object (bballintvgn1) (66)" breakable="true" interior="0" alpha="255" model="3452" doublesided="false" scale="1" dimension="0" posX="126.8" posY="4267.1001" posZ="70.6" rotX="0" rotY="0" rotZ="179.956"></object>
+    <object id="object (bballintvgn1) (67)" breakable="true" interior="0" alpha="255" model="3452" doublesided="false" scale="1" dimension="0" posX="152.89999" posY="4265.6001" posZ="70.6" rotX="0" rotY="0" rotZ="179.956"></object>
+    <object id="object (bballintvgn1) (68)" breakable="true" interior="0" alpha="255" model="3452" doublesided="false" scale="1" dimension="0" posX="174.89999" posY="4264.5" posZ="70.6" rotX="0" rotY="0" rotZ="179.956"></object>
+    <object id="object (bballintvgn1) (69)" breakable="true" interior="0" alpha="255" model="3452" doublesided="false" scale="1" dimension="0" posX="203" posY="4264.6001" posZ="70.6" rotX="0" rotY="0" rotZ="179.956"></object>
+    <object id="object (bballintvgn1) (70)" breakable="true" interior="0" alpha="255" model="3452" doublesided="false" scale="1" dimension="0" posX="229.3" posY="4270.2002" posZ="70.6" rotX="0" rotY="0" rotZ="179.956"></object>
+    <object id="object (bballintvgn1) (71)" breakable="true" interior="0" alpha="255" model="3452" doublesided="false" scale="1" dimension="0" posX="256.10001" posY="4265.7998" posZ="70.6" rotX="0" rotY="0" rotZ="179.956"></object>
+    <object id="object (bballintvgn1) (72)" breakable="true" interior="0" alpha="255" model="3452" doublesided="false" scale="1" dimension="0" posX="287.39999" posY="4264.7002" posZ="70.6" rotX="0" rotY="0" rotZ="179.956"></object>
+    <object id="object (bballintvgn1) (73)" breakable="true" interior="0" alpha="255" model="3452" doublesided="false" scale="1" dimension="0" posX="326.79999" posY="4269" posZ="70.6" rotX="0" rotY="0" rotZ="179.956"></object>
+    <object id="object (bballintvgn1) (74)" breakable="true" interior="0" alpha="255" model="3452" doublesided="false" scale="1" dimension="0" posX="350.70001" posY="4265.2998" posZ="70.6" rotX="0" rotY="0" rotZ="179.956"></object>
+    <object id="object (bballintvgn1) (75)" breakable="true" interior="0" alpha="255" model="3452" doublesided="false" scale="1" dimension="0" posX="376.5" posY="4235.7998" posZ="75.6" rotX="0" rotY="0" rotZ="93.956"></object>
+    <object id="object (bballintvgn1) (76)" breakable="true" interior="0" alpha="255" model="3452" doublesided="false" scale="1" dimension="0" posX="381.60001" posY="4212.5" posZ="75.6" rotX="0" rotY="0" rotZ="93.955"></object>
+    <object id="object (bballintvgn1) (77)" breakable="true" interior="0" alpha="255" model="3452" doublesided="false" scale="1" dimension="0" posX="380.79999" posY="4191.1001" posZ="75.6" rotX="0" rotY="0" rotZ="93.955"></object>
+    <object id="object (bballintvgn1) (78)" breakable="true" interior="0" alpha="255" model="3452" doublesided="false" scale="1" dimension="0" posX="380.70001" posY="4164" posZ="75.6" rotX="0" rotY="0" rotZ="93.955"></object>
+    <object id="object (bballintvgn1) (79)" breakable="true" interior="0" alpha="255" model="3452" doublesided="false" scale="1" dimension="0" posX="384.20001" posY="4142.5" posZ="75.6" rotX="0" rotY="0" rotZ="93.955"></object>
+    <object id="object (bballintvgn1) (80)" breakable="true" interior="0" alpha="255" model="3452" doublesided="false" scale="1" dimension="0" posX="376.70001" posY="4134.1001" posZ="75.6" rotX="0" rotY="0" rotZ="93.955"></object>
+    <object id="object (bballintvgn1) (81)" breakable="true" interior="0" alpha="255" model="3452" doublesided="false" scale="1" dimension="0" posX="378.60001" posY="4110.6001" posZ="75.6" rotX="0" rotY="0" rotZ="93.955"></object>
+    <object id="object (bballintvgn1) (82)" breakable="true" interior="0" alpha="255" model="3452" doublesided="false" scale="1" dimension="0" posX="380.79999" posY="4083.5" posZ="75.6" rotX="0" rotY="0" rotZ="93.955"></object>
+    <object id="object (bballintvgn1) (83)" breakable="true" interior="0" alpha="255" model="3452" doublesided="false" scale="1" dimension="0" posX="382.70001" posY="4059.8" posZ="75.6" rotX="0" rotY="0" rotZ="93.955"></object>
+    <object id="object (bballintvgn1) (84)" breakable="true" interior="0" alpha="255" model="3452" doublesided="false" scale="1" dimension="0" posX="384.39999" posY="4037.8999" posZ="75.6" rotX="0" rotY="0" rotZ="93.955"></object>
+    <object id="object (bballintvgn1) (85)" breakable="true" interior="0" alpha="255" model="3452" doublesided="false" scale="1" dimension="0" posX="375.79999" posY="4013.6001" posZ="75.6" rotX="0" rotY="0" rotZ="93.955"></object>
+    <object id="object (bballintvgn1) (86)" breakable="true" interior="0" alpha="255" model="3452" doublesided="false" scale="1" dimension="0" posX="378.89999" posY="3984.5" posZ="75.6" rotX="0" rotY="0" rotZ="93.955"></object>
+    <object id="object (bballintvgn1) (87)" breakable="true" interior="0" alpha="255" model="3452" doublesided="false" scale="1" dimension="0" posX="380.89999" posY="3959.3" posZ="75.6" rotX="0" rotY="0" rotZ="93.955"></object>
+    <object id="object (bballintvgn1) (88)" breakable="true" interior="0" alpha="255" model="3452" doublesided="false" scale="1" dimension="0" posX="3.5" posY="3929.3999" posZ="70.8" rotX="0" rotY="0" rotZ="359.967"></object>
+    <object id="object (bballintvgn1) (89)" breakable="true" interior="0" alpha="255" model="3452" doublesided="false" scale="1" dimension="0" posX="30.4" posY="3928.6001" posZ="70.8" rotX="0" rotY="0" rotZ="359.967"></object>
+    <object id="object (bballintvgn1) (90)" breakable="true" interior="0" alpha="255" model="3452" doublesided="false" scale="1" dimension="0" posX="58.6" posY="3927.7" posZ="70.8" rotX="0" rotY="0" rotZ="359.967"></object>
+    <object id="object (bballintvgn1) (91)" breakable="true" interior="0" alpha="255" model="3452" doublesided="false" scale="1" dimension="0" posX="86.8" posY="3926.8" posZ="70.8" rotX="0" rotY="0" rotZ="359.967"></object>
+    <object id="object (bballintvgn1) (92)" breakable="true" interior="0" alpha="255" model="3452" doublesided="false" scale="1" dimension="0" posX="113.5" posY="3926" posZ="70.8" rotX="0" rotY="0" rotZ="359.967"></object>
+    <object id="object (bballintvgn1) (93)" breakable="true" interior="0" alpha="255" model="3452" doublesided="false" scale="1" dimension="0" posX="138.89999" posY="3925.2" posZ="70.8" rotX="0" rotY="0" rotZ="359.967"></object>
+    <object id="object (bballintvgn1) (94)" breakable="true" interior="0" alpha="255" model="3452" doublesided="false" scale="1" dimension="0" posX="162.39999" posY="3924.5" posZ="70.8" rotX="0" rotY="0" rotZ="359.967"></object>
+    <object id="object (bballintvgn1) (95)" breakable="true" interior="0" alpha="255" model="3452" doublesided="false" scale="1" dimension="0" posX="185.89999" posY="3923.8" posZ="70.8" rotX="0" rotY="0" rotZ="359.967"></object>
+    <object id="object (bballintvgn1) (96)" breakable="true" interior="0" alpha="255" model="3452" doublesided="false" scale="1" dimension="0" posX="211" posY="3923" posZ="70.8" rotX="0" rotY="0" rotZ="359.967"></object>
+    <object id="object (bballintvgn1) (97)" breakable="true" interior="0" alpha="255" model="3452" doublesided="false" scale="1" dimension="0" posX="236.10001" posY="3922.2" posZ="70.8" rotX="0" rotY="0" rotZ="359.967"></object>
+    <object id="object (bballintvgn1) (98)" breakable="true" interior="0" alpha="255" model="3452" doublesided="false" scale="1" dimension="0" posX="259.89999" posY="3921.5" posZ="70.8" rotX="0" rotY="0" rotZ="359.967"></object>
+    <object id="object (bballintvgn1) (99)" breakable="true" interior="0" alpha="255" model="3452" doublesided="false" scale="1" dimension="0" posX="277.39999" posY="3920.8999" posZ="70.8" rotX="0" rotY="0" rotZ="359.967"></object>
+    <object id="object (bballintvgn1) (100)" breakable="true" interior="0" alpha="255" model="3452" doublesided="false" scale="1" dimension="0" posX="294.89999" posY="3928.8" posZ="70.8" rotX="0" rotY="0" rotZ="359.967"></object>
+    <object id="object (bballintvgn1) (101)" breakable="true" interior="0" alpha="255" model="3452" doublesided="false" scale="1" dimension="0" posX="316.89999" posY="3928.1001" posZ="70.8" rotX="0" rotY="0" rotZ="359.967"></object>
+    <object id="object (bballintvgn1) (102)" breakable="true" interior="0" alpha="255" model="3452" doublesided="false" scale="1" dimension="0" posX="342" posY="3927.3" posZ="70.8" rotX="0" rotY="0" rotZ="359.967"></object>
+    <object id="object (pinetree06) (1)" breakable="true" interior="0" alpha="255" model="655" doublesided="false" scale="2" dimension="0" posX="80.4" posY="3967.8" posZ="53.8" rotX="0" rotY="0" rotZ="0"></object>
+    <object id="object (adrenaline) (1)" breakable="true" interior="0" alpha="255" model="1241" doublesided="false" scale="2" dimension="0" posX="84" posY="3969.8999" posZ="65.2" rotX="0" rotY="182" rotZ="98"></object>
+    <object id="object (adrenaline) (2)" breakable="true" interior="0" alpha="255" model="1241" doublesided="false" scale="2" dimension="0" posX="82.1" posY="3969.1001" posZ="64.7" rotX="0" rotY="182" rotZ="97.998"></object>
+    <object id="object (adrenaline) (3)" breakable="true" interior="0" alpha="255" model="1241" doublesided="false" scale="2" dimension="0" posX="80.5" posY="3967.2" posZ="65.4" rotX="0" rotY="110" rotZ="97.998"></object>
+    <object id="object (adrenaline) (4)" breakable="true" interior="0" alpha="255" model="1241" doublesided="false" scale="2" dimension="0" posX="80.6" posY="3965.7" posZ="68.7" rotX="0" rotY="109.995" rotZ="115.998"></object>
+    <object id="object (adrenaline) (5)" breakable="true" interior="0" alpha="255" model="1241" doublesided="false" scale="2" dimension="0" posX="78.6" posY="3965.7" posZ="65.4" rotX="0" rotY="109.995" rotZ="135.998"></object>
+    <object id="object (adrenaline) (6)" breakable="true" interior="0" alpha="255" model="1241" doublesided="false" scale="2" dimension="0" posX="79.9" posY="3964.8999" posZ="69.2" rotX="0" rotY="109.995" rotZ="135.994"></object>
+    <object id="object (adrenaline) (7)" breakable="true" interior="0" alpha="255" model="1241" doublesided="false" scale="2" dimension="0" posX="83.5" posY="3971.3" posZ="69.9" rotX="0" rotY="109.995" rotZ="93.994"></object>
+    <object id="object (adrenaline) (8)" breakable="true" interior="0" alpha="255" model="1241" doublesided="false" scale="2" dimension="0" posX="83.3" posY="3969.8" posZ="75.1" rotX="0" rotY="109.995" rotZ="103.994"></object>
+    <object id="object (adrenaline) (9)" breakable="true" interior="0" alpha="255" model="1241" doublesided="false" scale="2" dimension="0" posX="80.4" posY="3968.5" posZ="66.8" rotX="0" rotY="111.995" rotZ="139.991"></object>
+    <object id="object (adrenaline) (10)" breakable="true" interior="0" alpha="255" model="1241" doublesided="false" scale="2" dimension="0" posX="80.2" posY="3967" posZ="73.7" rotX="0" rotY="109.995" rotZ="117.994"></object>
+    <object id="object (adrenaline) (11)" breakable="true" interior="0" alpha="255" model="1241" doublesided="false" scale="2" dimension="0" posX="80.3" posY="3966.8" posZ="77.4" rotX="0" rotY="109.995" rotZ="117.993"></object>
+    <object id="object (bribe) (1)" breakable="true" interior="0" alpha="255" model="1247" doublesided="false" scale="3" dimension="0" posX="80.7" posY="3967.5" posZ="79" rotX="0" rotY="0" rotZ="0"></object>
+    <object id="object (snowover03) (1)" breakable="true" interior="0" alpha="255" model="3915" doublesided="true" scale="1" dimension="0" posX="87.8" posY="3947.3" posZ="54.5" rotX="0" rotY="0" rotZ="0"></object>
+    <object id="object (des_cockbody) (1)" breakable="true" interior="0" alpha="255" model="16776" doublesided="false" scale="0.2" dimension="0" posX="89.4" posY="3950.3999" posZ="55.9" rotX="0" rotY="0" rotZ="268"></object>
+    <object id="object (des_cockbody) (2)" breakable="true" interior="0" alpha="255" model="16776" doublesided="false" scale="0.2" dimension="0" posX="86.5" posY="3942.6001" posZ="55.9" rotX="0" rotY="0" rotZ="239.995"></object>
+    <object id="object (des_cockbody) (3)" breakable="true" interior="0" alpha="255" model="16776" doublesided="false" scale="0.2" dimension="0" posX="61.7" posY="3941.8" posZ="54.2" rotX="0" rotY="0" rotZ="213.991"></object>
+    <object id="object (des_cockbody) (4)" breakable="true" interior="0" alpha="255" model="16776" doublesided="false" scale="0.2" dimension="0" posX="107.1" posY="3936.1001" posZ="54.2" rotX="0" rotY="0" rotZ="213.986"></object>
+</map>
