@@ -1239,10 +1239,10 @@ function MoveAway.update ()
 		if isPedDead(player) or getElementHealth(player) == 0 then
 			local vehicle = g_Vehicles[player]
 			if isElement(vehicle) then
-				setElementVelocity(vehicle,0,0,0)
-				setVehicleTurnVelocity(vehicle,0,0,0)
+				--setElementVelocity(vehicle,0,0,0)
+				--setVehicleTurnVelocity(vehicle,0,0,0)
 				Override.setCollideOthers( "ForMoveAway", vehicle, 0 )
-				Override.setAlpha( "ForMoveAway", {player, vehicle}, 0 )
+				--Override.setAlpha( "ForMoveAway", {player, vehicle}, 0 )
 			end
 		end
 	end
