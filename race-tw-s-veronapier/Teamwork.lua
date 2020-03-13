@@ -335,7 +335,7 @@ end
 -- -------------
 -- -------------
 function startAnnouncement(newState, oldState)
-	if (newState == "GridCountdown" or newState == "PreGridCountdown") then
+	if (newState == "GridCountdown") then
 		for i,v in pairs(getElementsByType("player")) do
 			if (#getElementsByType("player") == 1) then
 				triggerClientEvent(v, "setAnnouncementInformation", getRootElement(), "You are the only player in the server.\nTeamwork can't be done alone.\nSolo Assistant Ramps will be raised momentarily.", nil)
@@ -596,6 +596,9 @@ end
 addEventHandler("onVehicleEnter", root, setTeamPlayerAttributesOVE)	
 
 function setCollisionORSC(newState, oldState)
+	if (newState == "undefined" or newState == "NoMap" or newState == "LoadingMap" or newState == "PreGridCountdown") then
+		return
+	end
 	for i,v in pairs(getElementsByType("player")) do
 		triggerClientEvent(v, "setCollisionsAll", getRootElement())	
 		if (newState == "GridCountdown") then
@@ -609,13 +612,13 @@ end
 addEventHandler("onRaceStateChanging", root, setCollisionORSC)
 
 function attachBlipToPlayer(player, r, g, b)
-	if (not PLAYER_DATA[thePlayer]) then
+	if (not PLAYER_DATA[player]) then
 		return
 	end
-	if (isElement(PLAYER_DATA[thePlayer].blip)) then
-		destroyElement(PLAYER_DATA[thePlayer].blip)
+	if (isElement(PLAYER_DATA[player].blip)) then
+		destroyElement(PLAYER_DATA[player].blip)
 	end
-	PLAYER_DATA[thePlayer].blip = createBlipAttachedTo(thePlayer, 0, 1, r, g, b)
+	PLAYER_DATA[player].blip = createBlipAttachedTo(player, 0, 1, r, g, b)
 end
 
 -- Team assignment in marker
@@ -713,6 +716,7 @@ function changePlayerTeam(player, to)
 	local r,g,b = getTeamColor(getPlayerTeam(player))
 	setVehicleColor(car,r,g,b,(r+127)/2,(g+127)/2,(b+127)/2)
 	attachBlipToPlayer(player,r,g,b)
+		outputChatBox("GGGGGGG")
 	triggerClientEvent(player, "setCollisionsAll", getRootElement())
 	for i,v in pairs(getElementsByType("player")) do
 		triggerClientEvent(v, "setCollisionsSpecific", getRootElement(), player)

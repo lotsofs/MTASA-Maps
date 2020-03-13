@@ -26,6 +26,9 @@ function setCollisionsAll()
 	-- set my team's vehicles collidable with one another
 	local car = getPedOccupiedVehicle(localPlayer)
 	local team = getPlayerTeam(localPlayer)
+	if (not team) then
+		return
+	end
 
 	local teamPlayers = getPlayersInTeam(team)	
 	local teamCars = {}
@@ -34,7 +37,9 @@ function setCollisionsAll()
 	end
 	for i,v in pairs(teamCars) do
 		for j, w in pairs(teamCars) do
-			setElementCollidableWith(v,w,true)
+			if (w and v) then
+				setElementCollidableWith(v,w,true)
+			end
 		end
 	end
 end
@@ -58,7 +63,9 @@ function setCollisionsSpecific(withPlayer)
 		-- set collisions to false if teammates
 		for i,v in pairs(getPlayersInTeam(team)) do
 			local car = getPedOccupiedVehicle(v)
-			setElementCollidableWith(car,withCar,true)
+			if (car) then
+				setElementCollidableWith(car,withCar,true)
+			end
 		end
 	end
 end
