@@ -1,3 +1,22 @@
+-- TODO
+-- ----
+-- ----
+
+-- DONE - left in an outputChatBox, oops
+-- The first gate opening is not immediately obvious, to riders OR helpers. The same goes for the initial goal. Perhaps be a bit more in your face with the announcements still. Same with people quiting/idling.
+-- Jivel is going about some collision issues at the first platform. Players colliding with one another? Not sure what could cause it, maybe respawning players?
+-- Players REALLY like to not kill themselves when they suicide. Can I do something against this?
+-- Im not a big fan of that pipe blocking part of the end course track. Perhaps alter it slightly.
+-- Trigger the 'team has won' message when rider requirement amount of people finish, as opposed to 1 or all.
+
+
+
+
+
+
+
+
+
 -- Constants / Variables -- These values can be easily changed
 -- ---------------------
 -- ---------------------
@@ -716,7 +735,6 @@ function changePlayerTeam(player, to)
 	local r,g,b = getTeamColor(getPlayerTeam(player))
 	setVehicleColor(car,r,g,b,(r+127)/2,(g+127)/2,(b+127)/2)
 	attachBlipToPlayer(player,r,g,b)
-		outputChatBox("GGGGGGG")
 	triggerClientEvent(player, "setCollisionsAll", getRootElement())
 	for i,v in pairs(getElementsByType("player")) do
 		triggerClientEvent(v, "setCollisionsSpecific", getRootElement(), player)
