@@ -3,14 +3,25 @@
 -- ----
 
 -- DONE - left in an outputChatBox, oops
--- The first gate opening is not immediately obvious, to riders OR helpers. The same goes for the initial goal. Perhaps be a bit more in your face with the announcements still. Same with people quiting/idling.
--- Jivel is going about some collision issues at the first platform. Players colliding with one another? Not sure what could cause it, maybe respawning players?
--- Players REALLY like to not kill themselves when they suicide. Can I do something against this?
+-- DONE - move the first gate to be more visible
+-- DONE - speed bumps
+-- Perhaps be a bit more in your face with the announcements still. Same with people quiting/idling.
+-- Players collide for a frame upon changing vehicle
+-- DONE - Players REALLY like to not kill themselves when they suicide. Can I do something against this?
 -- Im not a big fan of that pipe blocking part of the end course track. Perhaps alter it slightly.
--- Trigger the 'team has won' message when rider requirement amount of people finish, as opposed to 1 or all.
-
-
-
+-- DONE - Trigger the 'team has won' message when rider requirement amount of people finish, as opposed to 1 or all.
+-- DONE - If there's teams of 3 and 4, ensure at least 2 helpers, really unfair otherwise.
+-- DONE - Add repairs at bottom to prevent chain explosions
+-- DONE - Add second place notifications
+-- DONE - Something about outlines, josh
+-- Make the end gate double, in case someone glitches past
+-- DONE - Add a check maybe for if ja rider falls off the track --> Z-coordinate below 13 , Y-coordinate between -1832 & -2016, X coordinate between 817 and 855
+-- Double check for join/leave errors
+-- triggerEvent('onPlayerReachCheckpointInternal', player, 1)
+-- DONE - course abandoned triggers whe nreversing before firsty ankee
+-- DONE - course abandoned triggers on home stretch
+-- DONE - course abandoned should be removed on death
+-- ped doesn't die
 
 
 
@@ -20,15 +31,24 @@
 -- Constants / Variables -- These values can be easily changed
 -- ---------------------
 -- ---------------------
+MAIN_COURSE_CHECKPOINTS = 20								-- this is the amount of checkpoints on the main course. Enough people acquiring this amount will trigger checkpoints being rewarded to helpers and allowing the team to finish the race
+PLAY_AREA = createColRectangle(806,-2098,110,318)			-- bounding rectangle of the play area. Players leaving this area will be flagged as wanderers. 
 
-MAIN_COURSE_CHECKPOINTS = 20						-- this is the amount of checkpoints on the main course. Enough people acquiring this amount will trigger checkpoints being rewarded to helpers and allowing the team to finish the race
-PLAY_AREA = createColRectangle(806,-2098,110,318)	-- bounding rectangle of the play area. Players leaving this area will be flagged as wanderers. 
+HELPER_AREA = createColCuboid(817, -2016, 8, 38, 172, 5.5)	-- if riders enter this area, they will get a prompt to respawn (eg. they fell off the track or wandered out of a shared area)
 
-MARKER_TEAM_CONFIG = "_MARKER_TEAM_CONFIG"			-- the marker for changing teams, name in editor. Make sure it matches, make sure it exists.
-MARKER_FIRST_GATE = "_MARKER_FIRST_GATE"			-- marker in front of first gate, name in editor, informing pass throughers and forcing checkpoint catchup
-MARKER_SECOND_GATE = "_MARKER_SECOND_GATE"			-- marker in front of second gate, name in editor, informing to wait for the rest of your team
+MARKER_TEAM_CONFIG = "_MARKER_TEAM_CONFIG"					-- the marker for changing teams, name in editor. Make sure it matches, make sure it exists.
+MARKER_FIRST_GATE = "_MARKER_FIRST_GATE"					-- marker in front of first gate, name in editor, informing pass throughers and forcing checkpoint catchup
+MARKER_SECOND_GATE = "_MARKER_SECOND_GATE"					-- marker in front of second gate, name in editor, informing to wait for the rest of your team
 
-POSSIBLE_TEAMS = {									-- possible team names & base colors. This list will be shuffled.
+-- camera used for the initial cutscene
+CAMERA_POSITION_X = 847.4
+CAMERA_POSITION_Y = -1776.3
+CAMERA_POSITION_Z = 17.6
+CAMERA_TARGET_X = 853.9
+CAMERA_TARGET_Y = -1797.2
+CAMERA_TARGET_Z = 17.2
+
+POSSIBLE_TEAMS = {											-- possible team names & base colors. This list will be shuffled.
 	{"Spume",255,255,255,"#FFFFFF"}, --white
 	{"Team Deep Sea",0,0,0,"#000000"}, -- black
 	{"Lobster",255,0,0,"#FF0000"}, -- red
@@ -111,7 +131,8 @@ TEAMS = {}
 TEAM_DATA = {}
 PLAYER_DATA = {}
 GOAL = -1
-TEAM_WON = false
+TEAMS_FINISHED = 0
+WIN_MESSAGE = ""
 
 addEvent("onRaceStateChanging", true)
 
@@ -149,6 +170,8 @@ function initTeam(team, data)
 	TEAM_DATA[team]["quiters"] = 0
 	TEAM_DATA[team]["activeMembers"] = 0
 	TEAM_DATA[team]["riderRequirement"] = 0
+	TEAM_DATA[team]["raceFinished"] = false
+	TEAM_DATA[team]["racersFinished"] = 0
 	TEAM_DATA[team]["collectedCheckpoints"] = 0
 	TEAM_DATA[team]["finishedRiders"] = 0
 	TEAM_DATA[team]["targetCheckpoints"] = 0
@@ -209,14 +232,22 @@ function initPlayer(player)
 end
 
 function determineGoal()
-	local lowest = 64
+	uneven = false
+	local lowest = 65
 	for i,v in pairs(TEAMS) do
 		local TEAM_COUNT = countPlayersInTeam(TEAMS[i])
 		if (TEAM_COUNT < lowest) then
+			if (lowest <= 64) then
+				uneven = true
+				-- teams are uneven, make sure that the smaller team gets at least two helpers
+			end
 			lowest = TEAM_COUNT
 		end
 	end
 	local maxBound = lowest - 1
+	if (uneven) then
+		maxBound = math.max(maxBound - 1, 1)
+	end
 	if (maxBound <= 0) then
 		-- we have a team of 1 players, move the player to a different team, or check if the player is the only player
 		if (#getElementsByType("player") > 1) then
@@ -364,11 +395,13 @@ function startAnnouncement(newState, oldState)
 		end
 	elseif (newState == "Running") then
 		setTimer(ValidateTeamLineups, 10000, 0)
-		for i,v in pairs(getElementsByType("player")) do
-			triggerClientEvent(v, "setAnnouncementInformation", getRootElement(), "", nil)
-			triggerClientEvent(v, "setObjectiveInformation", getRootElement(), "1", TEAM_DATA)
-			PLAYER_DATA[v].wanderTime = 0
-		end
+		setTimer(function()
+			for i,v in pairs(getElementsByType("player")) do
+				triggerClientEvent(v, "setAnnouncementInformation", getRootElement(), "", nil)
+				triggerClientEvent(v, "setObjectiveInformation", getRootElement(), "1", TEAM_DATA)
+				PLAYER_DATA[v].wanderTime = 0
+			end
+		end, 3000, 1)
 	end
 end
 
@@ -429,23 +462,29 @@ end
 function onPlayerFinish(rank, time_)
 	PLAYER_DATA[source].state = "racefinished"
 	local team = getPlayerTeam(source)
-	local finishedCount = 0
+	TEAM_DATA[team].racersFinished = TEAM_DATA[team].racersFinished + 1
 	-- for i,v in pairs(getPlayersInTeam(team)) do
 		-- if (PLAYER_DATA[v].state == "racefinished") then
 			-- finishedCount = finishedCount + 1
 		-- end
 	-- end
-	if (not TEAM_WON) then -- and finishedCount >= TEAM_DATA[team].activeMembers) then
-		TEAM_WON = true
+	if (not TEAM_DATA[team].raceFinished and TEAM_DATA[team].racersFinished >= TEAM_DATA[team].riderRequirement) then
+		TEAM_DATA[team].raceFinished = true
 		local milliseconds = time_ % 1000
 		local seconds = ((time_ - milliseconds) % 60000) / 1000
-		local zeroSeconds = ""
-		if (seconds < 10) then
-			zeroSeconds = "0"
-		end
 		local minutes = (time_ - milliseconds - (seconds * 1000)) / 60000
-		local message = TEAM_DATA[team].hex .. TEAM_DATA[team].name .. " #B8C4CCwin! (" .. minutes .. ":" .. zeroSeconds .. seconds .. "." .. milliseconds .. ")"
-		triggerClientEvent("setAnnouncementInformation", getRootElement(), message, nil)
+		local timeMessage = string.format("%02d:%02d.%03d", minutes, seconds, milliseconds)
+		TEAMS_FINISHED = TEAMS_FINISHED + 1
+		if (TEAMS_FINISHED == 1) then
+			WIN_MESSAGE = TEAM_DATA[team].hex .. TEAM_DATA[team].name .. " #B8C4CCwin! (" .. timeMessage .. ")\n"
+		elseif (TEAMS_FINISHED == 2) then
+			WIN_MESSAGE = WIN_MESSAGE .. TEAM_DATA[team].hex .. TEAM_DATA[team].name .. " #B8C4CCcome 2nd! (" .. timeMessage .. ")\n"
+		elseif (TEAMS_FINISHED == 3) then
+			WIN_MESSAGE = WIN_MESSAGE .. TEAM_DATA[team].hex .. TEAM_DATA[team].name .. " #B8C4CCcome 3rd! (" .. timeMessage .. ")\n"
+		else
+			WIN_MESSAGE = WIN_MESSAGE .. TEAM_DATA[team].hex .. TEAM_DATA[team].name .. " #B8C4CCcome " .. TEAMS_FINISHED .. "th! (" .. timeMessage .. ")\n"
+		end
+		triggerClientEvent("setAnnouncementInformation", getRootElement(), WIN_MESSAGE, nil)
 	end
 end
 addEventHandler("onPlayerFinish", root, onPlayerFinish)
@@ -578,6 +617,25 @@ function playerDied()
 end
 addEvent("onPlayerRaceWasted", true)
 addEventHandler("onPlayerRaceWasted", root, playerDied)
+
+
+function riderFell(hitElement, matchingDimension)
+	if (getElementType(hitElement) ~= "player") then
+		return
+	end
+	if (PLAYER_DATA[hitElement].checkpointsReached >= 3) then
+		triggerClientEvent(hitElement, "setAnnouncementInformation", getRootElement(), "Course abandoned! \nType /kill in chat to return.", nil)
+		setTimer(function()
+			triggerClientEvent(hitElement, "setAnnouncementInformation", getRootElement(), "", nil)
+		end, 10000, 1)
+	end
+end
+addEventHandler("onColShapeHit", HELPER_AREA, riderFell)
+
+function riderDied()
+	triggerClientEvent(source, "setAnnouncementInformation", getRootElement(), "", nil)
+end
+addEventHandler("onPlayerWasted", root, riderDied)
 
 -- Configure players for team
 -- --------------------------
@@ -778,8 +836,40 @@ function handleJoiners()
 end
 addEventHandler("onPlayerJoin", getRootElement(), handleJoiners)
 
+
+
+-- camera
+-- ------
+-- ------
+-- ------
+
+function cutscene(newState, oldState)
+	if (newState == "GridCountdown") then
+		for i, v in pairs(getElementsByType("player")) do
+			setCameraMatrix(v, CAMERA_POSITION_X, CAMERA_POSITION_Y, CAMERA_POSITION_Z, CAMERA_TARGET_X, CAMERA_TARGET_Y, CAMERA_TARGET_Z)
+			setTimer(setCameraTarget, 5000, 1, v, v)
+		end
+	elseif (newState == "Running") then
+		for i, v in pairs(getElementsByType("player")) do
+			setCameraTarget(v, v)
+		end
+	end
+end
+addEventHandler("onRaceStateChanging", root, cutscene)
+
 -- debug
 -- -----
 -- -----
 
 -- addCommandHandler("rewardHelperCheckpoints", playerCpCatchupTeleport)
+
+
+    -- <object id="_ASSISTANT01" breakable="true" interior="0" collisions="true" alpha="255" model="7017" doublesided="true" scale="1" dimension="0" posX="881" posY="-1822.5" posZ="-25.9" rotX="291.995" rotY="270" rotZ="105.995"></object>
+    -- <object id="_ASSISTANT02" breakable="true" interior="0" collisions="true" alpha="255" model="7017" doublesided="true" scale="1" dimension="0" posX="884.59961" posY="-1865.2998" posZ="-21.6" rotX="285.985" rotY="270" rotZ="89.995"></object>
+    -- <object id="_ASSISTANT03" breakable="true" interior="0" collisions="true" alpha="255" model="7017" doublesided="true" scale="1" dimension="0" posX="816.2002" posY="-1852" posZ="-27.1" rotX="289.99" rotY="270" rotZ="179.984"></object>
+    -- <object id="_ASSISTANT04" breakable="true" interior="0" collisions="true" alpha="255" model="7017" doublesided="true" scale="1" dimension="0" posX="859.7002" posY="-1889.5" posZ="-18" rotX="279.987" rotY="270" rotZ="147.98"></object>
+    -- <object id="_ASSISTANT05" breakable="true" interior="0" collisions="true" alpha="255" model="7017" doublesided="true" scale="1" dimension="0" posX="825.59961" posY="-1994.2998" posZ="-24.7" rotX="289.984" rotY="270" rotZ="353.98"></object>
+    -- <object id="_ASSISTANT06" breakable="true" interior="0" collisions="true" alpha="255" model="7017" doublesided="true" scale="1" dimension="0" posX="868.7998" posY="-1909.7998" posZ="-20.4" rotX="281.728" rotY="270" rotZ="139.471"></object>
+    -- <object id="_ASSISTANT07" breakable="true" interior="0" collisions="true" alpha="255" model="7017" doublesided="true" scale="1" dimension="0" posX="801.90002" posY="-1999.8" posZ="-26.4" rotX="287.982" rotY="270" rotZ="269.973"></object>
+    -- <object id="_ASSISTANT08" breakable="true" interior="0" collisions="true" alpha="255" model="7017" doublesided="true" scale="1" dimension="0" posX="854.20001" posY="-2006.5" posZ="-17.4" rotX="274.73" rotY="270" rotZ="179.973"></object>
+    -- <object id="_ASSISTANT09" breakable="true" interior="0" collisions="true" alpha="255" model="7017" doublesided="true" scale="1" dimension="0" posX="794.5" posY="-1834" posZ="-23.4" rotX="283.982" rotY="270" rotZ="269.984"></object>

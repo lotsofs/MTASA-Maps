@@ -126,11 +126,31 @@ objectiveInformation = ""
 
 function drawHud()
 	local width,height = guiGetScreenSize()
-	dxDrawText(announcementInformation, width*0.2, height*0.2, width*0.8, height*0.9, tocolor(184, 196, 204,255), 3, "default", "center", "top", false, true, false, true)
-	dxDrawText(markerInformation, width*0.2, height*0.5, width*0.8, height*0.9, tocolor(184, 196, 204,255), 3, "default", "center", "top", false, true)
-	dxDrawText(teamInformation, width*0.2, height*0.03, width*0.87, height*0.9, tocolor(184, 196, 204,255), 1.5, "default", "right", "top", false, true, false, true)
-	dxDrawText(objectiveInformation, width*0.2, height*0.8, width*0.8, height*0.95, tocolor(184, 196, 204, 255), 2, "default", "center", "bottom", false, true, false, true)
+
+	drawBorderedText(announcementInformation, 2, width*0.2, height*0.2, width*0.8, height*0.9, tocolor(184, 196, 204,255), 3, "default", "center", "top", false, true, false, true)
+	drawBorderedText(markerInformation, 2, width*0.2, height*0.5, width*0.8, height*0.9, tocolor(184, 196, 204,255), 3, "default", "center", "top", false, true)
+	drawBorderedText(teamInformation, 1, width*0.2, height*0.03, width*0.87, height*0.9, tocolor(184, 196, 204,255), 1.5, "default", "right", "top", false, true, false, true)
+	drawBorderedText(objectiveInformation, 2, width*0.2, height*0.8, width*0.8, height*0.95, tocolor(184, 196, 204, 255), 2, "default", "center", "bottom", false, true, false, true)
+	
+	-- dxDrawText(markerInformation, width*0.2, height*0.5, width*0.8, height*0.9, tocolor(184, 196, 204,255), 3, "default", "center", "top", false, true)
+	-- dxDrawText(teamInformation, width*0.2, height*0.03, width*0.87, height*0.9, tocolor(184, 196, 204,255), 1.5, "default", "right", "top", false, true, false, true)
+	-- dxDrawText(objectiveInformation, width*0.2, height*0.8, width*0.8, height*0.95, tocolor(184, 196, 204, 255), 2, "default", "center", "bottom", false, true, false, true)
 end
+
+function drawBorderedText(text, borderSize, width, height, width2, height2, color, size, font, horizAlign, vertiAlign, bool1, bool2, bool3, bool4)
+	text2 = string.gsub(text, "#%x%x%x%x%x%x", "")
+	dxDrawText(text2, width+borderSize, height, width2+borderSize, height2, tocolor(5, 17, 26, 255), size, font, horizAlign, vertiAlign, bool1, bool2, bool3, bool4)
+	dxDrawText(text2, width, height+borderSize, width2, height2+borderSize, tocolor(5, 17, 26, 255), size, font, horizAlign, vertiAlign, bool1, bool2, bool3, bool4)
+	dxDrawText(text2, width, height-borderSize, width2, height2-borderSize, tocolor(5, 17, 26, 255), size, font, horizAlign, vertiAlign, bool1, bool2, bool3, bool4)
+	dxDrawText(text2, width-borderSize, height, width2-borderSize, height2, tocolor(5, 17, 26, 255), size, font, horizAlign, vertiAlign, bool1, bool2, bool3, bool4)
+	dxDrawText(text2, width+borderSize, height+borderSize, width2+borderSize, height2+borderSize, tocolor(5, 17, 26, 255), size, font, horizAlign, vertiAlign, bool1, bool2, bool3, bool4)
+	dxDrawText(text2, width-borderSize, height-borderSize, width2-borderSize, height2-borderSize, tocolor(5, 17, 26, 255), size, font, horizAlign, vertiAlign, bool1, bool2, bool3, bool4)
+	dxDrawText(text2, width+borderSize, height-borderSize, width2+borderSize, height2-borderSize, tocolor(5, 17, 26, 255), size, font, horizAlign, vertiAlign, bool1, bool2, bool3, bool4)
+	dxDrawText(text2, width-borderSize, height+borderSize, width2-borderSize, height2+borderSize, tocolor(5, 17, 26, 255), size, font, horizAlign, vertiAlign, bool1, bool2, bool3, bool4)
+	dxDrawText(text, width, height, width2, height2, color, size, font, horizAlign, vertiAlign, bool1, bool2, bool3, bool4)
+end
+
+
 
 function setMarkerInformation(text)
 	markerInformation = text
@@ -149,10 +169,16 @@ function setAnnouncementInformation(text, teamData)
 	announcementInformation = text
 	else
 		local team = teamData[getPlayerTeam(localPlayer)]
-		local message = "Welcome to the Verona Pier Teamwork!\n\nYour team is: " .. team.hex .. team.name .."\n#B8C4CCYour objective: Have " .. team.hex .. team.riderRequirement .. "#B8C4CC players complete the course.\n\nTeam members:\n" .. team.hex
+		local message = "Welcome to the Verona Pier Teamwork!\n\nYour team is: " .. team.hex .. team.name .."\n#B8C4CCYour objective: Have " .. team.hex .. team.riderRequirement .. "#B8C4CC players complete the course.\n\n\n\n\n\nTeam members:\n" .. team.hex
 		local players = getPlayersInTeam(getPlayerTeam(localPlayer))
 		for i,v in pairs(players) do
-			message = message .. getPlayerName(v) .. team.hex .. "\n"
+			message = message .. team.hex .. getPlayerName(v) .. "#B8C4CC"
+			if (i < #players) then
+				message = message .. ", "
+			end
+			if (i % 6 == 0) then
+				message = message .. "\n"
+			end
 		end
 		announcementInformation = message
 	end
