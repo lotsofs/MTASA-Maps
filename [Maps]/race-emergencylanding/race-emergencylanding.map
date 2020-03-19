@@ -1,0 +1,60 @@
+<map edf:definitions="editor_main,race">
+    <checkpoint id="checkpoint () (1)" type="ring" color="#14253999" size="20" nextid="checkpoint () (2)" posX="1755.0996" posY="-3005.2002" posZ="564.20001" rotX="0" rotY="0" rotZ="0"></checkpoint>
+    <checkpoint id="checkpoint () (2)" type="ring" color="#14253999" size="20" alpha="255" interior="0" nextid="checkpoint () (3)" posX="1522.9" posY="-2881.1001" posZ="446.29999" rotX="0" rotY="0" rotZ="0"></checkpoint>
+    <checkpoint id="checkpoint () (3)" type="ring" color="#14253999" size="20" alpha="255" interior="0" nextid="checkpoint () (4)" posX="1221" posY="-2631.7" posZ="304.60001" rotX="0" rotY="0" rotZ="0"></checkpoint>
+    <checkpoint id="checkpoint () (4)" type="ring" color="#14253999" size="20" alpha="255" interior="0" nextid="checkpoint () (5)" posX="1453.1" posY="-2442.2" posZ="175.10001" rotX="0" rotY="0" rotZ="0"></checkpoint>
+    <checkpoint id="checkpoint () (5)" type="ring" color="#14253999" size="20" alpha="255" interior="0" nextid="checkpoint () (6)" posX="1668.2998" posY="-2345.3994" posZ="83.8" rotX="0" rotY="0" rotZ="0"></checkpoint>
+    <checkpoint id="checkpoint () (6)" type="corona" color="#18BBCE7F" size="20" alpha="255" interior="0" nextid="checkpoint () (7)" posX="1765.2" posY="-2287.2" posZ="25.8" rotX="0" rotY="0" rotZ="0"></checkpoint>
+    <checkpoint id="checkpoint () (7)" type="ring" color="#18BBCE7F" size="1" alpha="255" interior="0" posX="1765.9004" posY="-2285.8994" posZ="-13.1" rotX="0" rotY="0" rotZ="0"></checkpoint>
+    <explosion id="_EXPLOSION_1" type="35" interior="0" amount="100" respawn="30000" dimension="0" alpha="255" posX="1623.9" posY="-2291.2" posZ="59.2" rotX="0" rotY="0" rotZ="0"></explosion>
+    <explosion id="_EXPLOSION_2" type="35" interior="0" amount="100" respawn="30000" dimension="0" alpha="255" posX="1631.5" posY="-2281.8" posZ="64.1" rotX="0" rotY="0" rotZ="0"></explosion>
+    <explosion id="_EXPLOSION_3" type="35" interior="0" amount="100" respawn="30000" dimension="0" alpha="255" posX="1623.2" posY="-2282.3999" posZ="63.7" rotX="0" rotY="0" rotZ="0"></explosion>
+    <explosion id="_EXPLOSION_4" type="35" interior="0" amount="100" respawn="30000" dimension="0" alpha="255" posX="1622.4" posY="-2277.8999" posZ="85.5" rotX="0" rotY="0" rotZ="0"></explosion>
+    <explosion id="_EXPLOSION_5" type="35" interior="0" amount="100" respawn="30000" dimension="0" alpha="255" posX="1624.8" posY="-2292.8999" posZ="67.7" rotX="0" rotY="0" rotZ="0"></explosion>
+    <explosion id="_EXPLOSION_6" type="35" interior="0" amount="100" respawn="30000" dimension="0" alpha="255" posX="1625.2" posY="-2283" posZ="92.9" rotX="0" rotY="0" rotZ="0"></explosion>
+    <explosion id="_EXPLOSION_7" type="35" interior="0" amount="100" respawn="30000" dimension="0" alpha="255" posX="1629" posY="-2288.2" posZ="94.1" rotX="0" rotY="0" rotZ="0"></explosion>
+    <explosion id="_EXPLOSION_8" type="35" interior="0" amount="100" respawn="30000" dimension="0" alpha="255" posX="1623.9" posY="-2290.3" posZ="91.6" rotX="0" rotY="0" rotZ="0"></explosion>
+    <explosion id="_EXPLOSION_9" type="35" interior="0" amount="100" respawn="30000" dimension="0" alpha="255" posX="1622.8" posY="-2296" posZ="85" rotX="0" rotY="0" rotZ="0"></explosion>
+    <explosion id="_EXPLOSION_10" type="35" interior="0" amount="100" respawn="30000" dimension="0" alpha="255" posX="1632" posY="-2296.2" posZ="24.6" rotX="0" rotY="0" rotZ="0"></explosion>
+    <explosion id="_EXPLOSION_11" type="35" interior="0" amount="100" respawn="30000" dimension="0" alpha="255" posX="1625.9" posY="-2291.2" posZ="37.4" rotX="0" rotY="0" rotZ="0"></explosion>
+    <explosion id="_EXPLOSION_12" type="35" interior="0" amount="100" respawn="30000" dimension="0" alpha="255" posX="1592" posY="-2290.6001" posZ="39" rotX="0" rotY="0" rotZ="0"></explosion>
+    <marker id="_MARKER" type="cylinder" color="#18BBCEFF" size="20" interior="0" dimension="0" alpha="255" posX="1764.7998" posY="-2286.7998" posZ="25.8" rotX="0" rotY="0" rotZ="0"></marker>
+    <object id="_COLLAPSED_TOWER" breakable="true" interior="0" alpha="0" model="4832" doublesided="false" scale="1" dimension="0" posX="1610.8" posY="-2285.8" posZ="-27.4" rotX="13.965" rotY="4.122" rotZ="0"></object>
+    <object id="_COLLAPSING_TOWER" breakable="true" interior="0" alpha="255" model="4832" doublesided="false" scale="1" dimension="0" posX="1610.8" posY="-2285.8401" posZ="52.75" rotX="0" rotY="0" rotZ="0"></object>
+    <object id="_RUBBLE_PILE_DOWN" breakable="true" interior="0" alpha="255" model="16304" doublesided="false" scale="3" dimension="0" posX="1609.2" posY="-2289.3" posZ="4.8" rotX="0" rotY="0" rotZ="69.999"></object>
+    <object id="_RUBBLE_PILE_UP" breakable="true" interior="0" alpha="0" model="16304" doublesided="false" scale="3" dimension="0" posX="1609.2" posY="-2289.3" posZ="17.6" rotX="0" rotY="0" rotZ="70"></object>
+    <ped id="_COP" dimension="0" model="280" interior="0" rotZ="0.003" alpha="255" posX="1761.6" posY="-2344.7" posZ="-2.7" rotX="0" rotY="0"></ped>
+    <ped id="_PILOT" dimension="0" model="61" interior="0" rotZ="0.003" alpha="255" posX="1755.2" posY="-2344.3" posZ="-2.7" rotX="0" rotY="0"></ped>
+    <ped id="_SOLDIER_1" dimension="0" model="287" interior="0" rotZ="0.003" alpha="255" posX="1756.9" posY="-2344.3" posZ="-2.7" rotX="0" rotY="0"></ped>
+    <ped id="_SOLDIER_2" dimension="0" model="287" interior="0" rotZ="0.003" alpha="255" posX="1758.6" posY="-2344.3" posZ="-2.7" rotX="0" rotY="0"></ped>
+    <ped id="_SOLDIER_3" dimension="0" model="287" interior="0" rotZ="0.003" alpha="255" posX="1760.1" posY="-2344.5" posZ="-2.7" rotX="0" rotY="0"></ped>
+    <ped id="ped (1)" dimension="0" model="277" interior="0" rotZ="70.003" alpha="255" posX="1782" posY="-2298.7" posZ="26.8" rotX="0" rotY="0"></ped>
+    <ped id="ped (2)" dimension="0" model="277" interior="0" rotZ="70.003" alpha="255" posX="1784.1" posY="-2295.8999" posZ="27.1" rotX="0" rotY="0"></ped>
+    <ped id="ped (3)" dimension="0" model="277" interior="0" rotZ="60.003" alpha="255" posX="1797.3" posY="-2305.2" posZ="12.7" rotX="0" rotY="0"></ped>
+    <ped id="ped (4)" dimension="0" model="277" interior="0" rotZ="330.005" alpha="255" posX="1755.2" posY="-2315.7" posZ="13.4" rotX="0" rotY="0"></ped>
+    <ped id="ped (5)" dimension="0" model="277" interior="0" rotZ="220.004" alpha="255" posX="1735" posY="-2264.8999" posZ="13.4" rotX="0" rotY="0"></ped>
+    <removeWorldObject id="removeWorldObject (airtwer_Las) (1)" radius="63.197578" interior="0" model="4832" lodModel="4948" posX="1610.7969" posY="-2285.8359" posZ="52.75" rotX="0" rotY="0" rotZ="0"></removeWorldObject>
+    <spawner id="_AT_400" sirens="false" paintjob="3" interior="0" alpha="255" model="577" plate="HU04 AML" dimension="0" posX="1185" posY="-2646.5" posZ="483.20001" rotX="320" rotY="0" rotZ="280" color="150,145,140,95,39,43,0,0,0,0,0,0"></spawner>
+    <spawner id="_HYDRA_01" sirens="false" paintjob="3" interior="0" alpha="255" model="520" plate="CLPZ F2E" dimension="0" posX="1432.8" posY="-2349.3" posZ="246.3" rotX="320" rotY="0" rotZ="250" color="0,0,0,0,0,0,0,0,0,0,0,0"></spawner>
+    <spawner id="_HYDRA_02" sirens="false" paintjob="3" interior="0" alpha="255" model="520" plate="M27Q 7HN" dimension="0" posX="1456.3" posY="-2325.7" posZ="239.60001" rotX="320" rotY="0" rotZ="249.999" color="0,0,0,0,0,0,0,0,0,0,0,0"></spawner>
+    <spawner id="_HYDRA_03" sirens="false" paintjob="3" interior="0" alpha="255" model="520" plate="CHS3 3D1" dimension="0" posX="1479.8" posY="-2355.5" posZ="228.60001" rotX="320" rotY="0" rotZ="249.999" color="0,0,0,0,0,0,0,0,0,0,0,0"></spawner>
+    <spawner id="_POLICE_MAVERICK" sirens="false" paintjob="3" interior="0" alpha="255" model="497" plate="5XN3 ZWW" dimension="0" posX="1755.8" posY="-2280.5" posZ="126.3" rotX="0" rotY="0" rotZ="0" color="0,0,0,245,245,245,0,0,0,0,0,0"></spawner>
+    <spawnpoint id="spawnpoint (Hunter) (8)" vehicle="563" alpha="255" interior="0" posX="1749.1" posY="-2964.2" posZ="674.59998" rotX="0" rotY="0" rotZ="199.985"></spawnpoint>
+    <spawnpoint id="spawnpoint (Hunter) (6)" vehicle="563" alpha="255" interior="0" posX="1714.6" posY="-3009.7" posZ="674.59998" rotX="0" rotY="0" rotZ="269.99"></spawnpoint>
+    <spawnpoint id="spawnpoint (Hunter) (11)" vehicle="563" alpha="255" interior="0" posX="1793.1" posY="-3008.2" posZ="674.59998" rotX="0" rotY="0" rotZ="79.976"></spawnpoint>
+    <spawnpoint id="spawnpoint (Hunter) (4)" vehicle="563" alpha="255" interior="0" posX="1744.3" posY="-3045.8" posZ="674.59998" rotX="0" rotY="0" rotZ="349.989"></spawnpoint>
+    <spawnpoint id="spawnpoint (Hunter) (7)" vehicle="563" alpha="255" interior="0" posX="1725.6" posY="-2984.6001" posZ="674.59998" rotX="0" rotY="0" rotZ="239.989"></spawnpoint>
+    <spawnpoint id="spawnpoint (Hunter) (9)" vehicle="563" alpha="255" interior="0" posX="1780.5" posY="-2965.8" posZ="674.59998" rotX="0" rotY="0" rotZ="149.984"></spawnpoint>
+    <spawnpoint id="spawnpoint (Hunter) (10)" vehicle="563" alpha="255" interior="0" posX="1793.1" posY="-2994.1001" posZ="674.59998" rotX="0" rotY="0" rotZ="99.98"></spawnpoint>
+    <spawnpoint id="spawnpoint (Hunter) (3)" vehicle="563" alpha="255" interior="0" posX="1722.4" posY="-3033.3" posZ="674.59998" rotX="0" rotY="0" rotZ="309.993"></spawnpoint>
+    <spawnpoint id="spawnpoint (Hunter) (1)" vehicle="563" posX="1771.1" posY="-3044.3" posZ="674.59998" rotX="0" rotY="0" rotZ="30"></spawnpoint>
+    <spawnpoint id="spawnpoint (Hunter) (12)" vehicle="563" alpha="255" interior="0" posX="1793.09998" posY="-3008.19995" posZ="674.59998" rotX="0" rotY="0" rotZ="79.976"></spawnpoint>
+    <spawnpoint id="spawnpoint (Hunter) (5)" vehicle="563" alpha="255" interior="0" posX="1789.9" posY="-3020.7" posZ="674.59998" rotX="0" rotY="0" rotZ="69.999"></spawnpoint>
+    <vehicle id="vehicle (Fire Truck Ladder) (1)" sirens="false" paintjob="3" interior="0" alpha="255" model="544" plate="TGVM 0NI" dimension="0" posX="1756.3" posY="-2318.3" posZ="13.8" rotX="0" rotY="0" rotZ="290" color="132,4,16,245,245,245,0,0,0,0,0,0"></vehicle>
+    <vehicle id="vehicle (Fire Truck Ladder) (2)" sirens="false" paintjob="3" interior="0" alpha="255" model="544" plate="PCNN A8R" dimension="0" posX="1734.4" posY="-2260.5" posZ="13.7" rotX="0" rotY="0" rotZ="339.995" color="132,4,16,245,245,245,0,0,0,0,0,0"></vehicle>
+    <vehicle id="vehicle (Fire Truck) (1)" sirens="false" paintjob="3" interior="0" alpha="255" model="407" plate="4BNL LKE" dimension="0" posX="1800.3" posY="-2304.2" posZ="13" rotX="0" rotY="0" rotZ="0" color="132,4,16,245,245,245,0,0,0,0,0,0"></vehicle>
+    <vehicle id="vehicle (Fire Truck) (2)" sirens="false" paintjob="3" interior="0" alpha="255" model="407" plate="D6OJ AR0" dimension="0" posX="1732.1" posY="-2303.3999" posZ="13.7" rotX="0" rotY="0" rotZ="20" color="132,4,16,245,245,245,0,0,0,0,0,0"></vehicle>
+    <waypoint id="_RUN_WAYPOINT_1" type="health" interior="0" amount="100" respawn="30000" dimension="0" alpha="255" posX="1817.1" posY="-2274.8" posZ="26.8" rotX="0" rotY="0" rotZ="0"></waypoint>
+    <waypoint id="_RUN_WAYPOINT_2" type="health" interior="0" amount="100" respawn="30000" dimension="0" alpha="255" posX="1782.3" posY="-2275.1001" posZ="26.8" rotX="0" rotY="0" rotZ="0"></waypoint>
+    <waypoint id="_RUN_WAYPOINT_3" type="health" interior="0" amount="100" respawn="30000" dimension="0" alpha="255" posX="1779.4" posY="-2277.6001" posZ="26.8" rotX="0" rotY="0" rotZ="0"></waypoint>
+</map>
