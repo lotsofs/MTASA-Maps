@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-16"?>
+<map mod="deathmatch">
+  <spawnpoint posX="1654.904297" posY="-1638.365479" posZ="83.531250" rotation="360" vehicle="429" id="spawnpoint0" />
+  <spawnpoint posX="1613.767090" posY="-1560.866089" posZ="28.335938" rotation="360" vehicle="429" id="spawnpoint1" />
+  <spawnpoint posX="1609.911621" posY="-1561.079468" posZ="28.335938" rotation="360" vehicle="429" id="spawnpoint2" />
+  <spawnpoint posX="1605.715576" posY="-1561.166748" posZ="28.335938" rotation="360" vehicle="429" id="spawnpoint3" />
+  <spawnpoint posX="1613.921753" posY="-1568.502563" posZ="28.335938" rotation="360" vehicle="429" id="spawnpoint4" />
+  <spawnpoint posX="1609.756348" posY="-1568.614990" posZ="28.335938" rotation="360" vehicle="429" id="spawnpoint5" />
+  <spawnpoint posX="1605.726563" posY="-1568.524048" posZ="28.335938" rotation="360" vehicle="429" id="spawnpoint6" />
+  <spawnpoint posX="1614.379639" posY="-1575.210449" posZ="28.335938" rotation="360" vehicle="429" id="spawnpoint7" />
+  <spawnpoint posX="1609.705200" posY="-1575.121094" posZ="28.335938" rotation="360" vehicle="429" id="spawnpoint8" />
+  <spawnpoint posX="1605.936279" posY="-1575.254761" posZ="28.335938" rotation="360" vehicle="429" id="spawnpoint9" />
+  <checkpoint posX="1609.804932" posY="-1554.731323" posZ="27.795937" type="ring" size="1.050000" id="checkpoint0" nextid="checkpoint1" />
+  <checkpoint posX="1712.140503" posY="-571.735901" posZ="36.849625" type="ring" size="3.500000" id="checkpoint1" nextid="checkpoint2" />
+  <checkpoint posX="1797.385376" posY="1045.755127" posZ="6.753126" type="ring" size="3.950000" id="checkpoint2" nextid="checkpoint3" />
+  <checkpoint posX="1217.405762" posY="1987.729370" posZ="6.753124" type="ring" size="2.750000" id="checkpoint3" nextid="checkpoint4" />
+  <checkpoint posX="2053.004395" posY="842.943298" posZ="7.803125" type="ring" size="3.000000" id="checkpoint4" nextid="checkpoint5" />
+  <checkpoint posX="2717.571045" posY="1611.404297" posZ="7.803127" type="ring" size="2.800000" id="checkpoint5" nextid="checkpoint6" />
+  <checkpoint posX="2717.442383" posY="2166.042480" posZ="15.160741" type="ring" size="3.950000" id="checkpoint6" nextid="checkpoint7" />
+  <checkpoint posX="2194.690430" posY="2601.850586" posZ="6.779935" type="ring" size="3.500000" id="checkpoint7" nextid="checkpoint8" />
+  <checkpoint posX="1217.436035" posY="1870.070068" posZ="6.753125" type="ring" size="2.750000" id="checkpoint8" />
+  <racepickup posX="1654.684692" posY="-1638.306641" posZ="84.281250" type="vehiclechange" vehicle="425" id="pickup0" />
+  <racepickup posX="1605.593506" posY="-1555.688965" posZ="29.085938" type="nitro" id="pickup1" />
+  <racepickup posX="1609.882935" posY="-1555.431152" posZ="29.085938" type="nitro" id="pickup2" />
+  <racepickup posX="1613.921509" posY="-1555.109741" posZ="29.085938" type="nitro" id="pickup3" />
+  <racepickup posX="1605.707642" posY="-1564.366699" posZ="29.085938" type="nitro" id="pickup4" />
+  <racepickup posX="1609.950317" posY="-1564.168213" posZ="29.085938" type="nitro" id="pickup5" />
+  <racepickup posX="1613.914795" posY="-1564.416626" posZ="29.085938" type="nitro" id="pickup6" />
+  <racepickup posX="1606.113037" posY="-1571.610596" posZ="29.085938" type="nitro" id="pickup7" />
+  <racepickup posX="1609.672119" posY="-1571.424683" posZ="29.085938" type="nitro" id="pickup8" />
+  <racepickup posX="1614.219971" posY="-1571.493530" posZ="29.085938" type="nitro" id="pickup9" />
+  <racepickup posX="1217.468506" posY="1976.061157" posZ="7.203125" type="nitro" id="pickup10" />
+  <racepickup posX="1217.410522" posY="1257.796631" posZ="7.203125" type="nitro" id="pickup11" />
+  <racepickup posX="1793.815186" posY="843.081421" posZ="11.125275" type="nitro" id="pickup12" />
+  <racepickup posX="2659.977051" posY="953.853210" posZ="7.203125" type="nitro" id="pickup13" />
+  <racepickup posX="2717.756592" posY="1611.889038" posZ="7.203125" type="nitro" id="pickup14" />
+  <racepickup posX="2716.969727" posY="2172.250244" posZ="7.210741" type="nitro" id="pickup15" />
+</map>

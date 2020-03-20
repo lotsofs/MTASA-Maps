@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-16"?>
+<map mod="deathmatch">
+  <spawnpoint posX="2566.047852" posY="-2237.529541" posZ="0.569395" rotation="145" vehicle="430" id="spawnpoint0" />
+  <spawnpoint posX="2362.944580" posY="-2487.587646" posZ="0.707103" rotation="78" vehicle="430" id="spawnpoint1" />
+  <spawnpoint posX="2363.273682" posY="-2481.203125" posZ="0.775994" rotation="78" vehicle="430" id="spawnpoint2" />
+  <spawnpoint posX="2362.736816" posY="-2475.827637" posZ="0.986617" rotation="89" vehicle="430" id="spawnpoint3" />
+  <spawnpoint posX="2361.973633" posY="-2470.914551" posZ="0.710516" rotation="89" vehicle="430" id="spawnpoint4" />
+  <spawnpoint posX="2365.456299" posY="-2464.045898" posZ="0.803008" rotation="78" vehicle="430" id="spawnpoint5" />
+  <spawnpoint posX="2372.280518" posY="-2457.305908" posZ="0.756062" rotation="78" vehicle="430" id="spawnpoint6" />
+  <spawnpoint posX="2377.946533" posY="-2451.290283" posZ="0.597517" rotation="67" vehicle="430" id="spawnpoint7" />
+  <checkpoint posX="2562.901611" posY="-2241.084473" posZ="0.061381" id="checkpoint0" nextid="checkpoint1" />
+  <checkpoint posX="729.300476" posY="-1518.308350" posZ="0.043482" size="3.700000" id="checkpoint1" />
+  <object posX="2563.755615" posY="-2230.057373" posZ="-0.317731" rotX="0" rotY="0" rotZ="-180.000019847843" model="976" id="object0" />
+  <object posX="2565.044189" posY="-2230.925781" posZ="-0.280491" rotX="0" rotY="0" rotZ="-22.4999953190079" model="976" id="object1" />
+  <object posX="2574.532715" posY="-2234.578369" posZ="-0.074077" rotX="0" rotY="0" rotZ="-101.250007583425" model="976" id="object2" />
+  <object posX="2572.323242" posY="-2243.183838" posZ="0.067242" rotX="0" rotY="0" rotZ="-134.999971914047" model="976" id="object3" />
+  <object posX="2557.875488" posY="-2252.281006" posZ="1.270807" rotX="0" rotY="0" rotZ="-202.499957871071" model="1655" id="object4" />
+  <racepickup posX="2565.497314" posY="-2238.849365" posZ="1.400658" type="vehiclechange" vehicle="452" id="pickup0" />
+</map>

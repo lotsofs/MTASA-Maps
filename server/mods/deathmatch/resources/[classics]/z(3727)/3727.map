@@ -1,0 +1,292 @@
+<?xml version="1.0" encoding="utf-16"?>
+<map mod="deathmatch">
+  <spawnpoint posX="2604.184570" posY="-1477.576050" posZ="16.311028" rotation="170" vehicle="522" id="spawnpoint0" />
+  <spawnpoint posX="2605.537842" posY="-1478.003052" posZ="16.312569" rotation="170" vehicle="522" id="spawnpoint1" />
+  <spawnpoint posX="2606.807373" posY="-1477.827515" posZ="16.316240" rotation="170" vehicle="522" id="spawnpoint2" />
+  <spawnpoint posX="2608.083740" posY="-1477.926636" posZ="16.315628" rotation="170" vehicle="522" id="spawnpoint3" />
+  <spawnpoint posX="2602.974121" posY="-1477.679443" posZ="16.309414" rotation="170" vehicle="522" id="spawnpoint4" />
+  <spawnpoint posX="2601.736328" posY="-1477.683350" posZ="16.309351" rotation="170" vehicle="522" id="spawnpoint5" />
+  <spawnpoint posX="2600.475830" posY="-1477.591064" posZ="16.310793" rotation="170" vehicle="522" id="spawnpoint6" />
+  <checkpoint posX="2585.684814" posY="-1602.254761" posZ="2.981819" id="checkpoint0" nextid="checkpoint1" />
+  <checkpoint posX="2583.927002" posY="-1908.136108" posZ="2.859375" id="checkpoint1" nextid="checkpoint2" />
+  <checkpoint posX="2486.923828" posY="-2317.058594" posZ="0.012025" id="checkpoint2" nextid="checkpoint3" />
+  <checkpoint posX="2316.040527" posY="-2742.502686" posZ="-0.246173" id="checkpoint3" nextid="checkpoint4" />
+  <checkpoint posX="2190.692871" posY="-2904.375977" posZ="29.531128" id="checkpoint4" nextid="checkpoint5" />
+  <checkpoint posX="1964.938843" posY="-2477.741455" posZ="12.539118" id="checkpoint5" nextid="checkpoint6" />
+  <checkpoint posX="1961.807861" posY="-2167.157227" posZ="12.382813" id="checkpoint6" nextid="checkpoint7" />
+  <checkpoint posX="1961.262695" posY="-1772.858643" posZ="12.382813" id="checkpoint7" />
+  <object posX="2595.883057" posY="-2053.289063" posZ="3.262423" rotX="0" rotY="0" rotZ="-165.012074180795" model="955" id="object0" />
+  <object posX="2323.884033" posY="-2847.250732" posZ="-0.231628" rotX="0" rotY="3.43774677078494" rotZ="95.3974155935026" model="3996" id="object1" />
+  <object posX="2327.409668" posY="-2881.550049" posZ="2.738218" rotX="0" rotY="12.8915503904435" rotZ="94.5379789008063" model="3996" id="object2" />
+  <racepickup posX="2578.866699" posY="-2220.876953" posZ="0.783345" type="vehiclechange" vehicle="493" id="pickup0" />
+  <racepickup posX="2577.203613" posY="-2221.572510" posZ="0.798382" type="vehiclechange" vehicle="493" id="pickup1" />
+  <racepickup posX="2575.863037" posY="-2221.590332" posZ="0.886616" type="vehiclechange" vehicle="493" id="pickup2" />
+  <racepickup posX="2574.006836" posY="-2223.995605" posZ="0.793524" type="vehiclechange" vehicle="493" id="pickup3" />
+  <racepickup posX="2580.635254" posY="-2222.323730" posZ="0.763436" type="vehiclechange" vehicle="493" id="pickup4" />
+  <racepickup posX="2583.239502" posY="-2223.005859" posZ="0.766242" type="vehiclechange" vehicle="493" id="pickup5" />
+  <racepickup posX="2585.664063" posY="-2223.710449" posZ="0.862626" type="vehiclechange" vehicle="493" id="pickup6" />
+  <racepickup posX="2589.697998" posY="-2225.874268" posZ="0.874803" type="vehiclechange" vehicle="493" id="pickup7" />
+  <racepickup posX="2593.605469" posY="-2227.753906" posZ="1.024487" type="vehiclechange" vehicle="493" id="pickup8" />
+  <racepickup posX="2597.982422" posY="-2230.444336" posZ="1.027617" type="vehiclechange" vehicle="493" id="pickup9" />
+  <racepickup posX="2602.281982" posY="-2232.157227" posZ="1.086397" type="vehiclechange" vehicle="493" id="pickup10" />
+  <racepickup posX="2571.550049" posY="-2225.152100" posZ="0.779193" type="vehiclechange" vehicle="493" id="pickup11" />
+  <racepickup posX="2569.119873" posY="-2226.334473" posZ="0.862038" type="vehiclechange" vehicle="493" id="pickup12" />
+  <racepickup posX="2566.070801" posY="-2226.286133" posZ="0.979277" type="vehiclechange" vehicle="493" id="pickup13" />
+  <racepickup posX="2562.212158" posY="-2226.806885" posZ="0.898476" type="vehiclechange" vehicle="493" id="pickup14" />
+  <racepickup posX="2322.242920" posY="-2821.539307" posZ="1.281738" type="vehiclechange" vehicle="541" id="pickup15" />
+  <racepickup posX="2322.335205" posY="-2826.166016" posZ="1.604413" type="nitro" id="pickup16" />
+  <racepickup posX="2322.259766" posY="-2824.663818" posZ="-0.086214" type="nitro" id="pickup17" />
+  <racepickup posX="2321.021240" posY="-2824.772705" posZ="-0.330229" type="nitro" id="pickup18" />
+  <racepickup posX="2319.538086" posY="-2823.839111" posZ="0.021023" type="nitro" id="pickup19" />
+  <racepickup posX="2318.062256" posY="-2824.229004" posZ="0.239923" type="nitro" id="pickup20" />
+  <racepickup posX="2316.872803" posY="-2824.494629" posZ="0.282001" type="nitro" id="pickup21" />
+  <racepickup posX="2324.083008" posY="-2824.304932" posZ="-0.229218" type="nitro" id="pickup22" />
+  <racepickup posX="2325.056641" posY="-2824.176270" posZ="-0.268508" type="nitro" id="pickup23" />
+  <racepickup posX="2326.369629" posY="-2824.021484" posZ="-0.240785" type="nitro" id="pickup24" />
+  <racepickup posX="2327.833984" posY="-2823.283447" posZ="-0.153189" type="nitro" id="pickup25" />
+  <racepickup posX="2329.291992" posY="-2823.931641" posZ="-0.018983" type="nitro" id="pickup26" />
+  <racepickup posX="2315.304688" posY="-2823.409912" posZ="-0.069724" type="nitro" id="pickup27" />
+  <racepickup posX="2318.195557" posY="-2862.364990" posZ="0.815952" type="nitro" id="pickup28" />
+  <racepickup posX="2322.002930" posY="-2862.907715" posZ="0.705566" type="nitro" id="pickup29" />
+  <racepickup posX="2326.511475" posY="-2860.314453" posZ="0.583759" type="nitro" id="pickup30" />
+  <racepickup posX="2327.721924" posY="-2860.416992" posZ="0.596734" type="nitro" id="pickup31" />
+  <racepickup posX="2331.246338" posY="-2864.168213" posZ="0.989730" type="nitro" id="pickup32" />
+  <racepickup posX="2333.599854" posY="-2863.906982" posZ="0.987406" type="nitro" id="pickup33" />
+  <racepickup posX="2329.635010" posY="-2863.543213" posZ="0.794509" type="nitro" id="pickup34" />
+  <racepickup posX="2325.844482" posY="-2862.597900" posZ="0.716554" type="nitro" id="pickup35" />
+  <racepickup posX="2324.677246" posY="-2863.544678" posZ="0.766572" type="nitro" id="pickup36" />
+  <racepickup posX="2322.254883" posY="-2861.427490" posZ="0.618460" type="nitro" id="pickup37" />
+  <racepickup posX="2319.880127" posY="-2860.370605" posZ="0.706189" type="nitro" id="pickup38" />
+  <racepickup posX="2313.662598" posY="-2863.953857" posZ="-0.207340" type="nitro" id="pickup39" />
+  <racepickup posX="2330.932861" posY="-2930.938721" posZ="15.490305" type="vehiclechange" vehicle="476" id="pickup40" />
+  <racepickup posX="1967.615723" posY="-2454.902344" posZ="14.046875" type="vehiclechange" vehicle="451" id="pickup41" />
+  <racepickup posX="1966.438843" posY="-2453.498047" posZ="12.546875" type="vehiclechange" vehicle="451" id="pickup42" />
+  <racepickup posX="1966.357300" posY="-2453.506592" posZ="12.546875" type="vehiclechange" vehicle="451" id="pickup43" />
+  <racepickup posX="1965.667847" posY="-2452.672363" posZ="12.546875" type="vehiclechange" vehicle="451" id="pickup44" />
+  <racepickup posX="1964.400513" posY="-2452.829102" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup45" />
+  <racepickup posX="1963.399292" posY="-2453.033936" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup46" />
+  <racepickup posX="1962.489380" posY="-2453.256836" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup47" />
+  <racepickup posX="1961.914917" posY="-2453.415771" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup48" />
+  <racepickup posX="1960.205566" posY="-2451.809814" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup49" />
+  <racepickup posX="1956.382202" posY="-2445.864502" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup50" />
+  <racepickup posX="1957.639038" posY="-2452.820313" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup51" />
+  <racepickup posX="1956.642944" posY="-2453.295654" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup52" />
+  <racepickup posX="1950.713379" posY="-2446.603516" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup53" />
+  <racepickup posX="1945.688477" posY="-2441.701172" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup54" />
+  <racepickup posX="1942.865723" posY="-2443.681641" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup55" />
+  <racepickup posX="1942.411011" posY="-2444.033447" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup56" />
+  <racepickup posX="1941.185303" posY="-2445.031738" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup57" />
+  <racepickup posX="1949.421997" posY="-2453.480225" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup58" />
+  <racepickup posX="1956.213989" posY="-2457.911133" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup59" />
+  <racepickup posX="1961.130859" posY="-2459.895752" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup60" />
+  <racepickup posX="1963.508423" posY="-2460.660889" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup61" />
+  <racepickup posX="1964.829956" posY="-2457.477783" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup62" />
+  <racepickup posX="1968.015869" posY="-2455.727539" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup63" />
+  <racepickup posX="1970.016357" posY="-2455.764648" posZ="12.546875" type="vehiclechange" vehicle="451" id="pickup64" />
+  <racepickup posX="1971.177246" posY="-2451.558105" posZ="12.546875" type="vehiclechange" vehicle="451" id="pickup65" />
+  <racepickup posX="1972.931152" posY="-2451.760498" posZ="12.546875" type="vehiclechange" vehicle="451" id="pickup66" />
+  <racepickup posX="1974.103882" posY="-2453.893311" posZ="12.546875" type="vehiclechange" vehicle="451" id="pickup67" />
+  <racepickup posX="1975.970215" posY="-2456.857666" posZ="12.546875" type="vehiclechange" vehicle="451" id="pickup68" />
+  <racepickup posX="1976.708740" posY="-2456.327881" posZ="12.546875" type="vehiclechange" vehicle="451" id="pickup69" />
+  <racepickup posX="1976.636597" posY="-2456.302246" posZ="12.546875" type="vehiclechange" vehicle="451" id="pickup70" />
+  <racepickup posX="1977.180542" posY="-2454.755371" posZ="12.546875" type="vehiclechange" vehicle="451" id="pickup71" />
+  <racepickup posX="1981.615112" posY="-2453.458740" posZ="12.546875" type="vehiclechange" vehicle="451" id="pickup72" />
+  <racepickup posX="1985.914063" posY="-2445.889648" posZ="12.546875" type="vehiclechange" vehicle="451" id="pickup73" />
+  <racepickup posX="1988.302246" posY="-2444.912598" posZ="12.546875" type="vehiclechange" vehicle="451" id="pickup74" />
+  <racepickup posX="1988.959229" posY="-2445.304688" posZ="12.546875" type="vehiclechange" vehicle="451" id="pickup75" />
+  <racepickup posX="1990.985840" posY="-2446.632080" posZ="12.546875" type="vehiclechange" vehicle="451" id="pickup76" />
+  <racepickup posX="1992.119507" posY="-2447.458496" posZ="12.546875" type="vehiclechange" vehicle="451" id="pickup77" />
+  <racepickup posX="1991.854614" posY="-2449.809082" posZ="12.546875" type="vehiclechange" vehicle="451" id="pickup78" />
+  <racepickup posX="1991.764893" posY="-2452.105469" posZ="12.546875" type="vehiclechange" vehicle="451" id="pickup79" />
+  <racepickup posX="1992.361816" posY="-2452.643066" posZ="12.546875" type="vehiclechange" vehicle="451" id="pickup80" />
+  <racepickup posX="1992.060669" posY="-2441.602051" posZ="12.546875" type="vehiclechange" vehicle="451" id="pickup81" />
+  <racepickup posX="1981.540894" posY="-2452.138916" posZ="12.546875" type="vehiclechange" vehicle="451" id="pickup82" />
+  <racepickup posX="1978.935303" posY="-2452.257080" posZ="12.546875" type="vehiclechange" vehicle="451" id="pickup83" />
+  <racepickup posX="1977.479004" posY="-2444.579346" posZ="12.546875" type="vehiclechange" vehicle="451" id="pickup84" />
+  <racepickup posX="1972.126465" posY="-2445.311279" posZ="12.546875" type="vehiclechange" vehicle="451" id="pickup85" />
+  <racepickup posX="1967.318604" posY="-2450.463379" posZ="12.546875" type="vehiclechange" vehicle="451" id="pickup86" />
+  <racepickup posX="1961.755127" posY="-2442.447266" posZ="12.546875" type="vehiclechange" vehicle="451" id="pickup87" />
+  <racepickup posX="1951.547729" posY="-2441.333252" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup88" />
+  <racepickup posX="1953.999146" posY="-2456.086670" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup89" />
+  <racepickup posX="1945.487793" posY="-2450.308838" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup90" />
+  <racepickup posX="1928.654053" posY="-2437.028076" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup91" />
+  <racepickup posX="1926.144409" posY="-2439.665039" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup92" />
+  <racepickup posX="1924.647461" posY="-2441.410156" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup93" />
+  <racepickup posX="1920.591309" posY="-2446.984863" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup94" />
+  <racepickup posX="1882.941528" posY="-2430.671631" posZ="12.554688" type="vehiclechange" vehicle="451" id="pickup95" />
+  <racepickup posX="1867.160889" posY="-2425.488525" posZ="12.554688" type="vehiclechange" vehicle="451" id="pickup96" />
+  <racepickup posX="1890.726196" posY="-2441.829102" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup97" />
+  <racepickup posX="1890.019287" posY="-2443.402100" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup98" />
+  <racepickup posX="1856.953613" posY="-2436.548828" posZ="19.537821" type="vehiclechange" vehicle="451" id="pickup99" />
+  <racepickup posX="1858.759277" posY="-2432.101807" posZ="13.137820" type="vehiclechange" vehicle="451" id="pickup100" />
+  <racepickup posX="1863.083618" posY="-2423.088379" posZ="15.537834" type="vehiclechange" vehicle="451" id="pickup101" />
+  <racepickup posX="1889.904541" posY="-2443.665771" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup102" />
+  <racepickup posX="1890.606201" posY="-2442.090332" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup103" />
+  <racepickup posX="1891.214844" posY="-2440.788574" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup104" />
+  <racepickup posX="1891.845093" posY="-2439.497070" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup105" />
+  <racepickup posX="1892.496826" posY="-2438.216309" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup106" />
+  <racepickup posX="1892.897949" posY="-2437.452881" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup107" />
+  <racepickup posX="1908.121704" posY="-2445.553467" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup108" />
+  <racepickup posX="1908.121704" posY="-2445.553467" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup109" />
+  <racepickup posX="1908.448730" posY="-2444.946289" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup110" />
+  <racepickup posX="1908.559204" posY="-2444.744385" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup111" />
+  <racepickup posX="1908.894287" posY="-2444.141602" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup112" />
+  <racepickup posX="1915.199219" posY="-2445.769287" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup113" />
+  <racepickup posX="1915.523804" posY="-2445.232666" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup114" />
+  <racepickup posX="1916.188965" posY="-2444.169189" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup115" />
+  <racepickup posX="1925.801270" posY="-2447.168945" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup116" />
+  <racepickup posX="1926.215576" posY="-2446.595459" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup117" />
+  <racepickup posX="1926.425659" posY="-2446.310791" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup118" />
+  <racepickup posX="1930.164429" posY="-2447.656494" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup119" />
+  <racepickup posX="1930.778198" posY="-2446.885254" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup120" />
+  <racepickup posX="1936.388794" posY="-2449.777832" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup121" />
+  <racepickup posX="1937.640259" posY="-2448.390869" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup122" />
+  <racepickup posX="1941.306519" posY="-2448.316406" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup123" />
+  <racepickup posX="1943.316284" posY="-2449.531006" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup124" />
+  <racepickup posX="1948.537964" posY="-2454.215088" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup125" />
+  <racepickup posX="1951.064819" posY="-2453.932617" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup126" />
+  <racepickup posX="1956.211060" posY="-2455.850586" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup127" />
+  <racepickup posX="1962.078735" posY="-2458.239502" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup128" />
+  <racepickup posX="1964.414429" posY="-2456.186523" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup129" />
+  <racepickup posX="1912.078003" posY="-2451.682129" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup130" />
+  <racepickup posX="1906.384033" posY="-2449.054688" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup131" />
+  <racepickup posX="1927.588989" posY="-2457.995605" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup132" />
+  <racepickup posX="1930.890503" posY="-2457.831787" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup133" />
+  <racepickup posX="1940.827515" posY="-2461.096924" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup134" />
+  <racepickup posX="1954.516846" posY="-2465.433350" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup135" />
+  <racepickup posX="1955.795776" posY="-2464.814697" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup136" />
+  <racepickup posX="1957.908325" posY="-2462.986084" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup137" />
+  <racepickup posX="1962.052490" posY="-2464.302734" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup138" />
+  <racepickup posX="1963.498169" posY="-2463.656982" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup139" />
+  <racepickup posX="1965.448364" posY="-2463.049805" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup140" />
+  <racepickup posX="1967.324463" posY="-2460.795410" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup141" />
+  <racepickup posX="1969.713257" posY="-2459.817383" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup142" />
+  <racepickup posX="1971.903931" posY="-2464.742676" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup143" />
+  <racepickup posX="1972.912842" posY="-2466.270508" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup144" />
+  <racepickup posX="1971.864868" posY="-2466.409180" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup145" />
+  <racepickup posX="1970.036865" posY="-2466.877930" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup146" />
+  <racepickup posX="1967.054321" posY="-2466.629639" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup147" />
+  <racepickup posX="1963.849854" posY="-2466.012695" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup148" />
+  <racepickup posX="1962.201416" posY="-2467.958740" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup149" />
+  <racepickup posX="1958.401733" posY="-2466.900635" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup150" />
+  <racepickup posX="1945.307007" posY="-2459.592285" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup151" />
+  <racepickup posX="1933.904419" posY="-2452.941650" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup152" />
+  <racepickup posX="1851.388062" posY="-2455.734863" posZ="13.137872" type="vehiclechange" vehicle="451" id="pickup153" />
+  <racepickup posX="1905.278320" posY="-2451.582520" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup154" />
+  <racepickup posX="1947.225708" posY="-2468.425049" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup155" />
+  <racepickup posX="1953.545044" posY="-2469.389893" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup156" />
+  <racepickup posX="1957.950928" posY="-2470.183350" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup157" />
+  <racepickup posX="1963.474731" posY="-2471.354004" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup158" />
+  <racepickup posX="1965.291748" posY="-2469.937744" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup159" />
+  <racepickup posX="1967.125732" posY="-2468.699707" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup160" />
+  <racepickup posX="1969.162231" posY="-2468.377686" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup161" />
+  <racepickup posX="1971.956787" posY="-2467.409180" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup162" />
+  <racepickup posX="1975.859741" posY="-2468.475098" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup163" />
+  <racepickup posX="1977.377441" posY="-2467.655273" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup164" />
+  <racepickup posX="1975.105469" posY="-2468.426025" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup165" />
+  <racepickup posX="1971.797607" posY="-2468.353760" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup166" />
+  <racepickup posX="1970.231934" posY="-2468.033936" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup167" />
+  <racepickup posX="1966.294189" posY="-2468.772461" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup168" />
+  <racepickup posX="1961.881348" posY="-2470.322998" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup169" />
+  <racepickup posX="1959.777466" posY="-2469.813477" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup170" />
+  <racepickup posX="1951.215210" posY="-2465.803223" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup171" />
+  <racepickup posX="1940.605103" posY="-2461.474365" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup172" />
+  <racepickup posX="1917.654663" posY="-2452.145508" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup173" />
+  <racepickup posX="1940.208130" posY="-2465.583496" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup174" />
+  <racepickup posX="1947.771973" posY="-2469.166016" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup175" />
+  <racepickup posX="1951.412476" posY="-2470.395752" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup176" />
+  <racepickup posX="1954.393188" posY="-2470.485107" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup177" />
+  <racepickup posX="1958.077881" posY="-2471.364258" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup178" />
+  <racepickup posX="1960.609009" posY="-2471.752197" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup179" />
+  <racepickup posX="1963.001099" posY="-2471.477539" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup180" />
+  <racepickup posX="1964.948608" posY="-2470.595703" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup181" />
+  <racepickup posX="1967.915039" posY="-2469.405762" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup182" />
+  <racepickup posX="1970.009033" posY="-2468.559814" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup183" />
+  <racepickup posX="1972.179443" posY="-2468.472412" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup184" />
+  <racepickup posX="1974.094727" posY="-2469.831055" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup185" />
+  <racepickup posX="1974.067505" posY="-2469.814209" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup186" />
+  <racepickup posX="1971.467773" posY="-2469.800781" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup187" />
+  <racepickup posX="1969.200439" posY="-2470.698730" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup188" />
+  <racepickup posX="1966.513916" posY="-2471.060303" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup189" />
+  <racepickup posX="1963.675293" posY="-2471.190674" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup190" />
+  <racepickup posX="1962.009033" posY="-2473.307617" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup191" />
+  <racepickup posX="1957.766602" posY="-2472.946045" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup192" />
+  <racepickup posX="1949.099976" posY="-2469.715332" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup193" />
+  <racepickup posX="1908.618774" posY="-2461.089600" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup194" />
+  <racepickup posX="1966.487549" posY="-2285.144043" posZ="16.277393" type="vehiclechange" vehicle="451" id="pickup195" />
+  <racepickup posX="1952.048096" posY="-2472.973389" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup196" />
+  <racepickup posX="1954.795410" posY="-2473.207275" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup197" />
+  <racepickup posX="1961.854980" posY="-2474.145508" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup198" />
+  <racepickup posX="1963.077515" posY="-2473.784180" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup199" />
+  <racepickup posX="1965.499023" posY="-2472.904053" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup200" />
+  <racepickup posX="1966.599365" posY="-2472.796143" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup201" />
+  <racepickup posX="1968.091187" posY="-2472.605957" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup202" />
+  <racepickup posX="1969.617920" posY="-2472.920898" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup203" />
+  <racepickup posX="1971.592651" posY="-2472.870361" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup204" />
+  <racepickup posX="1972.279907" posY="-2473.105225" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup205" />
+  <racepickup posX="1971.775635" posY="-2473.609619" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup206" />
+  <racepickup posX="1970.503418" posY="-2474.330078" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup207" />
+  <racepickup posX="1969.293701" posY="-2474.135254" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup208" />
+  <racepickup posX="1967.868774" posY="-2474.687988" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup209" />
+  <racepickup posX="1966.924194" posY="-2475.428223" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup210" />
+  <racepickup posX="1966.114380" posY="-2475.843994" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup211" />
+  <racepickup posX="1964.663208" posY="-2475.965332" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup212" />
+  <racepickup posX="1963.127686" posY="-2476.163330" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup213" />
+  <racepickup posX="1961.590088" posY="-2475.749023" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup214" />
+  <racepickup posX="1959.224609" posY="-2475.292725" posZ="13.077625" type="vehiclechange" vehicle="451" id="pickup215" />
+  <racepickup posX="1948.584717" posY="-2473.552490" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup216" />
+  <racepickup posX="1907.200806" posY="-2467.409668" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup217" />
+  <racepickup posX="1943.728149" posY="-2474.333496" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup218" />
+  <racepickup posX="1961.213867" posY="-2477.235107" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup219" />
+  <racepickup posX="1961.879028" posY="-2477.152344" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup220" />
+  <racepickup posX="1964.581055" posY="-2476.876465" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup221" />
+  <racepickup posX="1965.755615" posY="-2476.411865" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup222" />
+  <racepickup posX="1967.185303" posY="-2475.682129" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup223" />
+  <racepickup posX="1968.193359" posY="-2475.479004" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup224" />
+  <racepickup posX="1969.437988" posY="-2475.219238" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup225" />
+  <racepickup posX="1970.556885" posY="-2475.241211" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup226" />
+  <racepickup posX="1971.021362" posY="-2475.333496" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup227" />
+  <racepickup posX="1969.968384" posY="-2476.404541" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup228" />
+  <racepickup posX="1969.095825" posY="-2476.264648" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup229" />
+  <racepickup posX="1968.220459" posY="-2476.649902" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup230" />
+  <racepickup posX="1967.739868" posY="-2477.046143" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup231" />
+  <racepickup posX="1967.284912" posY="-2477.423340" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup232" />
+  <racepickup posX="1966.715942" posY="-2477.556885" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup233" />
+  <racepickup posX="1965.359009" posY="-2477.705078" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup234" />
+  <racepickup posX="1962.197754" posY="-2477.623535" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup235" />
+  <racepickup posX="1953.359985" posY="-2477.189941" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup236" />
+  <racepickup posX="1930.740479" posY="-2476.080566" posZ="12.539118" type="vehiclechange" vehicle="451" id="pickup237" />
+  <racepickup posX="1965.508179" posY="-2285.437988" posZ="14.046875" type="nitro" id="pickup238" />
+  <racepickup posX="1966.134033" posY="-2283.935059" posZ="12.546875" type="nitro" id="pickup239" />
+  <racepickup posX="1963.102783" posY="-2280.315674" posZ="12.546875" type="nitro" id="pickup240" />
+  <racepickup posX="1962.597412" posY="-2280.347900" posZ="12.546875" type="nitro" id="pickup241" />
+  <racepickup posX="1963.178711" posY="-2281.612061" posZ="12.546875" type="nitro" id="pickup242" />
+  <racepickup posX="1964.853027" posY="-2282.776611" posZ="12.546875" type="nitro" id="pickup243" />
+  <racepickup posX="1965.431396" posY="-2277.419434" posZ="12.546875" type="nitro" id="pickup244" />
+  <racepickup posX="1966.500488" posY="-2277.417480" posZ="12.546875" type="nitro" id="pickup245" />
+  <racepickup posX="1967.925659" posY="-2277.448242" posZ="12.546875" type="nitro" id="pickup246" />
+  <racepickup posX="1967.925659" posY="-2277.448242" posZ="12.546875" type="nitro" id="pickup247" />
+  <racepickup posX="1969.171631" posY="-2277.506104" posZ="12.546875" type="nitro" id="pickup248" />
+  <racepickup posX="1969.349487" posY="-2277.516846" posZ="12.546875" type="nitro" id="pickup249" />
+  <racepickup posX="1969.705078" posY="-2277.540039" posZ="12.546875" type="nitro" id="pickup250" />
+  <racepickup posX="1970.770996" posY="-2277.623535" posZ="12.546875" type="nitro" id="pickup251" />
+  <racepickup posX="1971.303223" posY="-2277.673096" posZ="12.546875" type="nitro" id="pickup252" />
+  <racepickup posX="1971.531128" posY="-2280.525391" posZ="12.546875" type="nitro" id="pickup253" />
+  <racepickup posX="1971.698853" posY="-2280.543945" posZ="12.546875" type="nitro" id="pickup254" />
+  <racepickup posX="1971.480591" posY="-2277.690918" posZ="12.546875" type="nitro" id="pickup255" />
+  <racepickup posX="1969.053223" posY="-2268.865479" posZ="12.546875" type="nitro" id="pickup256" />
+  <racepickup posX="1967.605713" posY="-2268.812744" posZ="12.546875" type="nitro" id="pickup257" />
+  <racepickup posX="1966.571289" posY="-2268.795654" posZ="12.546875" type="nitro" id="pickup258" />
+  <racepickup posX="1965.122803" posY="-2268.800537" posZ="12.546875" type="nitro" id="pickup259" />
+  <racepickup posX="1963.881592" posY="-2268.831787" posZ="12.546875" type="nitro" id="pickup260" />
+  <racepickup posX="1962.847900" posY="-2268.876709" posZ="12.546875" type="nitro" id="pickup261" />
+  <racepickup posX="1964.150024" posY="-2270.763672" posZ="12.546874" type="nitro" id="pickup262" />
+  <racepickup posX="1964.951660" posY="-2270.743652" posZ="12.546874" type="nitro" id="pickup263" />
+  <racepickup posX="1968.084717" posY="-2266.756104" posZ="12.546874" type="nitro" id="pickup264" />
+  <racepickup posX="1970.860352" posY="-2266.903809" posZ="12.546874" type="nitro" id="pickup265" />
+  <racepickup posX="1971.499756" posY="-2266.955078" posZ="12.546874" type="nitro" id="pickup266" />
+  <racepickup posX="1971.925781" posY="-2266.992676" posZ="12.546874" type="nitro" id="pickup267" />
+  <racepickup posX="1972.776978" posY="-2267.076660" posZ="12.546874" type="nitro" id="pickup268" />
+  <racepickup posX="1973.228516" posY="-2264.900391" posZ="12.546874" type="nitro" id="pickup269" />
+  <racepickup posX="1973.668213" posY="-2264.949463" posZ="12.546874" type="nitro" id="pickup270" />
+</map>
