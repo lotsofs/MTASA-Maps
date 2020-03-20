@@ -1,0 +1,415 @@
+-- Constants / Variables
+-- ---------------------
+-- ---------------------
+
+MAIN_COURSE_CHECKPOINTS = 20
+
+teamOdds = {{1000,1000,1000,1000,1000,1000,1000,1000},
+{1000,1000,1000,1000,1000,1000,1000,1000},
+{1000,1000,1000,1000,1000,1000,1000,1000},
+{500,1000,1000,1000,1000,1000,1000,1000},
+{500,1000,1000,1000,1000,1000,1000,1000},
+{250,750,1000,1000,1000,1000,1000,1000},
+{250,750,1000,1000,1000,1000,1000,1000},
+{166,666,832,1000,1000,1000,1000,1000},
+{166,332,832,1000,1000,1000,1000,1000},
+{125,500,625,750,1000,1000,1000,1000},
+{125,375,625,875,1000,1000,1000,1000},
+{100,333,566,799,899,1000,1000,1000},
+{100,300,500,700,900,1000,1000,1000},
+{83,516,616,716,816,916,1000,1000},
+{83,166,457,540,831,914,1000,1000},
+{71,356,427,712,783,854,925,1000},
+{71,142,299,456,613,770,927,1000},
+{62,124,436,498,560,872,934,1000},
+{62,124,286,448,610,772,934,1000},
+{55,110,165,498,831,886,941,1000},
+{55,110,443,498,553,608,941,1000},
+{50,100,270,440,610,780,950,1000},
+{50,100,270,440,610,780,950,1000},
+{45,90,294,498,543,747,792,1000},
+{45,90,135,180,861,906,951,1000},
+{41,82,123,298,473,648,823,1000},
+{41,82,123,298,473,648,823,1000},
+{38,76,114,498,536,574,958,1000},
+{38,76,114,291,468,645,822,1000},
+{35,70,105,140,534,928,963,1000},
+{35,70,105,319,533,747,961,1000},
+{33,66,99,499,532,565,598,1000},
+{33,66,99,132,348,564,780,1000},
+{31,62,93,124,342,560,778,1000},
+{31,62,93,124,530,561,967,1000},
+{29,58,87,116,177,876,937,1000},
+{29,58,87,116,336,556,776,1000},
+{27,54,81,108,330,552,774,1000},
+{27,54,81,108,330,552,774,1000},
+{26,52,78,104,840,892,944,1000},
+{26,52,78,104,130,419,708,1000},
+{25,50,75,100,125,525,925,1000},
+{25,50,75,100,125,416,707,1000},
+{23,46,69,92,115,409,703,1000},
+{23,46,69,92,115,409,703,1000},
+{22,44,66,88,110,406,702,1000},
+{22,44,66,88,110,406,702,1000},
+{21,42,63,84,105,487,614,1000},
+{21,42,63,84,105,126,889,1000},
+{20,40,60,80,100,120,558,1000},
+{20,40,60,80,100,120,558,1000},
+{20,40,60,80,100,120,560,1000},
+{20,40,60,80,100,120,560,1000},
+{19,38,57,76,95,114,556,1000},
+{19,38,57,76,95,114,556,1000},
+{18,36,54,72,90,108,552,1000},
+{18,36,54,72,90,108,126,1000},
+{17,34,51,68,85,102,119,1000},
+{17,34,51,68,85,102,119,1000},
+{17,34,51,68,85,102,119,1000},
+{17,34,51,68,85,102,119,1000},
+{16,32,48,64,80,96,112,1000},
+{16,32,48,64,80,96,112,1000},
+{16,32,48,64,80,96,112,1000}}
+
+blips = {}
+possibleTeams = {}
+teamCount = -1
+teams = {}
+teamData = {}
+playersProgress = {} -- -1 = non-participant, 0 = participating, 1 = finished main course, 2 = helper heading for the gate, 3 = ready for home stretch
+playersCheckpointsReached = {}
+goal = -1
+
+-- TODO: 
+-- DONE - set team collision only to team mates
+-- DONE - set player name color in chat and tab menu
+-- DONE - set player car color to team, including on respawn
+
+-- DONE - have the team machine prompt for input
+-- DONE - enable team changing
+-- perform continuous checks for quiters, AFKers, and wanderers.
+-- deal with joiners
+-- balance for inequal sized teams
+
+-- DONE - determine how many teammates need to make it to the finish line before the gates open
+-- DONE - open gates when conditions are met
+-- deal with helpers who kill themselves after gaining its 20 seconds, locking themselves out of a finish
+
+-- DONE - replace all baggages with caddies
+-- DONE - perhaps add a colored marker above teammates (this is taken care of by the player name tag)
+-- DONE - radar blips for teammates
+
+-- display messages when markers are entered, and make these markers invisible once I confirm they're working
+-- ui that tracks progress as well as states the goal (how many people must make it, etc) and events (gates have opened, team has won)
+
+
+
+-- Team assignment at start of map
+-- -------------------------------
+-- -------------------------------
+
+function assignTeams()
+	-- determine how many teams to create based on player count and some degree of randomness
+	local randomInt = math.random(1000)
+	for i = 1,8,1 do
+		if (randomInt <= teamOdds[getPlayerCount()][i]) then
+			-- create i teams
+			teamCount = i
+			break
+		end
+	end	
+	
+	-- pick the teams to pick
+	-- these are the teams
+	local inputTeams = {
+		{"Spume",255,255,255,"#FFFFFF"}, --white
+		{"Team Deep Sea",0,0,0,"#000000"}, -- black
+		{"Lobster",255,0,0,"#FF0000"}, -- red
+		{"Team Algae",0,255,0,"#00FF00"}, -- green
+		{"Team Daytime Sky",0,0,255,"#0000FF"}, -- blue
+		{"Shallow Waters",0,255,255,"#00FFFF"}, -- cyan
+		{"Team Pearl",255,0,255,"#FF00FF"}, -- magenta
+		{"The Sand",255,255,0,"#FFFF00"} -- yellow
+	}
+	
+	-- shuffle them
+	local outputTeams = {}
+	for i = 8, 1, -1 do
+		local pickedTeamIndex = math.random(1,i)
+		outputTeams[i] = inputTeams[pickedTeamIndex]
+		table.remove(inputTeams, pickedTeamIndex)
+	end
+	possibleTeams = outputTeams
+	
+	-- create teams using the list we just shuffled to determine which themes to create
+	for i = 1, teamCount, 1 do
+		teams[i] = createTeam(outputTeams[i][1],outputTeams[i][2],outputTeams[i][3],outputTeams[i][4])
+	end
+		
+	-- take each player and shuffle them too
+	local inputPlayers = getElementsByType("player")
+	local outputPlayers = {}
+	for i = #inputPlayers, 1, -1 do
+		local pickedPlayerIndex = math.random(1,i)
+		outputPlayers[i] = inputPlayers[pickedPlayerIndex]
+		table.remove(inputPlayers, pickedPlayerIndex)
+	end
+	
+	-- then add them to the teams
+	for i,v in pairs(outputPlayers) do
+		setPlayerTeam(v, teams[i % teamCount + 1])	
+	end
+	
+	determineGoal()
+end
+addEventHandler("onMapStarting", root, assignTeams) 
+
+function determineGoal()
+	local lowest = 64
+	for i,v in pairs(teams) do
+		local teamCount = countPlayersInTeam(teams[i])
+		if (teamCount < 64) then
+			lowest = teamCount
+		end
+	end
+	maxBound = lowest - 1
+	if (maxBound == 0) then
+		-- we have a team of 1 players, move the player to a different team, or check if the player is the only player
+		if (#getElementsByType("player") > 1) then
+			outputChatBox("ERROR: A team was generated with 1 player in it. This shouldn't happen.", playerSource, 255, 127, 0)
+		end
+		goal = 1
+	else
+		-- generate three random numbers, and pick whichever is closest to 55% of players.
+		for i = 1,3,1 do
+			proposedGoal = math.random(1,maxBound)
+			if (math.abs(proposedGoal - (lowest * 0.55)) < math.abs(goal - (lowest * 0.55))) then
+				goal = proposedGoal
+			end
+		end
+	end
+end
+
+-- Race progress
+-- -------------
+-- -------------
+function processCheckpoint(checkpoint, time_)
+	if (playersProgress[source] == 2 and checkpoint > MAIN_COURSE_CHECKPOINTS) then
+		-- this is a helper for whom the end gate has just opened, and he's now heading to reunite with his riders
+		playersProgress[source] = 3	
+		teamCheckStageTwo(source)
+	elseif (checkpoint >= 3 and checkpoint < MAIN_COURSE_CHECKPOINTS) then
+		-- a rider in the middle of the course
+		playersCheckpointsReached[source] = checkpoint
+		playersProgress[source] = 0
+	elseif (checkpoint >= MAIN_COURSE_CHECKPOINTS and playersProgress[source] == 0) then
+		-- a rider that has reached the end of the main course. Check for total team progress.
+		playersProgress[source] = 1
+		teamCheckStageOne(source)
+	end
+end
+
+function teamCheckStageTwo(player)
+	local team = getPlayerTeam(player)
+	local stageAdvanceCount = 0
+	local nonParticipants = 0
+	local teamMembers = getPlayersInTeam(team)
+	for i,v in pairs(teamMembers) do
+		if (playersProgress[v] == 2) then
+			return
+		end
+	end
+	for i,v in pairs(teamMembers) do
+		if (playersProgress[v] ~= -1) then
+			triggerClientEvent(v, "openSecondGate", getRootElement())	
+		end
+	end
+	
+end
+
+function teamCheckStageOne(player)
+	local team = getPlayerTeam(player)
+	local stageAdvanceCount = 0
+	local nonParticipants = 0
+	local teamMembers = getPlayersInTeam(team)
+	for i,v in pairs(teamMembers) do
+		if (playersProgress[source] >= 1) then
+			stageAdvanceCount = stageAdvanceCount + 1
+		elseif (playersProgress[source] == -1) then
+			nonParticipants = nonParticipants + 1
+		end
+	end
+	-- check if the team has met its goal, or if all but one of its participating members have reached the finish (the one being the helper)
+	if (stageAdvanceCount >= goal or stageAdvanceCount >= #teamMembers - nonParticipants - 1) then
+		-- team is finished, open helper gate for its members
+		for i,v in pairs(teamMembers) do
+			if (playersProgress[v] == 1) then -- rider
+				playersProgress[v] = 3
+				triggerClientEvent(v, "openFirstGate", getRootElement())	
+			elseif (playersProgress[v] == 0) then -- helper
+				playersProgress[v] = 2
+				playerCpCatchupTeleport(v)
+				triggerClientEvent(v, "openFirstGate", getRootElement())	
+			elseif (playersProgress[v] == -1) then -- non participant
+				triggerClientEvent(v, "openFirstGate", getRootElement())	
+			end
+		end
+	end
+end
+
+function playerCpCatchupTeleport(player)
+	local vehicle = getPedOccupiedVehicle(player)	
+	local x,y,z = getElementPosition(vehicle)
+	local l,m,n = getElementVelocity(vehicle)	
+	local u,v,w = getElementRotation(vehicle)
+	local p,q,r = getElementAngularVelocity(vehicle)
+	setVehicleFrozen(vehicle, true)
+	cps = getElementsByType("checkpoint")
+	for i = 1, MAIN_COURSE_CHECKPOINTS, 1 do
+		local a, b, c = getElementPosition(cps[i])
+		setElementPosition(vehicle, a,b,c)
+	end		
+	setElementPosition(vehicle, x,y,z+10)
+	setTimer(function()
+		setVehicleFrozen(vehicle, false)
+		setElementVelocity(vehicle, l,m,n)
+		setElementRotation(vehicle, u,v,w)
+		setElementAngularVelocity(vehicle, p,q,r)
+	end, 1000, 1)
+end
+
+
+-- Configure players for team
+-- --------------------------
+-- --------------------------
+
+function setTeamPlayerAttributesOPPURP()
+	local car = getPedOccupiedVehicle(source)
+	local r,g,b = getTeamColor(getPlayerTeam(source))
+	setVehicleColor(car,r,g,b,(r+127)/2,(g+127)/2,(b+127)/2)
+	if (isElement(blips[source])) then
+		destroyElement(blips[source])
+	end
+	blips[source] = createBlipAttachedTo(source, 0, 1, r, g, b)
+	triggerClientEvent(source, "setCollisionsAll", getRootElement())
+	for i,v in pairs(getElementsByType("player")) do
+		triggerClientEvent(v, "setCollisionsSpecific", getRootElement(), source)
+	end
+end
+addEventHandler("onPlayerPickUpRacePickup", root, setTeamPlayerAttributesOPPURP)
+
+function setTeamPlayerAttributesOVE(thePlayer)
+	local r,g,b = getTeamColor(getPlayerTeam(thePlayer))
+	setVehicleColor(source,r,g,b,(r+127)/2,(g+127)/2,(b+127)/2)
+	if (isElement(blips[thePlayer])) then
+		destroyElement(blips[thePlayer])
+	end
+	blips[thePlayer] = createBlipAttachedTo(thePlayer, 0, 1, r, g, b)
+	triggerClientEvent(thePlayer, "setCollisionsAll", getRootElement())
+	for i,v in pairs(getElementsByType("player")) do
+		triggerClientEvent(v, "setCollisionsSpecific", getRootElement(), thePlayer)
+	end
+end
+addEventHandler("onVehicleEnter", root, setTeamPlayerAttributesOVE)	
+
+function setCollisionORSC(newState, oldState)
+	for i,v in pairs(getElementsByType("player")) do
+		triggerClientEvent(v, "setCollisionsAll", getRootElement())	
+		if (newState == "GridCountdown") then
+			local r,g,b = getTeamColor(getPlayerTeam(v))
+			if (isElement(blips[v])) then
+				destroyElement(blips[v])
+			end
+			blips[v] = createBlipAttachedTo(v, 0, 1, r, g, b)
+		end
+	end
+	
+end
+
+addEvent("onRaceStateChanging", true)
+addEventHandler("onRaceStateChanging", root, setCollisionORSC)
+
+
+-- Team assignment in marker
+-- -------------------------
+-- -------------------------
+
+function markerDetection(markerHit, matchingDimension)
+	markerID = getElementID(markerHit)
+	if (markerID == "_MARKER_TEAM_CONFIG") then
+		x1,y1,z1 = getElementPosition(markerHit)
+		x2,y2,z2 = getElementPosition(source)
+		if (getDistanceBetweenPoints3D(x1,y1,z1,x2,y2,z2) < getMarkerSize(markerHit)) then
+			promptTeamMenu(source)
+		end
+	elseif (markerID == "_MARKER_FIRST_GATE") then
+		playerCpCatchupTeleport(source)
+		if (not playersProgress[source] or playersProgress[source] == 0) then
+			triggerClientEvent(source, "setMarkerInformation", getRootElement(), "This gate will open when your team has reached its goal.")
+		elseif (playersProgress[source] >= 2) then
+			playerCpCatchupTeleport(source)
+		end
+	end
+end
+addEventHandler("onPlayerMarkerHit", getRootElement(), markerDetection)
+
+function markerDetectionLeave(markerHit, matchingDimension)
+	if (markerID == "_MARKER_TEAM_CONFIG") then
+		-- nothing yet
+	elseif (markerID == "_MARKER_FIRST_GATE") then
+		triggerClientEvent(source, "setMarkerInformation", getRootElement(), "")
+	end
+end
+addEventHandler("onPlayerMarkerLeave", getRootElement(), markerDetectionLeave)
+
+function promptTeamMenu(player)		-- TODO: Give this a GUI
+	local msg = "Use /changeteam # to change to a team. Possible team numbers: "
+	for i = 1,7,1 do
+		msg = msg .. possibleTeams[i][5] .. i .. "#E7D9B0, "
+	end
+	msg = msg .. possibleTeams[8][5] .. 8 .. "#E7D9B0."
+	outputChatBox(msg, player, 231, 217, 176, true)
+end
+
+function changeTeamCmd(playerSource, commandName, teamNo)
+	if (not isElementWithinMarker(playerSource, getElementByID("_MARKER_TEAM_CONFIG"))) then
+		return
+	end
+	if (not teamNo) then
+		outputChatBox("no team number specified", playerSource)
+		return
+	end
+	teamNumber = tonumber(teamNo)
+	if (teamNumber and teamNumber > 0 and teamNumber < 9) then
+		changePlayerTeam(playerSource, teamNumber)
+	else 
+		outputChatBox("Invalid team number", playerSource)
+	end
+end
+addCommandHandler("changeteam", changeTeamCmd)
+
+function changePlayerTeam(player, to)
+	local toTeam = getTeamFromName(possibleTeams[to][1])
+	if (toTeam) then
+		setPlayerTeam(player, toTeam)
+	else
+		teams[to] = createTeam(possibleTeams[to][1],possibleTeams[to][2],possibleTeams[to][3],possibleTeams[to][4])
+		setPlayerTeam(player, teams[to])
+	end
+	-- set colors & cols etc
+	local car = getPedOccupiedVehicle(player)
+	local r,g,b = getTeamColor(getPlayerTeam(player))
+	setVehicleColor(car,r,g,b,(r+127)/2,(g+127)/2,(b+127)/2)
+	if (isElement(blips[player])) then
+		destroyElement(blips[player])
+	end
+	blips[player] = createBlipAttachedTo(player, 0, 1, r, g, b)
+	triggerClientEvent(player, "setCollisionsAll", getRootElement())
+	for i,v in pairs(getElementsByType("player")) do
+		triggerClientEvent(v, "setCollisionsSpecific", getRootElement(), player)
+	end
+end
+
+-- debug
+-- -----
+-- -----
+
+addCommandHandler("rewardHelperCheckpoints", playerCpCatchupTeleport)
