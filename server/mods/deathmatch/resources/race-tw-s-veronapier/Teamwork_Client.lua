@@ -9,66 +9,33 @@ gate1Opened = false
 gate2Opened = false
 rampsRaised = false
 
---- collisions setting
-function setCollisionsAllHub()
-	setCollisionsAll()	-- set the collisions
-	setTimer(setCollisionsAll, 2067, 1)	-- set them again after 2 seconds, because respawn times. There seems to be no onRespawn event, so jury rigged it with a timer.
-end
-
-function setCollisionsAll()
-	-- set every vehicle non-collidable with one another
-	local cars = getElementsByType("vehicle")
-	for i,v in pairs(cars) do
-		for j, w in pairs(cars) do
-			setElementCollidableWith(v,w,false)
-		end
-	end
-	-- set my team's vehicles collidable with one another
-	local car = getPedOccupiedVehicle(localPlayer)
-	local team = getPlayerTeam(localPlayer)
-	if (not team) then
+-- COLLISIONS NEW
+-- --------------
+-- --------------
+function setCollisionsNew(theKey, oldValue, newValue)
+	if (theKey ~= "race.collideothers" or new == 0) then
 		return
 	end
-
-	local teamPlayers = getPlayersInTeam(team)	
-	local teamCars = {}
-	for i,v in pairs(teamPlayers) do
-		teamCars[i] = getPedOccupiedVehicle(v)
+	if (not getVehicleOccupant(source)) then
+		return
 	end
-	for i,v in pairs(teamCars) do
-		for j, w in pairs(teamCars) do
-			if (w and v) then
-				setElementCollidableWith(v,w,true)
-			end
-		end
+	team1 = getPlayerTeam(getVehicleOccupant(source))
+	team2 = getPlayerTeam(localPlayer)
+	if (team1 ~= team2) then
+		setElementData(source, "race.collideothers", 0, false)
 	end
 end
+addEventHandler("onClientElementDataChange", root, setCollisionsNew)
 
-function setCollisionsSpecificHub(withPlayer)
-	setCollisionsSpecific(withPlayer)	-- set the collisions
-	setTimer(setCollisionsSpecific, 2067, 1, withPlayer)	-- set them again after 2 seconds, because respawn times. There seems to be no onRespawn event, so jury rigged it with a timer.
-end
 
-function setCollisionsSpecific(withPlayer)	
-	local withCar = getPedOccupiedVehicle(withPlayer)
-	-- set collisions to false with eveyrone
-	local cars = getElementsByType("vehicle")
-	for i,v in pairs(cars) do
-		setElementCollidableWith(v,withCar,false)
-	end
-
-	teamWith = getPlayerTeam(withPlayer)
-	team = getPlayerTeam(localPlayer)
-	if (team == teamWith) then
-		-- set collisions to false if teammates
-		for i,v in pairs(getPlayersInTeam(team)) do
-			local car = getPedOccupiedVehicle(v)
-			if (car) then
-				setElementCollidableWith(car,withCar,true)
-			end
-		end
+function setCollisionsNewAll()
+	for i, v in pairs(getElementsByType("player")) do
+		vehicle = getPedOccupiedVehicle(v)
+		setElementData(vehicle, "race.collideothers", 1, false)
 	end
 end
+addEvent("setCollisionsNewAll", true)
+addEventHandler("setCollisionsNewAll", getRootElement(), setCollisionsNewAll)
 
 function openFirstGate()
 	if (gate1Opened) then
@@ -102,13 +69,9 @@ function raiseRamps()
 	end
 end
 
-addEvent("setCollisionsAll", true)
-addEvent("setCollisionsSpecific", true)
 addEvent("openFirstGate", true)
 addEvent("openSecondGate", true)
 addEvent("raiseRamps", true)
-addEventHandler("setCollisionsAll", getRootElement(), setCollisionsAllHub)
-addEventHandler("setCollisionsSpecific", getRootElement(), setCollisionsSpecificHub)
 addEventHandler("openFirstGate", getRootElement(), openFirstGate)
 addEventHandler("openSecondGate", getRootElement(), openSecondGate)
 addEventHandler("raiseRamps", getRootElement(), raiseRamps)

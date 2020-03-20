@@ -2,26 +2,16 @@
 -- ----
 -- ----
 
--- DONE - left in an outputChatBox, oops
--- DONE - move the first gate to be more visible
--- DONE - speed bumps
 -- Perhaps be a bit more in your face with the announcements still. Same with people quiting/idling.
--- Players collide for a frame upon changing vehicle
--- DONE - Players REALLY like to not kill themselves when they suicide. Can I do something against this?
+-- DONE - Players collide for a frame upon changing vehicle
 -- Im not a big fan of that pipe blocking part of the end course track. Perhaps alter it slightly.
--- DONE - Trigger the 'team has won' message when rider requirement amount of people finish, as opposed to 1 or all.
--- DONE - If there's teams of 3 and 4, ensure at least 2 helpers, really unfair otherwise.
--- DONE - Add repairs at bottom to prevent chain explosions
--- DONE - Add second place notifications
--- DONE - Something about outlines, josh
 -- Make the end gate double, in case someone glitches past
--- DONE - Add a check maybe for if ja rider falls off the track --> Z-coordinate below 13 , Y-coordinate between -1832 & -2016, X coordinate between 817 and 855
 -- Double check for join/leave errors
 -- triggerEvent('onPlayerReachCheckpointInternal', player, 1)
--- DONE - course abandoned triggers whe nreversing before firsty ankee
--- DONE - course abandoned triggers on home stretch
--- DONE - course abandoned should be removed on death
 -- ped doesn't die
+-- DONE - Joiners get put in one team
+-- revamp checkpoint thing
+-- the first gate only opens when the packer changes back to a caddy (or someone picks up a race pickup.) It should open as soon as players finish. Fix!
 -- DONE - tutorial is messed up
 
 
@@ -381,10 +371,7 @@ function AutoBalance(player)
 	local r,g,b = getTeamColor(getPlayerTeam(player))
 	setVehicleColor(car,r,g,b,(r+127)/2,(g+127)/2,(b+127)/2)
 	attachBlipToPlayer(player,r,g,b)
-	triggerClientEvent(player, "setCollisionsAll", getRootElement())
-	for i,v in pairs(getElementsByType("player")) do
-		triggerClientEvent(v, "setCollisionsSpecific", getRootElement(), player)
-	end
+	triggerClientEvent(root, "setCollisionsNewAll", getRootElement())
 	updateHudInfo()
 end
 
@@ -656,10 +643,6 @@ function setTeamPlayerAttributesOPPURP()
 	end
 	setVehicleColor(car,r,g,b,(r+127)/2,(g+127)/2,(b+127)/2)
 	attachBlipToPlayer(source,r,g,b)
-	triggerClientEvent(source, "setCollisionsAll", getRootElement())
-	for i,v in pairs(getElementsByType("player")) do
-		triggerClientEvent(v, "setCollisionsSpecific", getRootElement(), source)
-	end
 	updateHudInfo()
 end
 addEventHandler("onPlayerPickUpRacePickup", root, setTeamPlayerAttributesOPPURP)
@@ -671,10 +654,6 @@ function setTeamPlayerAttributesOVE(thePlayer)
 	local r,g,b = getTeamColor(getPlayerTeam(thePlayer))
 	setVehicleColor(source,r,g,b,(r+127)/2,(g+127)/2,(b+127)/2)
 	attachBlipToPlayer(thePlayer,r,g,b)
-	triggerClientEvent(thePlayer, "setCollisionsAll", getRootElement())
-	for i,v in pairs(getElementsByType("player")) do
-		triggerClientEvent(v, "setCollisionsSpecific", getRootElement(), thePlayer)
-	end
 	updateHudInfo()
 end
 addEventHandler("onVehicleEnter", root, setTeamPlayerAttributesOVE)	
@@ -684,7 +663,6 @@ function setCollisionORSC(newState, oldState)
 		return
 	end
 	for i,v in pairs(getElementsByType("player")) do
-		triggerClientEvent(v, "setCollisionsAll", getRootElement())	
 		if (newState == "GridCountdown") then
 			local r,g,b = getTeamColor(getPlayerTeam(v))
 			attachBlipToPlayer(v,r,g,b)
@@ -798,12 +776,9 @@ function changePlayerTeam(player, to)
 	-- set colors & cols etc
 	local car = getPedOccupiedVehicle(player)
 	local r,g,b = getTeamColor(getPlayerTeam(player))
+	triggerClientEvent(root, "setCollisionsNewAll", getRootElement())
 	setVehicleColor(car,r,g,b,(r+127)/2,(g+127)/2,(b+127)/2)
 	attachBlipToPlayer(player,r,g,b)
-	triggerClientEvent(player, "setCollisionsAll", getRootElement())
-	for i,v in pairs(getElementsByType("player")) do
-		triggerClientEvent(v, "setCollisionsSpecific", getRootElement(), player)
-	end
 	updateHudInfo()
 end
 
@@ -839,6 +814,7 @@ function handleJoiners()
 		selectedTeam = 1
 	end
 	setPlayerTeam(source, TEAMS[selectedTeam])
+	triggerClientEvent(root, "setCollisionsNewAll", getRootElement())
 	outputChatBox(getPlayerName(source) .. " #B8C4CChas been assigned to " .. TEAM_DATA[TEAMS[selectedTeam]].hex .. TEAM_DATA[TEAMS[selectedTeam]].name .. "#B8C4CC.", getRootElement(), 184, 196, 204, true)
 end
 addEventHandler("onPlayerJoin", getRootElement(), handleJoiners)
