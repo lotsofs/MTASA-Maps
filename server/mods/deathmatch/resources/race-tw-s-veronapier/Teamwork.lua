@@ -822,7 +822,7 @@ function handleJoiners()
 	local selectedTeam = 0
 	for i = 1, TEAM_COUNT, 1 do
 		local playersInTeam = countPlayersInTeam(TEAMS[i])
-		if (playersInTeam > lowestTeam) then
+		if (playersInTeam < lowestTeam) then
 			selectedTeam = i
 			lowestTeam = playersInTeam
 		end
