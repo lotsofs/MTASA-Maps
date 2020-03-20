@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-16"?>
+<map mod="deathmatch">
+  <spawnpoint posX="2630.928955" posY="-1603.344482" posZ="19.254953" rotation="83" vehicle="477" id="spawnpoint0" />
+  <spawnpoint posX="2630.754395" posY="-1605.245850" posZ="19.254953" rotation="83" vehicle="477" id="spawnpoint1" />
+  <spawnpoint posX="2630.658936" posY="-1607.242920" posZ="19.254953" rotation="83" vehicle="477" id="spawnpoint2" />
+  <spawnpoint posX="2630.481934" posY="-1609.277710" posZ="19.254953" rotation="83" vehicle="477" id="spawnpoint3" />
+  <spawnpoint posX="2630.083496" posY="-1617.085327" posZ="19.254953" rotation="83" vehicle="477" id="spawnpoint4" />
+  <spawnpoint posX="2630.014404" posY="-1618.647217" posZ="19.254953" rotation="83" vehicle="477" id="spawnpoint5" />
+  <spawnpoint posX="2629.889893" posY="-1620.448975" posZ="19.254953" rotation="83" vehicle="477" id="spawnpoint6" />
+  <spawnpoint posX="2629.840088" posY="-1621.975464" posZ="19.254953" rotation="83" vehicle="477" id="spawnpoint7" />
+  <spawnpoint posX="2629.787842" posY="-1623.543823" posZ="19.254953" rotation="83" vehicle="477" id="spawnpoint8" />
+  <checkpoint posX="2378.035645" posY="-1604.105713" posZ="7.936134" id="checkpoint0" nextid="checkpoint1" />
+  <checkpoint posX="1901.316772" posY="-1501.623047" posZ="2.248285" id="checkpoint1" nextid="checkpoint2" />
+  <checkpoint posX="1725.546143" posY="-1492.810669" posZ="18.049145" id="checkpoint2" nextid="checkpoint3" />
+  <checkpoint posX="1644.167114" posY="-1440.674194" posZ="26.848850" id="checkpoint3" nextid="checkpoint4" />
+  <checkpoint posX="1645.498779" posY="-1141.606445" posZ="56.767673" id="checkpoint4" nextid="checkpoint5" />
+  <checkpoint posX="1714.209351" posY="-505.923859" posZ="32.966610" id="checkpoint5" nextid="checkpoint6" />
+  <checkpoint posX="1712.339478" posY="416.770996" posZ="29.790148" id="checkpoint6" nextid="checkpoint7" />
+  <checkpoint posX="1783.865723" posY="653.128113" posZ="17.397808" id="checkpoint7" nextid="checkpoint8" />
+  <checkpoint posX="1806.288940" posY="839.026001" posZ="9.671875" id="checkpoint8" nextid="checkpoint9" />
+  <checkpoint posX="1807.080444" posY="1162.506836" posZ="5.734375" id="checkpoint9" nextid="checkpoint10" />
+  <checkpoint posX="1807.154663" posY="1309.447144" posZ="5.734375" id="checkpoint10" nextid="checkpoint11" />
+  <checkpoint posX="1797.574951" posY="1433.704346" posZ="5.703125" id="checkpoint11" nextid="checkpoint12" />
+  <checkpoint posX="1762.648804" posY="1434.190796" posZ="8.779129" id="checkpoint12" nextid="checkpoint13" />
+  <checkpoint posX="1717.479370" posY="1453.311523" posZ="9.796492" id="checkpoint13" nextid="checkpoint14" />
+  <checkpoint posX="1726.440430" posY="1561.392578" posZ="9.671875" id="checkpoint14" nextid="checkpoint15" />
+  <checkpoint posX="1678.677612" posY="1601.117798" posZ="9.820313" id="checkpoint15" nextid="checkpoint16" />
+  <checkpoint posX="1481.281738" posY="1806.701172" posZ="11.792814" id="checkpoint16" nextid="checkpoint17" />
+  <checkpoint posX="1484.724487" posY="1740.610596" posZ="9.812500" id="checkpoint17" nextid="checkpoint18" />
+  <checkpoint posX="1481.850342" posY="1115.711670" posZ="93.375122" type="ring" id="checkpoint18" />
+  <racepickup posX="2592.819092" posY="-1600.264648" posZ="19.926147" type="nitro" id="pickup0" />
+  <racepickup posX="2592.142090" posY="-1606.521973" posZ="19.890762" type="nitro" id="pickup1" />
+  <racepickup posX="2591.036621" posY="-1616.321533" posZ="19.916508" type="nitro" id="pickup2" />
+  <racepickup posX="2590.609131" posY="-1621.626221" posZ="19.902363" type="nitro" id="pickup3" />
+  <racepickup posX="1802.913086" posY="1188.966187" posZ="7.234374" type="nitro" id="pickup4" />
+  <racepickup posX="1809.736084" posY="1190.387939" posZ="7.234375" type="nitro" id="pickup5" />
+  <racepickup posX="1807.136719" posY="1308.455078" posZ="7.234375" type="vehiclechange" vehicle="409" id="pickup6" />
+  <racepickup posX="1483.838379" posY="1704.277344" posZ="11.312500" type="vehiclechange" vehicle="593" id="pickup7" />
+</map>

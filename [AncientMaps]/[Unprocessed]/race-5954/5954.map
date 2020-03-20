@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-16"?>
+<map mod="deathmatch">
+  <spawnpoint posX="2750.612305" posY="-1771.064209" posZ="43.347630" rotation="360" vehicle="522" id="spawnpoint0" />
+  <spawnpoint posX="2753.081543" posY="-1775.705566" posZ="42.931297" rotation="360" vehicle="522" id="spawnpoint1" />
+  <checkpoint posX="2772.007080" posY="-1759.593018" posZ="41.240059" vehicle="573" id="checkpoint0" nextid="checkpoint1" />
+  <checkpoint posX="2811.116943" posY="-1707.344727" posZ="8.950356" id="checkpoint1" nextid="checkpoint2" />
+  <checkpoint posX="2761.319580" posY="-1672.765259" posZ="8.751946" id="checkpoint2" nextid="checkpoint3" />
+  <checkpoint posX="2699.111084" posY="-1675.582520" posZ="8.494367" id="checkpoint3" nextid="checkpoint4" />
+  <checkpoint posX="2672.442871" posY="-1704.174805" posZ="8.378518" id="checkpoint4" nextid="checkpoint5" />
+  <checkpoint posX="2657.722168" posY="-1736.200439" posZ="8.309982" vehicle="545" id="checkpoint5" nextid="checkpoint6" />
+  <checkpoint posX="2659.149414" posY="-1794.437012" posZ="8.307343" id="checkpoint6" nextid="checkpoint7" />
+  <checkpoint posX="2675.193604" posY="-1826.159424" posZ="8.372475" id="checkpoint7" nextid="checkpoint8" />
+  <checkpoint posX="2723.391602" posY="-1854.649780" posZ="8.567791" id="checkpoint8" nextid="checkpoint9" />
+  <checkpoint posX="2778.593018" posY="-1848.678345" posZ="8.789051" id="checkpoint9" nextid="checkpoint10" />
+  <checkpoint posX="2842.889648" posY="-1846.817261" posZ="9.906878" id="checkpoint10" nextid="checkpoint11" />
+  <checkpoint posX="2859.854248" posY="-1814.194214" posZ="10.370283" vehicle="427" id="checkpoint11" nextid="checkpoint12" />
+  <checkpoint posX="2906.941895" posY="-2202.636230" posZ="41.517029" id="checkpoint12" />
+  <object posX="2853.360596" posY="-1821.077148" posZ="16.424971" rotX="0" rotY="0" rotZ="0" model="18250" id="object0" />
+  <racepickup posX="2818.902832" posY="-2112.305908" posZ="11.429688" type="vehiclechange" vehicle="464" id="pickup0" />
+</map>
