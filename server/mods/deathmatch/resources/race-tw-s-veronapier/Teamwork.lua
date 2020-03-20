@@ -22,6 +22,7 @@
 -- DONE - course abandoned triggers on home stretch
 -- DONE - course abandoned should be removed on death
 -- ped doesn't die
+-- DONE - tutorial is messed up
 
 
 
@@ -141,6 +142,12 @@ addEvent("onRaceStateChanging", true)
 -- -------------------------------
 
 function start()
+	for i = 1, 3, 1 do
+		car = getElementByID("_TUTORIAL_VEHICLE_" .. i)
+		setElementFrozen(car, true)
+		setElementAlpha(car, 0)
+	end
+	
 	shuffleTeams()
 	assignTeams()
 	for i,v in pairs(getElementsByType("player")) do
@@ -847,6 +854,11 @@ function cutscene(newState, oldState)
 	if (newState == "GridCountdown") then
 		for i, v in pairs(getElementsByType("player")) do
 			setCameraMatrix(v, CAMERA_POSITION_X, CAMERA_POSITION_Y, CAMERA_POSITION_Z, CAMERA_TARGET_X, CAMERA_TARGET_Y, CAMERA_TARGET_Z)
+			for i = 1, 3, 1 do
+				car = getElementByID("_TUTORIAL_VEHICLE_" .. i)
+				setElementFrozen(car, false)
+				setElementAlpha(car, 255)
+			end
 			setTimer(setCameraTarget, 5000, 1, v, v)
 		end
 	elseif (newState == "Running") then
