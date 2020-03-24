@@ -13,6 +13,9 @@
 -- revamp checkpoint thing
 -- the first gate only opens when the packer changes back to a caddy (or someone picks up a race pickup.) It should open as soon as players finish. Fix!
 -- DONE - tutorial is messed up
+-- Collisions still messed up, see Jivel on Discord
+-- Teams: Synchronize helper count, not rider count
+-- Swap caddy for tug?
 
 
 
@@ -617,7 +620,7 @@ function riderFell(hitElement, matchingDimension)
 	if (getElementType(hitElement) ~= "player") then
 		return
 	end
-	if (PLAYER_DATA[hitElement].checkpointsReached >= 3) then
+	if (PLAYER_DATA[hitElement].checkpointsReached >= 3 and PLAYER_DATA[hitElement].checkpointsReached < MAIN_COURSE_CHECKPOINTS) then
 		triggerClientEvent(hitElement, "setAnnouncementInformation", getRootElement(), "Course abandoned! \nType /kill in chat to return.", nil)
 		setTimer(function()
 			triggerClientEvent(hitElement, "setAnnouncementInformation", getRootElement(), "", nil)
