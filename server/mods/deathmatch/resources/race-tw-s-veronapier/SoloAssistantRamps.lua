@@ -18,4 +18,4 @@ function raiseRamps()
 end
 addEvent("raiseRamps", true)
 addEventHandler("raiseRamps", getRootElement(), raiseRamps)
-addCommandHandler("raiseSoloRamps", raiseRamps)
+--addCommandHandler("raiseSoloRamps", raiseRamps)

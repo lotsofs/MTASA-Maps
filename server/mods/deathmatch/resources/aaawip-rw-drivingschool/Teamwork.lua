@@ -2,7 +2,7 @@
 -- ----
 -- ----
 
--- -- Map Editor:
+-- -- Driving School specific:
 -- DONE - Make it harder to fall off after the first wing of the andromada, redesign entire track
 -- DONE - first barrier can be jumped from the top
 -- DONE - move last checkpoint further over the edge
@@ -13,7 +13,7 @@
 -- DONE - bus can be getten out if you enter it slowly, move it further from the tug
 -- DONE - decoration
 
--- -- Script:
+-- -- Teamwork Script:
 -- DONE - freeze vehicles
 -- team had an advantage, compensation message could use a color or somethign
 -- Perhaps be a bit more in your face with the announcements still. Same with people quiting/idling.
