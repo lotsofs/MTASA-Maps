@@ -4,34 +4,6 @@ gateFinishLine = "_GATE_FINISH_LINE"				-- editor id for the second gate
 gate1Opened = false
 gate2Opened = false
 
--- COLLISIONS NEW
--- --------------
--- --------------
-function setCollisionsNew(theKey, oldValue, newValue)
-	if (theKey ~= "race.collideothers" or new == 0) then
-		return
-	end
-	if (not getVehicleOccupant(source)) then
-		return
-	end
-	team1 = getPlayerTeam(getVehicleOccupant(source))
-	team2 = getPlayerTeam(localPlayer)
-	if (team1 ~= team2) then
-		setElementData(source, "race.collideothers", 0, false)
-	end
-end
-addEventHandler("onClientElementDataChange", root, setCollisionsNew)
-
-
-function setCollisionsNewAll()
-	for i, v in pairs(getElementsByType("player")) do
-		vehicle = getPedOccupiedVehicle(v)
-		setElementData(vehicle, "race.collideothers", 1, false)
-	end
-end
-addEvent("setCollisionsNewAll", true)
-addEventHandler("setCollisionsNewAll", getRootElement(), setCollisionsNewAll)
-
 function openFirstGate()
 	if (gate1Opened) then
 		return

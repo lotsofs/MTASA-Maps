@@ -19,11 +19,13 @@
 -- Perhaps be a bit more in your face with the announcements still. Same with people quiting/idling.
 -- revamp checkpoint thing
 -- the first gate only opens when the packer changes back to a caddy (or someone picks up a race pickup.) It should open as soon as players finish. Fix!
--- Collisions still messed up, see Jivel on Discord
 -- Teams: Synchronize helper count, not rider count
 -- DONE - Super GT still messes up
--- Collisions dont work when people change team
--- Definitely somethign wrong with the collision script at line 29 	setElementData(vehicle, "race.collideothers", 1, false)
+-- DONE - Collisions still messed up, see Jivel on Discord
+-- DONE - Collisions dont work when people change team
+-- DONE - Definitely somethign wrong with the collision script at line 29 	setElementData(vehicle, "race.collideothers", 1, false)
+-- Sometimes when people change teams, it breaks
+-- Collisions are weird when two teammates collide with each other while ghosting with a non-teammate
 
 
 
@@ -374,7 +376,7 @@ function AutoBalance(player)
 	local r,g,b = getTeamColor(getPlayerTeam(player))
 	setVehicleColor(car,r,g,b,(r+127)/2,(g+127)/2,(b+127)/2)
 	attachBlipToPlayer(player,r,g,b)
-	triggerClientEvent(root, "setCollisionsNewAll", getRootElement())
+	triggerClientEvent(root, "resetCollisions", getRootElement(), player)
 	updateHudInfo()
 end
 
@@ -779,7 +781,7 @@ function changePlayerTeam(player, to)
 	-- set colors & cols etc
 	local car = getPedOccupiedVehicle(player)
 	local r,g,b = getTeamColor(getPlayerTeam(player))
-	triggerClientEvent(root, "setCollisionsNewAll", getRootElement())
+	triggerClientEvent(root, "resetCollisions", getRootElement(), player)
 	setVehicleColor(car,r,g,b,(r+127)/2,(g+127)/2,(b+127)/2)
 	attachBlipToPlayer(player,r,g,b)
 	updateHudInfo()
@@ -817,7 +819,7 @@ function handleJoiners()
 		selectedTeam = 1
 	end
 	setPlayerTeam(source, TEAMS[selectedTeam])
-	triggerClientEvent(root, "setCollisionsNewAll", getRootElement())
+	triggerClientEvent(root, "resetCollisions", getRootElement(), source)
 	outputChatBox(getPlayerName(source) .. " #B8C4CChas been assigned to " .. TEAM_DATA[TEAMS[selectedTeam]].hex .. TEAM_DATA[TEAMS[selectedTeam]].name .. "#B8C4CC.", getRootElement(), 184, 196, 204, true)
 end
 addEventHandler("onPlayerJoin", getRootElement(), handleJoiners)
