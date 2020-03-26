@@ -1,41 +1,8 @@
 gateHelperReunion = "_GATE_HELPER_REUNION"			-- editor id for the first gate
 gateFinishLine = "_GATE_FINISH_LINE"				-- editor id for the second gate
 
-soloRamps = {"_ASSISTANT01","_ASSISTANT02","_ASSISTANT03","_ASSISTANT04","_ASSISTANT05","_ASSISTANT06","_ASSISTANT07","_ASSISTANT08","_ASSISTANT09"}		-- editor id for solo assistant ramps
-
-
-
 gate1Opened = false
 gate2Opened = false
-rampsRaised = false
-
--- COLLISIONS NEW
--- --------------
--- --------------
-function setCollisionsNew(theKey, oldValue, newValue)
-	if (theKey ~= "race.collideothers" or new == 0) then
-		return
-	end
-	if (not getVehicleOccupant(source)) then
-		return
-	end
-	team1 = getPlayerTeam(getVehicleOccupant(source))
-	team2 = getPlayerTeam(localPlayer)
-	if (team1 ~= team2) then
-		setElementData(source, "race.collideothers", 0, false)
-	end
-end
-addEventHandler("onClientElementDataChange", root, setCollisionsNew)
-
-
-function setCollisionsNewAll()
-	for i, v in pairs(getElementsByType("player")) do
-		vehicle = getPedOccupiedVehicle(v)
-		setElementData(vehicle, "race.collideothers", 1, false)
-	end
-end
-addEvent("setCollisionsNewAll", true)
-addEventHandler("setCollisionsNewAll", getRootElement(), setCollisionsNewAll)
 
 function openFirstGate()
 	if (gate1Opened) then
@@ -57,26 +24,10 @@ function openSecondGate()
 	moveObject(gate, 1500, x, y, z, 0, 70, 0)
 end
 
-function raiseRamps()
-	if (rampsRaised) then
-		return
-	end
-	rampsRaised = true
-	for i,v in pairs(soloRamps) do
-		local ramp = getElementByID(v)
-		local x,y,z = getElementPosition(ramp)
-		moveObject(ramp, 10000, x, y, z + 30)
-	end
-end
-
 addEvent("openFirstGate", true)
 addEvent("openSecondGate", true)
-addEvent("raiseRamps", true)
 addEventHandler("openFirstGate", getRootElement(), openFirstGate)
 addEventHandler("openSecondGate", getRootElement(), openSecondGate)
-addEventHandler("raiseRamps", getRootElement(), raiseRamps)
-
-
 
 -- hud
 -- ---
@@ -178,4 +129,3 @@ addEventHandler("onClientRender", root, drawHud)
 -- debug
 -- addCommandHandler("openGate1", openFirstGate)
 -- addCommandHandler("openGate2", openSecondGate)
--- addCommandHandler("raiseSoloRamps", raiseRamps)

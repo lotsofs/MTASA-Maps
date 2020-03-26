@@ -2,23 +2,24 @@
 -- ----
 -- ----
 
--- Perhaps be a bit more in your face with the announcements still. Same with people quiting/idling.
--- DONE - Players collide for a frame upon changing vehicle
+-- -- Verona Specific:
 -- Im not a big fan of that pipe blocking part of the end course track. Perhaps alter it slightly.
--- Make the end gate double, in case someone glitches past
--- Double check for join/leave errors
--- triggerEvent('onPlayerReachCheckpointInternal', player, 1)
 -- ped doesn't die
--- DONE - Joiners get put in one team
--- revamp checkpoint thing
--- the first gate only opens when the packer changes back to a caddy (or someone picks up a race pickup.) It should open as soon as players finish. Fix!
--- DONE - tutorial is messed up
--- Collisions still messed up, see Jivel on Discord
--- Teams: Synchronize helper count, not rider count
 -- Swap caddy for tug?
 
-
-
+-- -- Teamwork Script:
+-- DONE - freeze vehicles
+-- team had an advantage, compensation message could use a color or somethign
+-- Perhaps be a bit more in your face with the announcements still. Same with people quiting/idling.
+-- revamp checkpoint thing
+-- the first gate only opens when the packer changes back to a caddy (or someone picks up a race pickup.) It should open as soon as players finish. Fix!
+-- Teams: Synchronize helper count, not rider count
+-- DONE - Super GT still messes up
+-- DONE - Collisions still messed up, see Jivel on Discord
+-- DONE - Collisions dont work when people change team
+-- DONE - Definitely somethign wrong with the collision script at line 29 	setElementData(vehicle, "race.collideothers", 1, false)
+-- Sometimes when people change teams, it breaks
+-- Collisions are weird when two teammates collide with each other while ghosting with a non-teammate
 
 
 
@@ -135,12 +136,6 @@ addEvent("onRaceStateChanging", true)
 -- -------------------------------
 
 function start()
-	for i = 1, 3, 1 do
-		car = getElementByID("_TUTORIAL_VEHICLE_" .. i)
-		setElementFrozen(car, true)
-		setElementAlpha(car, 0)
-	end
-	
 	shuffleTeams()
 	assignTeams()
 	for i,v in pairs(getElementsByType("player")) do
@@ -374,7 +369,7 @@ function AutoBalance(player)
 	local r,g,b = getTeamColor(getPlayerTeam(player))
 	setVehicleColor(car,r,g,b,(r+127)/2,(g+127)/2,(b+127)/2)
 	attachBlipToPlayer(player,r,g,b)
-	triggerClientEvent(root, "setCollisionsNewAll", getRootElement())
+	triggerClientEvent(root, "resetCollisions", getRootElement(), player)
 	updateHudInfo()
 end
 
@@ -779,7 +774,7 @@ function changePlayerTeam(player, to)
 	-- set colors & cols etc
 	local car = getPedOccupiedVehicle(player)
 	local r,g,b = getTeamColor(getPlayerTeam(player))
-	triggerClientEvent(root, "setCollisionsNewAll", getRootElement())
+	triggerClientEvent(root, "resetCollisions", getRootElement(), player)
 	setVehicleColor(car,r,g,b,(r+127)/2,(g+127)/2,(b+127)/2)
 	attachBlipToPlayer(player,r,g,b)
 	updateHudInfo()
@@ -817,7 +812,7 @@ function handleJoiners()
 		selectedTeam = 1
 	end
 	setPlayerTeam(source, TEAMS[selectedTeam])
-	triggerClientEvent(root, "setCollisionsNewAll", getRootElement())
+	triggerClientEvent(root, "resetCollisions", getRootElement(), source)
 	outputChatBox(getPlayerName(source) .. " #B8C4CChas been assigned to " .. TEAM_DATA[TEAMS[selectedTeam]].hex .. TEAM_DATA[TEAMS[selectedTeam]].name .. "#B8C4CC.", getRootElement(), 184, 196, 204, true)
 end
 addEventHandler("onPlayerJoin", getRootElement(), handleJoiners)
@@ -833,11 +828,6 @@ function cutscene(newState, oldState)
 	if (newState == "GridCountdown") then
 		for i, v in pairs(getElementsByType("player")) do
 			setCameraMatrix(v, CAMERA_POSITION_X, CAMERA_POSITION_Y, CAMERA_POSITION_Z, CAMERA_TARGET_X, CAMERA_TARGET_Y, CAMERA_TARGET_Z)
-			for i = 1, 3, 1 do
-				car = getElementByID("_TUTORIAL_VEHICLE_" .. i)
-				setElementFrozen(car, false)
-				setElementAlpha(car, 255)
-			end
 			setTimer(setCameraTarget, 5000, 1, v, v)
 		end
 	elseif (newState == "Running") then
