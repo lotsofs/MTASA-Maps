@@ -14,14 +14,14 @@
 -- DONE - decoration
 
 -- -- Script:
--- freeze vehicles
+-- DONE - freeze vehicles
 -- team had an advantage, compensation message could use a color or somethign
 -- Perhaps be a bit more in your face with the announcements still. Same with people quiting/idling.
 -- revamp checkpoint thing
 -- the first gate only opens when the packer changes back to a caddy (or someone picks up a race pickup.) It should open as soon as players finish. Fix!
 -- Collisions still messed up, see Jivel on Discord
 -- Teams: Synchronize helper count, not rider count
--- Super GT still messes up
+-- DONE - Super GT still messes up
 -- Collisions dont work when people change team
 -- Definitely somethign wrong with the collision script at line 29 	setElementData(vehicle, "race.collideothers", 1, false)
 
@@ -141,12 +141,6 @@ addEvent("onRaceStateChanging", true)
 -- -------------------------------
 
 function start()
-	for i = 1, 3, 1 do
-		car = getElementByID("_TUTORIAL_VEHICLE_" .. i)
-		setElementFrozen(car, true)
-		setElementAlpha(car, 0)
-	end
-	
 	shuffleTeams()
 	assignTeams()
 	for i,v in pairs(getElementsByType("player")) do
@@ -839,11 +833,6 @@ function cutscene(newState, oldState)
 	if (newState == "GridCountdown") then
 		for i, v in pairs(getElementsByType("player")) do
 			setCameraMatrix(v, CAMERA_POSITION_X, CAMERA_POSITION_Y, CAMERA_POSITION_Z, CAMERA_TARGET_X, CAMERA_TARGET_Y, CAMERA_TARGET_Z)
-			for i = 1, 3, 1 do
-				car = getElementByID("_TUTORIAL_VEHICLE_" .. i)
-				setElementFrozen(car, false)
-				setElementAlpha(car, 255)
-			end
 			setTimer(setCameraTarget, 5000, 1, v, v)
 		end
 	elseif (newState == "Running") then
