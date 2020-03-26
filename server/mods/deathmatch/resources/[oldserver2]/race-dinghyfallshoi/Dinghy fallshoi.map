@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-16"?>
+<map mod="deathmatch">
+  <spawnpoint posX="1984.557617" posY="-2587.203369" posZ="93.323982" rotation="78" vehicle="522" id="spawnpoint0" />
+  <spawnpoint posX="1984.476563" posY="-2585.363281" posZ="93.323982" rotation="78" vehicle="522" id="spawnpoint1" />
+  <spawnpoint posX="1984.844482" posY="-2583.638672" posZ="93.323982" rotation="78" vehicle="522" id="spawnpoint2" />
+  <spawnpoint posX="1984.676270" posY="-2581.912354" posZ="93.323982" rotation="78" vehicle="522" id="spawnpoint3" />
+  <spawnpoint posX="1984.783081" posY="-2580.226807" posZ="93.323982" rotation="78" vehicle="522" id="spawnpoint4" />
+  <spawnpoint posX="1984.449585" posY="-2588.530762" posZ="93.323982" rotation="78" vehicle="522" id="spawnpoint5" />
+  <checkpoint posX="1964.236572" posY="-2584.136475" posZ="92.663605" id="checkpoint0" nextid="checkpoint1" />
+  <checkpoint posX="1901.417358" posY="-2583.333008" posZ="33.386730" id="checkpoint1" nextid="checkpoint2" />
+  <checkpoint posX="1712.302734" posY="-2592.795166" posZ="12.546875" size="3.500000" color="#fa0000" id="checkpoint2" />
+  <object posX="1882.880981" posY="-2583.624756" posZ="15.115066" rotX="0" rotY="-43.831271327508" rotZ="0" model="18450" id="object0" />
+  <object posX="1934.342041" posY="-2583.671631" posZ="64.452545" rotX="0" rotY="-43.831271327508" rotZ="0" model="18450" id="object1" />
+  <object posX="2001.365356" posY="-2584.182373" posZ="92.319855" rotX="0" rotY="0" rotZ="0" model="18450" id="object2" />
+  <object posX="1871.799561" posY="-2581.092529" posZ="13.346987" rotX="0" rotY="0" rotZ="89.9999812760317" model="1655" id="object3" />
+  <object posX="1871.717285" posY="-2588.768799" posZ="13.346987" rotX="0" rotY="0" rotZ="89.9999812760317" model="1655" id="object4" />
+  <object posX="1877.271484" posY="-2594.816406" posZ="14.148754" rotX="0" rotY="0" rotZ="0" model="1697" id="object5" />
+  <object posX="1875.797485" posY="-2574.293945" posZ="14.148754" rotX="0" rotY="0" rotZ="-179.999962552063" model="1697" id="object6" />
+  <object posX="1922.982056" posY="-2583.878662" posZ="55.625195" rotX="48.9878341879059" rotY="-4.29718346348117" rotZ="-88.2811078906392" model="1697" id="object7" />
+  <object posX="2037.483643" posY="-2579.655762" posZ="77.460495" rotX="0" rotY="0" rotZ="-89.9999812760317" model="3330" id="object8" />
+  <object posX="1970.497925" posY="-2580.416992" posZ="77.460495" rotX="0" rotY="0" rotZ="-89.9999812760317" model="3330" id="object9" />
+  <object posX="2009.162598" posY="-2608.383789" posZ="77.460495" rotX="0" rotY="3.43774677078494" rotZ="4.29718346348117" model="3330" id="object10" />
+  <object posX="2002.672852" posY="-2541.847412" posZ="77.460495" rotX="0" rotY="3.43774677078494" rotZ="-186.952805395976" model="3330" id="object11" />
+  <object posX="2000.228149" posY="-2579.318604" posZ="105.710495" rotX="0" rotY="48.9878341879059" rotZ="-99.2897470789443" model="3330" id="object12" />
+  <object posX="1999.857544" posY="-2574.406250" posZ="104.604248" rotX="0" rotY="-52.4255809586908" rotZ="-88.0397780673301" model="3330" id="object13" />
+  <object posX="1973.932373" posY="-2502.455566" posZ="13.083280" rotX="0" rotY="0" rotZ="0" model="1453" id="object14" />
+  <object posX="1973.993042" posY="-2502.517578" posZ="14.223615" rotX="0" rotY="0" rotZ="0" model="1453" id="object15" />
+  <object posX="1974.680786" posY="-2502.683594" posZ="14.083280" rotX="0" rotY="92.8191055154139" rotZ="154.698776572661" model="1453" id="object16" />
+  <object posX="1974.440796" posY="-2502.669922" posZ="14.833280" rotX="0" rotY="92.8191055154139" rotZ="154.698776572661" model="1453" id="object17" />
+  <racepickup posX="1961.602295" posY="-2588.938232" posZ="94.163605" type="vehiclechange" vehicle="473" id="pickup0" />
+  <racepickup posX="1962.198120" posY="-2585.940918" posZ="94.163605" type="vehiclechange" vehicle="473" id="pickup1" />
+  <racepickup posX="1962.435669" posY="-2583.404785" posZ="94.163605" type="vehiclechange" vehicle="473" id="pickup2" />
+  <racepickup posX="1962.249023" posY="-2580.241943" posZ="94.163605" type="vehiclechange" vehicle="473" id="pickup3" />
+</map>
