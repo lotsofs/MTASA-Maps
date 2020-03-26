@@ -3,17 +3,19 @@
 -- ----
 
 -- -- Map Editor:
--- Make it harder to fall off after the first wing of the andromada, redesign entire track
--- first barrier can be jumped from the top
--- move last checkpoint further over the edge
--- move the penultimate checkpoiint more to the right
--- untighten the first bus inner corner
--- team had an advantage, compensation message could use a color or somethign
--- checkpoint 7 can be gotten through the wall
--- secure first DFT area so you cant enter with a tug
--- bus can be getten out if you enter it slowly, move it further from the tug
+-- DONE - Make it harder to fall off after the first wing of the andromada, redesign entire track
+-- DONE - first barrier can be jumped from the top
+-- DONE - move last checkpoint further over the edge
+-- DONE - move the penultimate checkpoiint more to the right
+-- DONE - untighten the first bus inner corner
+-- DONE - checkpoint 7 can be gotten through the wall
+-- DONE - secure first DFT area so you cant enter with a tug
+-- DONE - bus can be getten out if you enter it slowly, move it further from the tug
+-- DONE - decoration
 
 -- -- Script:
+-- freeze vehicles
+-- team had an advantage, compensation message could use a color or somethign
 -- Perhaps be a bit more in your face with the announcements still. Same with people quiting/idling.
 -- revamp checkpoint thing
 -- the first gate only opens when the packer changes back to a caddy (or someone picks up a race pickup.) It should open as soon as players finish. Fix!
