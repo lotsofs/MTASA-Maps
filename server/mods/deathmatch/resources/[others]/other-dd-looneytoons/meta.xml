@@ -1,0 +1,25 @@
+<meta>
+    <file src="looneytoons.mp3" />
+    <file src="tiptoe.wav" />
+    <file src="scramble.wav" />
+    <script src="client.luac" type="client" />
+    <script src="server.luac" type="server" />
+    <info gamemodes="race" type="map" name="[DD] Looney Toons" author="" version="1.0.0" description="DD" />
+    <map src="race-[dd]looneytoons.map" dimension="0" />
+    <settings>
+        <setting name="#skins" value='[ &quot;cj&quot; ]' />
+        <setting name="#maxplayers" value="[ 64 ]" />
+        <setting name="#gamespeed" value="[ 1 ]" />
+        <setting name="#ghostmode" value='[ &quot;false&quot; ]' />
+        <setting name="#time" value="13:00" />
+        <setting name="#vehicleweapons" value='[ &quot;false&quot; ]' />
+        <setting name="#minplayers" value="[ 0 ]" />
+        <setting name="#weather" value="[ 7 ]" />
+        <setting name="#gravity" value="[ 0.008000 ]" />
+        <setting name="#waveheight" value="[ 0 ]" />
+        <setting name="#respawntime" value="[ 5 ]" />
+        <setting name="#locked_time" value="[ true ]" />
+        <setting name="#duration" value="[ 450 ]" />
+        <setting name="#respawn" value='[ &quot;none&quot; ]' />
+    </settings>
+</meta>
