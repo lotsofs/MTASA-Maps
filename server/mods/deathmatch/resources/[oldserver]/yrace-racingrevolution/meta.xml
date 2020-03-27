@@ -1,0 +1,23 @@
+<meta>
+    <script src="Da T4x.lua" type="server" />
+    <script src="sewevators.lua" type="server" />
+    <include resource="realdriveby" />
+    <info type="map" name="Racing Revolution" author="S.Eagle" description="none" version="1.0.0" gamemodes="race" />
+    <map src="racingrevolution.map" dimension="0" />
+    <settings>
+        <setting name="#skins" value='[ &quot;cj&quot; ]' />
+        <setting name="#maxplayers" value="[ 128 ]" />
+        <setting name="#gamespeed" value="[ 1 ]" />
+        <setting name="#ghostmode" value='[ &quot;false&quot; ]' />
+        <setting name="#time" value="12:0" />
+        <setting name="#vehicleweapons" value='[ &quot;true&quot; ]' />
+        <setting name="#minplayers" value="[ 0 ]" />
+        <setting name="#weather" value="[ 0 ]" />
+        <setting name="#gravity" value="[ 0.008000 ]" />
+        <setting name="#waveheight" value="[ 0 ]" />
+        <setting name="#respawntime" value="[ 5 ]" />
+        <setting name="#locked_time" value="[ false ]" />
+        <setting name="#duration" value="[ 600 ]" />
+        <setting name="#respawn" value='[ &quot;timelimit&quot; ]' />
+    </settings>
+</meta>

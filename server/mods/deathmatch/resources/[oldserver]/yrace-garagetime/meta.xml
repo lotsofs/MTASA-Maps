@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-16"?>
+<meta>
+  <info type="map" gamemodes="race" name="garage time" author="AoS S.Eagle" description="race with towtruck to your garage in sf" version="1" />
+  <map src="garage time.map" />
+  <settings>
+    <setting name="#time" value="10:30" />
+    <setting name="#weather" value="3" />
+    <setting name="#respawn" value="timelimit" />
+    <setting name="#respawntime" value="0" />
+    <setting name="#duration" value="6000" />
+  </settings>
+</meta>
