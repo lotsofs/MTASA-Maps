@@ -286,6 +286,10 @@ end
 addEvent("setScoreBoard", true)
 addEventHandler("setScoreBoard", root, setScoreBoard)
 
+function showScoreBoardCmd()
+	showScoreBoard(true, 15000)
+end
+
 function showScoreBoard(enabled, duration)
 	SHOW = enabled
 	if (duration) then
@@ -296,6 +300,7 @@ function showScoreBoard(enabled, duration)
 end
 addEvent("showScoreBoard", true)
 addEventHandler("showScoreBoard", root, showScoreBoard)
+addCommandHandler("showScoreBoard", showScoreBoardCmd)
 
 function drawScoreBoard()
 	if (SHOW) then
