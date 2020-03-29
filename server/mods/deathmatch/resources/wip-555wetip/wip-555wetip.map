@@ -1,0 +1,15 @@
+<map edf:definitions="editor_main,race">
+    <checkpoint id="checkpoint1hotel" type="checkpoint" color="#FE000099" size="3" nextid="checkpoint2cutscene" posX="-1748.402" posY="909.7514" posZ="23.8906" rotX="0" rotY="0" rotZ="0"></checkpoint>
+    <checkpoint id="checkpoint2cutscene" type="corona" color="#FE000099" size="1" alpha="255" interior="0" nextid="checkpoint3cutscene" posX="-1748.4" posY="909.79999" posZ="8" rotX="0" rotY="0" rotZ="0"></checkpoint>
+    <checkpoint id="checkpoint3cutscene" type="corona" color="#FE000099" size="1" alpha="255" interior="0" nextid="checkpoint4garage" posX="-1748.4" posY="909.79999" posZ="11" rotX="0" rotY="0" rotZ="0"></checkpoint>
+    <checkpoint id="checkpoint4garage" type="checkpoint" nextid="checkpoint5parkingentrance" color="#FF000099" size="3" posX="-2033.626" posY="178.856" posZ="27.8359" rotX="0" rotY="0" rotZ="0"></checkpoint>
+    <checkpoint id="checkpoint5parkingentrance" type="checkpoint" color="#FF000099" size="3" nextid="checkpoint6final" posX="-1780.069" posY="970.95532" posZ="23.75" rotX="0" rotY="0" rotZ="0"></checkpoint>
+    <checkpoint id="checkpoint6final" type="corona" color="#FF000099" size="1" alpha="255" interior="0" nextid="false" posX="-1688.214" posY="987.12183" posZ="6.6" rotX="0" rotY="0" rotZ="0"></checkpoint>
+    <marker id="marker_undergroundGarageParkingSpot" type="cylinder" color="#FE0000FF" size="3" interior="0" dimension="0" alpha="255" posX="-1688.214" posY="987.12183" posZ="16.5855" rotX="0" rotY="0" rotZ="0"></marker>
+    <object id="object (sprayshpdr2_SFSe) (1)" breakable="true" interior="0" collisions="true" alpha="255" model="11319" doublesided="false" scale="1" dimension="0" posX="-1904.5" posY="279.20001" posZ="45.6" rotX="0" rotY="90" rotZ="90"></object>
+    <racepickup id="racepickup (NRG-500) (1)" type="repair" vehicle="522" respawn="0" posX="-1904.3" posY="286.89999" posZ="41.6" rotX="0" rotY="0" rotZ="319.86"></racepickup>
+    <removeWorldObject id="removeWorldObject (sprayshpdr2_SFSe) (1)" radius="6.643784" interior="0" model="11319" lodModel="0" posX="-1904.4675" posY="277.84949" posZ="44.4757" rotX="0" rotY="0" rotZ="0"></removeWorldObject>
+    <spawnpoint id="spawnpoint (Admiral) (1)" vehicle="439" posX="-2009.4" posY="122.5" posZ="27.5" rotX="0" rotY="0" rotZ="180"></spawnpoint>
+    <vehicle id="Vehicle_ParkMeritHereAfterRepair" sirens="false" paintjob="3" interior="0" alpha="255" model="551" plate="CZ95Z56" dimension="0" color="54,65,85,245,245,245,0,0,0,0,0,0" posX="-2031.5" posY="178.60001" posZ="28.7" rotX="0" rotY="0" rotZ="270"></vehicle>
+    <location id="tempPlayerHideHotel" interior="0" dimension="0" posX="-1734.2" posY="981.29999" posZ="83" rotX="0" rotY="0" rotZ="180"></location>
+</map>
