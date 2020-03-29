@@ -300,8 +300,12 @@ addEventHandler("showScoreBoard", root, showScoreBoard)
 function drawScoreBoard()
 	if (SHOW) then
 		local width,height = guiGetScreenSize()
-		dxDrawRectangle(width*0.275, height*0.015, width*0.18, height*0.22, tocolor(5, 33, 51, 127))
-		dxDrawText(TEXT, width*0.28, height*0.025, width*0.8, height*0.9, tocolor(230, 245, 255, 255), 1, "default-bold", "left", "top", false, true, false, false)
+		boxX = width * 0.275
+		boxY = height * 0.015
+		boxWidth = width * 0.18
+		boxHeight = (boxWidth * 0.6875)
+		dxDrawRectangle(boxX, boxY, boxWidth, boxHeight, tocolor(5, 33, 51, 127))
+		dxDrawText(TEXT, width*0.28, height*0.025, width*0.8, height*0.9, tocolor(230, 245, 255, 255), width / 1600, "default-bold", "left", "top", false, true, false, false)
 	end
 end
 addEventHandler("onClientRender", root, drawScoreBoard)
