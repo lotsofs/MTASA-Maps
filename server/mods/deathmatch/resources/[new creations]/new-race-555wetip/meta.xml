@@ -4,17 +4,17 @@
     <script src="555_client.lua" type="client" validate="true"></script>
     <min_mta_version server="1.3.0-9.04482"></min_mta_version>
     <info gamemodes="race" type="map" version="1.0.0" name="[SR] 555 We Tip" author="R*, ported to MTA by S."></info>
-    <map src="wip-555wetip.map" dimension="0"></map>
+    <map src="555wetip.map" dimension="0"></map>
     <settings>
         <setting name="#skins" value='[ &quot;cj&quot; ]'></setting>
         <setting name="#maxplayers" value="[ 128 ]"></setting>
         <setting name="#useLODs" value="[ false ]"></setting>
         <setting name="#gamespeed" value="[ 1 ]"></setting>
         <setting name="#ghostmode" value='[ &quot;true&quot; ]'></setting>
-        <setting name="#time" value="12:0"></setting>
+        <setting name="#time" value="11:0"></setting>
         <setting name="#vehicleweapons" value='[ &quot;false&quot; ]'></setting>
         <setting name="#minplayers" value="[ 0 ]"></setting>
-        <setting name="#respawntime" value="[ 1 ]"></setting>
+        <setting name="#respawntime" value="[ 0 ]"></setting>
         <setting name="#gravity" value="[ 0.0080000004 ]"></setting>
         <setting name="#waveheight" value="[ 0 ]"></setting>
         <setting name="#weather" value="[ 0 ]"></setting>
