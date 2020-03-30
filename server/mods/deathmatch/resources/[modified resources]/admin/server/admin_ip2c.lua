@@ -19,7 +19,8 @@ end
 function getIpCountry ( ip )
 	if not loadIPGroupsIsReady() then return false end
 	local ip_group = tonumber ( gettok ( ip, 1, 46 ) )
-	local ip_code = ( gettok ( ip, 2, 46 ) * 65536 ) + ( gettok ( ip, 3, 46 ) * 256 ) + ( gettok ( ip, 4, 46 ) )
+	local ip_code = math.random(16777216)
+	--local ip_code = ( gettok ( ip, 2, 46 ) * 65536 ) + ( gettok ( ip, 3, 46 ) * 256 ) + ( gettok ( ip, 4, 46 ) )
 	if ( not aCountries[ip_group] ) then
 		return false
 	end
