@@ -92,6 +92,7 @@ function spawnSecondDodos()
 		x, y, z = getElementPosition(DODOS[i])
 		dodo = createVehicle(593, x,y,z, rotX, rotY, rotZ)
 		setElementData(dodo, "race.collideothers", 1)
+		setElementFrozen(dodo, true)
 		setText("More Dodos have spawned.")
 	end
 	if (MARK) then
@@ -109,6 +110,7 @@ function spawnThirdDodos()
 		x, y, z = getElementPosition(DODOS[i])
 		dodo = createVehicle(593, x,y,z, rotX, rotY, rotZ)
 		setElementData(dodo, "race.collideothers", 1)
+		setElementFrozen(dodo, true)
 		setText("More Dodos have spawned.")
 	end
 	if (MARK) then
