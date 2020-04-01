@@ -17,7 +17,18 @@ function onRaceStateChanging(newState, oldState)
 		
 		end
 	end
-	
 end
 addEvent("onRaceStateChanging", true)
 addEventHandler("onRaceStateChanging", root, onRaceStateChanging)
+
+
+function oof()
+	outputChatBox("ASD")
+	for i,v in pairs(getElementsByType("vehicle")) do
+		asdf = getModelHandling(429)
+		for k,g in pairs(asdf) do
+			setVehicleHandling(v, k, g)
+		end
+	end
+end
+addCommandHandler("oof", oof)
