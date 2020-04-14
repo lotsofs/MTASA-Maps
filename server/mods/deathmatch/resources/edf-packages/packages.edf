@@ -1,0 +1,60 @@
+<def name="Packages">
+	<element name="packageNormal" friendlyname="Hidden Package - Normal" icon="pickup_white.png">
+		<data name="position" type="coord3d" default="0,0,0"/>
+		<object model="1575" posZ="0.5" editorOnly="true"/>
+		<marker size="0.5" type="corona" posZ="0.5" color="#44444400" editorOnly="true"/>
+		<marker size="0.5" type="marker" posZ="-0.3" color="#44444400" editorOnly="true"/>
+		<data name="region" type="element:region" required="false" default="" />
+	</element>
+		<element name="packageHelicopter" friendlyname="Hidden Package - Helicopter Only" icon="pickup_orange.png">
+		<data name="position" type="coord3d" default="0,0,0"/>
+		<object model="1576" posZ="0.5" editorOnly="true"/>
+		<marker size="0.5" type="corona" posZ="0.5" color="#44220000" editorOnly="true"/>
+		<marker size="0.5" type="marker" posZ="-0.3" color="#44220000" editorOnly="true"/>
+		<data name="region" type="element:region" required="false" default="" />
+	</element>
+		<element name="packageHard" friendlyname="Hidden Package - Hard" icon="pickup_yellow.png">
+		<data name="position" type="coord3d" default="0,0,0"/>
+		<object model="1577" posZ="0.5" editorOnly="true"/>
+		<marker size="0.5" type="corona" posZ="0.5" color="#44440000" editorOnly="true"/>
+		<marker size="0.5" type="marker" posZ="-0.3" color="#44440000" editorOnly="true"/>
+		<data name="region" type="element:region" required="false" default="" />
+	</element>
+	<element name="packageBike" friendlyname="Hidden Package - Bike Only" icon="pickup_green.png">
+		<data name="position" type="coord3d" default="0,0,0"/>
+		<object model="1578" posZ="0.5" editorOnly="true"/>
+		<marker size="0.5" type="corona" posZ="0.5" color="#00440000" editorOnly="true"/>
+		<marker size="0.5" type="marker" posZ="-0.3" color="#00440000" editorOnly="true"/>
+		<data name="region" type="element:region" required="false" default="" />
+	</element>
+	<element name="packageWater" friendlyname="Hidden Package - Water" icon="pickup_blue.png">
+		<data name="position" type="coord3d" default="0,0,0"/>
+		<object model="1579" posZ="0.5" editorOnly="true"/>
+		<marker size="0.5" type="corona" posZ="0.5" color="#00004400" editorOnly="true"/>
+		<marker size="0.5" type="marker" posZ="-0.3" color="#00004400" editorOnly="true"/>
+		<data name="region" type="element:region" required="false" default="" />
+	</element>
+	<element name="packageExtreme" friendlyname="Hidden Package - Extreme" icon="pickup_red.png">
+		<data name="position" type="coord3d" default="0,0,0"/>
+		<object model="1580" posZ="0.5" editorOnly="true"/>
+		<marker size="0.5" type="corona" posZ="0.5" color="#44000000" editorOnly="true"/>
+		<marker size="0.5" type="marker" posZ="-0.3" color="#44000000" editorOnly="true"/>
+		<data name="region" type="element:region" required="false" default="" />
+	</element>
+	
+	
+	<element name="radarZone" friendlyname="Radar Zone" icon="radararea.png">
+		<data name="position" type="coord3d" default="0,0,0"/>
+		<data name="originX" type="number" default="-10"/>
+		<data name="originY" type="number" default="-10"/>
+		<data name="sizeX" type="number" default="10"/>
+		<data name="sizeY" type="number" default="10"/>
+		<marker size="10" type="corona" posZ="0.5" color="#ff0000ff" editorOnly="true"/>
+		<data name="region" type="element:region" required="false" default="" />
+	</element>
+	<element name="region" friendlyname="Region" icon="region.png">
+		<data name="position" type="coord3d" default="0,0,0"/>
+		<data name="friendlyname" type="string" default="Unnamed Region"/>
+		<marker size="10" type="corona" posZ="0.5" color="#00ff00ff" editorOnly="true"/>
+	</element>
+</def>
