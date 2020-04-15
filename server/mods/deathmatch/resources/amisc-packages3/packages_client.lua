@@ -53,6 +53,27 @@ function showPackages(packages)
 	end
 end
 
+RADARZONES = {}
+
+function getRadarZones()
+	local radarZones = getElementsByType("radarZone", resourceRoot)
+	for i, zone in ipairs(radarZones) do
+		-- get zone information
+		local id = getElementID(zone)
+		local fromX = getElementData(zone, "originX")
+		local fromY = getElementData(zone, "originY")
+		local toX = getElementData(zone, "sizeX")
+		local toY = getElementData(zone, "sizeY")
+		-- see if zone already exists, and if yes, remove it
+		if (RADARZONES[id]) then
+			destroyElement(RADARZONES[id])
+			RADARZONES[id] = nil
+		end
+		-- display zone
+		RADARZONES[id] = createRadarAreaFromTo(fromX, fromY, toX, toY, 0, 0, 0, 128)
+	end
+end
+
 function createRadarAreaFromTo(minX, minY, maxX, maxY, r, g, b, a, visibleTo)
 	r = r or 255
 	g = g or 0
@@ -69,6 +90,7 @@ function onClientResourceStart(startedResource)
 	-- client script has loaded, spawn packages.
 	getPackages()
 	-- TODO: Tell server we are ready to receive information
+	getRadarZones()
 end
 addEventHandler("onClientResourceStart", resourceRoot, onClientResourceStart)
 
