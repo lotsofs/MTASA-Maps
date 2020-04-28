@@ -91,7 +91,7 @@ function onRaceStateChanging(newState, oldState)
 		end
 		setTimer(function()
 			triggerClientEvent(root, "markDodosOnMap", resourceRoot)
-		end, 300000, 1)
+		end, 240000, 1)
 		--triggerClientEvent(root, "setOpponentCollisions", resourceRoot)
 	end	
 end
