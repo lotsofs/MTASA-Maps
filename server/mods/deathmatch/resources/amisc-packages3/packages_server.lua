@@ -40,7 +40,7 @@ function createPackageHitboxes(packages)
 			PACKAGE_HITBOXES[typeName .. i] = nil
 		end
         -- place package
-        PACKAGE_HITBOXES[typeName .. i] = createColTube(x,y,z,1.5,3)
+        PACKAGE_HITBOXES[typeName .. i] = createColTube(x,y,z-1,1.5,4)
         PACKAGE_ORIGINALS[typeName .. i] = pack
         setElementID(PACKAGE_HITBOXES[typeName .. i], typeName .. i)
 	end

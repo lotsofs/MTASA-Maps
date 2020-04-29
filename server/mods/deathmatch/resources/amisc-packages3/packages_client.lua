@@ -358,7 +358,7 @@ function reloadPackages()
 end
 
 function resetPackages()
-	if (not packagesEnabled()) then
+	if (getElementData(localPlayer, "coloredPackages.nonParticipant")) then
 		outputChatBox("You must enable hidden packages before you can do that.", 49, 206, 13)
 		return
 	end
