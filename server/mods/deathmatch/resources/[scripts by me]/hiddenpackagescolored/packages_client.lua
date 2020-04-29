@@ -151,7 +151,7 @@ function showBlips(packages)
 			local r = PACKAGE_DATA[typeName].r
 			local g = PACKAGE_DATA[typeName].g
 			local b = PACKAGE_DATA[typeName].b
-			PACKAGE_BLIPS[id] = createBlip(x, y, z, 0, 1, r, g, b, 255, 0, 350)
+			PACKAGE_BLIPS[id] = createBlip(x, y, z, 0, 2, r, g, b, 255, 0, 350)
 		end
 	end
 end
@@ -256,7 +256,7 @@ function enableRadarAreas()
 			b = (collectedWater + collectedHelicopter) / totalBlue * 255
 		end
 		-- place the zones
-		radarZone = createRadarAreaFromTo(fromX, fromY, toX, toY, r, g, b, 64)
+		radarZone = createRadarAreaFromTo(fromX, fromY, toX, toY, r, g, b, 96)
 		RADAR_ZONES[id] = radarZone
 	end
 end
