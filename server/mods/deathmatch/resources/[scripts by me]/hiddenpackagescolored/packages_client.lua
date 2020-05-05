@@ -472,6 +472,9 @@ function onClientColShapeHit(theElement, matchingDimension)
 	if (getElementType(theElement) ~= "player") then
 		return
 	end
+	if (theElement ~= localPlayer) then
+		return
+	end
 	name = getElementData(source, "region")
 	if (not name) then
 		return
