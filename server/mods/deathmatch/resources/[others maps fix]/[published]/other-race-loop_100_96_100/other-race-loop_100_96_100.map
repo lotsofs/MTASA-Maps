@@ -1,5 +1,5 @@
 <map edf:definitions="editor_main,race">
-    <spawnpoint id="spawnpoint0" vehicle="411" posX="414.60001" posY="-49.8" posZ="744.20001" rotX="0" rotY="0" rotZ="90"></spawnpoint>
+    <spawnpoint id="spawnpoint0" vehicle="411" posX="724.79999" posY="-49.8" posZ="1209.5" rotX="0" rotY="0" rotZ="90"></spawnpoint>
     <checkpoint id="checkpoint0" type="ring" nextid="false" color="#C8C800" size="7" posX="-440" posY="50" posZ="200" rotX="0" rotY="0" rotZ="0"></checkpoint>
     <object id="object0" breakable="true" interior="0" collisions="true" alpha="255" model="18450" doublesided="false" scale="1" dimension="0" posX="-400" posY="50" posZ="200" rotX="0" rotY="0" rotZ="0"></object>
     <object id="object1" breakable="true" interior="0" collisions="true" alpha="255" model="18450" doublesided="false" scale="1" dimension="0" posX="-320" posY="50" posZ="200" rotX="0" rotY="0" rotZ="0"></object>
@@ -103,7 +103,7 @@
     <object id="object99" breakable="true" interior="0" collisions="true" alpha="255" model="18450" doublesided="false" scale="1" dimension="0" posX="-13.05262" posY="-49.89294" posZ="200.85552" rotX="-0.076" rotY="-352.5" rotZ="-0.58"></object>
     <object id="object100" breakable="true" interior="0" collisions="true" alpha="255" model="18450" doublesided="false" scale="1" dimension="0" posX="-6.54031" posY="-49.97323" posZ="200.21411" rotX="-0.019" rotY="-356.25" rotZ="-0.292"></object>
     <object id="object101" breakable="true" interior="0" collisions="true" alpha="255" model="18450" doublesided="false" scale="1" dimension="0" posX="0" posY="-50" posZ="200" rotX="0" rotY="-360" rotZ="0"></object>
-    <object id="object102" breakable="true" interior="0" collisions="true" alpha="255" model="18450" doublesided="false" scale="1" dimension="0" posX="456.02405" posY="-50.00183" posZ="743.08887" rotX="0" rotY="0" rotZ="0"></object>
+    <object id="object102" breakable="true" interior="0" collisions="true" alpha="255" model="18450" doublesided="false" scale="1" dimension="0" posX="767" posY="-50" posZ="1208.5" rotX="0" rotY="0" rotZ="0"></object>
     <object id="object103" breakable="true" interior="0" collisions="true" alpha="255" model="18450" doublesided="false" scale="1" dimension="0" posX="6.54031" posY="-50" posZ="200.21411" rotX="0" rotY="-3.75" rotZ="0"></object>
     <object id="object104" breakable="true" interior="0" collisions="true" alpha="255" model="18450" doublesided="false" scale="1" dimension="0" posX="13.05262" posY="-50" posZ="200.85552" rotX="0" rotY="-7.5" rotZ="0"></object>
     <object id="object105" breakable="true" interior="0" collisions="true" alpha="255" model="18450" doublesided="false" scale="1" dimension="0" posX="19.50903" posY="-50" posZ="201.92148" rotX="0" rotY="-11.25" rotZ="0"></object>
@@ -126,7 +126,14 @@
     <object id="object122" breakable="true" interior="0" collisions="true" alpha="255" model="18450" doublesided="false" scale="1" dimension="0" posX="305.27252" posY="-50" posZ="576.9671" rotX="0" rotY="-56.25" rotZ="0"></object>
     <object id="object123" breakable="true" interior="0" collisions="true" alpha="255" model="18450" doublesided="false" scale="1" dimension="0" posX="349.69601" posY="-50" posZ="643.47369" rotX="0" rotY="-56.25" rotZ="0"></object>
     <object id="object124" breakable="true" interior="0" collisions="true" alpha="255" model="18450" doublesided="false" scale="1" dimension="0" posX="394.095" posY="-50" posZ="709.94794" rotX="0" rotY="-56.25" rotZ="0"></object>
-    <racepickup id="pickup1" type="nitro" vehicle="522" respawn="0" posX="414.5" posY="-50" posZ="745" rotX="0" rotY="0" rotZ="346.32"></racepickup>
+    <object id="object125" breakable="true" interior="0" collisions="true" alpha="255" model="18450" doublesided="false" scale="1" dimension="0" posX="438.53205" posY="-50" posZ="776.45148" rotX="0" rotY="-56.25" rotZ="0"></object>
+    <object id="object126" breakable="true" interior="0" collisions="true" alpha="255" model="18450" doublesided="false" scale="1" dimension="0" posX="482.95633" posY="-50" posZ="842.94654" rotX="0" rotY="-56.25" rotZ="0"></object>
+    <object id="object127" breakable="true" interior="0" collisions="true" alpha="255" model="18450" doublesided="false" scale="1" dimension="0" posX="527.38061" posY="-50" posZ="909.44159" rotX="0" rotY="-56.25" rotZ="0"></object>
+    <object id="object128" breakable="true" interior="0" collisions="true" alpha="255" model="18450" doublesided="false" scale="1" dimension="0" posX="571.80489" posY="-50" posZ="975.93665" rotX="0" rotY="-56.25" rotZ="0"></object>
+    <object id="object129" breakable="true" interior="0" collisions="true" alpha="255" model="18450" doublesided="false" scale="1" dimension="0" posX="616.22917" posY="-50" posZ="1042.43171" rotX="0" rotY="-56.25" rotZ="0"></object>
+    <object id="object130" breakable="true" interior="0" collisions="true" alpha="255" model="18450" doublesided="false" scale="1" dimension="0" posX="660.65345" posY="-50" posZ="1108.92677" rotX="0" rotY="-56.25" rotZ="0"></object>
+    <object id="object131" breakable="true" interior="0" collisions="true" alpha="255" model="18450" doublesided="false" scale="1" dimension="0" posX="705.07813" posY="-50" posZ="1175.4219" rotX="0" rotY="303.75" rotZ="0"></object>
+    <racepickup id="pickup1" type="nitro" vehicle="522" respawn="0" posX="723.5" posY="-50" posZ="1205.1" rotX="0" rotY="0" rotZ="258.3"></racepickup>
     <racepickup id="pickup3" type="repair" vehicle="522" respawn="0" posX="58.35952" posY="52.01441" posZ="220.66447" rotX="0" rotY="0" rotZ="180"></racepickup>
     <racepickup id="pickup4" type="repair" vehicle="522" respawn="0" posX="58.4245" posY="44.27838" posZ="220.71457" rotX="0" rotY="0" rotZ="180"></racepickup>
     <racepickup id="pickup5" type="repair" vehicle="522" respawn="0" posX="53.67615" posY="51.59201" posZ="217.50845" rotX="0" rotY="0" rotZ="180"></racepickup>
@@ -165,7 +172,7 @@
     <racepickup id="pickup38" type="repair" vehicle="522" respawn="0" posX="-30.15594" posY="46.45031" posZ="201.84375" rotX="0" rotY="0" rotZ="180"></racepickup>
     <racepickup id="pickup39" type="repair" vehicle="522" respawn="0" posX="-36.33821" posY="53.349" posZ="201.84375" rotX="0" rotY="0" rotZ="180"></racepickup>
     <racepickup id="pickup40" type="repair" vehicle="522" respawn="0" posX="-35.50994" posY="46.55344" posZ="201.84375" rotX="0" rotY="0" rotZ="180"></racepickup>
-    <racepickup id="racepickup (NRG-500) (1)" type="nitro" vehicle="522" respawn="0" alpha="255" interior="0" posX="409.60001" posY="-50" posZ="735.29999" rotX="0" rotY="0" rotZ="196.56"></racepickup>
-    <racepickup id="racepickup (NRG-500) (3)" type="nitro" vehicle="522" respawn="0" alpha="255" interior="0" posX="409.60001" posY="-45.3" posZ="735.29999" rotX="0" rotY="0" rotZ="100.26"></racepickup>
-    <racepickup id="racepickup (NRG-500) (4)" type="nitro" vehicle="522" respawn="0" alpha="255" interior="0" posX="409.60001" posY="-54.7" posZ="735.29999" rotX="0" rotY="0" rotZ="274.32"></racepickup>
+    <racepickup id="racepickup (NRG-500) (1)" type="nitro" vehicle="522" respawn="0" alpha="255" interior="0" posX="724.90002" posY="-49.8" posZ="1210.3" rotX="0" rotY="0" rotZ="102.24"></racepickup>
+    <racepickup id="racepickup (NRG-500) (3)" type="nitro" vehicle="522" respawn="0" alpha="255" interior="0" posX="723.5" posY="-54" posZ="1205.1" rotX="0" rotY="0" rotZ="270.18"></racepickup>
+    <racepickup id="racepickup (NRG-500) (4)" type="nitro" vehicle="522" respawn="0" alpha="255" interior="0" posX="723.5" posY="-46.1" posZ="1205.1" rotX="0" rotY="0" rotZ="318.42"></racepickup>
 </map>
