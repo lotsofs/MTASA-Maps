@@ -181,31 +181,36 @@ end
 function colorGenerator(player)
 	colors = {}
 	for i = 1, 4, 1 do
-		listNumber = {1, 2, 3}
-		shuffledShittyNumbers = {}
-		for i = #listNumber, 1, -1 do
-			randomIndex = math.random(1,i)
-			shuffledShittyNumbers[i] = listNumber[randomIndex]
-			table.remove(listNumber, randomIndex)
+		-- since MTA wants colors in RGB, we won't bother calculating hue. Instead, we pretend S & V are both 100% to calculate a RGB values and apply SV on them later.
+		-- When both S and V are 100%, the color in RGB will always have one component of 255, one of 0, and one in between.
+		omponents = {}
+		omponents[1] = 255
+		omponents[2] = 0
+		omponents[3] = math.random(0, 255)
+		saturation = math.random(99, 100) / 100
+		value = math.random(99, 100) / 100
+
+		-- this block of code determines which RGB component will be min, which max, and which the other by shuffling them.
+		indices = {1, 2, 3}
+		shuffledIndices = {}
+		for i = #indices, 1, -1 do
+			random = math.random(1,i)
+			shuffledIndices[i] = indices[random]
+			table.remove(indices, random)
 		end
-		someColors = {}
-		someColors[1] = 255
-		someColors[2] = 0
-		someColors[3] = math.random(0, 255)
-		saturation = math.random(0, 100) / 100
-		value = math.random(0, 100) / 100
-		for j,w in pairs(shuffledShittyNumbers) do
-			c = someColors[w]
-			c = c + ((255 - c) * (1 - saturation))
-			c = c * value
-			c = c - (c % 1)
-			colors[j + (i - 1) * 3] = c
+
+		-- now we take the min/maxed RGB components and do the saturation & value calculations on them based on the shuffled indices
+		for j,w in pairs(shuffledIndices) do
+			c = components[w]		
+			c = c + ((255 - c) * (1 - saturation)) 
+			c = c * value			
+			c = c - (c % 1)			
+			colors[j + (i - 1) * 3] = c	
 		end
 	end
+	-- apply our 4 generated colors the vehicle
 	vehicle = getPedOccupiedVehicle(player)
 	setVehicleColor(vehicle, colors[1], colors[2], colors[3], colors[4], colors[5], colors[6], colors[7], colors[8], colors[9], colors[10], colors[11], colors[12])
-	
-	--setVehicleColor(vehicle, math.random(0,255), math.random(0,255), math.random(0,255), math.random(0,255), math.random(0,255), math.random(0,255), math.random(0,255), math.random(0,255), math.random(0,255), math.random(0,255), math.random(0,255), math.random(0,255))
 end
 
 function teleportToNext(player)

@@ -107,7 +107,7 @@ function setVehicleID(vehicle, id)
 			end
 		end
 		if not vehicleColorFixed then
-			setVehicleColor(vehicle, math.random(0, 126), math.random(0, 126), 0, 0)
+			setVehicleColorToRandomHSV(vehicle)
 		end
 	end
 	TimerManager.createTimerFor("map",vehicle):setTimer(revertVehicleWheels, 1000, 1, vehicle)
@@ -127,6 +127,42 @@ function revertVehicleDoors(vehicle)
 	for i=2,5 do
 		setVehicleDoorState(vehicle, i, 0)
 	end
+end
+
+-- function added by S. to diversify the vehicle colors but avoid having many cars be super bright colors
+-- this code is duplicate in race_server.lua , idk how to call stuff from other scripts in lua.
+function setVehicleColorToRandomHSV(vehicle)
+	colors = {}
+	for i = 1, 4, 1 do
+		-- since MTA wants colors in RGB, we won't bother calculating hue. Instead, we pretend S & V are both 100% to calculate a RGB values and apply SV on them later.
+		-- When both S and V are 100%, the color in RGB will always have one component of 255, one of 0, and one in between.
+		components = {}
+		components[1] = 255
+		components[2] = 0
+		components[3] = math.random(0, 255)
+		saturation = math.random(0, 75) / 100	-- change 75 to 100 to allow for superbright colors. (don't forget to do so in the other script as well)
+		value = math.random(0, 100) / 100
+
+		-- this block of code determines which RGB component will be min, which max, and which the other by shuffling them.
+		indices = {1, 2, 3}
+		shuffledIndices = {}
+		for i = #indices, 1, -1 do
+			random = math.random(1,i)
+			shuffledIndices[i] = indices[random]
+			table.remove(indices, random)
+		end
+
+		-- now we take the min/maxed RGB components and do the saturation & value calculations on them based on the shuffled indices
+		for j,w in pairs(shuffledIndices) do
+			c = components[w]		
+			c = c + ((255 - c) * (1 - saturation)) 
+			c = c * value			
+			c = c - (c % 1)			
+			colors[j + (i - 1) * 3] = c	
+		end
+	end
+	-- apply our 4 generated colors the vehicle
+	setVehicleColor(vehicle, colors[1], colors[2], colors[3], colors[4], colors[5], colors[6], colors[7], colors[8], colors[9], colors[10], colors[11], colors[12])
 end
 
 function setVehiclePaintjobAndUpgrades(vehicle, paintjob, upgrades)
