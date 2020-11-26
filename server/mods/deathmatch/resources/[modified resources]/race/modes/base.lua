@@ -233,7 +233,24 @@ function RaceMode:onPlayerReachCheckpoint(player, checkpointNum)
 	if checkpointNum < RaceMode.getNumberOfCheckpoints() then
 		-- Regular checkpoint
 		local vehicle = RaceMode.getPlayerVehicle(player)
-		self.checkpointBackups[player][checkpointNum] = { vehicle = getElementModel(vehicle), position = { getElementPosition(vehicle) }, rotation = { getVehicleRotation(vehicle) }, velocity = { getElementVelocity(vehicle) }, turnvelocity = { getVehicleTurnVelocity(vehicle) }, geardown = getVehicleLandingGearDown(vehicle) or false }
+		self.checkpointBackups[player][checkpointNum] = {
+			vehicle = getElementModel(vehicle),
+			position = {
+				getElementPosition(vehicle)
+			},
+			rotation = {
+				getElementRotation(vehicle)
+			},
+			velocity = {
+				getElementVelocity(vehicle)
+			},
+			turnvelocity = {
+				getVehicleTurnVelocity(vehicle)
+			},
+			geardown = getVehicleLandingGearDown(vehicle) or false,
+			hasNitro = getVehicleUpgradeOnSlot(vehicle, 8) > 0
+		}
+		triggerClientEvent(player, 'race:saveNosLevel', resourceRoot, checkpointNum)
 
 		self.checkpointBackups[player].goingback = true
 		TimerManager.destroyTimersFor("checkpointBackup",player)
@@ -449,6 +466,12 @@ function restorePlayer(id, player, bNoFade, bDontFix)
 		RaceMode.playerFreeze(player, true, bDontFix)
         outputDebug( 'MISC', 'restorePlayer: setElementFrozen true for ' .. tostring(getPlayerName(player)) .. '  vehicle:' .. tostring(vehicle) )
 		removeVehicleUpgrade(vehicle, 1010) -- remove nitro
+		if bkp.hasNitro then
+			addVehicleUpgrade(vehicle, 1010) -- add nos if player had nos
+		end
+
+		triggerClientEvent(player, 'race:recallNosLevel', resourceRoot, checkpoint)
+
 		TimerManager.destroyTimersFor("unfreeze",player)
 		TimerManager.createTimerFor("map","unfreeze",player):setTimer(restorePlayerUnfreeze, 2000, 1, id, player, bDontFix)
 	end
@@ -464,9 +487,11 @@ function restorePlayerUnfreeze(id, player, bDontFix)
 	RaceMode.playerUnfreeze(player, bDontFix)
 	local vehicle = RaceMode.getPlayerVehicle(player)
     outputDebug( 'MISC', 'restorePlayerUnfreeze: vehicle false for ' .. tostring(getPlayerName(player)) .. '  vehicle:' .. tostring(vehicle) )
-	local bkp = RaceMode.instances[id].checkpointBackups[player][getPlayerCurrentCheckpoint(player)-1]
+	local checkpointNum = getPlayerCurrentCheckpoint(player) - 1
+	local bkp = RaceMode.instances[id].checkpointBackups[player][checkpointNum]
 	setElementVelocity(vehicle, unpack(bkp.velocity))
 	setVehicleTurnVelocity(g_Vehicles[player], unpack(bkp.turnvelocity))
+	triggerClientEvent(player, 'race:startNosAgain', resourceRoot, checkpointNum)
 end
 
 --------------------------------------

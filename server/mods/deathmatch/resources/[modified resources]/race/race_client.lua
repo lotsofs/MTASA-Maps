@@ -1459,3 +1459,47 @@ function setPipeDebug(bOn)
     g_bPipeDebug = bOn
     outputConsole( 'bPipeDebug set to ' .. tostring(g_bPipeDebug) )
 end
+-- Custom features --
+local checkpointData = {}
+
+local function saveNosLevel(checkpointNum)
+	checkpointData[checkpointNum] = {
+		nosLevel = getVehicleNitroLevel(getPedOccupiedVehicle(localPlayer)),
+		nosCount = getVehicleNitroCount(getPedOccupiedVehicle(localPlayer)),
+		nosActivated = isVehicleNitroActivated(getPedOccupiedVehicle(localPlayer))
+	};
+end
+addEvent('race:saveNosLevel', true)
+addEventHandler('race:saveNosLevel', resourceRoot, saveNosLevel)
+
+local function recallNosLevel(checkpointNum)
+	local data = checkpointData[checkpointNum]
+	if data then
+		if data.nosCount then
+			setVehicleNitroCount(getPedOccupiedVehicle(localPlayer), data.nosCount)
+		end
+
+		if data.nosLevel then
+			setVehicleNitroLevel(getPedOccupiedVehicle(localPlayer), data.nosLevel)
+		end
+	end
+end
+addEvent('race:recallNosLevel', true)
+addEventHandler('race:recallNosLevel', resourceRoot, recallNosLevel)
+
+local function startNosAgain(checkpointNum)
+	local data = checkpointData[checkpointNum]
+	if data then
+		if data.nosCount then
+			setVehicleNitroCount(getPedOccupiedVehicle(localPlayer), data.nosCount)
+		end
+		
+		if data.nosLevel then
+			setVehicleNitroLevel(getPedOccupiedVehicle(localPlayer), data.nosLevel)
+		end
+		setVehicleNitroActivated(getPedOccupiedVehicle(localPlayer), data.nosActivated)
+	end
+end
+addEvent('race:startNosAgain', true)
+addEventHandler('race:startNosAgain', resourceRoot, startNosAgain)
+---------------------
