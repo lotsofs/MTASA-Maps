@@ -6,6 +6,27 @@ local nameFromVoteID = {}
 local voteIDFromName = {}
 local optionLabels = {}
 
+-- Joshimuz edit
+local progressbars = {}
+
+local screenX,screenY = guiGetScreenSize()
+
+local pollBoxRect = {
+	--x = screenX/2 - screenX/10,
+	x = screenX - (screenX/5) - 10,
+	y = screenY - (screenY/(screenY/432)) - 10,
+	width = screenX/5,
+	height = screenY/(screenY/432)
+	}
+local drawPoll = false
+local pollTitle = "Vote for the next map"
+local pollOptionsText = {}
+
+local pollVotes = {}
+local pollMaxVoters = 0
+local pollCurrentVote = 0
+-- end Joshimuz edit
+
 local isVoteActive
 local hasAlreadyVoted = false
 local isChangeAllowed = false
@@ -18,7 +39,7 @@ local cacheTimer
 
 local layout = {}
 layout.window = {
-	width = 150,
+	width = 300,
 	relative = false,
 	alpha = 0.85,
 }
@@ -126,9 +147,11 @@ addEventHandler("doShowPoll", rootElement,
         layout.option.width = layout.window.width
         layout.cancel.width = layout.window.width
         layout.time.width   = layout.window.width
-
-        local screenX, screenY = guiGetScreenSize()
-
+		
+		-- Joshimuz edit
+        --local screenX, screenY = guiGetScreenSize()
+		-- end Joshimuz edit
+        
 		--create the window
 		voteWindow = guiCreateWindowFromCache (
 						screenX,
@@ -192,8 +215,16 @@ addEventHandler("doShowPoll", rootElement,
 			guiLabelSetColor(optionLabels[index], layout.option.r, layout.option.g, layout.option.b)
 			guiSetAlpha(optionLabels[index], layout.option.alpha)
 			setElementParent(optionLabels[index], voteWindow)
-
-			labelY = labelY + optionHeight + layout.option.bottom_padding
+			
+			-- Joshimuz edit
+			
+			-- labelY = labelY + optionHeight + layout.option.bottom_padding
+			
+			progressbars[index] = guiCreateProgressBar(layout.option.posX, labelY + 15, 280, 15, layout.option.relative, voteWindow )
+			
+			labelY = labelY + optionHeight + layout.option.bottom_padding + 15
+			
+			-- end Joshimuz edit
 		end
 
 		--bind 0 keys if there are more than 9 options
@@ -248,12 +279,25 @@ addEventHandler("doShowPoll", rootElement,
 		guiSetPosition(voteWindow, screenX - layout.window.width, screenY - windowHeight, false)
 
         --set the default value after creating gui
-        layout.window.width = 150
-
+		-- Joshimuz edit
+        --layout.window.width = 150
+		layout.window.width = 300
+		-- end Joshimuz edit
+        
 		isVoteActive = true
 
 		finishTime = getTickCount() + pollTime
 		addEventHandler("onClientRender", rootElement, updateTime)
+		
+		-- Joshimuz edit
+		drawPoll = true
+		
+		pollTitle = pollData.title
+		pollOptionsText = pollOptions
+		pollCurrentVote = 0
+		
+		guiSetPosition(voteWindow, screenX + screenX, screenY - windowHeight, false)
+		-- end Joshimuz edit
 	end
 )
 
@@ -271,6 +315,12 @@ addEventHandler("doStopPoll", rootElement,
 
 		removeEventHandler("onClientRender", rootElement, updateTime)
 		destroyElementToCache(voteWindow)
+		-- Joshimuz edit
+		drawPoll = false
+		
+		pollVotes = nil
+		pollMaxVoters = 0
+		-- end Joshimuz edit
 	end
 )
 
@@ -338,6 +388,10 @@ function sendVote(voteID)
 
 	--send the vote to the server
 	triggerServerEvent("onClientSendVote", localPlayer, voteID)
+	
+	-- Joshimuz edit
+	pollCurrentVote = voteID
+	-- end Joshimuz edit
 end
 addEventHandler("doSendVote", rootElement, sendVote)
 
@@ -468,3 +522,52 @@ function table.insertUnique(t,val)
 	end
     table.insert(t,val)
 end
+
+-- Joshimuz edit
+addEvent( "updateBars", true )
+function updateBars(voteCount, maxVoters) 
+	pollVotes = voteCount
+	pollMaxVoters = maxVoters
+
+	--outputChatBox("client before for loop  voters:"..maxVoters.." voteCount size:"..tostring(#voteCount))
+	for i, votes in ipairs(voteCount) do
+		guiProgressBarSetProgress(progressbars[i], (votes / maxVoters)*100)  
+		--outputChatBox("client votes in voteCount")		
+    end 
+	--outputChatBox("client after for loop")
+end
+addEventHandler("updateBars", rootElement, updateBars)
+
+function draw()
+	if drawPoll then
+		dxDrawRectangle ( pollBoxRect.x, pollBoxRect.y, pollBoxRect.width, pollBoxRect.height, tocolor ( 0, 0, 50, 150 ) ) -- Create transparent background
+		
+		-- Create outline
+		dxDrawRectangle ( pollBoxRect.x, pollBoxRect.y, 5, pollBoxRect.height, tocolor ( 0, 0, 0, 200 ) )
+		dxDrawRectangle ( pollBoxRect.x, pollBoxRect.y, pollBoxRect.width, 5, tocolor ( 0, 0, 0, 200 ) )
+		dxDrawRectangle ( pollBoxRect.x + pollBoxRect.width - 5, pollBoxRect.y, 5, pollBoxRect.height, tocolor ( 0, 0, 0, 200 ) )
+		dxDrawRectangle ( pollBoxRect.x, pollBoxRect.y + pollBoxRect.height - 5, pollBoxRect.width, 5, tocolor ( 0, 0, 0, 200 ) )
+		
+		local seconds = math.ceil( (finishTime - getTickCount()) / 1000 ) -- Calc time left in vote
+		
+		dxDrawText ( pollTitle.."  Time left: "..seconds, pollBoxRect.x + 10, pollBoxRect.y + 10, screenX, screenY, tocolor ( 255, 255, 255, 255 ), (screenX/1080) - 0.25, "default-bold" ) -- Draw poll title
+		
+		--dxDrawText ( "Time left:"..seconds, pollBoxRect.x - 20, pollBoxRect.y + 10, pollBoxRect.width + 40, screenY, tocolor ( 255, 255, 255, 255 ), screenX/720, "default-bold", "right" ) -- Draw poll title
+		
+		for index, option in ipairs(pollOptionsText) do
+			if pollCurrentVote == index then
+				dxDrawText (index .. "." .. option, pollBoxRect.x + 10, pollBoxRect.y + 15 + (40 * index), screenX, screenY, tocolor ( 255, 50, 50, 255 ), 1, "default-bold" )
+			else
+				dxDrawText (index .. "." .. option, pollBoxRect.x + 10, pollBoxRect.y + 15 + (40 * index), screenX, screenY, tocolor ( 255, 255, 255, 255 ), 1, "default-bold" )
+			end
+
+			dxDrawRectangle (pollBoxRect.x + 10, pollBoxRect.y + 35 + (40 * index), pollBoxRect.width - 20, 10, tocolor ( 255, 255, 255, 255 ))
+			if pollMaxVoters ~= 0 then
+				dxDrawRectangle (pollBoxRect.x + 12, pollBoxRect.y + 37 + (40 * index), (pollBoxRect.width - 24) * ((pollVotes[index] / pollMaxVoters)*1.9), 6, tocolor ( (pollVotes[index] / pollMaxVoters)*355, 0, 0, 255))
+			end
+		end
+	end
+end
+
+addEventHandler("onClientRender", root, draw)  -- Keep everything visible with onClientRender.
+-- end Joshimuz edit

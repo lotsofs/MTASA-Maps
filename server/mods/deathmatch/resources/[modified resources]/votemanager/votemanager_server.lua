@@ -387,6 +387,20 @@ addEventHandler("onClientSendVote", rootElement,
 
 		activePoll.playersWhoVoted = activePoll.playersWhoVoted + 1
 		activePoll.votedOption[getPlayerUserNameSafe(client)] = voteID
+		
+		-- Joshimuz edit
+		voteCount = {}
+		
+		--insert the options with equal number of votes
+				for _,votes in ipairs(activePoll) do
+				--outputChatBox("server votes in activePoll")
+					table.insert(voteCount,activePoll[_].votes)
+				end
+		
+		if triggerClientEvent ( rootElement, "updateBars", rootElement, voteCount, activePoll.maxVoters ) then
+			--outputChatBox("if statement true")
+		end
+		-- end Joshimuz edit
 
 		recheckVotes()
 	end
