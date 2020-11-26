@@ -1,5 +1,4 @@
 --
-﻿--
 -- racemidvote_server.lua
 --
 -- Mid-race random map vote and
@@ -198,70 +197,77 @@ local g_Poll
 -- race state 'NextMapSelect'
 ----------------------------------------------------------------------------
 function startNextMapVote()
-
-	exports.votemanager:stopPoll()
-
-	-- Handle forced nextmap setting
-	if maybeApplyForcedNextMap() then
-		return
-	end
-
-	-- Get all maps
-	local compatibleMaps = exports.mapmanager:getMapsCompatibleWithGamemode(getThisResource())
-
-	-- limit it to eight random maps
-	if #compatibleMaps > 8 then
-		math.randomseed(getTickCount())
-		repeat
-			table.remove(compatibleMaps, math.random(1, #compatibleMaps))
-		until #compatibleMaps == 8
-	elseif #compatibleMaps < 2 then
-		return false, errorCode.onlyOneCompatibleMap
-	end
-
-	-- mix up the list order
-	for i,map in ipairs(compatibleMaps) do
-		local swapWith = math.random(1, #compatibleMaps)
-		local temp = compatibleMaps[i]
-		compatibleMaps[i] = compatibleMaps[swapWith]
-		compatibleMaps[swapWith] = temp
-	end
-
-	local poll = {
-		title="Choose the next map:",
-		visibleTo=getRootElement(),
-		percentage=51,
-		timeout=15,
-		allowchange=true;
-		}
-
-	for index, map in ipairs(compatibleMaps) do
-		local mapName = getResourceInfo(map, "name") or getResourceName(map)
-		table.insert(poll, {mapName, 'nextMapVoteResult', getRootElement(), map})
-	end
-
-	local currentMap = exports.mapmanager:getRunningGamemodeMap()
-	if currentMap then
-		table.insert(poll, {"Play again", 'nextMapVoteResult', getRootElement(), currentMap})
-	end
-
-	-- Allow addons to modify the poll
-	g_Poll = poll
-	triggerEvent('onPollStarting', g_Root, poll )
-	poll = g_Poll
-	g_Poll = nil
-
-	local pollDidStart = exports.votemanager:startPoll(poll)
-
-	if pollDidStart then
-		gotoState('NextMapVote')
-		addEventHandler("onPollEnd", getRootElement(), chooseRandomMap)
-	end
-
-	return pollDidStart
+ 
+    exports.votemanager:stopPoll()
+ 
+    -- Handle forced nextmap setting
+    if maybeApplyForcedNextMap() then
+        return
+    end
+ 
+    -- Get all maps
+    local compatibleMaps = exports.mapmanager:getMapsCompatibleWithGamemode(getThisResource())
+       
+    -- limit it to eight random maps
+    if #compatibleMaps > 8 then
+        math.randomseed(getTickCount())
+        repeat
+            table.remove(compatibleMaps, math.random(1, #compatibleMaps))
+        until #compatibleMaps == 8
+    elseif #compatibleMaps < 2 then
+        return false, errorCode.onlyOneCompatibleMap
+    end
+ 
+    -- mix up the list order
+    for i,map in ipairs(compatibleMaps) do
+        local swapWith = math.random(1, #compatibleMaps)
+        local temp = compatibleMaps[i]
+        compatibleMaps[i] = compatibleMaps[swapWith]
+        compatibleMaps[swapWith] = temp
+    end
+       
+    local poll = {
+        title="Choose the next map:",
+        visibleTo=getRootElement(),
+        percentage=51,
+        timeout=15,
+        allowchange=true;
+        }
+       
+    for index, map in ipairs(compatibleMaps) do
+        local mapName = getResourceInfo(map, "name") or getResourceName(map)
+        table.insert(poll, {mapName, 'nextMapVoteResult', getRootElement(), map})
+    end
+       
+    if not g_playAgainCount then
+        g_playAgainCount = 0
+    end
+       
+    g_currentMap = exports.mapmanager:getRunningGamemodeMap()
+    if g_currentMap then
+        -- Modify this to change play again limit. Obviously 2 PlayAgains = 3 plays of the map total
+        if g_playAgainCount < 2 then
+            table.insert(poll, {"Play again (" .. g_playAgainCount + 1 .. "/2)", 'nextMapVoteResult', getRootElement(), g_currentMap})
+        end
+    end
+ 
+    -- Allow addons to modify the poll
+    g_Poll = poll
+    triggerEvent('onPollStarting', g_Root, poll )
+    poll = g_Poll
+    g_Poll = nil
+ 
+    local pollDidStart = exports.votemanager:startPoll(poll)
+ 
+    if pollDidStart then
+        gotoState('NextMapVote')
+        addEventHandler("onPollEnd", getRootElement(), chooseRandomMap)
+    end
+ 
+    return pollDidStart
 end
-
-
+ 
+ 
 -- Used by addons in response to onPollStarting
 addEvent('onPollModified')
 addEventHandler('onPollModified', getRootElement(),
@@ -289,17 +295,22 @@ end
 ----------------------------------------------------------------------------
 addEvent('nextMapVoteResult')
 addEventHandler('nextMapVoteResult', getRootElement(),
-	function( map )
-		if stateAllowsNextMapVoteResult() then
-			if not exports.mapmanager:changeGamemodeMap ( map, nil, true ) then
-				problemChangingMap()
-			end
-		end
-	end
+    function( map )
+        if map == g_currentMap then
+            g_playAgainCount = g_playAgainCount + 1
+        else
+            g_playAgainCount = 0
+        end
+        if stateAllowsNextMapVoteResult() then
+            if not exports.mapmanager:changeGamemodeMap ( map, nil, true ) then
+                problemChangingMap()
+            end
+        end
+    end
 )
-
-
-
+ 
+ 
+ 
 ----------------------------------------------------------------------------
 -- startMidMapVoteForRestartMap
 --
