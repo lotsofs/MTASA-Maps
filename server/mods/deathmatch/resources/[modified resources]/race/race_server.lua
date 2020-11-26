@@ -564,8 +564,7 @@ function joinHandlerBoth(player)
 end
 addEventHandler('onPlayerJoin', g_Root, joinHandlerByEvent)
 
-
--- function added by S. to diversify the vehicle colors but avoid having many cars be super bright colors.
+-- function added by S. to diversify the vehicle colors but avoid having many cars be super bright colors
 -- this code is duplicate in util_server.lua , idk how to call stuff from other scripts in lua.
 function setVehicleColorToRandomHSV(vehicle)
 	colors = {}
@@ -990,11 +989,13 @@ addEventHandler('onClientRequestSpectate', g_Root,
 				if getActivePlayerCount() < 1 then
 					TimerManager.createTimerFor("map"):setTimer(
 						function()
-							gotoState('EveryoneFinished')
-							--RaceMode.setTimeLeft( 0 )
-							RaceMode.endMap()
+							if getActivePlayerCount() < 1 then
+								gotoState('EveryoneFinished')
+								--RaceMode.setTimeLeft( 0 )
+								RaceMode.endMap()
+							end
 						end,
-						50, 1 )
+						500, 1 )
 				end
 				--outputChatBox(tostring(getActivePlayerCount()))
 				-- END JOSHIMUZ EDIT
@@ -1101,7 +1102,7 @@ function setPlayerNotReady( player )
     activateNotReadyText()
 end
 
--- Alter not ready timeout
+-- Alter not ready timeout 
 function setPlayerReady( player )
 	setPlayerStatus( player, "alive", nil )
     g_NotReady[player] = false
