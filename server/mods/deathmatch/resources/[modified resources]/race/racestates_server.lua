@@ -1,4 +1,5 @@
 --
+﻿--
 -- racestates_server.lua
 --
 -- Possible states are

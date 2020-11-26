@@ -14,7 +14,7 @@ g_Objects = {}
 addEventHandler('onClientResourceStart', g_ResRoot,
 	function()
 		g_Players = getElementsByType('player')
-
+		
         fadeCamera(false,0.0)
 		-- create GUI
 		local screenWidth, screenHeight = guiGetScreenSize()
@@ -38,15 +38,15 @@ addEventHandler('onClientResourceStart', g_ResRoot,
 		guiSetFont(g_GUI.timeleft, 'default-bold-small')
 		guiLabelSetHorizontalAlign(g_GUI.timeleft, 'center')
 		g_GUI.speedbar:setProgress(0)
-
+		
 		hideGUIComponents('timeleftbg', 'timeleft', 'healthbar', 'speedbar', 'ranknum', 'ranksuffix', 'checkpoint', 'timepassed')
         RankingBoard.precreateLabels(10)
-
+		
 		-- set update handlers
 		g_PickupStartTick = getTickCount()
 		addEventHandler('onClientRender', g_Root, updateBars)
 		g_WaterCheckTimer = setTimer(checkWater, 1000, 0)
-
+		
 		-- load pickup models and textures
 		for name,id in pairs(g_ModelForPickupType) do
 			engineImportTXD(engineLoadTXD('model/' .. name .. '.txd'), id)
@@ -150,7 +150,7 @@ end
 
 function TravelScreen.show( mapName, authorName )
     TravelScreen.startTime = getTickCount()
-    g_dxGUI['travelText2']:text(mapName)
+    g_dxGUI['travelText2']:text(mapName) 
 	g_dxGUI['travelText3']:text(authorName and "Author: " .. authorName or "")
     showGUIComponents('travelImage', 'travelText1', 'travelText2', 'travelText3')
 	guiMoveToBack(g_GUI['travelImage'])
@@ -177,7 +177,7 @@ end
 function initRace(vehicle, checkpoints, objects, pickups, mapoptions, ranked, duration, gameoptions, mapinfo, playerInfo)
     outputDebug( 'MISC', 'initRace start' )
 	unloadAll()
-
+	
 	g_Players = getElementsByType('player')
 	g_MapOptions = mapoptions
 	g_GameOptions = gameoptions
@@ -189,11 +189,11 @@ function initRace(vehicle, checkpoints, objects, pickups, mapoptions, ranked, du
 
 	fadeCamera(true)
 	showHUD(false)
-
+	
 	g_Vehicle = vehicle
 	setVehicleDamageProof(g_Vehicle, true)
 	OverrideClient.updateVars(g_Vehicle)
-
+	
 	--local x, y, z = getElementPosition(g_Vehicle)
 	setCameraBehindVehicle(vehicle)
 	--alignVehicleToGround(vehicle)
@@ -204,7 +204,7 @@ function initRace(vehicle, checkpoints, objects, pickups, mapoptions, ranked, du
 
 	-- checkpoints
 	g_Checkpoints = checkpoints
-
+	
 	-- pickups
 	local object
 	local pos
@@ -225,7 +225,7 @@ function initRace(vehicle, checkpoints, objects, pickups, mapoptions, ranked, du
 			g_Pickups[colshape].label:type("shadow",2)
         end
 	end
-
+	
 	-- objects
 	g_Objects = {}
 	local pos, rot
@@ -239,7 +239,7 @@ function initRace(vehicle, checkpoints, objects, pickups, mapoptions, ranked, du
 		g_CurrentCheckpoint = 0
 		showNextCheckpoint()
 	end
-
+	
 	-- GUI
 	g_dxGUI.timepassed:text('0:00:00')
 	showGUIComponents('healthbar', 'speedbar', 'timepassed')
@@ -254,7 +254,7 @@ function initRace(vehicle, checkpoints, objects, pickups, mapoptions, ranked, du
 	else
 		hideGUIComponents('checkpoint')
 	end
-
+	
 	g_HurryDuration = g_GameOptions.hurrytime
 	if duration then
 		launchRace(duration)
@@ -301,16 +301,16 @@ end
 
 function launchRace(duration)
 	g_Players = getElementsByType('player')
-
+	
 	if type(duration) == 'number' then
 		showGUIComponents('timeleftbg', 'timeleft')
 		guiLabelSetColor(g_GUI.timeleft, 255, 255, 255)
 		g_Duration = duration
 		addEventHandler('onClientRender', g_Root, updateTime)
 	end
-
+	
 	setVehicleDamageProof(g_Vehicle, false)
-
+	
 	g_StartTick = getTickCount()
 end
 

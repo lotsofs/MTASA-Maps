@@ -1,13 +1,14 @@
 --
+﻿--
 -- racemidvote_server.lua
 --
 -- Mid-race random map vote and
 -- NextMapVote handled in this file
 --
-
+ 
 local lastVoteStarterName = ''
 local lastVoteStarterCount = 0
-
+ 
 ----------------------------------------------------------------------------
 -- displayHilariarseMessage
 --

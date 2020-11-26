@@ -434,7 +434,7 @@ function restorePlayer(id, player, bNoFade, bDontFix)
         setVehicleTurnVelocity( vehicle, 0,0,0 )
 		setElementPosition(vehicle, unpack(bkp.position))
 		local rx, ry, rz = unpack(bkp.rotation)
-		setVehicleRotation(vehicle, rx or 0, ry or 0, rz or 0)
+		setElementRotation(vehicle, rx or 0, ry or 0, rz or 0)
 		if not bDontFix then
 			fixVehicle(vehicle)
 		end
@@ -442,13 +442,13 @@ function restorePlayer(id, player, bNoFade, bDontFix)
 		if getElementModel(vehicle) ~= bkp.vehicle then
 			setVehicleID(vehicle, bkp.vehicle)
 		end
-		warpPedIntoVehicle(player, vehicle)
-
+		warpPedIntoVehicle(player, vehicle)	
+		
         setVehicleLandingGearDown(vehicle,bkp.geardown)
 
 		RaceMode.playerFreeze(player, true, bDontFix)
         outputDebug( 'MISC', 'restorePlayer: setElementFrozen true for ' .. tostring(getPlayerName(player)) .. '  vehicle:' .. tostring(vehicle) )
-        removeVehicleUpgrade(vehicle, 1010) -- remove nitro
+		removeVehicleUpgrade(vehicle, 1010) -- remove nitro
 		TimerManager.destroyTimersFor("unfreeze",player)
 		TimerManager.createTimerFor("map","unfreeze",player):setTimer(restorePlayerUnfreeze, 2000, 1, id, player, bDontFix)
 	end

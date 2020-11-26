@@ -40,7 +40,7 @@
 	<script src="override_client.lua" type="client"/>
 	<script src="editor_support_client.lua" type="client"/>
 	<config src="help.xml" type="client" />
-
+	
 	<file src="img/progress_health_bg.png"/>
 	<file src="img/progress_health.png"/>
 	<file src="img/progress_speed_bg.png"/>
@@ -61,23 +61,23 @@
 	<file src="img/killmessage.png"/>
 
 	<file src="audio/mission_accomplished.mp3"/>
-
+	
 	<file src="model/nitro.dff"/>
 	<file src="model/nitro.txd"/>
 	<file src="model/repair.dff"/>
 	<file src="model/repair.txd"/>
 	<file src="model/vehiclechange.dff"/>
 	<file src="model/vehiclechange.txd"/>
-
+	
 	<file src="edf/checkpoint.png"/>
 	<file src="edf/pickup.png"/>
 	<file src="edf/spawnpoint.png"/>
-
+	
 	<export function="getTimePassed" type="server"/>
 	<export function="getPlayerRank" type="server"/>
 	<export function="isPlayerFinished" type="server"/>
 	<export function="getPlayerVehicle" type="server"/>
-
+	
 	<settings>
 		<!-- *****************************************************
 			 All these settings are adjustable in the Admin Panel:
@@ -95,14 +95,14 @@
 					desc="Color of the Race chat box messages."
 					/>
 
-		<setting name="*hurrytime" value="15"
+		<setting name="*hurrytime" value="60"
 					friendlyname="Hurry time"
 					accept="0-120"
 					group="Gameplay"
 					desc="Display HURRY! message this many seconds before the time runs out."
 					/>
 
-		<setting name="*timeafterfirstfinish" value="30"
+		<setting name="*timeafterfirstfinish" value="60"
 					friendlyname="Finish race time"
 					accept="0-120"
 					group="Gameplay"
@@ -116,7 +116,7 @@
 					desc="Default respawn mode, if one is not set in the map."
 					/>
 
-		<setting name="*respawntime" value="10"
+		<setting name="*respawntime" value="5"
 					friendlyname="Respawn time"
 					accept="0-60"
 					group="Gameplay"
@@ -137,7 +137,7 @@
 					desc="Set to true to disable collisions."
 					/>
 
-        <setting name="*ghostalpha" value="false"
+        <setting name="*ghostalpha" value="true"
 					friendlyname="Ghost alpha"
 					accept="false,true"
 					group="Graphics"
@@ -164,7 +164,7 @@
 					desc="Set to file to use the server file: mods\deathmatch\vehiclecolors.conf"
 					/>
 
-        <setting name="*skins" value="cj"
+        <setting name="*skins" value="random"
 					friendlyname="Driver skin"
 					group="Graphics"
 					accept="*"
@@ -276,7 +276,7 @@
 					desc="Allow any player to start spectating with the 'B' key. (Does not work in no repawn maps)"
 					/>
 
-		<setting name="*norsadminspectate" value="false"
+		<setting name="*norsadminspectate" value="true"
 					friendlyname="Admin no respawn spectate"
 					group="Spectating"
 					accept="false,true"
@@ -312,8 +312,8 @@
 		<setting name="*classicchangez_map_can_override"  friendlyname="Classic change Z map override" group="_Advanced" value="true" accept="false,true" desc="Set to true to allow the map to override this setting"/>
 		<setting name="*hunterminigun_map_can_override"  friendlyname="Hunter minigun map override" group="Gameplay" value="true" accept="false,true" desc="Set to true to allow the map to override this setting"/>
 
-		<setting name="*ghostmode_warning_if_map_override"  friendlyname="Ghost mode override warning" group="Gameplay" value="true" accept="false,true" desc="Set to true to issue a warning to players in the chatbox, if the map overrides this setting"/>
-		<setting name="*vehicleweapons_warning_if_map_override"  friendlyname="Vehicle weapons override warning" group="Gameplay" value="true" accept="false,true" desc="Set to true to issue a warning to players in the chatbox, if the map overrides this setting"/>
+		<setting name="*ghostmode_warning_if_map_override"  friendlyname="Ghost mode override warning" group="Gameplay" value="false" accept="false,true" desc="Set to true to issue a warning to players in the chatbox, if the map overrides this setting"/>
+		<setting name="*vehicleweapons_warning_if_map_override"  friendlyname="Vehicle weapons override warning" group="Gameplay" value="false" accept="false,true" desc="Set to true to issue a warning to players in the chatbox, if the map overrides this setting"/>
     </settings>
 
 
