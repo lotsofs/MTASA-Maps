@@ -73,8 +73,8 @@ function startMidMapVoteForRandomMap(player)
  
     -- Actual vote started here
     local pollDidStart = exports.votemanager:startPoll {
-            title='Do you want to change to a random map?',
-            percentage=51,
+            title='Some stupid poll to change to a random map:',
+            percentage=81,
             timeout=15,
             allowchange=true,
             visibleTo=getRootElement(),
@@ -227,10 +227,10 @@ function startNextMapVote()
     end
        
     local poll = {
-        title="Choose the next map:",
+        title="Blah blah blah:",
         visibleTo=getRootElement(),
         percentage=51,
-        timeout=15,
+        timeout=8,
         allowchange=true;
         }
        
@@ -332,8 +332,8 @@ function startMidMapVoteForRestartMap(player)
  
     -- Actual vote started here
     local pollDidStart = exports.votemanager:startPoll {
-            title='Do you want to restart the current map?',
-            percentage=51,
+            title='Restart map? Vote:',
+            percentage=81,
             timeout=15,
             allowchange=true,
             visibleTo=getRootElement(),

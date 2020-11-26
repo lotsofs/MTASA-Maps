@@ -607,7 +607,7 @@ function voteBetweenMaps(...)
 	end
 
 	local poll = {
-		title="Choose a map:",
+		title="What's this? A poll? Woah:",
 		visibleTo=rootElement,
 		percentage=vote.map.percentage,
 		timeout=vote.map.timeout,
@@ -679,7 +679,7 @@ function voteBetweenGamemodeCompatibleMaps(gamemode)
 	end
 
 	local poll = {
-		title="Choose a map:",
+		title="Ugh:",
 		visibleTo=rootElement,
 		percentage=vote.map.percentage,
 		timeout=vote.map.timeout,
