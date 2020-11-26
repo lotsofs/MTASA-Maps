@@ -108,6 +108,7 @@ function setVehicleID(vehicle, id)
 		end
 		if not vehicleColorFixed then
 			setVehicleColorToRandomHSV(vehicle)
+			-- setVehicleColor(vehicle, math.random(0, 126), math.random(0, 126), 0, 0)
 		end
 	end
 	TimerManager.createTimerFor("map",vehicle):setTimer(revertVehicleWheels, 1000, 1, vehicle)
