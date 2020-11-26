@@ -246,8 +246,8 @@ function startNextMapVote()
     g_currentMap = exports.mapmanager:getRunningGamemodeMap()
     if g_currentMap then
         -- Modify this to change play again limit. Obviously 2 PlayAgains = 3 plays of the map total
-        if g_playAgainCount < 2 then
-            table.insert(poll, {"Play again (" .. g_playAgainCount + 1 .. "/2)", 'nextMapVoteResult', getRootElement(), g_currentMap})
+        if g_playAgainCount < 99 then
+            table.insert(poll, {"Play again (" .. g_playAgainCount + 1 .. "/99)", 'nextMapVoteResult', getRootElement(), g_currentMap})
         end
     end
  
