@@ -519,6 +519,8 @@ function joinHandlerBoth(player)
                     end
                     if not vehicleColorFixed then
 						setVehicleColorToRandomHSV(vehicle)
+						-- note: the below would always set the tertiary color of cement truck, squalo & camper to black. when choosing to revert it, perhaps fix that.
+						-- setVehicleColor(vehicle, math.random(0, 126), math.random(0, 126), 0, 0)
                     end
                 end
             end
@@ -982,6 +984,20 @@ addEventHandler('onClientRequestSpectate', g_Root,
 				g_SavedVelocity[player] = {}
 				g_SavedVelocity[player].velocity = {getElementVelocity(g_Vehicles[player])}
 				g_SavedVelocity[player].turnvelocity = {getVehicleTurnVelocity(g_Vehicles[player])}
+				
+				-- JOSHIMUZ EDIT 
+				removeActivePlayer(player)
+				if getActivePlayerCount() < 1 then
+					TimerManager.createTimerFor("map"):setTimer(
+						function()
+							gotoState('EveryoneFinished')
+							--RaceMode.setTimeLeft( 0 )
+							RaceMode.endMap()
+						end,
+						50, 1 )
+				end
+				--outputChatBox(tostring(getActivePlayerCount()))
+				-- END JOSHIMUZ EDIT
 			else
 				clientCall(player, "Spectate.stop", 'manual' )
 				setPlayerStatus( player, nil, "")
@@ -994,6 +1010,11 @@ addEventHandler('onClientRequestSpectate', g_Root,
 					RaceMode.playerFreeze(player, true, true)
 					TimerManager.createTimerFor("map",player):setTimer(afterSpectatePlayerUnfreeze, 2000, 1, player, true)
 				end
+
+				-- JOSHIMUZ EDIT
+				addActivePlayer(player)
+				--outputChatBox(tostring(getActivePlayerCount()))
+				-- END JOSHIMUZ EDIT
 			end
 		end
 	end
