@@ -757,8 +757,8 @@ function findMaps( query, gamemode )
 		return outputDebugString("Votemanager did not function correctly because the \'mapmanager\' resource isn't running.",0)
 	end
 	local results = {}
-	--escape all meta chars
-	query = string.gsub(query, "([%*%+%?%.%(%)%[%]%{%}%\%/%|%^%$%-])","%%%1")
+	--escape all meta chars. Edit by S.: Or not. This just resulted in % signs being placed in the query. It appears characters are escaped elsewhere already as this broke exact match with map ID voting.
+	-- query = string.gsub(query, "([%*%+%?%.%(%)%[%]%{%}%\%/%|%^%$%-])","%%%1")
 	-- Loop through and find matching maps
 	local maps = gamemode and exports.mapmanager:getMapsCompatibleWithGamemode(gamemode) or exports.mapmanager:getMaps()
 	for i,resource in ipairs(maps) do
@@ -770,8 +770,8 @@ function findMaps( query, gamemode )
 			return {resource}
 		end
 
-		-- Find match for query within infoName
-		if string.find( infoName:lower(), query:lower() ) then
+		-- Find match for query within infoName (edit by S.: and resName)
+		if (string.find( infoName:lower(), query:lower() ) or string.find( resName:lower(), query:lower() )) then
 			table.insert( results, resource )
 		end
 	end
