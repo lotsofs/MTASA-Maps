@@ -1186,12 +1186,12 @@ MovePlayerAway.health = 0
 
 function MovePlayerAway.start()
 	local element = g_Vehicle or getPedOccupiedVehicle(g_Me) or g_Me
-	--MovePlayerAway.posX, MovePlayerAway.posY, MovePlayerAway.posZ = getElementPosition(element)
-	--MovePlayerAway.posZ = 34567 + math.random(0,4000)
-	--MovePlayerAway.rotZ = 0
+	MovePlayerAway.posX, MovePlayerAway.posY, MovePlayerAway.posZ = getElementPosition(element)
+	MovePlayerAway.posZ = 34567 + math.random(0,4000)
+	MovePlayerAway.rotZ = 0
 	MovePlayerAway.health = math.max(1,getElementHealth(element))
-	-- setElementHealth( element, 2000 )
-	-- setElementHealth( g_Me, 90 )
+	setElementHealth( element, 2000 )
+	setElementHealth( g_Me, 90 )
 	MovePlayerAway.update(true)
 	MovePlayerAway.timer:setTimer(MovePlayerAway.update,500,0)
 	triggerServerEvent("onRequestMoveAwayBegin", g_Me)
@@ -1207,7 +1207,7 @@ function MovePlayerAway.update(nozcheck)
 	if getPedOccupiedVehicle(g_Me) then
 		if not nozcheck then
 			if camTarget then
-				-- MovePlayerAway.posX, MovePlayerAway.posY = getElementPosition(camTarget)
+				MovePlayerAway.posX, MovePlayerAway.posY = getElementPosition(camTarget)
 				if getElementType(camTarget) ~= "vehicle" then
 					outputDebug( 'SPECTATE', 'camera target type:' .. getElementType(camTarget) )
 				end
@@ -1220,12 +1220,12 @@ function MovePlayerAway.update(nozcheck)
 		end
 		local vehicle = g_Vehicle
 		if vehicle then
-			-- fixVehicle( vehicle )
-			-- setElementFrozen ( vehicle, true )
-			-- setElementPosition( vehicle, MovePlayerAway.posX, MovePlayerAway.posY, MovePlayerAway.posZ )
-			-- setElementVelocity( vehicle, 0,0,0 )
-			-- setVehicleTurnVelocity( vehicle, 0,0,0 )
-			-- setElementRotation ( vehicle, 0,0,MovePlayerAway.rotZ )
+			fixVehicle( vehicle )
+			setElementFrozen ( vehicle, true )
+			setElementPosition( vehicle, MovePlayerAway.posX, MovePlayerAway.posY, MovePlayerAway.posZ )
+			setElementVelocity( vehicle, 0,0,0 )
+			setElementAngularVelocity( vehicle, 0,0,0 )
+			setElementRotation ( vehicle, 0,0,MovePlayerAway.rotZ )
 		end
 	end
 	setElementHealth( g_Me, 90 )
