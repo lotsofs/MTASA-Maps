@@ -1,4 +1,3 @@
--- This client script is completely controlled by the server
 ﻿-- This client script is completely controlled by the server
 Countdown = {}
 Countdown.__index = Countdown
@@ -49,7 +48,7 @@ function Countdown:update()
 		self:destroy()
 		return
 	end
-	if self.images then
+	if self.images and self.value <= 3 then
 		if self.countelems and self.countelems[1] then
 			table.each( self.countelems, destroyElement )
 		end
