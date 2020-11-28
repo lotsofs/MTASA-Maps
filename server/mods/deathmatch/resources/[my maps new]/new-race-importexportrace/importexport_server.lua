@@ -183,10 +183,10 @@ function colorGenerator(player)
 	for i = 1, 4, 1 do
 		-- since MTA wants colors in RGB, we won't bother calculating hue. Instead, we pretend S & V are both 100% to calculate a RGB values and apply SV on them later.
 		-- When both S and V are 100%, the color in RGB will always have one component of 255, one of 0, and one in between.
-		omponents = {}
-		omponents[1] = 255
-		omponents[2] = 0
-		omponents[3] = math.random(0, 255)
+		components = {}
+		components[1] = 255
+		components[2] = 0
+		components[3] = math.random(0, 255)
 		saturation = math.random(99, 100) / 100
 		value = math.random(99, 100) / 100
 
