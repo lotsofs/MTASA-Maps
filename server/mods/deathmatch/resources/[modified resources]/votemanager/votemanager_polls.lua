@@ -396,13 +396,16 @@ function voteMap(resource1, resource2)
 		if exports.mapmanager:isMapCompatibleWithGamemode(map, runningGamemode) then
 			local mapName = getResourceInfo(map, "name") or getResourceName(map)
 			return (startPoll{
-				title="Change map to "..mapName.."?",
+				title="Set the next map to "..mapName.."?",
 				percentage = vote.map.percentage,
 				visibleTo = rootElement,
 				timeout = vote.map.timeout,
 				allowchange = vote.map.allowchange;
-				[1]={"Yes",call,getResourceFromName("mapmanager"),"changeGamemodeMap",map,runningGamemode},
-				[2]={"No",outputVoteManager,"votemap: not enough votes to change to map '"..mapName.."'.",rootElement,vR,vG,vB;default=true},
+				-- Edit by S.: Set the next map instead of the current
+				-- [1]={"Yes",call,getResourceFromName("mapmanager"),"changeGamemodeMap",map,runningGamemode},
+				-- [2]={"No",outputVoteManager,"votemap: not enough votes to change to map '"..mapName.."'.",rootElement,vR,vG,vB;default=true},
+				[1]={"Yes",call,getResourceFromName("race"),"setNextMap",map},
+				[2]={"No",outputVoteManager,"votemap: not enough votes to set next map to '"..mapName.."'.",rootElement,vR,vG,vB;default=true},
 			}), true
 		else
 			return false, errorCode.mapIsntCompatible

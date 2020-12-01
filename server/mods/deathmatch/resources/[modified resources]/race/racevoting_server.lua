@@ -776,3 +776,17 @@ end
 function getMapName( map )
     return getResourceInfo( map, "name" ) or getResourceName( map ) or "unknown"
 end
+
+
+---------------------------------------------------------------------------
+--
+-- Custom functions
+--
+---------------------------------------------------------------------------
+
+-- by S.:
+function setNextMap( map )
+    g_ForcedNextMap = map
+    outputChatBox('Next map set to ' .. getMapName( g_ForcedNextMap ), g_Root, 0, 240, 0)
+    triggerClientEvent('onNextMapSet', resourceRoot, getMapName(g_ForcedNextMap))
+end
