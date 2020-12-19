@@ -1,0 +1,72 @@
+<meta>
+    <file src="songs/camarofever.mp3" download="false" />
+    <file src="songs/breakpoint.mp3" download="false" />
+    <file src="songs/overdrive.mp3" download="false" />
+    <file src="songs/soelectric.mp3" download="false" />
+    <file src="songs/silentstrike.mp3" download="false" />
+    <file src="songs/rollermobster.mp3" download="false" />
+    <file src="songs/sexualizer.mp3" download="false" />
+    <file src="songs/andromeda.mp3" download="false" />
+    <config src="songs_played.xml" type="server" />
+    
+    <file src="models/delorean.json" />
+    <file src="models/delorean_low.json" />
+    <file src="models/delorean_lower.json" />
+    <file src="models/bicycle.json" />
+    <file src="models/tire.json" />
+    <file src="models/tire_low.json" />
+    <file src="models/checkpoint.json" />
+    <file src="models/checkpoint_low.json" />
+    <file src="models/road.json" />
+    <file src="models/road_low.json" />
+    <file src="models/barrier.json" />
+    <file src="models/barrier_low.json" />
+    <file src="models/warning.json" />
+    <file src="models/arrow.json" />
+    <file src="models/palm.json" />
+    <file src="models/tony.json" />
+    <file src="models/gate.json" />
+    <file src="images/scanlines.png" />
+    <file src="images/horizon.png" />
+    <file src="images/buildings.png" />
+    <file src="images/tower.png" />
+    <file src="images/tower-lights.png" />
+    <file src="images/splashes/base.png" />
+    <file src="images/splashes/camarofever.png" />
+    <file src="images/splashes/breakpoint.png" />
+    <file src="images/splashes/overdrive.png" />
+    <file src="images/splashes/soelectric.png" />
+    <file src="images/splashes/silentstrike.png" />
+    <file src="images/splashes/rollermobster.png" />
+    <file src="images/splashes/sexualizer.png" />
+    <file src="images/splashes/andromeda.png" />
+    <file src="images/stars.png" />
+    <file src="road.col" />
+    <file src="vcr_osd_mono.ttf" />
+    
+    <script src="json.lua" type="client"></script>
+    <script src="main.lua" type="client"></script>
+    
+    <script src="main_s.lua" type="server"></script>
+    <info gamemodes="race" type="map" name="[R] Neon Dreams" author="TonyTheLemur" version="1.1.0"></info>
+    <map src="race-neon-dreams.map" dimension="0"></map>
+    <settings>
+        <setting name="#skins" value='[ &quot;random&quot; ]'></setting>
+        <setting name="#maxplayers" value="[ 128 ]"></setting>
+        <setting name="#useLODs" value="[ false ]"></setting>
+        <setting name="#gamespeed" value="[ 1 ]"></setting>
+        <setting name="#ghostmode" value='[ &quot;true&quot; ]'></setting>
+        <setting name="#time" value="12:0"></setting>
+        <setting name="#vehicleweapons" value='[ &quot;false&quot; ]'></setting>
+        <setting name="#minplayers" value="[ 0 ]"></setting>
+        <setting name="#respawntime" value="[ 1 ]"></setting>
+        <setting name="#gravity" value="[ 0.0080000004 ]"></setting>
+        <setting name="#waveheight" value="[ 0 ]"></setting>
+        <setting name="#weather" value="[ 2 ]"></setting>
+        <setting name="#locked_time" value="[ true ]"></setting>
+        <setting name="#duration" value="[ 1800 ]"></setting>
+        <setting name="#respawn" value='[ &quot;timelimit&quot; ]'></setting>
+    </settings>
+    <script src="mapEditorScriptingExtension_s.lua" type="server"></script>
+    <script src="mapEditorScriptingExtension_c.lua" type="client" validate="false"></script>
+</meta>
