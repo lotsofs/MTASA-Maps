@@ -83,7 +83,10 @@ function collectPackage(packageId, player)
         return
     end
     local vehicle = getPedOccupiedVehicle(player)
-    local model = getElementModel(vehicle)
+    local model = 0
+    if (vehicle) then
+        model = getElementModel(vehicle)
+    end
     playerPackageTable[packageId] = model
     setElementData(player, "coloredPackages.collected", playerPackageTable)
     triggerClientEvent(player, "onCollectPackage", player, packageId)
