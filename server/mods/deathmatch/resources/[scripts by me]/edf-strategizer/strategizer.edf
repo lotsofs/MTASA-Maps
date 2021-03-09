@@ -1,0 +1,20 @@
+<def name="Strategizer">
+
+	<element name="start" friendlyname="Start" icon="start.png">
+		<data name="position" type="coord3d" default="0,0,0"/>
+		<data name="rotation" type="coord3d" default="0,0,0"/>
+		<vehicle model="406" posZ="0.5" editorOnly="true"/>
+		<vehicle model="532" posZ="0.3" editorOnly="true"/>
+	</element> 
+
+	<element name="finish" friendlyname="Finish" icon="finish.png">
+		<data name="position" type="coord3d" default="0,0,0"/>
+		<marker size="6" type="checkpoint" posZ="0.5" color="#00ff00" editorOnly="true"/>
+	</element> 
+
+	<element name="track" friendlyname="Track" icon="track.png">
+		<data name="position" type="coord3d" default="0,0,0"/>
+		<object model="3877" editorOnly="true"/>
+		<marker size="1.5" type="corona" posZ="1.1" color="#0000ff" editorOnly="true"/>
+	</element> 
+</def>
