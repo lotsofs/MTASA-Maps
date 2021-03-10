@@ -1,9 +1,40 @@
 selectedCars = {}
-selectedIndices = {}
+selectedTracks = {}
+
+blips = {}
+checkpoints = {}
 
 playerProgress = {}
-playerCurrentCar = {}
-playerCurrentTrack = {}
+playerSelections = {}
+
+colors = {
+	{math.random(0, 255), math.random(0, 255), math.random(0, 255)},
+	{math.random(0, 255), math.random(0, 255), math.random(0, 255)},
+	{math.random(0, 255), math.random(0, 255), math.random(0, 255)},
+	{math.random(0, 255), math.random(0, 255), math.random(0, 255)},
+	{math.random(0, 255), math.random(0, 255), math.random(0, 255)},
+	{math.random(0, 255), math.random(0, 255), math.random(0, 255)},
+	{math.random(0, 255), math.random(0, 255), math.random(0, 255)},
+	{math.random(0, 255), math.random(0, 255), math.random(0, 255)},
+	{math.random(0, 255), math.random(0, 255), math.random(0, 255)},
+	{math.random(0, 255), math.random(0, 255), math.random(0, 255)},
+	{math.random(0, 255), math.random(0, 255), math.random(0, 255)},
+	{math.random(0, 255), math.random(0, 255), math.random(0, 255)},
+	{math.random(0, 255), math.random(0, 255), math.random(0, 255)},
+	{math.random(0, 255), math.random(0, 255), math.random(0, 255)},
+	{math.random(0, 255), math.random(0, 255), math.random(0, 255)},
+	{math.random(0, 255), math.random(0, 255), math.random(0, 255)},
+	{math.random(0, 255), math.random(0, 255), math.random(0, 255)},
+	{math.random(0, 255), math.random(0, 255), math.random(0, 255)},
+	{math.random(0, 255), math.random(0, 255), math.random(0, 255)},
+	{math.random(0, 255), math.random(0, 255), math.random(0, 255)},
+	{math.random(0, 255), math.random(0, 255), math.random(0, 255)},
+}
+
+finishes = nil
+tracks = nil
+starts = nil
+
 STAGES = 10
 
 ----------------------------- Start of the race ---------------------------
@@ -14,13 +45,20 @@ function startGame(newState, oldState)
 	end
 	shuffleTracksAll()
 	shuffleCarsAll()
+	for i, v in pairs(getElementsByType("player")) do
+		triggerClientEvent(v, "onCarSelectionFinished", resourceRoot, selectedCars, selectedTracks, colors)
+	end
+	finishes = getElementsByType("finish")
+	tracks = getElementsByType("track")
+	starts = getElementsByType("start")
+	displayTracks()
 end
 addEvent("onRaceStateChanging", true)
 addEventHandler("onRaceStateChanging", root, startGame)
 
 function shuffleTracksAll()
 	tracks = getElementsByType("track")
-	outputChatBox("tracks length: " .. #tracks)
+	-- outputChatBox("tracks length: " .. #tracks)
 	indices = {}
 	for i = 1, #tracks, 1 do
 		indices[i] = i
@@ -32,7 +70,7 @@ function shuffleTracksAll()
 		table.remove(indices, randomIndex)
 	end
 	for i = 1, STAGES, 1 do
-		selectedIndices[i] = shuffledIndices[i]
+		selectedTracks[i] = shuffledIndices[i]
 	end
 end
 
@@ -51,7 +89,7 @@ function shuffleCarsAll()
 		448, 461, 462, 463, 468, 471, 521, 522, 523, 581, 586,
 		509, 481, 510
 	}
-	outputChatBox("cars length: " .. #suitableCars)
+	-- outputChatBox("cars length: " .. #suitableCars)
 	shuffledCars = {}
 	for i = #suitableCars, 1, -1 do
 		randomIndex = math.random(1,i)
@@ -63,76 +101,73 @@ function shuffleCarsAll()
 	end
 end
 
-function nextCar()
-	changeCar(client, 1)
-end
+function displayTracks()
+	for i, v in pairs(selectedTracks) do
+		x, y, z = getElementPosition(finishes[v])
+		size = getElementData(finishes[v], "size") or 6
+		table.insert(checkpoints, createMarker(x, y, z, "checkpoint", 6, colors[i][1], colors[i][2], colors[i][3]))
+		table.insert(blips, createBlip(x, y, z, 0, 8, colors[i][1], colors[i][2], colors[i][3], 255, 0, 1000))
+		table.insert(blips, createBlip(2040.5, -2552.7, 10, 31, 1, colors[i][1], colors[i][2], colors[i][3], 255, 0))
 
-function prevCar()
-	changeCar(client, -1)
-end
+		x, y, z = getElementPosition(tracks[v])
+		object = createObject(6295, x, y + 0.175, z - 1)
+		setObjectScale(object, 0.1)
+		setElementCollisionsEnabled(object, false)
+		createMarker(x, y, z + 1.1, "corona", 1.5, colors[i][1], colors[i][2], colors[i][3])
 
-function nextTrack()
-	changeTrack(client, 1)
-end
-
-function prevTrack()
-	changeTrack(client, -1)
-end
-
-function changeCar(player, next)
-	if playerCurrentCar[player] then
-		local index = playerCurrentCar[player] 
-		playerCurrentCar[player] = playerCurrentCar[player] + next
-	else
-		playerCurrentCar[player] = next
+		x, y, z = getElementPosition(starts[v])
+		table.insert(blips, createBlip(x, y, z, 0, 2, colors[i][1], colors[i][2], colors[i][3], 255, 0, 1000))
 	end
-	if playerCurrentCar[player] < 1 then
-		playerCurrentCar[player] = playerCurrentCar[player] + STAGES
-	elseif playerCurrentCar[player] > STAGES then
-		playerCurrentCar[player] = playerCurrentCar[player] - STAGES
-	end
+end
 
-	vehicle = getPedOccupiedVehicle(player)
-	model = selectedCars[playerCurrentCar[player]]
+function changeCar(model)
+	vehicle = getPedOccupiedVehicle(client)
 	setElementModel(vehicle, model)
-	fixVehicle(vehicle)
-	x, y, z = getElementPosition(vehicle)
-	setElementPosition(vehicle, x, y, z + 0.5)
+end
+addEvent("changeCar", true)
+addEventHandler("changeCar", root, changeCar)
+
+----------------------------- Post Setup ---------------------------
+
+function finishSetup()
+	for i, v in pairs(blips) do
+		destroyElement(v)
+	end
+	for i, v in pairs(checkpoints) do
+		destroyElement(v)
+	end
+	for i, v in pairs(getElementsByType("player")) do
+		triggerClientEvent(v, "onSetupFinished", resourceRoot)
+	end
 end
 
-function changeTrack(player, next)
-	if playerCurrentTrack[player] then
-		local index = playerCurrentTrack[player]
-		playerCurrentTrack[player] = playerCurrentTrack[player] + next
-	else
-		playerCurrentTrack[player] = next
-	end
-	if playerCurrentTrack[player] < 1 then
-		playerCurrentTrack[player] = playerCurrentTrack[player] + STAGES
-	elseif playerCurrentTrack[player] > STAGES then
-		playerCurrentTrack[player] = playerCurrentTrack[player] - STAGES
-	end
+function transferCarList(cars)
+	playerSelections[client] = cars
+	playerProgress[client] = 1
+	teleportToNext(client)
+end
+addEvent("transferCarList", true)
+addEventHandler("transferCarList", root, transferCarList)
 
-	local vehicle = getPedOccupiedVehicle(player)
-	fixVehicle(vehicle)
-	
-	starts = getElementsByType("start")
-	x, y, z = getElementPosition(starts[selectedIndices[playerCurrentTrack[player]]])
-	u, v, w = getElementRotation(starts[selectedIndices[playerCurrentTrack[player]]])
-	setElementFrozen(vehicle, true)
+
+function teleportToNext(player)
+	-- get our destination
+	destination = starts[selectedTracks[playerProgress[player]]]
+	x = getElementData(destination, "posX")
+	y = getElementData(destination, "posY")
+	z = getElementData(destination, "posZ")
+	rX = getElementData(destination, "rotX")
+	rY = getElementData(destination, "rotY")
+	rZ = getElementData(destination, "rotZ")
+	-- get the vehicle for our destination
+	model = playerSelections[player][playerProgress[player]]
+	-- go there
+	vehicle = getPedOccupiedVehicle(player)
+	setElementModel(vehicle, model)
 	setElementPosition(vehicle, x, y, z)
-	setElementRotation(vehicle, u, v, w)
-	setElementVelocity(vehicle, 0,0,0 + 0.5)
-	setTimer( function()
-		setElementFrozen(vehicle, false)
-	end, 100, 1)
+	setElementRotation(vehicle, rX, rY, rZ)
+	fixVehicle(vehicle)
 end
 
-addEvent("nextCar", true)
-addEventHandler("nextCar", resourceRoot, nextCar)
-addEvent("prevCar", true)
-addEventHandler("prevCar", resourceRoot, prevCar)
-addEvent("nextTrack", true)
-addEventHandler("nextTrack", resourceRoot, nextTrack)
-addEvent("prevTrack", true)
-addEventHandler("prevTrack", resourceRoot, prevTrack)
+
+bindKey(getElementsByType("player")[1], "H", "down", finishSetup)
