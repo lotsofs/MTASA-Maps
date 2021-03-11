@@ -31,11 +31,14 @@ colors = {
 	{math.random(0, 255), math.random(0, 255), math.random(0, 255)},
 }
 
-finishes = nil
-tracks = nil
-starts = nil
+finishes = {}
+tracks = {}
+starts = {}
 
-STAGES = 10
+raceCps = getElementsByType("checkpoint")
+colShapes = {}
+
+STAGES = 73
 
 ----------------------------- Start of the race ---------------------------
 
@@ -107,7 +110,7 @@ function displayTracks()
 		size = getElementData(finishes[v], "size") or 6
 		table.insert(checkpoints, createMarker(x, y, z, "checkpoint", 6, colors[i][1], colors[i][2], colors[i][3]))
 		table.insert(blips, createBlip(x, y, z, 0, 8, colors[i][1], colors[i][2], colors[i][3], 255, 0, 1000))
-		table.insert(blips, createBlip(2040.5, -2552.7, 10, 31, 1, colors[i][1], colors[i][2], colors[i][3], 255, 0))
+		table.insert(blips, createBlip(620.5, -2371.4, 3, 31, 1, colors[i][1], colors[i][2], colors[i][3], 255, 0))
 
 		x, y, z = getElementPosition(tracks[v])
 		object = createObject(6295, x, y + 0.175, z - 1)
@@ -134,7 +137,13 @@ function finishSetup()
 		destroyElement(v)
 	end
 	for i, v in pairs(checkpoints) do
-		destroyElement(v)
+		r, g, b = getMarkerColor(v)
+		setMarkerColor(v, r, g, b ,0)
+		setMarkerType(v, "cylinder")
+		x, y, z = getElementPosition(v)
+		size = getMarkerSize(v)
+		table.insert(colShapes, createColCircle(x, y, size + 4))
+		-- destroyElement(v)
 	end
 	for i, v in pairs(getElementsByType("player")) do
 		triggerClientEvent(v, "onSetupFinished", resourceRoot)
@@ -167,7 +176,64 @@ function teleportToNext(player)
 	setElementPosition(vehicle, x, y, z)
 	setElementRotation(vehicle, rX, rY, rZ)
 	fixVehicle(vehicle)
+	enableNextCheckpoint(player)
 end
 
+function enableNextCheckpoint(player)
+	-- get our destination
+	progress = playerProgress[player]
+	destination = checkpoints[progress]
+	x, y, z = getElementPosition(destination)
+	size = getMarkerSize(destination)
+	r, g, b = getMarkerColor(destination)
+	triggerClientEvent(player, "makeCheckpointVisible", resourceRoot, x,y,z,size,r,g,b)
+end
 
 bindKey(getElementsByType("player")[1], "H", "down", finishSetup)
+
+
+----------------------------- Hitting a marker ---------------------------
+
+
+function teleportToRaceCp(player)
+	vehicle = getPedOccupiedVehicle(player)
+	for i = 1, playerProgress[player] - 1, 1 do
+		x,y,z = getElementPosition(raceCps[i])
+		setElementPosition(vehicle, x, y, z)
+	end
+end
+
+function checkpointHit(player, matchingDimension)
+	if (getElementType(player) ~= "player") then
+		return
+	end
+	for i, v in pairs(colShapes) do
+		if v == source then
+			if i == playerProgress[player] then
+				toggleAllControls(player, false, true, false)
+				triggerClientEvent(player, "checkpointFade", resourceRoot)
+				setTimer ( function(player)
+					playerProgress[player] = playerProgress[player] + 1
+					setElementFrozen(getPedOccupiedVehicle(player), true)
+					teleportToRaceCp(player)
+				end, 2000, 1, player)
+			end
+		end
+	end
+end
+addEventHandler("onColShapeHit", resourceRoot, checkpointHit)
+
+function grabCheckpoint(checkpoint, time_)
+	if (checkpoint < playerProgress[source] - 1) then
+		teleportToRaceCp(source)
+	elseif (checkpoint < STAGES) then
+		teleportToNext(source)
+		triggerClientEvent(source, "fadeIn", resourceRoot)
+		setElementFrozen(getPedOccupiedVehicle(source), false)
+		setTimer ( function(player)
+			toggleAllControls(player, true)
+			triggerClientEvent(player, "playGoSound", resourceRoot)
+		end, 2000, 1, source)
+	end
+end
+addEventHandler("onPlayerReachCheckpoint", getRootElement(), grabCheckpoint)

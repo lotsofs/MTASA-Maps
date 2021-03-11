@@ -14,8 +14,10 @@ currentTrack = 0
 
 colors = {}
 
-isSetup = false
+currentCp = nil
+currentBlip = nil
 
+isSetup = false
 
 function onSetupFinished()
 	sortedCars = {}
@@ -45,6 +47,40 @@ end
 addEvent("onSetupFinished", true)
 addEventHandler("onSetupFinished", resourceRoot, onSetupFinished)
 
+
+function makeCheckpointVisible(x,y,z,size,r,g,b)
+	outputChatBox(x)
+	currentCp = createMarker(x, y, z, "checkpoint", size, r, g, b)
+	currentBlip = createBlip(x,y,z,0,4,r,g,b)
+end
+
+addEvent("makeCheckpointVisible", true)
+addEventHandler("makeCheckpointVisible", resourceRoot, makeCheckpointVisible)
+
+
+function fadeIn()
+	fadeCamera(true, 2)
+end
+addEvent("fadeIn", true)
+addEventHandler("fadeIn", resourceRoot, fadeIn)
+
+function playGoSound()
+	playSoundFrontEnd(45)
+end
+addEvent("playGoSound", true)
+addEventHandler("playGoSound", resourceRoot, playGoSound)
+
+
+function checkpointFade()
+	playSoundFrontEnd(43)
+	fadeCamera(false, 2)
+	destroyElement(currentCp)
+	destroyElement(currentBlip)
+end
+addEvent("checkpointFade", true)
+addEventHandler("checkpointFade", resourceRoot, checkpointFade)
+
+
 ------------------------------------------ setup stage ------------------------------
 
 function onCarSelectionFinished(cars, tracks, col)
@@ -59,7 +95,7 @@ function onCarSelectionFinished(cars, tracks, col)
 			w = getElementData(veh, "rotZ")
 			model = cars[i]
 			spawnedCars[i] = createVehicle(model, x, y, z, u, v, w)
-			setVehicleColor(spawnedCars[i], 255, 255, 255, 127, 127, 127)
+			setVehicleColor(spawnedCars[i], 255, 255, 255, 0, 0, 0)
 			carBlips[i] = createBlipAttachedTo(spawnedCars[i],0,5,255,255,255,255,64, 1000)
 		end
 	end
@@ -90,7 +126,7 @@ function changeCar(next)
 	if (trackColor) then
 		setVehicleColor(vehicle, colors[trackColor][1], colors[trackColor][2] , colors[trackColor][3], colors[trackColor][1] / 2, colors[trackColor][2] / 2, colors[trackColor][3] / 2)
 	else
-		setVehicleColor(vehicle, 255, 255, 255, 127, 127, 127)
+		setVehicleColor(vehicle, 255, 255, 255, 0, 0, 0)
 	end
 	triggerServerEvent("changeCar", resourceRoot, model)
 end
@@ -115,9 +151,9 @@ function changeTrack(next)
 	setElementPosition(vehicle, x, y, z)
 	setElementRotation(vehicle, u, v, w)
 	setElementVelocity(vehicle, 0,0,0 + 0.5)
-	setTimer( function()
+	setTimer( function(vehicle)
 		setElementFrozen(vehicle, false)
-	end, 100, 1)
+	end, 100, 1, vehicle)
 end
 
 function assignCar(keyName, keyState)
