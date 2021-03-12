@@ -17,230 +17,290 @@
     <vehicleSpawner id="vehicleSpawner (28)" alpha="255" interior="0" posX="645.29999" posY="-2408.1001" posZ="2.5" rotX="0" rotY="0" rotZ="90"></vehicleSpawner>
     <vehicleSpawner id="vehicleSpawner (29)" alpha="255" interior="0" posX="645.29999" posY="-2398.7" posZ="2.5" rotX="0" rotY="0" rotZ="90"></vehicleSpawner>
     <vehicleSpawner id="vehicleSpawner (30)" alpha="255" interior="0" posX="645.29999" posY="-2389.3" posZ="2.5" rotX="0" rotY="0" rotZ="90"></vehicleSpawner>
-    <checkpoint id="checkpoint () (1)" type="ring" color="#FFFFFF99" size="5" alpha="255" interior="0" nextid="checkpoint () (2)" posX="590.20001" posY="-2484" posZ="35.5" rotX="0" rotY="0" rotZ="0"></checkpoint>
-    <checkpoint id="checkpoint () (2)" type="ring" color="#FFFFFF99" size="5" alpha="255" interior="0" nextid="checkpoint () (3)" posX="616.90002" posY="-2484" posZ="35.5" rotX="0" rotY="0" rotZ="0"></checkpoint>
-    <checkpoint id="checkpoint () (3)" type="ring" color="#FFFFFF99" size="5" alpha="255" interior="0" nextid="checkpoint () (4)" posX="643.59998" posY="-2484" posZ="35.5" rotX="0" rotY="0" rotZ="0"></checkpoint>
-    <checkpoint id="checkpoint () (4)" type="ring" color="#FFFFFF99" size="5" alpha="255" interior="0" nextid="checkpoint () (5)" posX="668.79999" posY="-2484" posZ="35.5" rotX="0" rotY="0" rotZ="0"></checkpoint>
-    <checkpoint id="checkpoint () (5)" type="ring" color="#FFFFFF99" size="5" alpha="255" interior="0" nextid="checkpoint () (6)" posX="694" posY="-2484" posZ="35.5" rotX="0" rotY="0" rotZ="0"></checkpoint>
-    <checkpoint id="checkpoint () (6)" type="ring" color="#FFFFFF99" size="5" alpha="255" interior="0" nextid="checkpoint () (7)" posX="717.59998" posY="-2484" posZ="35.5" rotX="0" rotY="0" rotZ="0"></checkpoint>
-    <checkpoint id="checkpoint () (7)" type="ring" color="#FFFFFF99" size="5" alpha="255" interior="0" posX="745.90002" posY="-2484" posZ="35.5" rotX="0" rotY="0" rotZ="0"></checkpoint>
-    <start id="start (1)" posX="2681.8999" posY="-1153" posZ="54.4" rotX="0" rotY="0" rotZ="270"></start>
-    <track id="track (1)" posX="2691.1001" posY="-1161.7" posZ="54.4" rotX="0" rotY="0" rotZ="0"></track>
+    <checkpoint id="checkpoint () (1)" type="ring" color="#FFFFFF99" size="5" alpha="255" interior="0" nextid="checkpoint () (2)" posX="580" posY="-2484" posZ="50" rotX="0" rotY="0" rotZ="0"></checkpoint>
+    <checkpoint id="checkpoint () (2)" type="ring" color="#FFFFFF99" size="5" alpha="255" interior="0" nextid="checkpoint () (3)" posX="580" posY="-2484" posZ="100" rotX="0" rotY="0" rotZ="0"></checkpoint>
+    <checkpoint id="checkpoint () (3)" type="ring" color="#FFFFFF99" size="5" alpha="255" interior="0" nextid="checkpoint () (4)" posX="580" posY="-2484" posZ="150" rotX="0" rotY="0" rotZ="0"></checkpoint>
+    <checkpoint id="checkpoint () (4)" type="ring" color="#FFFFFF99" size="5" alpha="255" interior="0" nextid="checkpoint () (5)" posX="580" posY="-2484" posZ="200" rotX="0" rotY="0" rotZ="0"></checkpoint>
+    <checkpoint id="checkpoint () (5)" type="ring" color="#FFFFFF99" size="5" alpha="255" interior="0" nextid="checkpoint () (6)" posX="580" posY="-2484" posZ="250" rotX="0" rotY="0" rotZ="0"></checkpoint>
+    <checkpoint id="checkpoint () (6)" type="ring" color="#FFFFFF99" size="5" alpha="255" interior="0" nextid="checkpoint () (7)" posX="580" posY="-2484" posZ="300" rotX="0" rotY="0" rotZ="0"></checkpoint>
+    <checkpoint id="checkpoint () (7)" type="ring" color="#FFFFFF99" size="5" alpha="255" interior="0" nextid="checkpoint () (8)" posX="580" posY="-2484" posZ="350" rotX="0" rotY="0" rotZ="0"></checkpoint>
+    <checkpoint id="checkpoint () (8)" type="ring" color="#FFFFFF99" size="5" alpha="255" interior="0" nextid="checkpoint () (9)" posX="580" posY="-2484" posZ="400" rotX="0" rotY="0" rotZ="0"></checkpoint>
+    <checkpoint id="checkpoint () (9)" type="ring" color="#FFFFFF99" size="5" alpha="255" interior="0" nextid="checkpoint () (10)" posX="580" posY="-2484" posZ="450" rotX="0" rotY="0" rotZ="0"></checkpoint>
+    <checkpoint id="checkpoint () (10)" type="ring" color="#FFFFFF99" size="5" alpha="255" interior="0" posX="580" posY="-2484" posZ="500" rotX="0" rotY="0" rotZ="0"></checkpoint>
+    <start id="start (1)" posX="2681.9004" posY="-1153" posZ="54.4" rotX="0" rotY="0" rotZ="270"></start>
+    <track id="track (1)" name="Vinewood Downhill" posX="2691.1006" posY="-1161.7002" posZ="54.4" rotX="0" rotY="0" rotZ="0"></track>
     <finish id="finish (1)" size="6" posX="2906.8999" posY="-1133.3" posZ="10.2" rotX="0" rotY="0" rotZ="0"></finish>
     <start id="start (2)" posX="584.29999" posY="855.59998" posZ="-41.8" rotX="0" rotY="0" rotZ="270"></start>
-    <track id="track (2)" posX="601.59998" posY="866.59998" posZ="-42.3" rotX="0" rotY="0" rotZ="0"></track>
+    <track id="track (2)" name="Quarry Climb" posX="601.59961" posY="866.59961" posZ="-42.3" rotX="0" rotY="0" rotZ="0"></track>
     <finish id="finish (2)" size="6" posX="809.90002" posY="843.20001" posZ="8.9" rotX="0" rotY="0" rotZ="0"></finish>
     <start id="start (3)" posX="-667.79999" posY="-2022" posZ="25.7" rotX="0" rotY="0" rotZ="0"></start>
-    <track id="track (3)" posX="-684.70001" posY="-2010.7" posZ="23.5" rotX="0" rotY="0" rotZ="0"></track>
+    <track id="track (3)" name="Brown Pond Splash" posX="-684.7002" posY="-2010.7002" posZ="23.5" rotX="0" rotY="0" rotZ="0"></track>
     <finish id="finish (3)" size="6" posX="-808.59998" posY="-1896" posZ="9.9" rotX="0" rotY="0" rotZ="0"></finish>
-    <track id="track (4)" posX="921.20001" posY="-827.20001" posZ="93.1" rotX="0" rotY="0" rotZ="0"></track>
+    <track id="track (4)" name="Vinewood Multi Drop" posX="1017.8" posY="-796.90002" posZ="101.9" rotX="0" rotY="0" rotZ="0"></track>
     <finish id="finish (4)" size="6" posX="724.29999" posY="-977.40002" posZ="52.2" rotX="0" rotY="0" rotZ="0"></finish>
-    <start id="start (4)" posX="940.40002" posY="-827" posZ="96.2" rotX="0" rotY="0" rotZ="120"></start>
-    <start id="start (5)" posX="2794.5" posY="-2456.1001" posZ="14.7" rotX="0" rotY="0" rotZ="90"></start>
-    <finish id="finish (5)" size="6" posX="2683.3" posY="-2455.3999" posZ="12.6" rotX="0" rotY="0" rotZ="0"></finish>
-    <track id="track (5)" posX="2776.6001" posY="-2462.3" posZ="14.3" rotX="0" rotY="0" rotZ="0"></track>
-    <start id="start (6)" posX="2797" posY="-2338.3999" posZ="14.7" rotX="0" rotY="0" rotZ="90"></start>
-    <track id="track (6)" posX="2798.8999" posY="-2352.5" posZ="14.3" rotX="0" rotY="0" rotZ="0"></track>
-    <finish id="finish (6)" size="6" posX="2546" posY="-2322.1001" posZ="0.9" rotX="0" rotY="0" rotZ="0"></finish>
+    <start id="start (4)" posX="1022" posY="-788" posZ="103.5" rotX="0" rotY="0" rotZ="113.998"></start>
+    <start id="start (5)" posX="2793.5" posY="-2456.1001" posZ="14.7" rotX="0" rotY="0" rotZ="90"></start>
+    <finish id="finish (5)" size="6" posX="2520.3999" posY="-2440.7" posZ="12.7" rotX="0" rotY="0" rotZ="0"></finish>
+    <track id="track (5)" name="Ocean Docks Warehouse" posX="2776.6006" posY="-2462.2998" posZ="14.3" rotX="0" rotY="0" rotZ="0"></track>
+    <start id="start (6)" posX="2797" posY="-2338.3994" posZ="14.7" rotX="0" rotY="0" rotZ="90"></start>
+    <track id="track (6)" name="Ocean Docks Along The Edge" posX="2798.9004" posY="-2352.5" posZ="14.3" rotX="0" rotY="0" rotZ="0"></track>
+    <finish id="finish (6)" size="6" posX="2411.3" posY="-2417.3999" posZ="0" rotX="0" rotY="0" rotZ="0"></finish>
     <start id="start (7)" posX="2716.8999" posY="-2557.8999" posZ="14.7" rotX="0" rotY="0" rotZ="90"></start>
     <finish id="finish (7)" size="6" posX="2736.8" posY="-2558.5" posZ="12.7" rotX="0" rotY="0" rotZ="0"></finish>
-    <track id="track (7)" posX="2710.8999" posY="-2550.6001" posZ="14.3" rotX="0" rotY="0" rotZ="0"></track>
-    <start id="start (8)" posX="2740" posY="-2503.8999" posZ="14.6" rotX="0" rotY="0" rotZ="90"></start>
-    <track id="track (8)" posX="2721.8" posY="-2509.8" posZ="14.3" rotX="0" rotY="0" rotZ="0"></track>
-    <finish id="finish (8)" size="6" posX="2622" posY="-2474.7" posZ="2.2" rotX="0" rotY="0" rotZ="0"></finish>
+    <track id="track (7)" name="Ocean Docks Around The Warehouse" posX="2710.9004" posY="-2550.5996" posZ="14.3" rotX="0" rotY="0" rotZ="0"></track>
+    <start id="start (8)" posX="2773.5" posY="-2510.3999" posZ="14.7" rotX="0" rotY="0" rotZ="90"></start>
+    <track id="track (8)" name="Ocean Docks Oyster Drop" posX="2766.2" posY="-2516.8" posZ="14.3" rotX="0" rotY="0" rotZ="0"></track>
+    <finish id="finish (8)" size="6" posX="2622" posY="-2470" posZ="2.2" rotX="0" rotY="0" rotZ="0"></finish>
     <start id="start (9)" posX="2301.8" posY="-2663.3" posZ="14.6" rotX="0" rotY="0" rotZ="270"></start>
-    <track id="track (9)" posX="2315.3" posY="-2670.2" posZ="14.3" rotX="0" rotY="0" rotZ="0"></track>
+    <track id="track (9)" name="Ocean Docks Bridge To Bridge" posX="2315.2998" posY="-2670.2002" posZ="14.3" rotX="0" rotY="0" rotZ="0"></track>
     <finish id="finish (9)" size="6" posX="2645.8" posY="-2504.1001" posZ="12.5" rotX="0" rotY="0" rotZ="0"></finish>
     <start id="start (10)" posX="2401.7" posY="-2665.1001" posZ="14.6" rotX="0" rotY="0" rotZ="0"></start>
-    <track id="track (10)" posX="2413.5" posY="-2654.1001" posZ="14.3" rotX="0" rotY="0" rotZ="0"></track>
-    <finish id="finish (10)" size="6" posX="2402" posY="-2513.2" posZ="12.7" rotX="0" rotY="0" rotZ="0"></finish>
-    <start id="start (11)" posX="2331.8" posY="-2346.6001" posZ="14.5" rotX="0" rotY="0" rotZ="226"></start>
-    <track id="track (11)" posX="2333.8" posY="-2360.6001" posZ="14.2" rotX="0" rotY="0" rotZ="0"></track>
+    <track id="track (10)" name="Ocean Docks Fence Smasher" posX="2413.5" posY="-2654.0996" posZ="14.3" rotX="0" rotY="0" rotZ="0"></track>
+    <finish id="finish (10)" size="6" posX="2722" posY="-2405.3999" posZ="12.5" rotX="0" rotY="0" rotZ="0"></finish>
+    <start id="start (11)" posX="2267.3999" posY="-2284.3" posZ="14.5" rotX="0" rotY="0" rotZ="226"></start>
+    <track id="track (11)" name="Ocean Docks Bridge Warehouse" posX="2266.5" posY="-2274.8" posZ="14.2" rotX="0" rotY="0" rotZ="0"></track>
     <finish id="finish (11)" size="6" posX="2414.8" posY="-2468.6001" posZ="12.7" rotX="0" rotY="0" rotZ="0"></finish>
-    <start id="start (12)" posX="2439.3999" posY="-2462.6001" posZ="14.7" rotX="0" rotY="0" rotZ="330"></start>
-    <track id="track (12)" posX="2451.8999" posY="-2461.1001" posZ="14.3" rotX="0" rotY="0" rotZ="0"></track>
-    <finish id="finish (12)" size="6" posX="2725.6001" posY="-2405.8" posZ="12.5" rotX="0" rotY="0" rotZ="0"></finish>
-    <start id="start (13)" posX="2390.2" posY="-2690.8" posZ="14.8" rotX="0" rotY="0" rotZ="270"></start>
-    <track id="track (13)" posX="2383.6001" posY="-2695.8999" posZ="14.3" rotX="0" rotY="0" rotZ="0"></track>
+    <start id="start (13)" posX="2391.2" posY="-2690.8" posZ="14.8" rotX="0" rotY="0" rotZ="270"></start>
+    <track id="track (13)" name="Ocean Docks Behind Containers" posX="2383.6006" posY="-2695.8994" posZ="14.3" rotX="0" rotY="0" rotZ="0"></track>
     <finish id="finish (13)" size="6" posX="2511.3999" posY="-2691.3" posZ="12.7" rotX="0" rotY="0" rotZ="0"></finish>
-    <start id="start (14)" posX="-767.59998" posY="-530.29999" posZ="34.3" rotX="0" rotY="0" rotZ="270"></start>
+    <start id="start (14)" posX="-818" posY="-590.79999" posZ="54.7" rotX="0" rotY="0" rotZ="270"></start>
     <finish id="finish (14)" size="6" posX="-600.70001" posY="-485.60001" posZ="24.6" rotX="0" rotY="0" rotZ="0"></finish>
-    <track id="track (14)" posX="-750.90002" posY="-517.20001" posZ="30.8" rotX="0" rotY="0" rotZ="0"></track>
+    <track id="track (14)" name="Into Fallen Tree" posX="-817.70001" posY="-599.20001" posZ="55.1" rotX="0" rotY="0" rotZ="0"></track>
     <start id="start (15)" posX="-480.20001" posY="2001.3" posZ="61.3" rotX="0" rotY="0" rotZ="134"></start>
-    <finish id="finish (15)" size="6" posX="-879.29999" posY="1952.4" posZ="59.2" rotX="0" rotY="0" rotZ="0"></finish>
-    <track id="track (15)" posX="-485.70001" posY="1985.5" posZ="61.1" rotX="0" rotY="0" rotZ="0"></track>
-    <start id="start (16)" posX="-699" posY="2055.7" posZ="61.3" rotX="0" rotY="0" rotZ="268"></start>
+    <finish id="finish (15)" size="6" posX="-874.20001" posY="1933.6" posZ="59.2" rotX="0" rotY="0" rotZ="0"></finish>
+    <track id="track (15)" name="Across The Dam" posX="-485.7002" posY="1985.5" posZ="61.1" rotX="0" rotY="0" rotZ="0"></track>
+    <start id="start (16)" posX="-635.70001" posY="2044.8" posZ="61.3" rotX="0" rotY="0" rotZ="247.995"></start>
     <finish id="finish (16)" size="6" posX="-479.79999" posY="1924.7" posZ="85.1" rotX="0" rotY="0" rotZ="0"></finish>
-    <track id="track (16)" posX="-695.20001" posY="2046" posZ="61.1" rotX="0" rotY="0" rotZ="0"></track>
+    <track id="track (16)" name="Dam Departure" posX="-634.59998" posY="2034" posZ="61.1" rotX="0" rotY="0" rotZ="0"></track>
     <start id="start (17)" posX="-726" posY="2407.19995" posZ="128.60001" rotX="0" rotY="0" rotZ="190"></start>
     <finish id="finish (17)" size="6" posX="-791.09998" posY="2429.8999" posZ="156.2" rotX="0" rotY="0" rotZ="0"></finish>
-    <track id="track (17)" posX="-716.70001" posY="2398.8999" posZ="128.7" rotX="0" rotY="0" rotZ="0"></track>
-    <start id="start (18)" posX="-859.09998" posY="2309.2" posZ="159.2" rotX="0" rotY="0" rotZ="270"></start>
-    <track id="track (18)" posX="-862.70001" posY="2302.8999" posZ="159.39999" rotX="0" rotY="0" rotZ="0"></track>
+    <track id="track (17)" name="Climbing Arco Del Oeste" posX="-716.7002" posY="2398.9004" posZ="128.7" rotX="0" rotY="0" rotZ="0"></track>
+    <start id="start (18)" posX="-859.09998" posY="2309.2" posZ="160.7" rotX="0" rotY="0" rotZ="270"></start>
+    <track id="track (18)" name="Arco Del Oeste Reverse Ramp" posX="-862.7002" posY="2302.9004" posZ="159.39999" rotX="0" rotY="0" rotZ="0"></track>
     <finish id="finish (18)" size="6" posX="-661.59998" posY="2306.1001" posZ="135.10001" rotX="0" rotY="0" rotZ="0"></finish>
     <start id="start (19)" posX="-787.59998" posY="2411.6001" posZ="158.10001" rotX="0" rotY="0" rotZ="0"></start>
-    <track id="track (19)" posX="-777.90002" posY="2414.3" posZ="157.8" rotX="0" rotY="0" rotZ="0"></track>
+    <track id="track (19)" name="Arco Del Oeste Double Drop" posX="-777.90039" posY="2414.2998" posZ="157.8" rotX="0" rotY="0" rotZ="0"></track>
     <finish id="finish (19)" size="6" posX="-515.20001" posY="2426.6001" posZ="56.4" rotX="0" rotY="0" rotZ="0"></finish>
     <start id="start (20)" posX="-705.20001" posY="2525.3" posZ="75.7" rotX="0" rotY="0" rotZ="120"></start>
-    <track id="track (20)" posX="-714.09998" posY="2510.6001" posZ="78" rotX="0" rotY="0" rotZ="0"></track>
+    <track id="track (20)" name="Onto Arco Del Oeste" posX="-714.09961" posY="2510.6006" posZ="78" rotX="0" rotY="0" rotZ="0"></track>
     <finish id="finish (20)" size="6" posX="-833.5" posY="2372.6001" posZ="120.5" rotX="0" rotY="0" rotZ="0"></finish>
-    <start id="start (21)" posX="-719" posY="2457.69995" posZ="124.6" rotX="0" rotY="0" rotZ="330"></start>
-    <track id="track (21)" posX="-722" posY="2469.8" posZ="122.4" rotX="0" rotY="0" rotZ="0"></track>
+    <start id="start (21)" posX="-719" posY="2457.7" posZ="125.6" rotX="0" rotY="0" rotZ="329.996"></start>
+    <track id="track (21)" name="Arco Del Oeste To Las Brujas" posX="-722" posY="2469.7998" posZ="122.4" rotX="0" rotY="0" rotZ="0"></track>
     <finish id="finish (21)" size="6" posX="-443.60001" posY="2245.3999" posZ="41.5" rotX="0" rotY="0" rotZ="0"></finish>
     <start id="start (22)" posX="1433.9" posY="2820.5" posZ="11.9" rotX="0" rotY="0" rotZ="110"></start>
     <finish id="finish (22)" size="6" posX="1128.5" posY="2730.1001" posZ="9.9" rotX="0" rotY="0" rotZ="0"></finish>
-    <track id="track (22)" posX="1419.7" posY="2824.3" posZ="11.5" rotX="0" rotY="0" rotZ="0"></track>
+    <track id="track (22)" name="Yellow Bell NE to SW" posX="1419.7002" posY="2824.2998" posZ="11.5" rotX="0" rotY="0" rotZ="0"></track>
     <start id="start (23)" posX="1430.9" posY="2730" posZ="11.9" rotX="0" rotY="0" rotZ="72"></start>
-    <track id="track (23)" posX="1428.8" posY="2739" posZ="11.5" rotX="0" rotY="0" rotZ="0"></track>
+    <track id="track (23)" name="Yellow Bell SE to NW" posX="1428.7998" posY="2739" posZ="11.5" rotX="0" rotY="0" rotZ="0"></track>
     <finish id="finish (23)" size="6" posX="1123.4" posY="2856.8999" posZ="9.9" rotX="0" rotY="0" rotZ="0"></finish>
     <start id="start (24)" posX="946.29999" posY="2772.7" posZ="20.5" rotX="0" rotY="0" rotZ="300"></start>
-    <track id="track (24)" posX="941.29999" posY="2782.6001" posZ="21.4" rotX="0" rotY="0" rotZ="0"></track>
-    <finish id="finish (24)" size="6" posX="1402.3" posY="2880.8999" posZ="9.2" rotX="0" rotY="0" rotZ="0"></finish>
-    <start id="start (25)" posX="803.29999" posY="2617.7" posZ="22" rotX="0" rotY="0" rotZ="332"></start>
-    <track id="track (25)" posX="804.20001" posY="2604.6001" posZ="21.5" rotX="0" rotY="0" rotZ="0"></track>
+    <track id="track (24)" name="Around Yellow Bell" posX="941.2998" posY="2782.6006" posZ="21.4" rotX="0" rotY="0" rotZ="0"></track>
+    <finish id="finish (24)" size="6" posX="1681.7" posY="2875.5" posZ="9.9" rotX="0" rotY="0" rotZ="0"></finish>
+    <start id="start (25)" posX="745.20001" posY="2492.3999" posZ="21.7" rotX="0" rotY="0" rotZ="335.996"></start>
+    <track id="track (25)" name="Bone County Railroad Tunnel" posX="749.29999" posY="2487.6001" posZ="21.4" rotX="0" rotY="0" rotZ="0"></track>
     <finish id="finish (25)" size="6" posX="930.20001" posY="2757.6001" posZ="18.1" rotX="0" rotY="0" rotZ="0"></finish>
     <start id="start (26)" posX="-2726.2" posY="2355.3" posZ="73" rotX="0" rotY="0" rotZ="300"></start>
-    <track id="track (26)" posX="-2728.6001" posY="2368.8" posZ="72.7" rotX="0" rotY="0" rotZ="0"></track>
+    <track id="track (26)" name="Bayside Downhill" posX="-2728.5996" posY="2368.7998" posZ="72.7" rotX="0" rotY="0" rotZ="0"></track>
     <finish id="finish (26)" size="6" posX="-2466.5" posY="2226.1001" posZ="3.9" rotX="0" rotY="0" rotZ="0"></finish>
     <start id="start (27)" posX="-2504.8999" posY="2423.6001" posZ="17.7" rotX="0" rotY="0" rotZ="40"></start>
-    <track id="track (27)" posX="-2500.7" posY="2429.8999" posZ="17.3" rotX="0" rotY="0" rotZ="0"></track>
+    <track id="track (27)" name="Bayside Uphill" posX="-2500.7002" posY="2429.9004" posZ="17.3" rotX="0" rotY="0" rotZ="0"></track>
     <finish id="finish (27)" size="6" posX="-2764.8999" posY="2349.5" posZ="73.4" rotX="0" rotY="0" rotZ="0"></finish>
-    <start id="start (28)" posX="-2237.6001" posY="2466.8999" posZ="6.1" rotX="0" rotY="0" rotZ="134"></start>
-    <track id="track (28)" posX="-2230.3" posY="2467" posZ="5.7" rotX="0" rotY="0" rotZ="0"></track>
-    <finish id="finish (28)" size="6" posX="-2404.2" posY="2477.8999" posZ="10" rotX="0" rotY="0" rotZ="0"></finish>
+    <start id="start (28)" posX="-2240.1001" posY="2464.7" posZ="6.1" rotX="0" rotY="0" rotZ="133.995"></start>
+    <track id="track (28)" name="Bayside Trailer Park" posX="-2230.2998" posY="2467" posZ="5.7" rotX="0" rotY="0" rotZ="0"></track>
+    <finish id="finish (28)" size="6" posX="-2506.8" posY="2514.6001" posZ="17.9" rotX="0" rotY="0" rotZ="0"></finish>
     <start id="start (29)" posX="-2226.6001" posY="2327.2" posZ="8.7" rotX="0" rotY="0" rotZ="130"></start>
     <finish id="finish (29)" size="6" posX="-2293.6001" posY="2230.7" posZ="4" rotX="0" rotY="0" rotZ="0"></finish>
-    <track id="track (29)" posX="-2235.5" posY="2334.3999" posZ="8.2" rotX="0" rotY="0" rotZ="0"></track>
+    <track id="track (29)" name="Bayside Helipad" posX="-2235.5" posY="2334.4004" posZ="8.2" rotX="0" rotY="0" rotZ="0"></track>
     <start id="start (30)" posX="-2614.8" posY="2371.3" posZ="10.3" rotX="0" rotY="0" rotZ="0"></start>
-    <finish id="finish (30)" size="6" posX="-2477.2" posY="2374.5" posZ="10" rotX="0" rotY="0" rotZ="0"></finish>
-    <track id="track (30)" posX="-2623.3999" posY="2375.6001" posZ="10.2" rotX="0" rotY="0" rotZ="0"></track>
-    <start id="start (31)" posX="-2616.2" posY="2442.3999" posZ="16.6" rotX="0" rotY="0" rotZ="218"></start>
-    <track id="track (31)" posX="-2619.8" posY="2432" posZ="15.6" rotX="0" rotY="0" rotZ="0"></track>
+    <finish id="finish (30)" size="6" posX="-2230.5" posY="2345.3" posZ="4" rotX="0" rotY="0" rotZ="0"></finish>
+    <track id="track (30)" name="Bayside Through The Grass" posX="-2623.3994" posY="2375.6006" posZ="10.2" rotX="0" rotY="0" rotZ="0"></track>
+    <start id="start (31)" posX="-2642.3" posY="2501.5" posZ="31.8" rotX="0" rotY="0" rotZ="209.996"></start>
+    <track id="track (31)" name="Bayside To The Coast" posX="-2646.7" posY="2486.1001" posZ="32.7" rotX="0" rotY="0" rotZ="0"></track>
     <finish id="finish (31)" size="6" posX="-2588.6001" posY="2240.7" posZ="4" rotX="0" rotY="0" rotZ="0"></finish>
-    <start id="start (32)" posX="-2529.3999" posY="2287.5" posZ="6.1" rotX="0" rotY="0" rotZ="90"></start>
-    <finish id="finish (32)" size="6" posX="-2467" posY="2330.8" posZ="3.9" rotX="0" rotY="0" rotZ="0"></finish>
-    <track id="track (32)" posX="-2529.6001" posY="2294.7" posZ="5.7" rotX="0" rotY="0" rotZ="0"></track>
-    <start id="start (33)" posX="-2416.3" posY="2434.6001" posZ="13.5" rotX="0" rotY="0" rotZ="260"></start>
-    <track id="track (33)" posX="-2416.6001" posY="2422.5" posZ="13.3" rotX="0" rotY="0" rotZ="0"></track>
+    <start id="start (32)" posX="-2529.6001" posY="2287" posZ="6.1" rotX="0" rotY="0" rotZ="154"></start>
+    <finish id="finish (32)" size="6" posX="-2359.6001" posY="2412.3999" posZ="6.1" rotX="0" rotY="0" rotZ="0"></finish>
+    <track id="track (32)" name="Bayside Shopping Trip" posX="-2529.5996" posY="2294.7002" posZ="5.7" rotX="0" rotY="0" rotZ="0"></track>
+    <start id="start (33)" posX="-2465.8999" posY="2433.5" posZ="16.4" rotX="0" rotY="0" rotZ="275.997"></start>
+    <track id="track (33)" name="Bayside Construction Site" posX="-2459.3999" posY="2422.7" posZ="15.8" rotX="0" rotY="0" rotZ="0"></track>
     <finish id="finish (33)" size="6" posX="-2371.3999" posY="2391.8999" posZ="7.4" rotX="0" rotY="0" rotZ="0"></finish>
     <start id="start (34)" posX="-2842" posY="2763.1001" posZ="243.8" rotX="0" rotY="0" rotZ="210"></start>
-    <track id="track (34)" posX="-2851.2" posY="2758.2" posZ="243.5" rotX="0" rotY="0" rotZ="0"></track>
+    <track id="track (34)" name="Bayside Big Drop" posX="-2851.2002" posY="2758.2002" posZ="243.5" rotX="0" rotY="0" rotZ="0"></track>
     <finish id="finish (34)" size="6" posX="-2757.2" posY="2567.2" posZ="93.5" rotX="0" rotY="0" rotZ="0"></finish>
     <start id="start (35)" posX="-2675.1001" posY="2186.8999" posZ="56.5" rotX="0" rotY="0" rotZ="8"></start>
-    <track id="track (35)" posX="-2683.2" posY="2185.3999" posZ="57.5" rotX="0" rotY="0" rotZ="0"></track>
+    <track id="track (35)" name="Gant Bridge To Bayside Tunnel" posX="-2683.2002" posY="2185.4004" posZ="57.5" rotX="0" rotY="0" rotZ="0"></track>
     <finish id="finish (35)" size="6" posX="-2304.5" posY="2638" posZ="53.7" rotX="0" rotY="0" rotZ="0"></finish>
     <start id="start (36)" posX="-2285.1001" posY="2675.8999" posZ="56.9" rotX="0" rotY="0" rotZ="90"></start>
-    <track id="track (36)" posX="-2277.2" posY="2687.8999" posZ="56.5" rotX="0" rotY="0" rotZ="0"></track>
+    <track id="track (36)" name="Bayside Tunnel To Gant Bridge" posX="-2277.2002" posY="2687.9004" posZ="56.5" rotX="0" rotY="0" rotZ="0"></track>
     <finish id="finish (36)" size="6" posX="-2708.5" posY="2225.2" posZ="54.6" rotX="0" rotY="0" rotZ="0"></finish>
     <start id="start (37)" posX="-2024.3" posY="2628.3999" posZ="52.2" rotX="0" rotY="0" rotZ="72"></start>
-    <track id="track (37)" posX="-2024.9" posY="2640" posZ="52.2" rotX="0" rotY="0" rotZ="0"></track>
+    <track id="track (37)" name="Bayside Tunnel Switch" posX="-2024.9004" posY="2640" posZ="52.2" rotX="0" rotY="0" rotZ="0"></track>
     <finish id="finish (37)" size="6" posX="-2133.6001" posY="2627.8" posZ="54.8" rotX="0" rotY="0" rotZ="0"></finish>
     <start id="start (38)" posX="1219.3" posY="-623.59998" posZ="104.9" rotX="0" rotY="0" rotZ="280"></start>
-    <track id="track (38)" posX="1227.5" posY="-628.29999" posZ="104.7" rotX="0" rotY="0" rotZ="0"></track>
-    <finish id="finish (38)" size="6" posX="1233.3" posY="-284.10001" posZ="14.3" rotX="0" rotY="0" rotZ="0"></finish>
-    <start id="start (39)" posX="2249" posY="-2634.2" posZ="14.7" rotX="0" rotY="0" rotZ="0"></start>
-    <track id="track (39)" posX="2258.8999" posY="-2631.8" posZ="16.5" rotX="0" rotY="0" rotZ="0"></track>
-    <finish id="finish (39)" size="6" posX="2248.1001" posY="-2437.2" posZ="12.6" rotX="0" rotY="0" rotZ="0"></finish>
+    <track id="track (38)" name="Vinewood Drop And Climb" posX="1227.5" posY="-628.2998" posZ="104.7" rotX="0" rotY="0" rotZ="0"></track>
+    <finish id="finish (38)" size="6" posX="1192" posY="-188.60001" posZ="38.1" rotX="0" rotY="0" rotZ="0"></finish>
+    <start id="start (39)" posX="2249" posY="-2629.7" posZ="14.7" rotX="0" rotY="0" rotZ="0"></start>
+    <track id="track (39)" name="Ocean Docks Stairs" posX="2255.2" posY="-2618.8" posZ="14.2" rotX="0" rotY="0" rotZ="0"></track>
+    <finish id="finish (39)" size="6" posX="2248.1001" posY="-2412.1001" posZ="12.6" rotX="0" rotY="0" rotZ="0"></finish>
     <start id="start (40)" posX="2210.8999" posY="-2682.6001" posZ="30.6" rotX="0" rotY="0" rotZ="90"></start>
-    <track id="track (40)" posX="2198.5" posY="-2665.5" posZ="27.1" rotX="0" rotY="0" rotZ="0"></track>
-    <finish id="finish (40)" size="6" posX="2028.9" posY="-2670" posZ="10.6" rotX="0" rotY="0" rotZ="0"></finish>
-    <start id="start (41)" posX="2160.1001" posY="-2626.3" posZ="14.5" rotX="0" rotY="0" rotZ="332"></start>
-    <track id="track (41)" posX="2168.2" posY="-2630.2" posZ="14.2" rotX="0" rotY="0" rotZ="0"></track>
-    <finish id="finish (41)" size="6" posX="2179.1001" posY="-2639.7" posZ="12.6" rotX="0" rotY="0" rotZ="0"></finish>
-    <start id="start (42)" posX="2278.3" posY="-2352.7" posZ="20.9" rotX="0" rotY="0" rotZ="316"></start>
+    <track id="track (40)" name="Ocean Docks Warehouse Drop" posX="2198.5" posY="-2665.5" posZ="27.1" rotX="0" rotY="0" rotZ="0"></track>
+    <finish id="finish (40)" size="6" posX="2160.1001" posY="-2473.3" posZ="12.4" rotX="0" rotY="0" rotZ="0"></finish>
+    <start id="start (41)" posX="2113.7" posY="-2672.3999" posZ="14.5" rotX="0" rotY="0" rotZ="299.996"></start>
+    <track id="track (41)" name="Ocean Docks Around The Fence" posX="2118" posY="-2679.2" posZ="14.2" rotX="0" rotY="0" rotZ="0"></track>
+    <finish id="finish (41)" size="6" posX="2180.3" posY="-2631.6001" posZ="12.6" rotX="0" rotY="0" rotZ="0"></finish>
+    <start id="start (42)" posX="2278.2998" posY="-2352.7002" posZ="20.9" rotX="0" rotY="0" rotZ="316"></start>
     <finish id="finish (42)" size="6" posX="2318.2" posY="-2312.1001" posZ="12.6" rotX="0" rotY="0" rotZ="0"></finish>
-    <track id="track (42)" posX="2279" posY="-2366.6001" posZ="18.1" rotX="0" rotY="0" rotZ="0"></track>
+    <track id="track (42)" name="Ocean Docks Short Wobble Platform" posX="2279.2998" posY="-2365.7002" posZ="18.1" rotX="0" rotY="0" rotZ="0"></track>
     <start id="start (43)" posX="2320.8999" posY="-2118.2" posZ="14.5" rotX="0" rotY="0" rotZ="224"></start>
-    <track id="track (43)" posX="2327.2" posY="-2136.8999" posZ="16.3" rotX="0" rotY="0" rotZ="0"></track>
-    <finish id="finish (43)" size="6" posX="2589.6001" posY="-2386.3999" posZ="12.4" rotX="0" rotY="0" rotZ="0"></finish>
-    <start id="start (44)" posX="2369.3999" posY="-2292.8999" posZ="14.5" rotX="0" rotY="0" rotZ="316"></start>
-    <track id="track (44)" posX="2378.7" posY="-2298.8" posZ="14.2" rotX="0" rotY="0" rotZ="0"></track>
+    <track id="track (43)" name="Ocean Docks Big Bridge" posX="2327.2002" posY="-2136.8994" posZ="16.3" rotX="0" rotY="0" rotZ="0"></track>
+    <finish id="finish (43)" size="6" posX="2553.3" posY="-2382.8" posZ="12.5" rotX="0" rotY="0" rotZ="0"></finish>
+    <start id="start (44)" posX="2335.8" posY="-2327.1001" posZ="14.5" rotX="0" rotY="0" rotZ="316"></start>
+    <track id="track (44)" name="Ocean Docks Yellow Cranes" posX="2338.7" posY="-2310.8999" posZ="14.2" rotX="0" rotY="0" rotZ="0"></track>
     <finish id="finish (44)" size="6" posX="2754.8999" posY="-2224.8999" posZ="15.2" rotX="0" rotY="0" rotZ="0"></finish>
-    <start id="start (45)" posX="2772.6001" posY="-2185.3999" posZ="12.2" rotX="0" rotY="0" rotZ="250"></start>
+    <start id="start (45)" posX="2772.6006" posY="-2185.3994" posZ="12.2" rotX="0" rotY="0" rotZ="249.999"></start>
     <finish id="finish (45)" size="6" posX="2878.3" posY="-2174.8999" posZ="2.5" rotX="0" rotY="0" rotZ="0"></finish>
-    <track id="track (45)" posX="2776.8999" posY="-2177.3" posZ="12.1" rotX="0" rotY="0" rotZ="0"></track>
-    <start id="start (46)" posX="2891.1001" posY="-2056.3" posZ="6.8" rotX="0" rotY="0" rotZ="0"></start>
-    <track id="track (46)" posX="2875.6001" posY="-2057.1001" posZ="9.2" rotX="0" rotY="0" rotZ="0"></track>
+    <track id="track (45)" name="Big Bump Of Sand" posX="2776.9004" posY="-2177.2998" posZ="12.1" rotX="0" rotY="0" rotZ="0"></track>
+    <start id="start (46)" posX="2866.3" posY="-2189.2" posZ="4.5" rotX="0" rotY="0" rotZ="334"></start>
+    <track id="track (46)" name="Playa Del Seville Beach" posX="2876" posY="-2193.3994" posZ="2.9" rotX="0" rotY="0" rotZ="0"></track>
     <finish id="finish (46)" size="6" posX="2898.5" posY="-1877.4" posZ="1.7" rotX="0" rotY="0" rotZ="0"></finish>
-    <start id="start (47)" posX="2819" posY="-2076.2" posZ="12" rotX="0" rotY="0" rotZ="280"></start>
+    <start id="start (47)" posX="2713.6001" posY="-2107.1001" posZ="12.1" rotX="0" rotY="0" rotZ="279.998"></start>
     <finish id="finish (47)" size="6" posX="2946.5" posY="-2051.8999" posZ="0" rotX="0" rotY="0" rotZ="0"></finish>
-    <track id="track (47)" posX="2807.8999" posY="-2074" posZ="11.9" rotX="0" rotY="0" rotZ="0"></track>
-    <start id="start (48)" posX="2861.8999" posY="-1818.7" posZ="12.2" rotX="0" rotY="0" rotZ="170"></start>
-    <track id="track (48)" posX="2868.1001" posY="-1817.6" posZ="11.7" rotX="0" rotY="0" rotZ="0"></track>
+    <track id="track (47)" name="Playa Del Seville Silos" posX="2726.8" posY="-2092.6001" posZ="12.8" rotX="0" rotY="0" rotZ="0"></track>
+    <start id="start (48)" posX="2909.3999" posY="-1613.3" posZ="12.2" rotX="0" rotY="0" rotZ="161.997"></start>
+    <track id="track (48)" name="East Beach To Playa Del Seville" posX="2918.3" posY="-1606.2" posZ="11.7" rotX="0" rotY="0" rotZ="0"></track>
     <finish id="finish (48)" size="6" posX="2857.3999" posY="-2047.9" posZ="10" rotX="0" rotY="0" rotZ="0"></finish>
-    <start id="start (49)" posX="2611.69995" posY="-2117" posZ="14.7" rotX="0" rotY="0" rotZ="270"></start>
-    <track id="track (49)" posX="2622.8999" posY="-2111.1001" posZ="13.3" rotX="0" rotY="0" rotZ="0"></track>
-    <finish id="finish (49)" size="6" posX="2694.6001" posY="-2107.8999" posZ="12.6" rotX="0" rotY="0" rotZ="0"></finish>
-    <start id="start (50)" posX="2416.8999" posY="-2089.6001" posZ="14.5" rotX="0" rotY="0" rotZ="270"></start>
-    <track id="track (50)" posX="2443" posY="-2083" posZ="14.2" rotX="0" rotY="0" rotZ="0"></track>
+    <start id="start (50)" posX="2284.8999" posY="-2086.8999" posZ="14.5" rotX="0" rotY="0" rotZ="253.995"></start>
+    <track id="track (50)" name="Ocean Docks Shortcuts" posX="2284.3" posY="-2095.3" posZ="14.2" rotX="0" rotY="0" rotZ="0"></track>
     <finish id="finish (50)" size="6" posX="2560.6001" posY="-2117.5" posZ="12.6" rotX="0" rotY="0" rotZ="0"></finish>
-    <start id="start (51)" posX="2396.8" posY="-2069.3999" posZ="22.3" rotX="0" rotY="0" rotZ="180"></start>
-    <track id="track (51)" posX="2404.7" posY="-2057.2" posZ="20.5" rotX="0" rotY="0" rotZ="0"></track>
+    <start id="start (51)" posX="2396.8" posY="-2070.3999" posZ="22.3" rotX="0" rotY="0" rotZ="179.995"></start>
+    <track id="track (51)" name="Ocean Docks Long Wobble Platform" posX="2404.7002" posY="-2057.2002" posZ="20.5" rotX="0" rotY="0" rotZ="0"></track>
     <finish id="finish (51)" size="6" posX="2397" posY="-2180.1001" posZ="12.6" rotX="0" rotY="0" rotZ="0"></finish>
-    <start id="start (52)" posX="2568.3" posY="-2048.8999" posZ="5" rotX="0" rotY="0" rotZ="90"></start>
-    <track id="track (52)" posX="2554.7" posY="-2041.8" posZ="4.5" rotX="0" rotY="0" rotZ="0"></track>
-    <finish id="finish (52)" size="6" posX="2377.8999" posY="-2049.2" posZ="13.6" rotX="0" rotY="0" rotZ="0"></finish>
+    <start id="start (52)" posX="2608.1001" posY="-2049.3999" posZ="5" rotX="0" rotY="0" rotZ="90"></start>
+    <track id="track (52)" name="Ocean Docks Under And Over" posX="2588.3999" posY="-2050.3999" posZ="4.5" rotX="0" rotY="0" rotZ="0"></track>
+    <finish id="finish (52)" size="6" posX="2391.2" posY="-2049" posZ="15.9" rotX="0" rotY="0" rotZ="0"></finish>
     <start id="start (53)" posX="2294.8999" posY="-2069.1001" posZ="14.5" rotX="0" rotY="0" rotZ="316"></start>
-    <track id="track (53)" posX="2296.3" posY="-2055.3999" posZ="14.2" rotX="0" rotY="0" rotZ="0"></track>
+    <track id="track (53)" name="Ocean Docks To Playa Del Seville" posX="2296.2998" posY="-2055.3994" posZ="14.2" rotX="0" rotY="0" rotZ="0"></track>
     <finish id="finish (53)" size="6" posX="2655.2" posY="-2004.3" posZ="12.4" rotX="0" rotY="0" rotZ="0"></finish>
-    <start id="start (54)" posX="2250.3999" posY="-2210.5" posZ="14.4" rotX="0" rotY="0" rotZ="320"></start>
-    <track id="track (54)" posX="2260.1001" posY="-2213.6001" posZ="14.2" rotX="0" rotY="0" rotZ="0"></track>
-    <finish id="finish (54)" size="6" posX="2399.5" posY="-2293.6001" posZ="5.1" rotX="0" rotY="0" rotZ="0"></finish>
     <start id="start (55)" posX="2210.6001" posY="-2293.1001" posZ="15.9" rotX="0" rotY="0" rotZ="138"></start>
-    <track id="track (55)" posX="2199.6001" posY="-2289.2" posZ="14.2" rotX="0" rotY="0" rotZ="0"></track>
-    <finish id="finish (55)" size="6" posX="2235.2" posY="-2215.3" posZ="12.6" rotX="0" rotY="0" rotZ="0"></finish>
-    <start id="start (56)" posX="2147.8999" posY="-1994.8" posZ="14.7" rotX="0" rotY="0" rotZ="226"></start>
-    <track id="track (56)" posX="2154.1001" posY="-1990.8" posZ="14.2" rotX="0" rotY="0" rotZ="0"></track>
+    <track id="track (55)" name="Grey Imports Compound" posX="2199.6006" posY="-2289.2002" posZ="14.2" rotX="0" rotY="0" rotZ="0"></track>
+    <finish id="finish (55)" size="6" posX="2398.8" posY="-2293.3" posZ="5.1" rotX="0" rotY="0" rotZ="0"></finish>
+    <start id="start (56)" posX="2147.9004" posY="-1994.7998" posZ="14.7" rotX="0" rotY="0" rotZ="226"></start>
+    <track id="track (56)" name="Train To Grey Imports" posX="2154.1006" posY="-1990.7998" posZ="14.2" rotX="0" rotY="0" rotZ="0"></track>
     <finish id="finish (56)" size="6" posX="2264.6001" posY="-2254.1001" posZ="12.6" rotX="0" rotY="0" rotZ="0"></finish>
-    <start id="start (57)" posX="2104.8" posY="-2150.8999" posZ="21" rotX="0" rotY="0" rotZ="90"></start>
-    <track id="track (57)" posX="2109.3" posY="-2156.1001" posZ="20.6" rotX="0" rotY="0" rotZ="0"></track>
-    <finish id="finish (57)" size="6" posX="1992.1" posY="-2148.1001" posZ="15.1" rotX="0" rotY="0" rotZ="0"></finish>
+    <start id="start (57)" posX="2054.5" posY="-2152.1001" posZ="14.7" rotX="0" rotY="0" rotZ="90"></start>
+    <track id="track (57)" name="Willowfield Tucked In A Corner" posX="2042.5" posY="-2146.5996" posZ="14.3" rotX="0" rotY="0" rotZ="0"></track>
+    <finish id="finish (57)" size="6" posX="2007.5" posY="-2134.6001" posZ="12.6" rotX="0" rotY="0" rotZ="0"></finish>
     <start id="start (58)" posX="2605.1001" posY="-1476.4" posZ="17.8" rotX="0" rotY="0" rotZ="180"></start>
-    <track id="track (58)" posX="2598.8999" posY="-1468.6" posZ="17.8" rotX="0" rotY="0" rotZ="0"></track>
-    <finish id="finish (58)" size="6" posX="2581.2" posY="-2131.7" posZ="-0.8" rotX="0" rotY="0" rotZ="0"></finish>
+    <track id="track (58)" name="Wide Storm Drains Sprint" posX="2598.9004" posY="-1468.5996" posZ="17.8" rotX="0" rotY="0" rotZ="0"></track>
+    <finish id="finish (58)" size="6" posX="2583.7" posY="-2210.1001" posZ="-1.2" rotX="0" rotY="0" rotZ="0"></finish>
     <start id="start (59)" posX="2296.3" posY="-2188.3" posZ="7.2" rotX="0" rotY="0" rotZ="46"></start>
-    <finish id="finish (59)" size="6" posX="1980.4" posY="-1867.6" posZ="4.7" rotX="0" rotY="0" rotZ="0"></finish>
-    <track id="track (59)" posX="2302.3" posY="-2177.8999" posZ="6.7" rotX="0" rotY="0" rotZ="0"></track>
-    <start id="start (60)" posX="2110.5" posY="-2187.2" posZ="14.5" rotX="0" rotY="0" rotZ="340"></start>
-    <track id="track (60)" posX="2122.3999" posY="-2182.1001" posZ="14.2" rotX="0" rotY="0" rotZ="0"></track>
-    <finish id="finish (60)" size="6" posX="2076.1001" posY="-1987.4" posZ="12.6" rotX="0" rotY="0" rotZ="0"></finish>
+    <finish id="finish (59)" size="6" posX="1846.1" posY="-1816.5" posZ="3" rotX="0" rotY="0" rotZ="0"></finish>
+    <track id="track (59)" name="Grey Imports Storm Drain Sprint" posX="2302.2998" posY="-2177.8994" posZ="6.7" rotX="0" rotY="0" rotZ="0"></track>
+    <start id="start (60)" posX="2103.3999" posY="-2266.1001" posZ="14.5" rotX="0" rotY="0" rotZ="337.999"></start>
+    <track id="track (60)" name="Ocean Docks Around The Back" posX="2099.3999" posY="-2252" posZ="14.2" rotX="0" rotY="0" rotZ="0"></track>
+    <finish id="finish (60)" size="6" posX="2019.7" posY="-1977.1" posZ="12.6" rotX="0" rotY="0" rotZ="0"></finish>
     <start id="start (61)" posX="2028.4" posY="-1986.4" posZ="36.1" rotX="0" rotY="0" rotZ="180"></start>
-    <track id="track (61)" posX="2040" posY="-1988.2" posZ="35.7" rotX="0" rotY="0" rotZ="0"></track>
+    <track id="track (61)" name="Los Santos Airport Drops" posX="2040" posY="-1988.2002" posZ="35.7" rotX="0" rotY="0" rotZ="0"></track>
     <finish id="finish (61)" size="6" posX="2026.7" posY="-2192.1001" posZ="12.6" rotX="0" rotY="0" rotZ="0"></finish>
     <start id="start (62)" posX="1981.6" posY="-1992.9" posZ="14.7" rotX="0" rotY="0" rotZ="90"></start>
-    <track id="track (62)" posX="1973.8" posY="-1984.9" posZ="14.9" rotX="0" rotY="0" rotZ="0"></track>
-    <finish id="finish (62)" size="6" posX="2029.6" posY="-2058.5" posZ="12.6" rotX="0" rotY="0" rotZ="0"></finish>
+    <track id="track (62)" name="Willowfield Small Lot" posX="1973.7998" posY="-1984.9004" posZ="14.9" rotX="0" rotY="0" rotZ="0"></track>
+    <finish id="finish (62)" size="6" posX="2213.6001" posY="-2149.1001" posZ="12.4" rotX="0" rotY="0" rotZ="0"></finish>
     <start id="start (63)" posX="2287.2" posY="-2253.5" posZ="14.5" rotX="0" rotY="0" rotZ="44"></start>
-    <track id="track (63)" posX="2292.5" posY="-2246.2" posZ="14.2" rotX="0" rotY="0" rotZ="0"></track>
+    <track id="track (63)" name="Ocean Docks To Willowfield" posX="2292.5" posY="-2246.2002" posZ="14.2" rotX="0" rotY="0" rotZ="0"></track>
     <finish id="finish (63)" size="6" posX="2313.8" posY="-1938.3" posZ="12.4" rotX="0" rotY="0" rotZ="0"></finish>
     <start id="start (64)" posX="2251" posY="-2151.3" posZ="14.7" rotX="0" rotY="0" rotZ="314"></start>
-    <track id="track (64)" posX="2237.7" posY="-2155.3" posZ="14.2" rotX="0" rotY="0" rotZ="0"></track>
+    <track id="track (64)" name="Into Grey Imports Storm Drain" posX="2237.7002" posY="-2155.2998" posZ="14.2" rotX="0" rotY="0" rotZ="0"></track>
     <finish id="finish (64)" size="6" posX="2271.8" posY="-2160.8" posZ="5.1" rotX="0" rotY="0" rotZ="0"></finish>
-    <start id="start (65)" posX="2514.1001" posY="-2009.90002" posZ="14.4" rotX="0" rotY="0" rotZ="90"></start>
-    <track id="track (65)" posX="2508.1001" posY="-2019.8" posZ="14.2" rotX="0" rotY="0" rotZ="0"></track>
-    <finish id="finish (65)" size="6" posX="2488.7" posY="-1950.5" posZ="12.5" rotX="0" rotY="0" rotZ="0"></finish>
+    <start id="start (65)" posX="2514.1006" posY="-2009.9004" posZ="14.4" rotX="0" rotY="0" rotZ="90"></start>
+    <track id="track (65)" name="Around Emmets" posX="2508.1006" posY="-2019.7998" posZ="14.2" rotX="0" rotY="0" rotZ="0"></track>
+    <finish id="finish (65)" size="6" posX="2517.7" posY="-1813.6" posZ="12.4" rotX="0" rotY="0" rotZ="0"></finish>
     <start id="start (66)" posX="2378.8999" posY="-1922.7" posZ="14.5" rotX="0" rotY="0" rotZ="270"></start>
-    <track id="track (66)" posX="2388.3999" posY="-1915.5" posZ="14.2" rotX="0" rotY="0" rotZ="0"></track>
-    <finish id="finish (66)" size="6" posX="2586.3" posY="-1966" posZ="2.9" rotX="0" rotY="0" rotZ="0"></finish>
+    <track id="track (66)" name="Cluckin Bell To East Beach" posX="2386.3999" posY="-1931.5" posZ="14.2" rotX="0" rotY="0" rotZ="0"></track>
+    <finish id="finish (66)" size="6" posX="2627.6001" posY="-1618.8" posZ="9.5" rotX="0" rotY="0" rotZ="0"></finish>
     <start id="start (67)" posX="2395" posY="-1892.5" posZ="14.5" rotX="0" rotY="0" rotZ="90"></start>
-    <track id="track (67)" posX="2389.3999" posY="-1884.3" posZ="14.2" rotX="0" rotY="0" rotZ="0"></track>
-    <finish id="finish (67)" size="6" posX="2218.5" posY="-1869.8" posZ="12.4" rotX="0" rotY="0" rotZ="0"></finish>
+    <track id="track (67)" name="Cluckin Bell To Idlewood" posX="2389.4004" posY="-1884.2998" posZ="14.2" rotX="0" rotY="0" rotZ="0"></track>
+    <finish id="finish (67)" size="6" posX="2148.8" posY="-1752.2" posZ="12.4" rotX="0" rotY="0" rotZ="0"></finish>
     <start id="start (68)" posX="2356.3999" posY="-2030.3" posZ="14.7" rotX="0" rotY="0" rotZ="0"></start>
-    <track id="track (68)" posX="2362.3999" posY="-2032.7" posZ="14.3" rotX="0" rotY="0" rotZ="0"></track>
+    <track id="track (68)" name="Willowfield Left And Right" posX="2362.4004" posY="-2032.7002" posZ="14.3" rotX="0" rotY="0" rotZ="0"></track>
     <finish id="finish (68)" size="6" posX="2516.8999" posY="-1892.1" posZ="12.4" rotX="0" rotY="0" rotZ="0"></finish>
     <start id="start (69)" posX="2411.2" posY="-1972.5" posZ="14.5" rotX="0" rotY="0" rotZ="90"></start>
-    <track id="track (69)" posX="2402.8999" posY="-1963.8" posZ="14.2" rotX="0" rotY="0" rotZ="0"></track>
-    <finish id="finish (69)" size="6" posX="2181.1001" posY="-1983.9" posZ="12.6" rotX="0" rotY="0" rotZ="0"></finish>
-    <track id="track (70)" posX="2781.5" posY="-1902.6" posZ="14.2" rotX="0" rotY="0" rotZ="0"></track>
+    <track id="track (69)" name="Willowfield To El Corona" posX="2402.9004" posY="-1963.7998" posZ="14.2" rotX="0" rotY="0" rotZ="0"></track>
+    <finish id="finish (69)" size="6" posX="1984.3" posY="-1953.4" posZ="12.6" rotX="0" rotY="0" rotZ="0"></finish>
+    <track id="track (70)" name="Sweets Girl" posX="2781.5" posY="-1902.5996" posZ="14.2" rotX="0" rotY="0" rotZ="0"></track>
     <start id="start (70)" posX="2769.8999" posY="-1893.5" posZ="12" rotX="0" rotY="0" rotZ="180"></start>
-    <finish id="finish (70)" size="6" posX="2602.6001" posY="-1932.4" posZ="12.4" rotX="0" rotY="0" rotZ="0"></finish>
-    <start id="start (71)" posX="2715.7" posY="-1994.3" posZ="14.5" rotX="0" rotY="0" rotZ="270"></start>
-    <finish id="finish (71)" size="6" posX="2868.3" posY="-1980.7" posZ="10.1" rotX="0" rotY="0" rotZ="0"></finish>
-    <track id="track (71)" posX="2724.7" posY="-2003.7" posZ="14.2" rotX="0" rotY="0" rotZ="0"></track>
+    <finish id="finish (70)" size="6" posX="2569.8" posY="-1932.6" posZ="12.4" rotX="0" rotY="0" rotZ="0"></finish>
+    <start id="start (71)" posX="2639.8" posY="-2004.3" posZ="14.7" rotX="0" rotY="0" rotZ="270"></start>
+    <finish id="finish (71)" size="6" posX="2889.2" posY="-1978.9" posZ="4.4" rotX="0" rotY="0" rotZ="0"></finish>
+    <track id="track (71)" name="To The Willowfield Beach" posX="2637.3" posY="-1996.8" posZ="14.2" rotX="0" rotY="0" rotZ="0"></track>
     <start id="start (72)" posX="2626.1001" posY="-2048.8999" posZ="23.6" rotX="0" rotY="0" rotZ="270"></start>
-    <track id="track (72)" posX="2634.3999" posY="-2057" posZ="22.7" rotX="0" rotY="0" rotZ="0"></track>
+    <track id="track (72)" name="Swerving Through Willowfield" posX="2634.4004" posY="-2057" posZ="22.7" rotX="0" rotY="0" rotZ="0"></track>
     <finish id="finish (72)" size="6" posX="2747.8999" posY="-1890.8" posZ="9.9" rotX="0" rotY="0" rotZ="0"></finish>
-    <start id="start (73)" posX="2692.2" posY="-2155.5" posZ="12" rotX="0" rotY="0" rotZ="270"></start>
-    <track id="track (73)" posX="2702.6001" posY="-2146.8999" posZ="11.7" rotX="0" rotY="0" rotZ="0"></track>
+    <start id="start (73)" posX="2656.1001" posY="-2155.6001" posZ="12" rotX="0" rotY="0" rotZ="270"></start>
+    <track id="track (73)" name="Ocean Docks Highway Turn" posX="2663.5" posY="-2147.3" posZ="11.8" rotX="0" rotY="0" rotZ="0"></track>
     <finish id="finish (73)" size="6" posX="2823" posY="-2030.7" posZ="10" rotX="0" rotY="0" rotZ="0"></finish>
+    <start id="start (74)" posX="-692.29999" posY="2371.8999" posZ="130.5" rotX="0" rotY="0" rotZ="180"></start>
+    <track id="track (74)" name="Arco Del Oeste Big Jump" posX="-685.59998" posY="2372.1001" posZ="130.5" rotX="0" rotY="0" rotZ="0"></track>
+    <finish id="finish (74)" size="6" posX="-875.79999" posY="2308.8" posZ="160.60001" rotX="0" rotY="0" rotZ="0"></finish>
+    <start id="start (75)" posX="860.59998" posY="2419.8" posZ="30.5" rotX="0" rotY="0" rotZ="164"></start>
+    <finish id="finish (75)" size="6" posX="683.5" posY="2390.5" posZ="30.5" rotX="0" rotY="0" rotZ="0"></finish>
+    <track id="track (75)" name="Bone County Intersection C" posX="868.59998" posY="2424.1001" posZ="30.1" rotX="0" rotY="0" rotZ="0"></track>
+    <start id="start (12)" posX="1111.80005" posY="2804.8999" posZ="11.8" rotX="0" rotY="0" rotZ="266"></start>
+    <track id="track (12)" name="Yellow Bell W To E" posX="1119.6" posY="2811.8999" posZ="11.5" rotX="0" rotY="0" rotZ="0"></track>
+    <finish id="finish (12)" size="6" posX="1410.3" posY="2773.6001" posZ="9.9" rotX="0" rotY="0" rotZ="0"></finish>
+    <start id="start (49)" posX="1270.1" posY="2664.5" posZ="11.9" rotX="0" rotY="0" rotZ="272"></start>
+    <finish id="finish (49)" size="6" posX="1907.4" posY="2774" posZ="9.7" rotX="0" rotY="0" rotZ="0"></finish>
+    <track id="track (49)" name="Crossing Prickle Pine" posX="1260" posY="2672.3" posZ="11.5" rotX="0" rotY="0" rotZ="0"></track>
+    <start id="start (54)" posX="1440.4" posY="2585.7" posZ="11.8" rotX="0" rotY="0" rotZ="0"></start>
+    <finish id="finish (54)" size="6" posX="1434.2" posY="2713.3" posZ="9.7" rotX="0" rotY="0" rotZ="0"></finish>
+    <track id="track (54)" name="Yellow Bell Station" posX="1430.4" posY="2576.6001" posZ="11.5" rotX="0" rotY="0" rotZ="0"></track>
+    <start id="start (76)" posX="1399.5" posY="2650.7" posZ="25" rotX="0" rotY="0" rotZ="270"></start>
+    <track id="track (76)" name="On Top Of Yellow Bell Station" posX="1396.1" posY="2656.2" posZ="24.5" rotX="0" rotY="0" rotZ="0"></track>
+    <finish id="finish (76)" size="6" posX="1600.7" posY="2654.8" posZ="9.9" rotX="0" rotY="0" rotZ="0"></finish>
+    <start id="start (77)" posX="1468.7" posY="2773.5" posZ="11.8" rotX="0" rotY="0" rotZ="270"></start>
+    <track id="track (77)" name="Prickle Pine Golf To Tennis" posX="1488.6" posY="2773.8" posZ="11.5" rotX="0" rotY="0" rotZ="0"></track>
+    <finish id="finish (77)" size="6" posX="1903.4" posY="2854.6001" posZ="9.9" rotX="0" rotY="0" rotZ="0"></finish>
+    <start id="start (78)" posX="1671.6" posY="2777.5" posZ="11.9" rotX="0" rotY="0" rotZ="270"></start>
+    <track id="track (78)" name="To Yellow Bell Golf Course" posX="1676.5" posY="2784.3999" posZ="11.5" rotX="0" rotY="0" rotZ="0"></track>
+    <finish id="finish (78)" size="6" posX="1504.2" posY="2773.2" posZ="9.9" rotX="0" rotY="0" rotZ="0"></finish>
+    <start id="start (79)" posX="1526.3" posY="2872.8999" posZ="11.9" rotX="0" rotY="0" rotZ="180"></start>
+    <track id="track (79)" name="Leaving Prickle Pine" posX="1532.6" posY="2881.3" posZ="11.5" rotX="0" rotY="0" rotZ="0"></track>
+    <finish id="finish (79)" size="6" posX="1477.6" posY="2462.3" posZ="13" rotX="0" rotY="0" rotZ="0"></finish>
+    <start id="start (80)" posX="1287.1" posY="2530.6001" posZ="11.9" rotX="0" rotY="0" rotZ="330"></start>
+    <finish id="finish (80)" size="6" posX="1667.6" posY="2733.2" posZ="9.7" rotX="0" rotY="0" rotZ="0"></finish>
+    <track id="track (80)" name="Prickle Pine Savehouse" posX="1285" posY="2516.5" posZ="11.5" rotX="0" rotY="0" rotZ="0"></track>
+    <start id="start (81)" posX="1780.3" posY="2617" posZ="11.9" rotX="0" rotY="0" rotZ="270"></start>
+    <finish id="finish (81)" size="6" posX="2004.7" posY="2593.1001" posZ="9.9" rotX="0" rotY="0" rotZ="0"></finish>
+    <track id="track (81)" name="Prickle Pine Estates" posX="1778.5" posY="2624.8999" posZ="11.6" rotX="0" rotY="0" rotZ="0"></track>
+    <start id="start (82)" posX="1907.2" posY="2678.3999" posZ="11.8" rotX="0" rotY="0" rotZ="0"></start>
+    <finish id="finish (82)" size="6" posX="1606.4" posY="2630.5" posZ="9.9" rotX="0" rotY="0" rotZ="0"></finish>
+    <track id="track (82)" name="To Yellow Bell Station" posX="1918.3" posY="2681.5" posZ="11.5" rotX="0" rotY="0" rotZ="0"></track>
+    <start id="start (83)" posX="1927" posY="2255.7" posZ="11.8" rotX="0" rotY="0" rotZ="0"></start>
+    <track id="track (83)" name="To Millies Place" posX="1918" posY="2262" posZ="11.5" rotX="0" rotY="0" rotZ="0"></track>
+    <finish id="finish (83)" size="6" posX="2036.6" posY="2728.6001" posZ="9.9" rotX="0" rotY="0" rotZ="0"></finish>
+    <start id="start (84)" posX="2449.7" posY="2791" posZ="11.9" rotX="0" rotY="0" rotZ="90"></start>
+    <finish id="finish (84)" size="6" posX="2034" posY="2755.2" posZ="9.9" rotX="0" rotY="0" rotZ="0"></finish>
+    <track id="track (84)" name="To Millies Neighbor" posX="2452.3" posY="2801.1001" posZ="11.5" rotX="0" rotY="0" rotZ="0"></track>
+    <start id="start (85)" posX="1909.8" posY="2809.2" posZ="11.9" rotX="0" rotY="0" rotZ="270"></start>
+    <finish id="finish (85)" size="6" posX="2752.1001" posY="2879" posZ="9.9" rotX="0" rotY="0" rotZ="0"></finish>
+    <track id="track (85)" name="Behind Spinybed" posX="1907.6" posY="2818.5" posZ="11.5" rotX="0" rotY="0" rotZ="0"></track>
+    <start id="start (86)" posX="2126.3999" posY="2718" posZ="11.9" rotX="0" rotY="0" rotZ="0"></start>
+    <track id="track (86)" name="Spinybed Xoomer" posX="2136.1001" posY="2719.2" posZ="11.5" rotX="0" rotY="0" rotZ="0"></track>
+    <finish id="finish (86)" size="6" posX="2274.7" posY="2625.2" posZ="6.5" rotX="0" rotY="0" rotZ="0"></finish>
+    <start id="start (87)" posX="2119.2" posY="2952.7" posZ="32.8" rotX="0" rotY="0" rotZ="270"></start>
+    <finish id="finish (87)" size="6" posX="2434.1001" posY="2957.1001" posZ="29.7" rotX="0" rotY="0" rotZ="0"></finish>
+    <track id="track (87)" name="Las Venturas North Mountains" posX="2115.8999" posY="2961.8" posZ="33" rotX="0" rotY="0" rotZ="0"></track>
+    <start id="start (88)" posX="2625.2" posY="2726.8999" posZ="37.6" rotX="0" rotY="0" rotZ="90"></start>
+    <track id="track (88)" name="Inside KACC Military Fuels" posX="2630" posY="2732.8999" posZ="37.2" rotX="0" rotY="0" rotZ="0"></track>
+    <finish id="finish (88)" size="6" posX="2516.5" posY="2837.6001" posZ="9.9" rotX="0" rotY="0" rotZ="0"></finish>
+    <start id="start (89)" posX="2021" posY="2742.3" posZ="11.8" rotX="0" rotY="0" rotZ="270"></start>
+    <track id="track (89)" name="To KACC Military Fuels" posX="2022.1" posY="2731.5" posZ="11.5" rotX="0" rotY="0" rotZ="0"></track>
+    <finish id="finish (89)" size="6" posX="2492.3999" posY="2773.3" posZ="9.8" rotX="0" rotY="0" rotZ="0"></finish>
+    <start id="start (90)" posX="2732.5" posY="2494.3999" posZ="11.8" rotX="0" rotY="0" rotZ="20"></start>
+    <track id="track (90)" name="Around KACC Military Fuels" posX="2739" posY="2500.2" posZ="11.5" rotX="0" rotY="0" rotZ="0"></track>
+    <finish id="finish (90)" size="6" posX="2558.3999" posY="2872.3999" posZ="9.9" rotX="0" rotY="0" rotZ="0"></finish>
+    <start id="start (91)" posX="1569.7" posY="2733.2" posZ="11.8" rotX="0" rotY="0" rotZ="90"></start>
+    <track id="track (91)" name="Prickle Pine Tenpennys House" posX="1570.3" posY="2722.6001" posZ="11.5" rotX="0" rotY="0" rotZ="0"></track>
+    <finish id="finish (91)" size="6" posX="1556.6" posY="2589.8999" posZ="9.7" rotX="0" rotY="0" rotZ="0"></finish>
+    <start id="start (92)" posX="1030.4" posY="2903.8" posZ="48.1" rotX="0" rotY="0" rotZ="180"></start>
+    <track id="track (92)" name="Offroad To Pilson Intersection" posX="1042.7" posY="2902.2" posZ="46.8" rotX="0" rotY="0" rotZ="0"></track>
+    <finish id="finish (92)" size="6" posX="1097.9" posY="2521.8" posZ="9.9" rotX="0" rotY="0" rotZ="0"></finish>
 </map>

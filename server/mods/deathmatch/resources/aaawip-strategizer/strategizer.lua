@@ -38,7 +38,7 @@ starts = {}
 raceCps = getElementsByType("checkpoint")
 colShapes = {}
 
-STAGES = 73
+STAGES = 10
 
 ----------------------------- Start of the race ---------------------------
 
@@ -66,6 +66,7 @@ function shuffleTracksAll()
 	for i = 1, #tracks, 1 do
 		indices[i] = i
 	end
+
 	shuffledIndices = {}
 	for i = #indices, 1, -1 do
 		randomIndex = math.random(1,i)
@@ -75,6 +76,18 @@ function shuffleTracksAll()
 	for i = 1, STAGES, 1 do
 		selectedTracks[i] = shuffledIndices[i]
 	end
+
+
+	--- temporary code to disable shuffling
+	-- STARTAT = 78
+	-- for i = STARTAT, STAGES + STARTAT - 1, 1 do
+	-- 	j = i - STARTAT + 1
+	-- 	if i <= #indices then
+	-- 		selectedTracks[j] = indices[i]
+	-- 	else
+	-- 		selectedTracks[j] = indices[i - #indices]
+	-- 	end
+	-- end
 end
 
 function shuffleCarsAll()
@@ -123,9 +136,10 @@ function displayTracks()
 	end
 end
 
-function changeCar(model)
+function changeCar(model, r, g, b, r2, g2, b2)
 	vehicle = getPedOccupiedVehicle(client)
 	setElementModel(vehicle, model)
+	setVehicleColor(vehicle, r, g, b, r2, g2, b2)
 end
 addEvent("changeCar", true)
 addEventHandler("changeCar", root, changeCar)
@@ -142,7 +156,7 @@ function finishSetup()
 		setMarkerType(v, "cylinder")
 		x, y, z = getElementPosition(v)
 		size = getMarkerSize(v)
-		table.insert(colShapes, createColCircle(x, y, size + 4))
+		table.insert(colShapes, createColCircle(x, y, size + 2))
 		-- destroyElement(v)
 	end
 	for i, v in pairs(getElementsByType("player")) do

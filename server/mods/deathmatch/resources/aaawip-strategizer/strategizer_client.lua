@@ -122,13 +122,23 @@ function changeCar(next)
 	x, y, z = getElementPosition(vehicle)
 	setElementPosition(vehicle, x, y, z + 0.5)
 	trackColor = assignedCarColors[currentCar]
-	
 	if (trackColor) then
-		setVehicleColor(vehicle, colors[trackColor][1], colors[trackColor][2] , colors[trackColor][3], colors[trackColor][1] / 2, colors[trackColor][2] / 2, colors[trackColor][3] / 2)
+		r = colors[trackColor][1]
+		g = colors[trackColor][2]
+		b = colors[trackColor][3]
+		r2 = r/2
+		g2 = g/2
+		b2 = b/2
 	else
-		setVehicleColor(vehicle, 255, 255, 255, 0, 0, 0)
+		r = 255
+		g = 255
+		b = 255
+		r2 = 0
+		g2 = 0
+		b2 = 0
 	end
-	triggerServerEvent("changeCar", resourceRoot, model)
+	setVehicleColor(vehicle, r, g, b, r2, g2, b2)
+	triggerServerEvent("changeCar", resourceRoot, model, r, g, b, r2, g2, b2)
 end
 
 function changeTrack(next)
@@ -175,10 +185,17 @@ function assignCar(keyName, keyState)
 				distanceOld = distanceNew
 			end
 		end
-		setVehicleColor(vehicle, colors[chosenIndex][1], colors[chosenIndex][2], colors[chosenIndex][3], colors[chosenIndex][1] / 2, colors[chosenIndex][2] / 2, colors[chosenIndex][3] / 2)
-		setVehicleColor(spawnedCars[currentCar], colors[chosenIndex][1], colors[chosenIndex][2], colors[chosenIndex][3], colors[chosenIndex][1] / 2, colors[chosenIndex][2] / 2, colors[chosenIndex][3] / 2)
-		setBlipColor(carBlips[currentCar], colors[chosenIndex][1], colors[chosenIndex][2], colors[chosenIndex][3], 255)
+		r = colors[chosenIndex][1]
+		g = colors[chosenIndex][2]
+		b = colors[chosenIndex][3]
+		r2 = r/2
+		g2 = g/2
+		b2 = b/2
+		setVehicleColor(vehicle, r, g, b, r2, g2, b2)
+		setVehicleColor(spawnedCars[currentCar], r, g, b, r2, g2, b2)
+		setBlipColor(carBlips[currentCar], r, g, b, 255)
 		assignedCarColors[currentCar] = chosenIndex
+		triggerServerEvent("changeCar", resourceRoot, getElementModel(vehicle), r, g, b, r2, g2, b2)
 	end
 end
 
