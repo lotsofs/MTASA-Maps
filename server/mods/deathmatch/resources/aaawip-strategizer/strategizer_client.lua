@@ -49,7 +49,14 @@ addEventHandler("onSetupFinished", resourceRoot, onSetupFinished)
 
 
 function makeCheckpointVisible(x,y,z,size,r,g,b)
-	outputChatBox(x)
+	if (currentCp) then 
+		destroyElement(currentCp) 
+		currentCp = nil
+	end
+	if (currentBlip) then 
+		destroyElement(currentBlip) 
+		currentBlip = nil
+	end
 	currentCp = createMarker(x, y, z, "checkpoint", size, r, g, b)
 	currentBlip = createBlip(x,y,z,0,4,r,g,b)
 end
@@ -57,6 +64,13 @@ end
 addEvent("makeCheckpointVisible", true)
 addEventHandler("makeCheckpointVisible", resourceRoot, makeCheckpointVisible)
 
+
+-- function respawnCleanup()
+-- 	destroyElement(currentCp)
+-- 	destroyElement(currentBlip)
+-- end
+-- addEvent("respawnCleanup", true)
+-- addEventHandler("respawnCleanup", resourceRoot, respawnCleanup)
 
 function fadeIn()
 	fadeCamera(true, 2)
@@ -76,6 +90,8 @@ function checkpointFade()
 	fadeCamera(false, 2)
 	destroyElement(currentCp)
 	destroyElement(currentBlip)
+	currentCp = nil
+	currentBlip = nil
 end
 addEvent("checkpointFade", true)
 addEventHandler("checkpointFade", resourceRoot, checkpointFade)
@@ -105,6 +121,13 @@ end
 
 addEvent("onCarSelectionFinished", true)
 addEventHandler("onCarSelectionFinished", resourceRoot, onCarSelectionFinished)
+
+
+function respawn()
+	changeCar(0)
+end
+addEvent("respawn", true)
+addEventHandler("respawn", resourceRoot, respawn)
 
 function changeCar(next)
 	currentCar = currentCar + next
