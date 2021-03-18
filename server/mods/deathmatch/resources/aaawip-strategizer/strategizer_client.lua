@@ -88,8 +88,14 @@ addEventHandler("playGoSound", resourceRoot, playGoSound)
 function checkpointFade()
 	playSoundFrontEnd(43)
 	fadeCamera(false, 2)
-	destroyElement(currentCp)
-	destroyElement(currentBlip)
+	if (currentCp) then 
+		destroyElement(currentCp) 
+		currentCp = nil
+	end
+	if (currentBlip) then 
+		destroyElement(currentBlip) 
+		currentBlip = nil
+	end
 	currentCp = nil
 	currentBlip = nil
 end
@@ -112,7 +118,7 @@ function onCarSelectionFinished(cars, tracks, col)
 			model = cars[i]
 			spawnedCars[i] = createVehicle(model, x, y, z, u, v, w)
 			setVehicleColor(spawnedCars[i], 255, 255, 255, 0, 0, 0)
-			carBlips[i] = createBlipAttachedTo(spawnedCars[i],0,5,255,255,255,255,64, 1000)
+			carBlips[i] = createBlipAttachedTo(spawnedCars[i],0,6,255,255,255,255,64, 1000)
 		end
 	end
 	changeCar(0)

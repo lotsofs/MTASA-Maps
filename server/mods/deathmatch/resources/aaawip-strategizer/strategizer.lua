@@ -66,7 +66,6 @@ addEventHandler("onRaceStateChanging", root, startGame)
 
 function shuffleTracksAll()
 	TRACKS = getElementsByType("track")
-	-- outputChatBox("TRACKS length: " .. #TRACKS)
 	indices = {}
 	for i = 1, #TRACKS, 1 do
 		indices[i] = i
@@ -82,9 +81,8 @@ function shuffleTracksAll()
 		SELECTED_TRACKS[i] = shuffledIndices[i]
 	end
 
-
 	-- -- temporary code to disable shuffling
-	-- STARTAT = 136
+	-- STARTAT = 167
 	-- for i = STARTAT, STAGES + STARTAT - 1, 1 do
 	-- 	j = i - STARTAT + 1
 	-- 	if i <= #indices then
@@ -111,7 +109,6 @@ function shuffleCarsAll()
 		509, 481, 510,
 		605, 604, 594
 	}
-	-- outputChatBox("cars length: " .. #suitableCars)
 	shuffledCars = {}
 	for i = #suitableCars, 1, -1 do
 		randomIndex = math.random(1,i)
@@ -138,7 +135,7 @@ function displayTracks()
 		createMarker(x, y, z + 1.1, "corona", 1.5, COLORS[i][1], COLORS[i][2], COLORS[i][3])
 
 		x, y, z = getElementPosition(STARTS[v])
-		table.insert(BLIPS, createBlip(x, y, z, 0, 2, COLORS[i][1], COLORS[i][2], COLORS[i][3], 255, 0, 1000))
+		table.insert(BLIPS, createBlip(x, y, z, 0, 4, COLORS[i][1], COLORS[i][2], COLORS[i][3], 255, 0, 1000))
 	end
 end
 
@@ -167,16 +164,38 @@ function finishSetup()
 		-- destroyElement(v)
 	end
 	for i, v in pairs(getElementsByType("player")) do
-		PLAYER_TRANSITIONING[v] = 0
+		PLAYER_TRANSITIONING[v] = 1
 		triggerClientEvent(v, "onSetupFinished", resourceRoot)
 	end
+
+	-- start the race at the same time for all
+	setTimer ( function()
+		for i, v in pairs(getElementsByType("player")) do
+			PLAYER_TRANSITIONING[v] = 2
+			setElementCollisionsEnabled(getPedOccupiedVehicle(v), true)
+			setElementFrozen(getPedOccupiedVehicle(v), false)
+		end
+	end, 4000, 1, client)
+	setTimer ( function()
+		for i, v in pairs(getElementsByType("player")) do
+			PLAYER_TRANSITIONING[v] = 0
+			toggleAllControls(v, true)
+			triggerClientEvent(v, "playGoSound", resourceRoot)
+		end
+	end, 6000, 1, client)
 end
-bindKey(getElementsByType("player")[2], "H", "down", finishSetup)
+bindKey(getElementsByType("player")[1], "H", "down", finishSetup)
 
 function transferCarList(cars)
 	PLAYER_SELECTIONS[client] = cars
 	PLAYER_PROGRESS[client] = 1
-	teleportToNext(client)
+	toggleAllControls(client, false, true, false)
+	triggerClientEvent(client, "checkpointFade", resourceRoot)
+	setTimer ( function(player)
+		triggerClientEvent(player, "fadeIn", resourceRoot)
+		setElementFrozen(getPedOccupiedVehicle(player), true)
+		teleportToNext(player)
+	end, 2000, 1, client)
 end
 addEvent("transferCarList", true)
 addEventHandler("transferCarList", root, transferCarList)
@@ -216,20 +235,19 @@ function respawnDuringRace(theVehicle, seat, jacked)
 		end
 		return
 	end
-	if (PLAYER_PROGRESS[source] >= STAGES) then
-		return
-	end
 	if (MAP_STAGE == 1) then
 		triggerClientEvent(source, "respawn", resourceRoot)
 		return
 	end
+	if (PLAYER_PROGRESS[source] >= STAGES) then
+		return
+	end
 	if (PLAYER_TRANSITIONING[source] == 1) then
+		toggleAllControls(source, false, true, false)
 		setTimer ( function(player)
 			toggleAllControls(player, false, true, false)
-			teleportToNext(player)
-		end, 2001, 1, source)
+		end, 2000, 1, source)
 	else
-		-- triggerClientEvent(source, "respawnCleanup", resourceRoot)
 		teleportToNext(source)
 	end
 end
@@ -272,7 +290,6 @@ function checkpointHit(player, matchingDimension)
 			if i == PLAYER_PROGRESS[player] then
 				PLAYER_TRANSITIONING[player] = 1
 				PLAYER_PROGRESS[player] = PLAYER_PROGRESS[player] + 1
-				outputChatBox(PLAYER_PROGRESS[player])
 				toggleAllControls(player, false, true, false)
 				triggerClientEvent(player, "checkpointFade", resourceRoot)
 				setTimer ( function(player)
@@ -290,8 +307,10 @@ function grabCheckpoint(checkpoint, time_)
 		teleportToRaceCp(source)
 	elseif (checkpoint < STAGES) then
 		PLAYER_TRANSITIONING[source] = 2
+		toggleAllControls(source, false, true, false)
 		teleportToNext(source)
 		triggerClientEvent(source, "fadeIn", resourceRoot)
+		setElementCollisionsEnabled(getPedOccupiedVehicle(source), true)
 		setElementFrozen(getPedOccupiedVehicle(source), false)
 		setTimer ( function(player)
 			PLAYER_TRANSITIONING[player] = 0
