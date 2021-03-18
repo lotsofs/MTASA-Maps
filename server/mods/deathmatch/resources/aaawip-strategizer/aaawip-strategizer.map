@@ -1,22 +1,21 @@
 <map edf:definitions="edf-strategizer,race,editor_main">
-    <spawnpoint id="spawnpoint (Combine Harvester) (1)" vehicle="532" alpha="255" interior="0" posX="643.29999" posY="-2328.5" posZ="2.5" rotX="0" rotY="0" rotZ="139.996"></spawnpoint>
-    <spawnpoint id="spawnpoint (NRG-500) (1)" vehicle="532" posX="632.79999" posY="-2319.6001" posZ="2.5" rotX="0" rotY="0" rotZ="139.996"></spawnpoint>
-    <vehicleSpawner id="vehicleSpawner (16)" posX="596.59998" posY="-2340.7" posZ="2.5" rotX="0" rotY="0" rotZ="270"></vehicleSpawner>
+    <spawnpoint id="spawnpoint (Combine Harvester) (1)" vehicle="443" alpha="255" interior="0" posX="641.5" posY="-2333.3" posZ="2.5" rotX="0" rotY="0" rotZ="139.993"></spawnpoint>
+    <vehicleSpawner id="vehicleSpawner (16)" posX="602.90002" posY="-2340.7" posZ="2.5" rotX="0" rotY="0" rotZ="270"></vehicleSpawner>
     <object id="object (multicarpark01_lvS) (1)" breakable="true" interior="0" collisions="true" alpha="255" model="8390" doublesided="false" scale="1" dimension="0" posX="600" posY="-2383.8" posZ="-12.3" rotX="0" rotY="0" rotZ="0"></object>
-    <vehicleSpawner id="vehicleSpawner (17)" alpha="255" interior="0" posX="596.59998" posY="-2350.1001" posZ="2.5" rotX="0" rotY="0" rotZ="270"></vehicleSpawner>
-    <vehicleSpawner id="vehicleSpawner (18)" alpha="255" interior="0" posX="596.59998" posY="-2359.5" posZ="2.5" rotX="0" rotY="0" rotZ="270"></vehicleSpawner>
-    <vehicleSpawner id="vehicleSpawner (19)" alpha="255" interior="0" posX="596.59998" posY="-2368.8999" posZ="2.5" rotX="0" rotY="0" rotZ="270"></vehicleSpawner>
-    <vehicleSpawner id="vehicleSpawner (20)" alpha="255" interior="0" posX="596.59998" posY="-2378.3" posZ="2.5" rotX="0" rotY="0" rotZ="270"></vehicleSpawner>
-    <vehicleSpawner id="vehicleSpawner (21)" alpha="255" interior="0" posX="596.59998" posY="-2389.3" posZ="2.5" rotX="0" rotY="0" rotZ="270"></vehicleSpawner>
-    <vehicleSpawner id="vehicleSpawner (22)" alpha="255" interior="0" posX="596.59998" posY="-2398.7" posZ="2.5" rotX="0" rotY="0" rotZ="270"></vehicleSpawner>
-    <vehicleSpawner id="vehicleSpawner (23)" alpha="255" interior="0" posX="596.59998" posY="-2408.1001" posZ="2.5" rotX="0" rotY="0" rotZ="270"></vehicleSpawner>
-    <vehicleSpawner id="vehicleSpawner (24)" alpha="255" interior="0" posX="596.59998" posY="-2417.5" posZ="2.5" rotX="0" rotY="0" rotZ="270"></vehicleSpawner>
-    <vehicleSpawner id="vehicleSpawner (25)" alpha="255" interior="0" posX="596.59998" posY="-2426.8999" posZ="2.5" rotX="0" rotY="0" rotZ="270"></vehicleSpawner>
-    <vehicleSpawner id="vehicleSpawner (26)" alpha="255" interior="0" posX="645.29999" posY="-2426.8999" posZ="2.5" rotX="0" rotY="0" rotZ="90"></vehicleSpawner>
-    <vehicleSpawner id="vehicleSpawner (27)" alpha="255" interior="0" posX="645.29999" posY="-2417.5" posZ="2.5" rotX="0" rotY="0" rotZ="90"></vehicleSpawner>
-    <vehicleSpawner id="vehicleSpawner (28)" alpha="255" interior="0" posX="645.29999" posY="-2408.1001" posZ="2.5" rotX="0" rotY="0" rotZ="90"></vehicleSpawner>
-    <vehicleSpawner id="vehicleSpawner (29)" alpha="255" interior="0" posX="645.29999" posY="-2398.7" posZ="2.5" rotX="0" rotY="0" rotZ="90"></vehicleSpawner>
-    <vehicleSpawner id="vehicleSpawner (30)" alpha="255" interior="0" posX="645.29999" posY="-2389.3" posZ="2.5" rotX="0" rotY="0" rotZ="90"></vehicleSpawner>
+    <vehicleSpawner id="vehicleSpawner (17)" alpha="255" interior="0" posX="602.90002" posY="-2350.1001" posZ="2.5" rotX="0" rotY="0" rotZ="270"></vehicleSpawner>
+    <vehicleSpawner id="vehicleSpawner (18)" alpha="255" interior="0" posX="602.90002" posY="-2359.5" posZ="2.5" rotX="0" rotY="0" rotZ="270"></vehicleSpawner>
+    <vehicleSpawner id="vehicleSpawner (19)" alpha="255" interior="0" posX="602.90002" posY="-2368.8999" posZ="2.5" rotX="0" rotY="0" rotZ="270"></vehicleSpawner>
+    <vehicleSpawner id="vehicleSpawner (20)" alpha="255" interior="0" posX="602.90002" posY="-2378.3" posZ="2.5" rotX="0" rotY="0" rotZ="270"></vehicleSpawner>
+    <vehicleSpawner id="vehicleSpawner (21)" alpha="255" interior="0" posX="602.90002" posY="-2389.3" posZ="2.5" rotX="0" rotY="0" rotZ="270"></vehicleSpawner>
+    <vehicleSpawner id="vehicleSpawner (22)" alpha="255" interior="0" posX="602.90002" posY="-2398.7" posZ="2.5" rotX="0" rotY="0" rotZ="270"></vehicleSpawner>
+    <vehicleSpawner id="vehicleSpawner (23)" alpha="255" interior="0" posX="602.90002" posY="-2408.1001" posZ="2.5" rotX="0" rotY="0" rotZ="270"></vehicleSpawner>
+    <vehicleSpawner id="vehicleSpawner (24)" alpha="255" interior="0" posX="602.90002" posY="-2417.5" posZ="2.5" rotX="0" rotY="0" rotZ="270"></vehicleSpawner>
+    <vehicleSpawner id="vehicleSpawner (25)" alpha="255" interior="0" posX="602.90002" posY="-2426.8999" posZ="2.5" rotX="0" rotY="0" rotZ="270"></vehicleSpawner>
+    <vehicleSpawner id="vehicleSpawner (26)" alpha="255" interior="0" posX="637.40002" posY="-2426.8999" posZ="2.5" rotX="0" rotY="0" rotZ="90"></vehicleSpawner>
+    <vehicleSpawner id="vehicleSpawner (27)" alpha="255" interior="0" posX="637.40002" posY="-2417.5" posZ="2.5" rotX="0" rotY="0" rotZ="90"></vehicleSpawner>
+    <vehicleSpawner id="vehicleSpawner (28)" alpha="255" interior="0" posX="637.40002" posY="-2408.1001" posZ="2.5" rotX="0" rotY="0" rotZ="90"></vehicleSpawner>
+    <vehicleSpawner id="vehicleSpawner (29)" alpha="255" interior="0" posX="637.40002" posY="-2398.7" posZ="2.5" rotX="0" rotY="0" rotZ="90"></vehicleSpawner>
+    <vehicleSpawner id="vehicleSpawner (30)" alpha="255" interior="0" posX="637.40002" posY="-2389.3" posZ="2.5" rotX="0" rotY="0" rotZ="90"></vehicleSpawner>
     <checkpoint id="checkpoint () (1)" type="ring" color="#FFFFFF99" size="5" alpha="255" interior="0" nextid="checkpoint () (2)" posX="580" posY="-2484" posZ="50" rotX="0" rotY="0" rotZ="0"></checkpoint>
     <checkpoint id="checkpoint () (2)" type="ring" color="#FFFFFF99" size="5" alpha="255" interior="0" nextid="checkpoint () (3)" posX="580" posY="-2484" posZ="100" rotX="0" rotY="0" rotZ="0"></checkpoint>
     <checkpoint id="checkpoint () (3)" type="ring" color="#FFFFFF99" size="5" alpha="255" interior="0" nextid="checkpoint () (4)" posX="580" posY="-2484" posZ="150" rotX="0" rotY="0" rotZ="0"></checkpoint>
@@ -26,7 +25,7 @@
     <checkpoint id="checkpoint () (7)" type="ring" color="#FFFFFF99" size="5" alpha="255" interior="0" nextid="checkpoint () (8)" posX="580" posY="-2484" posZ="350" rotX="0" rotY="0" rotZ="0"></checkpoint>
     <checkpoint id="checkpoint () (8)" type="ring" color="#FFFFFF99" size="5" alpha="255" interior="0" nextid="checkpoint () (9)" posX="580" posY="-2484" posZ="400" rotX="0" rotY="0" rotZ="0"></checkpoint>
     <checkpoint id="checkpoint () (9)" type="ring" color="#FFFFFF99" size="5" alpha="255" interior="0" nextid="checkpoint () (10)" posX="580" posY="-2484" posZ="450" rotX="0" rotY="0" rotZ="0"></checkpoint>
-    <checkpoint id="checkpoint () (10)" type="ring" color="#FFFFFF99" size="5" alpha="255" interior="0" posX="580" posY="-2484" posZ="500" rotX="0" rotY="0" rotZ="0"></checkpoint>
+    <checkpoint id="checkpoint () (10)" type="ring" color="#FFFFFF99" size="5" alpha="255" interior="0" nextid="false" posX="580" posY="-2484" posZ="500" rotX="0" rotY="0" rotZ="0"></checkpoint>
     <start id="start (1)" posX="2681.9004" posY="-1153" posZ="54.4" rotX="0" rotY="0" rotZ="270"></start>
     <track id="track (1)" name="Vinewood Downhill" posX="2691.1006" posY="-1161.7002" posZ="54.4" rotX="0" rotY="0" rotZ="0"></track>
     <finish id="finish (1)" size="6" posX="2906.8999" posY="-1133.3" posZ="10.2" rotX="0" rotY="0" rotZ="0"></finish>
@@ -450,4 +449,90 @@
     <start id="start (141)" posX="2512.5" posY="-1783.4" posZ="14.7" rotX="0" rotY="0" rotZ="90"></start>
     <finish id="finish (141)" size="6" posX="2273" posY="-1801.5" posZ="12.6" rotX="0" rotY="0" rotZ="0"></finish>
     <track id="track (141)" name="To Big Bears Place" posX="2517" posY="-1774.4" posZ="14.2" rotX="0" rotY="0" rotZ="0"></track>
+    <start id="start (142)" posX="1625.3" posY="-1153.6" posZ="57.8" rotX="0" rotY="0" rotZ="355.995"></start>
+    <track id="track (142)" name="To Mulholland Safehouse" posX="1615.9" posY="-1149" posZ="59" rotX="0" rotY="0" rotZ="0"></track>
+    <finish id="finish (142)" size="6" posX="1314.2" posY="-619.59998" posZ="106.8" rotX="0" rotY="0" rotZ="0"></finish>
+    <start id="start (143)" posX="1379.5" posY="-934.40002" posZ="35.3" rotX="0" rotY="0" rotZ="350"></start>
+    <track id="track (143)" name="Around The Vinewood Sign" posX="1391.8" posY="-926.5" posZ="35.3" rotX="0" rotY="0" rotZ="0"></track>
+    <finish id="finish (143)" size="6" posX="1361.6" posY="-695.40002" posZ="90.1" rotX="0" rotY="0" rotZ="0"></finish>
+    <start id="start (144)" posX="1365.5" posY="-932.5" posZ="35.3" rotX="0" rotY="0" rotZ="350"></start>
+    <track id="track (144)" name="Up Madd Doggs Mansion Hairpins" posX="1355.6" posY="-920.40002" posZ="35.7" rotX="0" rotY="0" rotZ="0"></track>
+    <finish id="finish (144)" size="6" posX="1311.1" posY="-817" posZ="75.1" rotX="0" rotY="0" rotZ="0"></finish>
+    <start id="start (145)" posX="1250.8" posY="-809.90002" posZ="85.3" rotX="0" rotY="0" rotZ="150"></start>
+    <finish id="finish (145)" size="6" posX="1239" posY="-735.79999" posZ="94.6" rotX="0" rotY="0" rotZ="0"></finish>
+    <track id="track (145)" name="Leaving Madd Doggs Mansion" posX="1240.9" posY="-803" posZ="84.8" rotX="0" rotY="0" rotZ="0"></track>
+    <start id="start (146)" posX="1317.5" posY="-803.5" posZ="79.8" rotX="0" rotY="0" rotZ="240"></start>
+    <track id="track (146)" name="Down Madd Doggs Mansion Hairpins" posX="1308.8" posY="-791.90002" posZ="80.9" rotX="0" rotY="0" rotZ="0"></track>
+    <finish id="finish (146)" size="6" posX="1377" posY="-912.40002" posZ="34" rotX="0" rotY="0" rotZ="0"></finish>
+    <start id="start (147)" posX="1357.3" posY="-616.59998" posZ="110.2" rotX="0" rotY="0" rotZ="110"></start>
+    <finish id="finish (147)" size="6" posX="1635.6" posY="-888.90002" posZ="50.2" rotX="0" rotY="0" rotZ="0"></finish>
+    <track id="track (147)" name="Leaving Mulholland Savehouse" posX="1353.3" posY="-627.79999" posZ="113.8" rotX="0" rotY="0" rotZ="0"></track>
+    <start id="start (148)" posX="1276.8" posY="-600.79999" posZ="102.9" rotX="0" rotY="0" rotZ="0"></start>
+    <finish id="finish (148)" size="6" posX="1728" posY="-545.20001" posZ="34.4" rotX="0" rotY="0" rotZ="0"></finish>
+    <track id="track (148)" name="Mulholland Offramp Reverse" posX="1290.4" posY="-590.70001" posZ="102.4" rotX="0" rotY="0" rotZ="0"></track>
+    <start id="start (149)" posX="1720.9" posY="-582.29999" posZ="38.4" rotX="0" rotY="0" rotZ="350"></start>
+    <finish id="finish (149)" size="6" posX="1264.9" posY="-744.40002" posZ="93.9" rotX="0" rotY="0" rotZ="0"></finish>
+    <track id="track (149)" name="To Madd Doggs Mansion" posX="1730.1" posY="-578.90002" posZ="38.1" rotX="0" rotY="0" rotZ="0"></track>
+    <start id="start (150)" posX="1179.6" posY="-684.59998" posZ="63.1" rotX="0" rotY="0" rotZ="334"></start>
+    <track id="track (150)" name="Mulholland Between Bridges" posX="1189.3" posY="-684" posZ="62.7" rotX="0" rotY="0" rotZ="0"></track>
+    <finish id="finish (150)" size="6" posX="1314.2" posY="-362" posZ="1.9" rotX="0" rotY="0" rotZ="0"></finish>
+    <start id="start (151)" posX="997.09998" posY="-633.40002" posZ="122.1" rotX="0" rotY="0" rotZ="110"></start>
+    <track id="track (151)" name="Mulholland Swerving" posX="1000.8" posY="-644.79999" posZ="122.3" rotX="0" rotY="0" rotZ="0"></track>
+    <finish id="finish (151)" size="6" posX="589" posY="-905.09998" posZ="63.7" rotX="0" rotY="0" rotZ="0"></finish>
+    <start id="start (152)" posX="1104.9" posY="-769.29999" posZ="110.1" rotX="0" rotY="0" rotZ="94"></start>
+    <finish id="finish (152)" size="6" posX="846.5" posY="-784.20001" posZ="77.3" rotX="0" rotY="0" rotZ="0"></finish>
+    <track id="track (152)" name="Mulholland O Path" posX="1089.2" posY="-760.29999" posZ="108.4" rotX="0" rotY="0" rotZ="0"></track>
+    <start id="start (153)" posX="1038.1" posY="-707.59998" posZ="121.2" rotX="0" rotY="0" rotZ="118"></start>
+    <track id="track (153)" name="Mulholland Antenna" posX="1045.5" posY="-716.29999" posZ="120.3" rotX="0" rotY="0" rotZ="0"></track>
+    <finish id="finish (153)" size="6" posX="904.59998" posY="-790.70001" posZ="100.5" rotX="0" rotY="0" rotZ="0"></finish>
+    <start id="start (154)" posX="1101.8" posY="-825.20001" posZ="115.6" rotX="0" rotY="0" rotZ="186"></start>
+    <finish id="finish (154)" size="6" posX="1109.9" posY="-965.90002" posZ="41.8" rotX="0" rotY="0" rotZ="0"></finish>
+    <track id="track (154)" name="UFO House Drop" posX="1110.7" posY="-816.79999" posZ="113.4" rotX="0" rotY="0" rotZ="0"></track>
+    <start id="start (155)" posX="987.20001" posY="-921" posZ="43.3" rotX="0" rotY="0" rotZ="180"></start>
+    <track id="track (155)" name="Mulholland Hills Climb" posX="976.29999" posY="-932.40002" posZ="43" rotX="0" rotY="0" rotZ="0"></track>
+    <finish id="finish (155)" size="6" posX="930.09998" posY="-850.20001" posZ="92.6" rotX="0" rotY="0" rotZ="0"></finish>
+    <start id="start (156)" posX="706" posY="-999.20001" posZ="53.3" rotX="0" rotY="0" rotZ="320"></start>
+    <finish id="finish (156)" size="6" posX="961.29999" posY="-935.70001" posZ="40.6" rotX="0" rotY="0" rotZ="0"></finish>
+    <track id="track (156)" name="Through Mulholland" posX="704.90002" posY="-988.59998" posZ="53.1" rotX="0" rotY="0" rotZ="0"></track>
+    <start id="start (157)" posX="756.70001" posY="-937" posZ="56.7" rotX="0" rotY="0" rotZ="100"></start>
+    <finish id="finish (157)" size="6" posX="663.90002" posY="-881.70001" posZ="64.5" rotX="0" rotY="0" rotZ="0"></finish>
+    <track id="track (157)" name="Richman Dirt Path" posX="733" posY="-950.29999" posZ="56.4" rotX="0" rotY="0" rotZ="0"></track>
+    <start id="start (158)" posX="515.09998" posY="-1276.1" posZ="17.1" rotX="0" rotY="0" rotZ="40"></start>
+    <finish id="finish (158)" size="6" posX="524" posY="-1201.2" posZ="43.2" rotX="0" rotY="0" rotZ="0"></finish>
+    <track id="track (158)" name="Richman 270 Degree Turn" posX="521.70001" posY="-1284" posZ="17.9" rotX="0" rotY="0" rotZ="0"></track>
+    <start id="start (159)" posX="519" posY="-1167.6" posZ="59.2" rotX="0" rotY="0" rotZ="300"></start>
+    <track id="track (159)" name="Richman Over Bridge Without Guardrails" posX="513.29999" posY="-1160.3" posZ="59.3" rotX="0" rotY="0" rotZ="0"></track>
+    <finish id="finish (159)" size="6" posX="336.20001" posY="-1295.8" posZ="53.3" rotX="0" rotY="0" rotZ="0"></finish>
+    <start id="start (160)" posX="370.20001" posY="-1155.2" posZ="79.3" rotX="0" rotY="0" rotZ="230"></start>
+    <finish id="finish (160)" size="6" posX="525" posY="-1267.8" posZ="15.2" rotX="0" rotY="0" rotZ="0"></finish>
+    <track id="track (160)" name="Richman Double Drop" posX="375.5" posY="-1169" posZ="79.1" rotX="0" rotY="0" rotZ="0"></track>
+    <start id="start (161)" posX="291.29999" posY="-1059.4" posZ="89.8" rotX="0" rotY="0" rotZ="326"></start>
+    <track id="track (161)" name="Richman Bridge To Bridge" posX="319" posY="-1048.1" posZ="91.4" rotX="0" rotY="0" rotZ="0"></track>
+    <finish id="finish (161)" size="6" posX="633.5" posY="-901.70001" posZ="61.9" rotX="0" rotY="0" rotZ="0"></finish>
+    <start id="start (162)" posX="252.5" posY="-1022.2" posZ="57.5" rotX="0" rotY="0" rotZ="240"></start>
+    <finish id="finish (162)" size="6" posX="444.10001" posY="-1016.3" posZ="92" rotX="0" rotY="0" rotZ="0"></finish>
+    <track id="track (162)" name="Richman Turns Acute" posX="246.7" posY="-1013.8" posZ="57.9" rotX="0" rotY="0" rotZ="0"></track>
+    <start id="start (163)" posX="304" posY="-1326.3" posZ="54.6" rotX="0" rotY="0" rotZ="120"></start>
+    <finish id="finish (163)" size="6" posX="319.10001" posY="-1250.1" posZ="65" rotX="0" rotY="0" rotZ="0"></finish>
+    <track id="track (163)" name="Richman Someones Yard" posX="298.10001" posY="-1337.5" posZ="54.1" rotX="0" rotY="0" rotZ="0"></track>
+    <start id="start (164)" posX="168.8" posY="-1346.3" posZ="70.6" rotX="0" rotY="0" rotZ="190"></start>
+    <finish id="finish (164)" size="6" posX="83.9" posY="-1558.6" posZ="5.3" rotX="0" rotY="0" rotZ="0"></finish>
+    <track id="track (164)" name="Richman Down A Driveway" posX="177.8" posY="-1342" posZ="70.4" rotX="0" rotY="0" rotZ="0"></track>
+    <start id="start (165)" posX="62.5" posY="-1533.4" posZ="6.3" rotX="0" rotY="0" rotZ="270"></start>
+    <track id="track (165)" name="Past Richman" posX="69.5" posY="-1518.6" posZ="5.7" rotX="0" rotY="0" rotZ="0"></track>
+    <finish id="finish (165)" size="6" posX="132.3" posY="-1294.9" posZ="46" rotX="0" rotY="0" rotZ="0"></finish>
+    <start id="start (166)" posX="615.40002" posY="-1209.8" posZ="19.2" rotX="0" rotY="0" rotZ="24"></start>
+    <finish id="finish (166)" size="6" posX="-3.3" posY="-1361.5" posZ="9.7" rotX="0" rotY="0" rotZ="0"></finish>
+    <track id="track (166)" name="Richman Tunnel Leave LS" posX="621.70001" posY="-1199.8" posZ="19.1" rotX="0" rotY="0" rotZ="0"></track>
+    <start id="start (167)" posX="-13.8" posY="-1333.5" posZ="12.1" rotX="0" rotY="0" rotZ="310"></start>
+    <track id="track (167)" name="Richman Tunnel Enter LS" posX="-6.5" posY="-1314.5" posZ="11.3" rotX="0" rotY="0" rotZ="0"></track>
+    <finish id="finish (167)" size="6" posX="634.09998" posY="-1198.3" posZ="17.1" rotX="0" rotY="0" rotZ="0"></finish>
+    <start id="start (168)" posX="486.20001" posY="-1074.7" posZ="83.3" rotX="0" rotY="0" rotZ="90"></start>
+    <track id="track (168)" name="Richman Off Road" posX="480.20001" posY="-1090.5" posZ="83.1" rotX="0" rotY="0" rotZ="0"></track>
+    <finish id="finish (168)" size="6" posX="440" posY="-1197" posZ="65.7" rotX="0" rotY="0" rotZ="0"></finish>
+    <start id="start (169)" posX="1243.5" posY="-753.29999" posZ="95" rotX="0" rotY="0" rotZ="6"></start>
+    <finish id="finish (169)" size="6" posX="1452.4" posY="-795.40002" posZ="86.9" rotX="0" rotY="0" rotZ="0"></finish>
+    <track id="track (169)" name="To The Vinewood Sign" posX="1234" posY="-745.59998" posZ="96.6" rotX="0" rotY="0" rotZ="0"></track>
+    <spawnpoint id="spawnpoint (Packer) (1)" vehicle="443" alpha="255" interior="0" posX="630.5" posY="-2323.8999" posZ="2.5" rotX="0" rotY="0" rotZ="139.993"></spawnpoint>
+    <marker id="marker (checkpoint) (1)" type="checkpoint" color="#FFFFFFFF" size="10" interior="0" dimension="0" alpha="255" posX="580" posY="-2484" posZ="1.4" rotX="0" rotY="0" rotZ="0"></marker>
 </map>
