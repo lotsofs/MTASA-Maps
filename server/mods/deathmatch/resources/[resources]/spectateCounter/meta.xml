@@ -1,0 +1,10 @@
+<meta>
+	<info author="Ali Digitali" description="displays number of spectators" type="script" version="1.0.0" />
+	<script src="server.lua" type="server"/>
+
+	<settings>
+		<setting name="*x_position" value="0.5" />
+		<setting name="*y_position" value="0.975" />
+		<setting name="*refresh_time" value="100" />
+	</settings>
+</meta>

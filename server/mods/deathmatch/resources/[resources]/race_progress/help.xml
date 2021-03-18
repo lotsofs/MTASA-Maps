@@ -1,0 +1,17 @@
+<help title="Race Progress Bar">The Race Progress Bar shows the position of each player on the race track in a simplified way. On the left it shows the player names, on the right how far each player is into the race (km) and the time differences to you (measured at the checkpoints). Optionally, it shows a zoomed-in section centered on yourself, to make it easier to see what is happening around you.
+
+Commands
+------------------------
+/progress - Opens/closes the settings GUI
+/progress_toggle - Toggles the Progress Bar itself
+/progress_toggleZoom - Toggles the zoomed-in section
+
+Tip: Use "/bind k progress_toggle" to bind the command to the "k" key
+
+Predefined Keys
+------------------------
+F7 (short press) - Toggles the Race Progress Bar
+F7 (long press) - Opens/closes the settings GUI
+
+(The key may have been changed by the serveradmin.)
+</help>
