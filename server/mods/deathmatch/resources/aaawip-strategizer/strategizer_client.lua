@@ -65,6 +65,33 @@ addEvent("makeCheckpointVisible", true)
 addEventHandler("makeCheckpointVisible", resourceRoot, makeCheckpointVisible)
 
 
+velocities = {}
+rotations = {}
+angularVelocities = {}
+function dumpSpeed(index)
+	vehicle = getPedOccupiedVehicle(localPlayer)
+	angularVelocities[index] = {getElementAngularVelocity(vehicle)}
+	velocities[index] = {getElementVelocity(vehicle)}
+	rotations[index] = {getElementRotation(vehicle)}
+end
+addEvent("dumpSpeed", true)
+addEventHandler("dumpSpeed", resourceRoot, dumpSpeed)
+
+function spectacularFinish()
+	for i = 1, 9 do
+		setTimer(function(index)
+			vehicle = createVehicle(sortedCars[index], 613, -2377, 9, unpack(rotations[index]))
+			setElementAngularVelocity(vehicle, unpack(angularVelocities[index]))
+			setElementVelocity(vehicle, unpack(velocities[index]))
+		end, 2000 - (200 * i), 1, i)			
+	end
+	vehicle = getPedOccupiedVehicle(localPlayer)
+	setElementAngularVelocity(vehicle, unpack(angularVelocities[10]))
+	setElementVelocity(vehicle, unpack(velocities[10]))
+end
+addEvent("spectacularFinish", true)
+addEventHandler("spectacularFinish", resourceRoot, spectacularFinish)
+
 -- function respawnCleanup()
 -- 	destroyElement(currentCp)
 -- 	destroyElement(currentBlip)

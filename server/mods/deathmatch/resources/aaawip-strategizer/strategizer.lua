@@ -82,7 +82,7 @@ function shuffleTracksAll()
 	end
 
 	-- -- temporary code to disable shuffling
-	-- STARTAT = 167
+	-- STARTAT = 195
 	-- for i = STARTAT, STAGES + STARTAT - 1, 1 do
 	-- 	j = i - STARTAT + 1
 	-- 	if i <= #indices then
@@ -150,6 +150,7 @@ addEventHandler("changeCar", root, changeCar)
 ----------------------------- Post Setup ---------------------------
 
 function finishSetup()
+	createMarker(613, -2377, 9, "corona", size, 255, 255, 255, 127)
 	MAP_STAGE = 2
 	for i, v in pairs(BLIPS) do
 		destroyElement(v)
@@ -221,10 +222,17 @@ function teleportToNext(player)
 	enableNextCheckpoint(player)
 end
 
+function teleportToFinish(player)
+	vehicle = getPedOccupiedVehicle(player)
+	setElementPosition(vehicle, 613, -2377, 9)
+end
+
 function respawnDuringRace(theVehicle, seat, jacked)
+	-- do nothing at the start of the map
 	if (MAP_STAGE == 0) then
 		return
 	end
+	-- 
 	if (PLAYER_PREPARED[source] == nil) then
 		-- newly connected
 		PLAYER_PREPARED[source] = true
@@ -248,6 +256,7 @@ function respawnDuringRace(theVehicle, seat, jacked)
 			toggleAllControls(player, false, true, false)
 		end, 2000, 1, source)
 	else
+		setElementVelocity(getPedOccupiedVehicle(source), 0, 0, 0)
 		teleportToNext(source)
 	end
 end
@@ -293,6 +302,7 @@ function checkpointHit(player, matchingDimension)
 				toggleAllControls(player, false, true, false)
 				triggerClientEvent(player, "checkpointFade", resourceRoot)
 				setTimer ( function(player)
+					triggerClientEvent(player, "dumpSpeed", resourceRoot, PLAYER_PROGRESS[player] - 1)
 					setElementFrozen(getPedOccupiedVehicle(player), true)
 					teleportToRaceCp(player)
 				end, 2000, 1, player)
@@ -323,6 +333,12 @@ addEventHandler("onPlayerReachCheckpoint", getRootElement(), grabCheckpoint)
 
 
 function finish(rank, _time)
-	outputChatBox("Finish")
+	-- toggleAllControls(source, true)
+	triggerClientEvent(source, "fadeIn", resourceRoot)
+	setElementCollisionsEnabled(getPedOccupiedVehicle(source), true)
+	setElementFrozen(getPedOccupiedVehicle(source), false)
+	PLAYER_TRANSITIONING[source] = 2
+	teleportToFinish(source)
+	triggerClientEvent(source, "spectacularFinish", resourceRoot)
 end
 addEventHandler("onPlayerFinish", getRootElement(), finish)
