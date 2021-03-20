@@ -25,7 +25,7 @@
     <checkpoint id="checkpoint () (7)" type="ring" color="#FFFFFF99" size="5" alpha="255" interior="0" nextid="checkpoint () (8)" posX="580" posY="-2484" posZ="350" rotX="0" rotY="0" rotZ="0"></checkpoint>
     <checkpoint id="checkpoint () (8)" type="ring" color="#FFFFFF99" size="5" alpha="255" interior="0" nextid="checkpoint () (9)" posX="580" posY="-2484" posZ="400" rotX="0" rotY="0" rotZ="0"></checkpoint>
     <checkpoint id="checkpoint () (9)" type="ring" color="#FFFFFF99" size="5" alpha="255" interior="0" nextid="checkpoint () (10)" posX="580" posY="-2484" posZ="450" rotX="0" rotY="0" rotZ="0"></checkpoint>
-    <checkpoint id="checkpoint () (10)" type="ring" color="#FFFFFF99" size="5" alpha="255" interior="0" nextid="false" posX="580" posY="-2484" posZ="500" rotX="0" rotY="0" rotZ="0"></checkpoint>
+    <checkpoint id="checkpoint () (10)" type="ring" nextid="false" color="#FFFFFF99" size="5" alpha="255" interior="0" posX="580" posY="-2484" posZ="500" rotX="0" rotY="0" rotZ="0"></checkpoint>
     <start id="start (1)" posX="2681.9004" posY="-1153" posZ="54.4" rotX="0" rotY="0" rotZ="270"></start>
     <track id="track (1)" name="Vinewood Downhill" posX="2691.1006" posY="-1161.7002" posZ="54.4" rotX="0" rotY="0" rotZ="0"></track>
     <finish id="finish (1)" size="6" posX="2906.8999" posY="-1133.3" posZ="10.2" rotX="0" rotY="0" rotZ="0"></finish>
@@ -383,7 +383,7 @@
     <start id="start (119)" posX="-2365.2" posY="1081.8" posZ="56.7" rotX="0" rotY="0" rotZ="250"></start>
     <finish id="finish (119)" size="6" posX="-1920.8" posY="1066.4" posZ="48.6" rotX="0" rotY="0" rotZ="0"></finish>
     <track id="track (119)" name="Through Calton Heights Tunnel" posX="-2382.6001" posY="1088.8" posZ="56.5" rotX="0" rotY="0" rotZ="0"></track>
-    <start id="start (120)" posX="-1880" posY="1057.69995" posZ="46.4" rotX="0" rotY="0" rotZ="140"></start>
+    <start id="start (120)" posX="-1880" posY="1057.7002" posZ="46.4" rotX="0" rotY="0" rotZ="89.999"></start>
     <track id="track (120)" name="Cross Calton Heights" posX="-1870.4" posY="1067.2" posZ="47.7" rotX="0" rotY="0" rotZ="0"></track>
     <finish id="finish (120)" size="6" posX="-2254.1001" posY="701.5" posZ="48.3" rotX="0" rotY="0" rotZ="0"></finish>
     <start id="start (121)" posX="-2004.3" posY="761.20001" posZ="46.4" rotX="0" rotY="0" rotZ="0"></start>
@@ -535,4 +535,97 @@
     <track id="track (169)" name="To The Vinewood Sign" posX="1234" posY="-745.59998" posZ="96.6" rotX="0" rotY="0" rotZ="0"></track>
     <spawnpoint id="spawnpoint (Packer) (1)" vehicle="443" alpha="255" interior="0" posX="630.5" posY="-2323.8999" posZ="2.5" rotX="0" rotY="0" rotZ="139.993"></spawnpoint>
     <marker id="marker (checkpoint) (1)" type="checkpoint" color="#FFFFFFFF" size="10" interior="0" dimension="0" alpha="255" posX="580" posY="-2484" posZ="1.4" rotX="0" rotY="0" rotZ="0"></marker>
+    <start id="start (170)" posX="-2341" posY="-1606.3" posZ="484.79999" rotX="0" rotY="0" rotZ="220"></start>
+    <track id="track (170)" name="Mt Chilliad Jump Down" posX="-2354.5" posY="-1615.2002" posZ="484.29999" rotX="0" rotY="0" rotZ="0"></track>
+    <finish id="finish (170)" size="6" posX="-2044.9" posY="-1937.1" posZ="51.7" rotX="0" rotY="0" rotZ="0"></finish>
+    <start id="start (171)" posX="-2311.6001" posY="-1652.2" posZ="484.79999" rotX="0" rotY="0" rotZ="210"></start>
+    <track id="track (171)" name="Mt Chilliad Challenge Track Start" posX="-2313.2" posY="-1662.3" posZ="483.89999" rotX="0" rotY="0" rotZ="0"></track>
+    <finish id="finish (171)" size="6" posX="-2444.2" posY="-1775.9" posZ="415.70001" rotX="0" rotY="0" rotZ="0"></finish>
+    <start id="start (172)" posX="-2334.6001" posY="-1818.1" posZ="436.60001" rotX="0" rotY="0" rotZ="130"></start>
+    <finish id="finish (172)" size="6" posX="-2473" posY="-1919.2" posZ="300.70001" rotX="0" rotY="0" rotZ="0"></finish>
+    <track id="track (172)" name="Mt Chilliad Drop To Cobra" posX="-2335.5" posY="-1833.1" posZ="438.10001" rotX="0" rotY="0" rotZ="0"></track>
+    <start id="start (173)" posX="-2541.2" posY="-1672.6" posZ="402.5" rotX="0" rotY="0" rotZ="204"></start>
+    <track id="track (173)" name="Mt Chilliad Final Ascend" posX="-2541" posY="-1660.5" posZ="401" rotX="0" rotY="0" rotZ="0"></track>
+    <finish id="finish (173)" size="6" posX="-2291.3" posY="-1692.7" posZ="479.70001" rotX="0" rotY="0" rotZ="0"></finish>
+    <start id="start (174)" posX="-2522.5" posY="-1723.4" posZ="403.29999" rotX="0" rotY="0" rotZ="6"></start>
+    <track id="track (174)" name="Mt Chilliad Down Around The Top" posX="-2528.7002" posY="-1721.5996" posZ="402.60001" rotX="0" rotY="0" rotZ="0"></track>
+    <finish id="finish (174)" size="6" posX="-2196.3" posY="-1721" posZ="375.79999" rotX="0" rotY="0" rotZ="0"></finish>
+    <start id="start (175)" posX="-2651.7" posY="-1732.2" posZ="259.60001" rotX="0" rotY="0" rotZ="170"></start>
+    <track id="track (175)" name="Mt Chilliad Death Turn" posX="-2661.6001" posY="-1733" posZ="255.8" rotX="0" rotY="0" rotZ="0"></track>
+    <finish id="finish (175)" size="6" posX="-2258.1001" posY="-2073.8999" posZ="119.2" rotX="0" rotY="0" rotZ="0"></finish>
+    <finish id="finish (176)" size="6" posX="-2592.7" posY="-1774.3" posZ="318.5" rotX="0" rotY="0" rotZ="0"></finish>
+    <start id="start (176)" posX="-2577.8999" posY="-1359.2" posZ="266.79999" rotX="0" rotY="0" rotZ="110"></start>
+    <track id="track (176)" name="Mt Chilliad Along The Cliff" posX="-2582.7" posY="-1380.5" posZ="270.89999" rotX="0" rotY="0" rotZ="0"></track>
+    <start id="start (177)" posX="-2510.3" posY="-1896.9" posZ="298.39999" rotX="0" rotY="0" rotZ="230"></start>
+    <track id="track (177)" name="Mt Chilliad Cobra Run" posX="-2507.5" posY="-1888.5" posZ="298.5" rotX="0" rotY="0" rotZ="0"></track>
+    <finish id="finish (177)" size="6" posX="-2097.7" posY="-1739.2" posZ="185.10001" rotX="0" rotY="0" rotZ="0"></finish>
+    <start id="start (178)" posX="-2076.8" posY="-1628.5" posZ="174.8" rotX="0" rotY="0" rotZ="30"></start>
+    <finish id="finish (178)" size="6" posX="-2058.5" posY="-1444.9" posZ="103.7" rotX="0" rotY="0" rotZ="0"></finish>
+    <track id="track (178)" name="Mt Chilliad Cobra Run Part 2" posX="-2093.8999" posY="-1628.9" posZ="174.8" rotX="0" rotY="0" rotZ="0"></track>
+    <start id="start (179)" posX="-2056" posY="-1419.9" posZ="110.8" rotX="0" rotY="0" rotZ="230"></start>
+    <track id="track (179)" name="Mt Chilliad Through The Arch" posX="-2045.8" posY="-1449.2" posZ="104.1" rotX="0" rotY="0" rotZ="0"></track>
+    <finish id="finish (179)" size="6" posX="-2025.9" posY="-1780.7" posZ="94.1" rotX="0" rotY="0" rotZ="0"></finish>
+    <start id="start (180)" posX="-2395.3" posY="-2206.8999" posZ="34.4" rotX="0" rotY="0" rotZ="300"></start>
+    <track id="track (180)" name="Mt Chilliad Initial Ascend" posX="-2374.3999" posY="-2200.8999" posZ="34" rotX="0" rotY="0" rotZ="0"></track>
+    <finish id="finish (180)" size="6" posX="-2419.3999" posY="-2091.1001" posZ="120.7" rotX="0" rotY="0" rotZ="0"></finish>
+    <start id="start (181)" posX="-2389.3" posY="-2097.8999" posZ="119.6" rotX="0" rotY="0" rotZ="80"></start>
+    <track id="track (181)" name="Mt Chilliad To The Cabin" posX="-2394.8" posY="-2088.2" posZ="120.6" rotX="0" rotY="0" rotZ="0"></track>
+    <finish id="finish (181)" size="6" posX="-2828" posY="-1528" posZ="138.2" rotX="0" rotY="0" rotZ="0"></finish>
+    <finish id="finish (182)" size="6" posX="-2517.1001" posY="-1130.1" posZ="176.89999" rotX="0" rotY="0" rotZ="0"></finish>
+    <start id="start (182)" posX="-2801.1001" posY="-1516.8" posZ="140.39999" rotX="0" rotY="0" rotZ="0"></start>
+    <track id="track (182)" name="Mt Chilliad From The Cabin" posX="-2810.5996" posY="-1510.5996" posZ="140" rotX="0" rotY="0" rotZ="0"></track>
+    <start id="start (183)" posX="-2669.6001" posY="-1392.5" posZ="256.39999" rotX="0" rotY="0" rotZ="0"></start>
+    <track id="track (183)" name="Mt Chilliad From Cobra" posX="-2664.5" posY="-1408.9" posZ="261.70001" rotX="0" rotY="0" rotZ="0"></track>
+    <finish id="finish (183)" size="6" posX="-2520" posY="-1106.9" posZ="176.8" rotX="0" rotY="0" rotZ="0"></finish>
+    <start id="start (184)" posX="-2554.2" posY="-1492.8" posZ="360.29999" rotX="0" rotY="0" rotZ="310"></start>
+    <finish id="finish (184)" size="6" posX="-2188.6001" posY="-1702.7" posZ="374.20001" rotX="0" rotY="0" rotZ="0"></finish>
+    <track id="track (184)" name="Mt Chilliad Up Around The Top" posX="-2547" posY="-1501.9" posZ="359.70001" rotX="0" rotY="0" rotZ="0"></track>
+    <start id="start (185)" posX="-2253.1001" posY="-1307.8" posZ="266.10001" rotX="0" rotY="0" rotZ="59.996"></start>
+    <finish id="finish (185)" size="6" posX="-2484.8" posY="-1138.1" posZ="184.89999" rotX="0" rotY="0" rotZ="0"></finish>
+    <track id="track (185)" name="Mt Chilliad Cliff Drops" posX="-2258.8" posY="-1316.5" posZ="267.29999" rotX="0" rotY="0" rotZ="0"></track>
+    <start id="start (186)" posX="-2569.8999" posY="-1460.3" posZ="359.79999" rotX="0" rotY="0" rotZ="310"></start>
+    <track id="track (186)" name="Mt Chilliad Going Off Course" posX="-2575.8" posY="-1457.3" posZ="357.39999" rotX="0" rotY="0" rotZ="0"></track>
+    <finish id="finish (186)" size="6" posX="-2262" posY="-1337.2" posZ="276.60001" rotX="0" rotY="0" rotZ="0"></finish>
+    <start id="start (187)" posX="-2456" posY="-1380.2" posZ="341.29999" rotX="0" rotY="0" rotZ="302"></start>
+    <track id="track (187)" name="Mt Chilliad Left Hand Turn" posX="-2429.7" posY="-1366.7" posZ="340.5" rotX="0" rotY="0" rotZ="0"></track>
+    <finish id="finish (187)" size="6" posX="-2554.8" posY="-1326.9" posZ="266.79999" rotX="0" rotY="0" rotZ="0"></finish>
+    <start id="start (188)" posX="-1984.1" posY="-1408.1" posZ="26.2" rotX="0" rotY="0" rotZ="44"></start>
+    <finish id="finish (188)" size="6" posX="-2587.3" posY="-967.20001" posZ="18" rotX="0" rotY="0" rotZ="0"></finish>
+    <track id="track (188)" name="Mt Chilliad Trees At The Base" posX="-1989.4" posY="-1415.8" posZ="27" rotX="0" rotY="0" rotZ="0"></track>
+    <start id="start (189)" posX="-2143" posY="-1254.1" posZ="78.1" rotX="0" rotY="0" rotZ="210"></start>
+    <finish id="finish (189)" size="6" posX="-2025" posY="-1400.6" posZ="51.3" rotX="0" rotY="0" rotZ="0"></finish>
+    <track id="track (189)" name="Mt Chilliad Trees" posX="-2149.8" posY="-1258.6" posZ="77.7" rotX="0" rotY="0" rotZ="0"></track>
+    <finish id="finish (190)" size="6" posX="-2667" posY="-2014" posZ="86.4" rotX="0" rotY="0" rotZ="0"></finish>
+    <start id="start (190)" posX="-2553.3" posY="-2152.8999" posZ="63.3" rotX="0" rotY="0" rotZ="106"></start>
+    <track id="track (190)" name="Mt Chilliad Small Climb" posX="-2571.7" posY="-2145.2" posZ="66.1" rotX="0" rotY="0" rotZ="0"></track>
+    <start id="start (191)" posX="-2703.3999" posY="-1875.7" posZ="139.10001" rotX="0" rotY="0" rotZ="270"></start>
+    <finish id="finish (191)" size="6" posX="-2498.6001" posY="-2213.5" posZ="27.9" rotX="0" rotY="0" rotZ="0"></finish>
+    <track id="track (191)" name="Mt Chilliad Drop" posX="-2694.6001" posY="-1868.4" posZ="139.89999" rotX="0" rotY="0" rotZ="0"></track>
+    <track id="track (192)" name="Mt Chilliad Leaving Cabin" posX="-2821.8999" posY="-1513.2" posZ="140" rotX="0" rotY="0" rotZ="0"></track>
+    <start id="start (192)" posX="-2828.7" posY="-1513.1" posZ="140.2" rotX="0" rotY="0" rotZ="180"></start>
+    <finish id="finish (192)" size="6" posX="-2532.6001" posY="-2239.6001" posZ="28.2" rotX="0" rotY="0" rotZ="0"></finish>
+    <start id="start (193)" posX="-2239.8" posY="-1738.1" posZ="482" rotX="0" rotY="0" rotZ="0"></start>
+    <track id="track (193)" name="Mt Chilliad Multi Drop" posX="-2244.6001" posY="-1748.4" posZ="481" rotX="0" rotY="0" rotZ="0"></track>
+    <finish id="finish (193)" size="6" posX="-2232.3" posY="-1148.1" posZ="14.7" rotX="0" rotY="0" rotZ="0"></finish>
+    <start id="start (194)" posX="-2531.1001" posY="-2150.2" posZ="31.7" rotX="0" rotY="0" rotZ="36"></start>
+    <track id="track (194)" name="Mt Chilliad Tunnels" posX="-2537.5" posY="-2154.8999" posZ="31.5" rotX="0" rotY="0" rotZ="0"></track>
+    <finish id="finish (194)" size="6" posX="-2864.3999" posY="-1828.4" posZ="37.4" rotX="0" rotY="0" rotZ="0"></finish>
+    <start id="start (195)" posX="-2902.3999" posY="-1126.8" posZ="10.6" rotX="0" rotY="0" rotZ="170"></start>
+    <track id="track (195)" name="Mt Chilliad Bridge" posX="-2919.6001" posY="-1132.6" posZ="11.3" rotX="0" rotY="0" rotZ="0"></track>
+    <finish id="finish (195)" size="6" posX="-2754.8999" posY="-2001.6" posZ="39.2" rotX="0" rotY="0" rotZ="0"></finish>
+    <start id="start (196)" posX="-2512.8" posY="-2313.7" posZ="30.2" rotX="0" rotY="0" rotZ="14"></start>
+    <finish id="finish (196)" size="6" posX="-2483" posY="-2308" posZ="28.2" rotX="0" rotY="0" rotZ="0"></finish>
+    <track id="track (196)" name="Mt Chilliad Overpass To Overpass" posX="-2518.6001" posY="-2313.3" posZ="29.8" rotX="0" rotY="0" rotZ="0"></track>
+    <start id="start (197)" posX="-2406.6001" posY="-2172.2" posZ="34.4" rotX="0" rotY="0" rotZ="230"></start>
+    <finish id="finish (197)" size="6" posX="-2003.8" posY="-1876.2" posZ="42.5" rotX="0" rotY="0" rotZ="0"></finish>
+    <track id="track (197)" name="Leaving Mt Chilliad" posX="-2411.7" posY="-2177.5" posZ="37.8" rotX="0" rotY="0" rotZ="0"></track>
+    <start id="start (198)" posX="-1587.6" posY="-1604.7" posZ="37.5" rotX="0" rotY="0" rotZ="110"></start>
+    <track id="track (198)" name="To Angel Pine Junkyard" posX="-1592.7" posY="-1597.9" posZ="37.1" rotX="0" rotY="0" rotZ="0"></track>
+    <finish id="finish (198)" size="6" posX="-1881.5" posY="-1696.3" posZ="20.8" rotX="0" rotY="0" rotZ="0"></finish>
+    <start id="start (199)" posX="-1744.2" posY="-1630.8" posZ="22.9" rotX="0" rotY="0" rotZ="110"></start>
+    <finish id="finish (199)" size="6" posX="-1920.2" posY="-1691.8" posZ="20.8" rotX="0" rotY="0" rotZ="0"></finish>
+    <finish id="finish (200)" size="6" posX="-1955.5" posY="-1437.9" posZ="18.6" rotX="0" rotY="0" rotZ="0"></finish>
+    <track id="track (199)" name="Across Angel Pine Junkyard" posX="-1742.9" posY="-1617.7" posZ="22.4" rotX="0" rotY="0" rotZ="0"></track>
+    <start id="start (200)" posX="-1861.3" posY="-1686.2" posZ="42.8" rotX="0" rotY="0" rotZ="36"></start>
+    <track id="track (200)" name="On Top Of Angel Pine Junkyard" posX="-1854.5" posY="-1689.8" posZ="41.5" rotX="0" rotY="0" rotZ="0"></track>
 </map>
