@@ -30,7 +30,7 @@
     <track id="track (1)" name="Vinewood Downhill" posX="2691.1006" posY="-1161.7002" posZ="54.4" rotX="0" rotY="0" rotZ="0"></track>
     <finish id="finish (1)" size="6" posX="2906.8999" posY="-1133.3" posZ="10.2" rotX="0" rotY="0" rotZ="0"></finish>
     <start id="start (2)" posX="584.29999" posY="855.59998" posZ="-41.8" rotX="0" rotY="0" rotZ="270"></start>
-    <track id="track (2)" name="Quarry Climb" posX="601.59961" posY="866.59961" posZ="-42.3" rotX="0" rotY="0" rotZ="0"></track>
+    <track id="track (2)" name="Quarry Climb To Exit" posX="601.59961" posY="866.59961" posZ="-42.3" rotX="0" rotY="0" rotZ="0"></track>
     <finish id="finish (2)" size="6" posX="809.90002" posY="843.20001" posZ="8.9" rotX="0" rotY="0" rotZ="0"></finish>
     <start id="start (3)" posX="-667.79999" posY="-2022" posZ="25.7" rotX="0" rotY="0" rotZ="0"></start>
     <track id="track (3)" name="Brown Pond Splash" posX="-656.59998" posY="-2005.3" posZ="26.6" rotX="0" rotY="0" rotZ="0"></track>
@@ -125,8 +125,8 @@
     <start id="start (34)" posX="-2842" posY="2763.1001" posZ="243.8" rotX="0" rotY="0" rotZ="210"></start>
     <track id="track (34)" name="Bayside Big Drop" posX="-2851.2002" posY="2758.2002" posZ="243.5" rotX="0" rotY="0" rotZ="0"></track>
     <finish id="finish (34)" size="6" posX="-2757.2" posY="2567.2" posZ="93.5" rotX="0" rotY="0" rotZ="0"></finish>
-    <start id="start (35)" posX="-2675.1001" posY="2186.8999" posZ="56.5" rotX="0" rotY="0" rotZ="8"></start>
-    <track id="track (35)" name="Gant Bridge To Bayside Tunnel" posX="-2683.2002" posY="2185.4004" posZ="57.5" rotX="0" rotY="0" rotZ="0"></track>
+    <start id="start (35)" posX="-2675.0996" posY="2186.9004" posZ="56.5" rotX="0" rotY="0" rotZ="7.998"></start>
+    <track id="track (35)" name="Gant Bridge To Bayside Tunnel" posX="-2665.3" posY="2203" posZ="57.7" rotX="0" rotY="0" rotZ="0"></track>
     <finish id="finish (35)" size="6" posX="-2304.5" posY="2638" posZ="53.7" rotX="0" rotY="0" rotZ="0"></finish>
     <start id="start (36)" posX="-2285.1001" posY="2675.8999" posZ="56.9" rotX="0" rotY="0" rotZ="90"></start>
     <track id="track (36)" name="Bayside Tunnel To Gant Bridge" posX="-2277.2002" posY="2687.9004" posZ="56.5" rotX="0" rotY="0" rotZ="0"></track>
@@ -628,4 +628,121 @@
     <track id="track (199)" name="Across Angel Pine Junkyard" posX="-1742.9" posY="-1617.7" posZ="22.4" rotX="0" rotY="0" rotZ="0"></track>
     <start id="start (200)" posX="-1861.3" posY="-1686.2" posZ="42.8" rotX="0" rotY="0" rotZ="36"></start>
     <track id="track (200)" name="On Top Of Angel Pine Junkyard" posX="-1854.5" posY="-1689.8" posZ="41.5" rotX="0" rotY="0" rotZ="0"></track>
+    <start id="start (201)" posX="468.5" posY="886" posZ="-27.3" rotX="0" rotY="0" rotZ="270"></start>
+    <finish id="finish (201)" size="6" posX="592.90002" posY="872.79999" posZ="-43.5" rotX="0" rotY="0" rotZ="0"></finish>
+    <track id="track (201)" name="Quarry Bottom" posX="479" posY="892.70001" posZ="-29.7" rotX="0" rotY="0" rotZ="0"></track>
+    <start id="start (202)" posX="832.29999" posY="853.40002" posZ="13.4" rotX="0" rotY="0" rotZ="110"></start>
+    <track id="track (202)" name="Quarry Entrance" posX="817.20001" posY="857" posZ="13.5" rotX="0" rotY="0" rotZ="0"></track>
+    <finish id="finish (202)" size="6" posX="665.29999" posY="893.5" posZ="-41.4" rotX="0" rotY="0" rotZ="0"></finish>
+    <start id="start (203)" posX="696.5" posY="739.70001" posZ="-3.5" rotX="0" rotY="0" rotZ="20"></start>
+    <finish id="finish (203)" size="6" posX="580.90002" posY="964.29999" posZ="-19.7" rotX="0" rotY="0" rotZ="0"></finish>
+    <track id="track (203)" name="Quarry Cross" posX="706.59998" posY="731.90002" posZ="-6.7" rotX="0" rotY="0" rotZ="0"></track>
+    <start id="start (204)" posX="607.40002" posY="658.40002" posZ="6.1" rotX="0" rotY="0" rotZ="70"></start>
+    <track id="track (204)" name="Quarry Secret Entry" posX="596.90002" posY="652.29999" posZ="5.4" rotX="0" rotY="0" rotZ="0"></track>
+    <finish id="finish (204)" size="6" posX="459.89999" posY="961.90002" posZ="3.6" rotX="0" rotY="0" rotZ="0"></finish>
+    <start id="start (205)" posX="312.29999" posY="933.09998" posZ="21.5" rotX="0" rotY="0" rotZ="210"></start>
+    <finish id="finish (205)" size="6" posX="636.70001" posY="677.90002" posZ="5.3" rotX="0" rotY="0" rotZ="0"></finish>
+    <track id="track (205)" name="Quarry Secret Exit" posX="307.79999" posY="924.09998" posZ="21.1" rotX="0" rotY="0" rotZ="0"></track>
+    <start id="start (206)" posX="655.40002" posY="1270.5" posZ="12.8" rotX="0" rotY="0" rotZ="210"></start>
+    <track id="track (206)" name="Quarry Back Door" posX="659.09998" posY="1276.9" posZ="12.4" rotX="0" rotY="0" rotZ="0"></track>
+    <finish id="finish (206)" size="6" posX="354.20001" posY="877.20001" posZ="19.4" rotX="0" rotY="0" rotZ="0"></finish>
+    <finish id="finish (207)" size="6" posX="778.59998" posY="835.90002" posZ="4.9" rotX="0" rotY="0" rotZ="0"></finish>
+    <start id="start (207)" posX="602.20001" posY="1235.8" posZ="12.8" rotX="0" rotY="0" rotZ="210"></start>
+    <track id="track (207)" name="Quarry Front Door" posX="603.5" posY="1251" posZ="12.4" rotX="0" rotY="0" rotZ="0"></track>
+    <start id="start (208)" posX="787" posY="910" posZ="21.4" rotX="0" rotY="0" rotZ="10"></start>
+    <finish id="finish (208)" size="6" posX="349" posY="986" posZ="28.7" rotX="0" rotY="0" rotZ="0"></finish>
+    <track id="track (208)" name="Quarry Fence" posX="789" posY="886.59998" posZ="20.1" rotX="0" rotY="0" rotZ="0"></track>
+    <start id="start (209)" posX="848.40002" posY="830.70001" posZ="14.5" rotX="0" rotY="0" rotZ="280"></start>
+    <track id="track (209)" name="Quarry Parking Lot" posX="849.5" posY="820.20001" posZ="14" rotX="0" rotY="0" rotZ="0"></track>
+    <finish id="finish (209)" size="6" posX="1112.1" posY="885.09998" posZ="10.4" rotX="0" rotY="0" rotZ="0"></finish>
+    <start id="start (210)" posX="511.29999" posY="1124.2" posZ="16.5" rotX="0" rotY="0" rotZ="270"></start>
+    <finish id="finish (210)" size="6" posX="812.40002" posY="1150.4" posZ="27.5" rotX="0" rotY="0" rotZ="0"></finish>
+    <track id="track (210)" name="Between Quarry And Octane Springs" posX="507.60001" posY="1115.3" posZ="15.5" rotX="0" rotY="0" rotZ="0"></track>
+    <start id="start (211)" posX="67.5" posY="1053.7" posZ="15.6" rotX="0" rotY="0" rotZ="280"></start>
+    <finish id="finish (211)" size="6" posX="496.39999" posY="1103.6" posZ="14.4" rotX="0" rotY="0" rotZ="0"></finish>
+    <track id="track (211)" name="Drive In Theatre" posX="75" posY="1046.4" posZ="14.5" rotX="0" rotY="0" rotZ="0"></track>
+    <start id="start (212)" posX="432" posY="599.20001" posZ="20" rotX="0" rotY="0" rotZ="34"></start>
+    <track id="track (212)" name="Fallow Bridge To Green Palms" posX="428.5" posY="620.90002" posZ="19.9" rotX="0" rotY="0" rotZ="0"></track>
+    <finish id="finish (212)" size="6" posX="273.39999" posY="1362" posZ="9.6" rotX="0" rotY="0" rotZ="0"></finish>
+    <start id="start (213)" posX="230.7" posY="1147" posZ="13.9" rotX="0" rotY="0" rotZ="272"></start>
+    <finish id="finish (213)" size="6" posX="402.29999" posY="1152.5" posZ="7.2" rotX="0" rotY="0" rotZ="0"></finish>
+    <track id="track (213)" name="Octane Springs Farms" posX="222" posY="1155.5" posZ="14.3" rotX="0" rotY="0" rotZ="0"></track>
+    <start id="start (214)" posX="644.5" posY="1084.9" posZ="29.5" rotX="0" rotY="0" rotZ="286"></start>
+    <track id="track (214)" name="Quarry To Bike School" posX="646.70001" posY="1076.7" posZ="29.7" rotX="0" rotY="0" rotZ="0"></track>
+    <finish id="finish (214)" size="6" posX="1167.1" posY="1369.5" posZ="9.9" rotX="0" rotY="0" rotZ="0"></finish>
+    <start id="start (215)" posX="711.5" posY="1104.2" posZ="29.5" rotX="0" rotY="0" rotZ="0"></start>
+    <finish id="finish (215)" size="6" posX="473.60001" posY="1644.4" posZ="14.2" rotX="0" rotY="0" rotZ="0"></finish>
+    <track id="track (215)" name="Octane Springs S To N" posX="718.70001" posY="1114" posZ="28.6" rotX="0" rotY="0" rotZ="0"></track>
+    <start id="start (216)" posX="333.70001" posY="1360.1" posZ="9.1" rotX="0" rotY="0" rotZ="280"></start>
+    <finish id="finish (216)" size="6" posX="627.29999" posY="1367.2" posZ="11" rotX="0" rotY="0" rotZ="0"></finish>
+    <track id="track (216)" name="Octane Springs W To E" posX="339.89999" posY="1351.1" posZ="9.2" rotX="0" rotY="0" rotZ="0"></track>
+    <start id="start (217)" posX="445.10001" posY="1568.7" posZ="12.6" rotX="0" rotY="0" rotZ="180"></start>
+    <track id="track (217)" name="Octane Springs N To S" posX="437.39999" posY="1559.2" posZ="13.5" rotX="0" rotY="0" rotZ="0"></track>
+    <finish id="finish (217)" size="6" posX="422.5" posY="1274.4" posZ="9.1" rotX="0" rotY="0" rotZ="0"></finish>
+    <start id="start (218)" posX="644.79999" posY="1311.2" posZ="12.9" rotX="0" rotY="0" rotZ="36"></start>
+    <track id="track (218)" name="Octane Springs E To W" posX="656.20001" posY="1304.9" posZ="12.4" rotX="0" rotY="0" rotZ="0"></track>
+    <finish id="finish (218)" size="6" posX="420.5" posY="1541.1" posZ="10.5" rotX="0" rotY="0" rotZ="0"></finish>
+    <start id="start (219)" posX="681.70001" posY="1711.7" posZ="11.8" rotX="0" rotY="0" rotZ="130"></start>
+    <finish id="finish (219)" size="6" posX="393.70001" posY="1585.7" posZ="17.2" rotX="0" rotY="0" rotZ="0"></finish>
+    <track id="track (219)" name="Xoomer By Octane Springs" posX="674.20001" posY="1718.7" posZ="11.6" rotX="0" rotY="0" rotZ="0"></track>
+    <start id="start (220)" posX="833.20001" posY="1213.6" posZ="28.8" rotX="0" rotY="0" rotZ="10"></start>
+    <finish id="finish (220)" size="6" posX="802" posY="1658.9" posZ="4.3" rotX="0" rotY="0" rotZ="0"></finish>
+    <track id="track (220)" name="Bone County Gun Range" posX="845.09998" posY="1212.5" posZ="29.1" rotX="0" rotY="0" rotZ="0"></track>
+    <finish id="finish (221)" size="6" posX="229.3" posY="1235.6" posZ="21.9" rotX="0" rotY="0" rotZ="0"></finish>
+    <start id="start (221)" posX="736.09998" posY="1452.5" posZ="12.1" rotX="0" rotY="0" rotZ="172"></start>
+    <track id="track (221)" name="Octane Springs Railroad" posX="746.20001" posY="1428.8" posZ="19.9" rotX="0" rotY="0" rotZ="0"></track>
+    <start id="start (222)" posX="1098" posY="1377.2" posZ="11.8" rotX="0" rotY="0" rotZ="0"></start>
+    <track id="track (222)" name="Blackfield Stadium Upper" posX="1091.1" posY="1385.4" posZ="11.5" rotX="0" rotY="0" rotZ="0"></track>
+    <finish id="finish (222)" size="6" posX="1097.7" posY="1703.9" posZ="11.4" rotX="0" rotY="0" rotZ="0"></finish>
+    <start id="start (223)" posX="1131.59998" posY="1529.59998" posZ="53.5" rotX="0" rotY="0" rotZ="90"></start>
+    <finish id="finish (223)" size="6" posX="803" posY="1516.1" posZ="16.7" rotX="0" rotY="0" rotZ="0"></finish>
+    <track id="track (223)" name="Blackfield Stadium Roof" posX="1127.2" posY="1541.9" posZ="52.2" rotX="0" rotY="0" rotZ="0"></track>
+    <start id="start (224)" posX="1026.4" posY="1359.9" posZ="11.9" rotX="0" rotY="0" rotZ="0"></start>
+    <track id="track (224)" name="Blackfield Stadium Lower" posX="1035.1" posY="1360.9" posZ="11.5" rotX="0" rotY="0" rotZ="0"></track>
+    <finish id="finish (224)" size="6" posX="1130.6" posY="1686.8" posZ="7.4" rotX="0" rotY="0" rotZ="0"></finish>
+    <start id="start (225)" posX="1090.8" posY="1236.6" posZ="11.9" rotX="0" rotY="0" rotZ="0"></start>
+    <track id="track (225)" name="Around Bike School" posX="1096.1" posY="1225.1" posZ="11.5" rotX="0" rotY="0" rotZ="0"></track>
+    <finish id="finish (225)" size="6" posX="1133.2" posY="1193.2" posZ="9.7" rotX="0" rotY="0" rotZ="0"></finish>
+    <start id="start (226)" posX="1165.4" posY="1230.8" posZ="11.9" rotX="0" rotY="0" rotZ="180"></start>
+    <finish id="finish (226)" size="6" posX="1141.6" posY="1357.1" posZ="9.9" rotX="0" rotY="0" rotZ="0"></finish>
+    <track id="track (226)" name="Inside Bike School" posX="1156.5" posY="1224.4" posZ="11.5" rotX="0" rotY="0" rotZ="0"></track>
+    <start id="start (227)" posX="1072.8" posY="1800.4" posZ="11.9" rotX="0" rotY="0" rotZ="170"></start>
+    <track id="track (227)" name="Blackfield Stadium Parking Lot" posX="1081.1" posY="1801.8" posZ="11.9" rotX="0" rotY="0" rotZ="0"></track>
+    <finish id="finish (227)" size="6" posX="1027.4" posY="1165.4" posZ="9.7" rotX="0" rotY="0" rotZ="0"></finish>
+    <start id="start (228)" posX="989.90002" posY="1058.5" posZ="49.2" rotX="0" rotY="0" rotZ="180"></start>
+    <track id="track (228)" name="Greenglass College Roof" posX="1000.4" posY="1065.4" posZ="48.8" rotX="0" rotY="0" rotZ="0"></track>
+    <finish id="finish (228)" size="6" posX="1128.5" posY="993.90002" posZ="26" rotX="0" rotY="0" rotZ="0"></finish>
+    <start id="start (229)" posX="1147.8" posY="1116.7" posZ="12.1" rotX="0" rotY="0" rotZ="126"></start>
+    <track id="track (229)" name="Greenglass College Yard" posX="1139.6" posY="1120.3" posZ="11.7" rotX="0" rotY="0" rotZ="0"></track>
+    <finish id="finish (229)" size="6" posX="1033.5" posY="1031.7" posZ="10" rotX="0" rotY="0" rotZ="0"></finish>
+    <start id="start (230)" posX="1208.1" posY="1089.2" posZ="7.9" rotX="0" rotY="0" rotZ="90"></start>
+    <track id="track (230)" name="Across Greenglass College" posX="1216.1" posY="1080.2" posZ="7.5" rotX="0" rotY="0" rotZ="0"></track>
+    <finish id="finish (230)" size="6" posX="939.79999" posY="1066.9" posZ="9.8" rotX="0" rotY="0" rotZ="0"></finish>
+    <start id="start (231)" posX="407" posY="765.90002" posZ="7.1" rotX="0" rotY="0" rotZ="250"></start>
+    <finish id="finish (231)" size="6" posX="1217.5" posY="1703.9" posZ="6" rotX="0" rotY="0" rotZ="0"></finish>
+    <track id="track (231)" name="Around Quarry And Greenglass College" posX="420.10001" posY="771.79999" posZ="6.6" rotX="0" rotY="0" rotZ="0"></track>
+    <start id="start (232)" posX="-2691.3999" posY="2179.3" posZ="56.5" rotX="0" rotY="0" rotZ="10"></start>
+    <track id="track (232)" name="Enter Bayside" posX="-2701.8" posY="2174.8" posZ="57.7" rotX="0" rotY="0" rotZ="0"></track>
+    <finish id="finish (232)" size="6" posX="-2234.3" posY="2294.8999" posZ="4.4" rotX="0" rotY="0" rotZ="0"></finish>
+    <start id="start (233)" posX="-1781.5" posY="1293.2" posZ="60.8" rotX="0" rotY="0" rotZ="80"></start>
+    <track id="track (233)" name="Esplanade North Parking Garage" posX="-1774.8" posY="1297.4" posZ="63.2" rotX="0" rotY="0" rotZ="0"></track>
+    <finish id="finish (233)" size="6" posX="-1980.7" posY="1335.6" posZ="6.2" rotX="0" rotY="0" rotZ="0"></finish>
+    <start id="start (234)" posX="-1677.7" posY="1325.4" posZ="8.3" rotX="0" rotY="0" rotZ="130"></start>
+    <finish id="finish (234)" size="6" posX="-2340.6001" posY="668.70001" posZ="37.2" rotX="0" rotY="0" rotZ="0"></finish>
+    <track id="track (234)" name="From Pier 69" posX="-1675.1" posY="1334.4" posZ="7.9" rotX="0" rotY="0" rotZ="0"></track>
+    <start id="start (235)" posX="-2053.5" posY="1205.8" posZ="81.9" rotX="0" rotY="0" rotZ="270"></start>
+    <track id="track (235)" name="Esplanade South Roof Jumps" posX="-2057" posY="1213.8" posZ="81.4" rotX="0" rotY="0" rotZ="0"></track>
+    <finish id="finish (235)" size="6" posX="-1775.5" posY="1202.9" posZ="24.2" rotX="0" rotY="0" rotZ="0"></finish>
+    <start id="start (236)" posX="-1894.2" posY="-1769" posZ="30.4" rotX="0" rotY="0" rotZ="120"></start>
+    <track id="track (236)" name="Around Mt Chilliad" posX="-1899.1" posY="-1761.4" posZ="30.3" rotX="0" rotY="0" rotZ="0"></track>
+    <finish id="finish (236)" size="6" posX="-2911.2" posY="-1416.3" posZ="10.4" rotX="0" rotY="0" rotZ="0"></finish>
+    <finish id="finish (237)" size="6" posX="1093.3" posY="-639" posZ="111.7" rotX="0" rotY="0" rotZ="0"></finish>
+    <start id="start (237)" posX="116.9" posY="-1537.5" posZ="8.5" rotX="0" rotY="0" rotZ="62"></start>
+    <track id="track (237)" name="Through Richman" posX="104.4" posY="-1540.9" posZ="7.4" rotX="0" rotY="0" rotZ="0"></track>
+    <start id="start (238)" posX="2413.8999" posY="-1851" posZ="2.5" rotX="0" rotY="0" rotZ="90"></start>
+    <finish id="finish (238)" size="6" posX="2256.7" posY="-2201.3999" posZ="11.2" rotX="0" rotY="0" rotZ="0"></finish>
+    <track id="track (238)" name="Storm Drain Acute" posX="2405.5" posY="-1865.1" posZ="2.1" rotX="0" rotY="0" rotZ="0"></track>
+    <start id="start (239)" posX="2147.3999" posY="2785.8" posZ="11.9" rotX="0" rotY="0" rotZ="180"></start>
+    <finish id="finish (239)" size="6" posX="1246.7" posY="2634.1001" posZ="10.1" rotX="0" rotY="0" rotZ="0"></finish>
+    <track id="track (239)" name="Spinybed Burger Shot" posX="2139.5" posY="2786" posZ="11.5" rotX="0" rotY="0" rotZ="0"></track>
 </map>
