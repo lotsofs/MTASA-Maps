@@ -1,13 +1,12 @@
 SELECTED_CARS = {}
-SELECTED_TRACKS = {}
+SELECTED_TRACK_INDICES = {}
 
 BLIPS = {}
-CHECKPOINTS = {}
+CHECKPOINT_MARKERS = {}
 
-PLAYER_PROGRESS = {}
 PLAYER_SELECTIONS = {}
-PLAYER_TRANSITIONING = {}
-PLAYER_PREPARED = {}
+PLAYER_FAILSAFETIMERS = {}
+PLAYER_FAILSAFETIMERCOUNTERS = {}
 
 COLORS = {
 	{math.random(0, 255), math.random(0, 255), math.random(0, 255)},
@@ -33,68 +32,80 @@ COLORS = {
 	{math.random(0, 255), math.random(0, 255), math.random(0, 255)},
 }
 
-FINISHES = {}
-TRACKS = {}
-STARTS = {}
+FINISHES = getElementsByType("finish")
+TRACKS = getElementsByType("track")
+STARTS = getElementsByType("start")
 
 RACE_CPS = getElementsByType("checkpoint")
 COL_SHAPES = {}
 
 STAGES = 10
-MAP_STAGE = 0
+MAP_STAGE = "pregrid" --0 = before grid countdown. 1 = setup. 2 = race
 
 ----------------------------- Start of the race ---------------------------
 
-function startGame(newState, oldState)
-	if (newState ~= "GridCountdown") then
-		return
+addEventHandler("onResourceStop", resourceRoot,
+	function(resource)
+		for i, player in pairs(getElementsByType("player")) do
+			setElementData(player, "strategizer.progress", 0)
+			setElementData(player, "strategizer.state", "none") 
+			setElementData(player, "strategizer.failsafetimer", "0") 
+			-- none, setup, setupend, racestart, racing, fadeout, fadein, finished
+		end
 	end
-	MAP_STAGE = 1
+)
+
+function startGame()
+	MAP_STAGE = "setup"
 	shuffleTracksAll()
 	shuffleCarsAll()
-	for i, v in pairs(getElementsByType("player")) do
-		PLAYER_PREPARED[v] = true
-		triggerClientEvent(v, "onCarSelectionFinished", resourceRoot, SELECTED_CARS, SELECTED_TRACKS, COLORS)
+	for i, player in pairs(getElementsByType("player")) do
+		setElementData(player, "strategizer.progress", 0)
+		setElementData(player, "strategizer.state", "setup")
+		triggerClientEvent(player, "onCarSelectionFinished", resourceRoot, SELECTED_CARS, SELECTED_TRACK_INDICES, COLORS)
 	end
-	FINISHES = getElementsByType("finish")
-	TRACKS = getElementsByType("track")
-	STARTS = getElementsByType("start")
 	displayTracks()
 end
 addEvent("onRaceStateChanging", true)
-addEventHandler("onRaceStateChanging", root, startGame)
+addEventHandler("onRaceStateChanging", root, 
+	function(newState, oldState)
+		if (newState == "GridCountdown") then
+			startGame()
+		end
+	end
+)
 
 function shuffleTracksAll()
 	TRACKS = getElementsByType("track")
-	indices = {}
+	local indices = {}
 	for i = 1, #TRACKS, 1 do
 		indices[i] = i
 	end
 
-	shuffledIndices = {}
+	local shuffledIndices = {}
 	for i = #indices, 1, -1 do
 		randomIndex = math.random(1,i)
 		shuffledIndices[i] = indices[randomIndex]
 		table.remove(indices, randomIndex)
 	end
 	for i = 1, STAGES, 1 do
-		SELECTED_TRACKS[i] = shuffledIndices[i]
+		SELECTED_TRACK_INDICES[i] = shuffledIndices[i]
 	end
 
 	-- -- temporary code to disable shuffling
-	-- STARTAT = 195
+	-- STARTAT = 235
 	-- for i = STARTAT, STAGES + STARTAT - 1, 1 do
 	-- 	j = i - STARTAT + 1
 	-- 	if i <= #indices then
-	-- 		SELECTED_TRACKS[j] = indices[i]
+	-- 		SELECTED_TRACK_INDICES[j] = indices[i]
 	-- 	else
-	-- 		SELECTED_TRACKS[j] = indices[i - #indices]
+	-- 		SELECTED_TRACK_INDICES[j] = indices[i - #indices]
 	-- 	end
 	-- end
 end
 
 function shuffleCarsAll()
-	suitableCars = { 413, 418, 440, 459, 482, 483, 508, 582,
+	local suitableCars = { 413, 418, 440, 459, 482, 483, 508, 582,
 		414, 422, 428, 456, 478, 499, 543, 554, 600, 609,
 		403, 406, 408, 443, 455, 486, 514, 515, 524, 525, 530, 552, 573, 574, 578,
 		407, 416, 427, 432, 433, 490, 528, 544, 596, 597, 598, 599, 601,
@@ -109,7 +120,7 @@ function shuffleCarsAll()
 		509, 481, 510,
 		605, 604, 594
 	}
-	shuffledCars = {}
+	local shuffledCars = {}
 	for i = #suitableCars, 1, -1 do
 		randomIndex = math.random(1,i)
 		shuffledCars[i] = suitableCars[randomIndex]
@@ -121,215 +132,321 @@ function shuffleCarsAll()
 end
 
 function displayTracks()
-	for i, v in pairs(SELECTED_TRACKS) do
-		x, y, z = getElementPosition(FINISHES[v])
-		size = getElementData(FINISHES[v], "size") or 6
-		table.insert(CHECKPOINTS, createMarker(x, y, z, "checkpoint", 6, COLORS[i][1], COLORS[i][2], COLORS[i][3]))
-		table.insert(BLIPS, createBlip(x, y, z, 0, 8, COLORS[i][1], COLORS[i][2], COLORS[i][3], 255, 0, 1000))
-		table.insert(BLIPS, createBlip(620.5, -2371.4, 3, 31, 1, COLORS[i][1], COLORS[i][2], COLORS[i][3], 255, 0))
+	for i, v in pairs(SELECTED_TRACK_INDICES) do
+		local r, g, b = unpack(COLORS[i])
+		
+		-- display the checkpoint markers and put a blip on them
+		local x, y, z = getElementPosition(FINISHES[v])
+		local size = getElementData(FINISHES[v], "size") or 6
 
+		table.insert(CHECKPOINT_MARKERS, createMarker(x, y, z, "checkpoint", 6, r, g, b))
+		table.insert(BLIPS, createBlip(x, y, z, 0, 8, r, g, b, 255, 0, 1000))
+
+		-- place the lighthouse beacons
 		x, y, z = getElementPosition(TRACKS[v])
 		object = createObject(6295, x, y + 0.175, z - 1)
 		setObjectScale(object, 0.1)
 		setElementCollisionsEnabled(object, false)
-		createMarker(x, y, z + 1.1, "corona", 1.5, COLORS[i][1], COLORS[i][2], COLORS[i][3])
+		createMarker(x, y, z + 1.1, "corona", 1.5, r, g, b) -- glow
 
+		-- put a blip on the spawn (start position) of the track
 		x, y, z = getElementPosition(STARTS[v])
-		table.insert(BLIPS, createBlip(x, y, z, 0, 4, COLORS[i][1], COLORS[i][2], COLORS[i][3], 255, 0, 1000))
+		table.insert(BLIPS, createBlip(x, y, z, 0, 4, r, g, b, 255, 0, 1000))
 	end
 end
 
-function changeCar(model, r, g, b, r2, g2, b2)
-	vehicle = getPedOccupiedVehicle(client)
-	setElementModel(vehicle, model)
-	setVehicleColor(vehicle, r, g, b, r2, g2, b2)
-end
-addEvent("changeCar", true)
-addEventHandler("changeCar", root, changeCar)
+----------------------------- Misc (TODO: Different file?) ---------------------------
 
------------------------------ Post Setup ---------------------------
+addEvent("onClientCarChange", true)
+addEventHandler("onClientCarChange", root, 
+	function (model, r, g, b, r2, g2, b2)
+		local vehicle = getPedOccupiedVehicle(client)
+		setElementModel(vehicle, model)
+		setVehicleColor(vehicle, r, g, b, r2, g2, b2)
+	end
+)
+
+function getPosAndRotData(element)
+	local x = getElementData(element, "posX")
+	local y = getElementData(element, "posY")
+	local z = getElementData(element, "posZ")
+	local rX = getElementData(element, "rotX")
+	local rY = getElementData(element, "rotY")
+	local rZ = getElementData(element, "rotZ")
+	return x, y, z, rX, rY, rZ
+end
+
+----------------------------- Setup To Race Transition ---------------------------
 
 function finishSetup()
-	createMarker(613, -2377, 9, "corona", size, 255, 255, 255, 127)
-	MAP_STAGE = 2
-	for i, v in pairs(BLIPS) do
-		destroyElement(v)
-	end
-	for i, v in pairs(CHECKPOINTS) do
-		r, g, b = getMarkerColor(v)
-		setMarkerColor(v, r, g, b ,0)
-		setMarkerType(v, "cylinder")
-		x, y, z = getElementPosition(v)
-		size = getMarkerSize(v)
-		table.insert(COL_SHAPES, createColCircle(x, y, size + 2))
-		-- destroyElement(v)
-	end
-	for i, v in pairs(getElementsByType("player")) do
-		PLAYER_TRANSITIONING[v] = 1
-		triggerClientEvent(v, "onSetupFinished", resourceRoot)
+	MAP_STAGE = "race"
+	-- get rid of ALL The blips on the minimap
+	for i, blip in pairs(BLIPS) do
+		destroyElement(blip)
 	end
 
-	-- start the race at the same time for all
+	-- place an (invisible) hitbox on each checkpoint, and make all the markers invisible
+	for i, check in pairs(CHECKPOINT_MARKERS) do
+		local r, g, b = getMarkerColor(check)
+		setMarkerColor(check, r, g, b ,0)
+		setMarkerType(check, "cylinder")
+		local x, y, z = getElementPosition(check)
+		size = getMarkerSize(check)
+		table.insert(COL_SHAPES, createColCircle(x, y, size + 2))
+	end
+	
+	-- tell every player that setup has ended, make them compile a list and send it back to us.
+	-- This will be received in receiveClientCarList(), which will teleport players to the start after 2 seconds
+	for i, player in pairs(getElementsByType("player")) do
+		setElementData(player, "strategizer.state", "setupend")
+		triggerClientEvent(player, "onSetupFinished", resourceRoot)
+	end
+
+	-- after 4 seconds, unfreeze every player (they'll have teleported by then)
 	setTimer ( function()
-		for i, v in pairs(getElementsByType("player")) do
-			PLAYER_TRANSITIONING[v] = 2
-			setElementCollisionsEnabled(getPedOccupiedVehicle(v), true)
-			setElementFrozen(getPedOccupiedVehicle(v), false)
+		for i, player in pairs(getElementsByType("player")) do
+			vehicle = getPedOccupiedVehicle(player)
+			setElementData(player, "strategizer.state", "racestart")
+			setElementCollisionsEnabled(vehicle, true)
+			setElementFrozen(vehicle, false)
 		end
-	end, 4000, 1, client)
+	end, 4000, 1)
+	-- after 6 seconds, start the race for everyone
 	setTimer ( function()
-		for i, v in pairs(getElementsByType("player")) do
-			PLAYER_TRANSITIONING[v] = 0
-			toggleAllControls(v, true)
-			triggerClientEvent(v, "playGoSound", resourceRoot)
+		for i, player in pairs(getElementsByType("player")) do
+			setElementData(player, "strategizer.state", "racing")
+			toggleAllControls(player, true)
+			triggerClientEvent(player, "playGoSound", resourceRoot)
 		end
-	end, 6000, 1, client)
+	end, 6000, 1)
 end
 bindKey(getElementsByType("player")[1], "H", "down", finishSetup)
 
-function transferCarList(cars)
+function receiveClientCarList(cars)
+	-- received car list
 	PLAYER_SELECTIONS[client] = cars
-	PLAYER_PROGRESS[client] = 1
+	--  set progress
+	setElementData(client, "strategizer.progress", 1)
+	-- disable movement, and fade to black
 	toggleAllControls(client, false, true, false)
 	triggerClientEvent(client, "checkpointFade", resourceRoot)
+	-- after 2 seconds, teleport player to start and fade back in
 	setTimer ( function(player)
 		triggerClientEvent(player, "fadeIn", resourceRoot)
 		setElementFrozen(getPedOccupiedVehicle(player), true)
-		teleportToNext(player)
+		teleportPlayerToStart(player)
 	end, 2000, 1, client)
 end
 addEvent("transferCarList", true)
-addEventHandler("transferCarList", root, transferCarList)
+addEventHandler("transferCarList", root, receiveClientCarList)
+
+----------------------------- Player Race Teleportation ---------------------------
 
 
-function teleportToNext(player)
-	-- get our destination
-	destination = STARTS[SELECTED_TRACKS[PLAYER_PROGRESS[player]]]
-	x = getElementData(destination, "posX")
-	y = getElementData(destination, "posY")
-	z = getElementData(destination, "posZ")
-	rX = getElementData(destination, "rotX")
-	rY = getElementData(destination, "rotY")
-	rZ = getElementData(destination, "rotZ")
-	-- get the vehicle for our destination
-	model = PLAYER_SELECTIONS[player][PLAYER_PROGRESS[player]]
-	-- go there
-	vehicle = getPedOccupiedVehicle(player)
-	setElementModel(vehicle, model)
+function teleportPlayerToStart(player)
+	local model = PLAYER_SELECTIONS[player][1]
+	local track = SELECTED_TRACK_INDICES[1]
+	teleportPlayerToTrack(player, track, model)
+	enableNextCheckpoint(player, 1)
+end
+
+function teleportPlayerToNextTrack(player)
+	local playerProgress = getElementData(player, "strategizer.progress")
+	local nextTrack = SELECTED_TRACK_INDICES[playerProgress]
+	local model = PLAYER_SELECTIONS[player][playerProgress]
+	teleportPlayerToTrack(player, nextTrack, model)
+end
+
+function teleportPlayerToTrack(player, trackNo, carModel)
+	local destination = STARTS[trackNo]
+	local x, y, z, rX, rY, rZ = getPosAndRotData(destination)
+	local vehicle = getPedOccupiedVehicle(player)
+	setElementModel(vehicle, carModel)
 	setElementPosition(vehicle, x, y, z)
 	setElementRotation(vehicle, rX, rY, rZ)
 	fixVehicle(vehicle)
-	enableNextCheckpoint(player)
 end
 
 function teleportToFinish(player)
-	vehicle = getPedOccupiedVehicle(player)
+	local vehicle = getPedOccupiedVehicle(player)
 	setElementPosition(vehicle, 613, -2377, 9)
 end
 
 function respawnDuringRace(theVehicle, seat, jacked)
 	-- do nothing at the start of the map
-	if (MAP_STAGE == 0) then
+	if (MAP_STAGE == "pregrid") then
 		return
 	end
-	-- 
-	if (PLAYER_PREPARED[source] == nil) then
-		-- newly connected
-		PLAYER_PREPARED[source] = true
-		triggerClientEvent(source, "onCarSelectionFinished", resourceRoot, SELECTED_CARS, SELECTED_TRACKS, COLORS)
-		if (MAP_STAGE == 2) then
-			PLAYER_TRANSITIONING[source] = 0
+	
+	-- if the player just joined
+	if (getElementData(source, "strategizer.state") == false) then
+		-- give them all the information that was generated at the start of the map
+		setElementData(source, "strategizer.state", "setup")
+		triggerClientEvent(source, "onCarSelectionFinished", resourceRoot, SELECTED_CARS, SELECTED_TRACK_INDICES, COLORS)
+		-- if the race is already ongoing, put them in
+		if (MAP_STAGE == "race") then
+			setElementData(source, "strategizer.state", "racing")
 			triggerClientEvent(source, "onSetupFinished", resourceRoot)
 		end
 		return
-	end
-	if (MAP_STAGE == 1) then
+	end	
+
+
+	-- ??????????
+	if (MAP_STAGE == "setup") then
 		triggerClientEvent(source, "respawn", resourceRoot)
 		return
 	end
-	if (PLAYER_PROGRESS[source] >= STAGES) then
+	
+	-- if the player has already finished
+	local progress = getElementData(source, "strategizer.progress")
+	if (progress > STAGES) then
 		return
 	end
-	if (PLAYER_TRANSITIONING[source] == 1) then
+
+	local playerState = getElementData(source, "strategizer.state")
+	-- player died after grabbing CP but before being teleported to the next track
+	if (playerState == "fadeout") then
+		-- the race respawn reenables player's control, so disable it again
 		toggleAllControls(source, false, true, false)
+		-- When race mode unfreezes the player after respawn, they also give them controls back. Disable it once more
 		setTimer ( function(player)
 			toggleAllControls(player, false, true, false)
 		end, 2000, 1, source)
+		iprint(source)
+		iprint("respawning during fadeout")
+		teleportPlayerToNextTrack(source)
 	else
-		setElementVelocity(getPedOccupiedVehicle(source), 0, 0, 0)
-		teleportToNext(source)
+		teleportPlayerToNextTrack(source)
 	end
 end
 addEventHandler("onPlayerVehicleEnter", root, respawnDuringRace)
 
-function enableNextCheckpoint(player)
-	-- get our destination
-	progress = PLAYER_PROGRESS[player]
-	destination = CHECKPOINTS[progress]
-	x, y, z = getElementPosition(destination)
-	size = getMarkerSize(destination)
-	r, g, b = getMarkerColor(destination)
-	triggerClientEvent(player, "makeCheckpointVisible", resourceRoot, x,y,z,size,r,g,b)
-end
-
-
-
------------------------------ Hitting a marker ---------------------------
-
-
-function teleportToRaceCp(player)
-	vehicle = getPedOccupiedVehicle(player)
-	setElementVelocity(vehicle, 0 ,0,0)
-	for i = 1, PLAYER_PROGRESS[player] - 1, 1 do
-		x,y,z = getElementPosition(RACE_CPS[i])
-		setElementPosition(vehicle, x, y, z)
-	end
-end
+----------------------------- CLEAN UP EVERYTHING BELOW ---------------------------
 
 function checkpointHit(player, matchingDimension)
-	if (getElementType(player) ~= "player") then
-		return
-	end
-	x, y, z = getElementPosition(player)
-	if (z > 10000) then
-		return
-	end
+	-- figure out which checkpoint it is we just hit
 	for i, v in pairs(COL_SHAPES) do
 		if v == source then
-			if i == PLAYER_PROGRESS[player] then
-				PLAYER_TRANSITIONING[player] = 1
-				PLAYER_PROGRESS[player] = PLAYER_PROGRESS[player] + 1
-				toggleAllControls(player, false, true, false)
-				triggerClientEvent(player, "checkpointFade", resourceRoot)
-				setTimer ( function(player)
-					triggerClientEvent(player, "dumpSpeed", resourceRoot, PLAYER_PROGRESS[player] - 1)
-					setElementFrozen(getPedOccupiedVehicle(player), true)
-					teleportToRaceCp(player)
-				end, 2000, 1, player)
+			if (source == COL_SHAPES[10]) then
+				outputChatBox("TODO: Do something else when you finish the race than just transitioning")
+			end
+			if i == getElementData(player, "strategizer.progress") then
+				-- start the transition for the player
+				transitionPlayer(player)
+				return
 			end
 		end
 	end
 end
-addEventHandler("onColShapeHit", resourceRoot, checkpointHit)
-
-function grabCheckpoint(checkpoint, time_)
-	if (checkpoint < PLAYER_PROGRESS[source] - 1) then
-		teleportToRaceCp(source)
-	elseif (checkpoint < STAGES) then
-		PLAYER_TRANSITIONING[source] = 2
-		toggleAllControls(source, false, true, false)
-		teleportToNext(source)
-		triggerClientEvent(source, "fadeIn", resourceRoot)
-		setElementCollisionsEnabled(getPedOccupiedVehicle(source), true)
-		setElementFrozen(getPedOccupiedVehicle(source), false)
-		setTimer ( function(player)
-			PLAYER_TRANSITIONING[player] = 0
-			toggleAllControls(player, true)
-			triggerClientEvent(player, "playGoSound", resourceRoot)
-		end, 2000, 1, source)
+addEventHandler("onColShapeHit", resourceRoot, 
+	function(player, matchingDimension) 
+		-- only check players
+		if (getElementType(player) ~= "player") then
+			return
+		end
+		-- spectators are really high in the sky
+		local x, y, z = getElementPosition(player)
+		if (z > 10000) then
+			return
+		end
+		checkpointHit(player)
 	end
+)
+
+function transitionPlayer(player)
+	-- transition player out
+	setElementData(player, "strategizer.state", "fadeout")
+	toggleAllControls(player, false, true, false)
+	triggerClientEvent(player, "checkpointFade", resourceRoot)
+	
+	setTimer ( function(player)
+		local progress = getElementData(player, "strategizer.progress")
+		-- I dont want to do all this on the server, but race conditions :)
+		local vehicle = getPedOccupiedVehicle(player)
+		local matrix = getElementMatrix(vehicle)
+		local velocity = getElementVelocity(vehicle)
+		local angularVelocity = getElementAngularVelocity(vehicle)
+		-- Store these values on the client side so they can get a cool cinematic at the end
+		-- triggerClientEvent(player, "onCheckpointTransition", matrix, velocity, angularVelocity)
+		triggerClientEvent(player, "dumpSpeed", resourceRoot, progress)
+		-- freeze the player
+		setElementVelocity(vehicle, 0 ,0,0)
+		setElementAngularVelocity(vehicle, 0, 0 ,0)
+		setElementFrozen(getPedOccupiedVehicle(player), true)
+		cpNo = getElementData(player, "race.checkpoint")
+		for i = cpNo, progress do
+			teleportPlayerToRaceCp(player, i)
+		end
+		-- setElementData(player, "strategizer.progress", i + 1)
+	end, 2000, 1, player)
+	-- failsafe in case the player dies at an unfortuante moment in the transition
+	local progress = getElementData(player, "strategizer.progress")
+	PLAYER_FAILSAFETIMERCOUNTERS[player] = 0
+	PLAYER_FAILSAFETIMERS[player] = setTimer ( function(player, oldProgress)
+		PLAYER_FAILSAFETIMERCOUNTERS[player] = PLAYER_FAILSAFETIMERCOUNTERS[player] + 1
+		-- dont do anything before 5 half seconds have passed
+		if (PLAYER_FAILSAFETIMERCOUNTERS[player] < 5) then
+			return
+		end
+		-- if the player is still in fadeout (probably, otherwise this timer would've been killed already)
+		if getElementData(player, "strategizer.state") == "fadeout" then
+			local progress = getElementData(player, "strategizer.progress")
+			-- spam chat :)
+			local name = getPlayerName(player)
+			outputChatBox(name .. " has encountered a big fat error! Arguments: " .. progress .. " " .. oldProgress .. " " .. PLAYER_FAILSAFETIMERCOUNTERS[player], root, 227, 20, 32)
+			-- do the teleport again
+			cpNo = getElementData(player, "race.checkpoint")
+			for i = cpNo, progress do
+				teleportPlayerToRaceCp(player, i)
+			end
+		end
+	end, 500, 0, player, progress)
 end
-addEventHandler("onPlayerReachCheckpoint", getRootElement(), grabCheckpoint)
+
+function teleportPlayerToRaceCp(player, cp)
+	local vehicle = getPedOccupiedVehicle(player)
+	local x,y,z = getElementPosition(RACE_CPS[cp])
+	setElementPosition(vehicle,x,y,z)
+end
+
+function freePlayerControls(player)
+	toggleAllControls(player, true)
+	setElementCollisionsEnabled(getPedOccupiedVehicle(player), true)
+	setElementFrozen(getPedOccupiedVehicle(player), false)
+end
+
+addEventHandler("onPlayerReachCheckpoint", root, 
+	function(checkpoint, time_)
+		-- ignore CPs the player already got
+		if (checkpoint == getElementData(source, "strategizer.progress")) then
+			-- Kill failsafe timers
+			-- PLAYER_FAILSAFETIMERCOUNTERS[player] = 0
+			killTimer(PLAYER_FAILSAFETIMERS[source])
+			-- Increment player progress
+			progress = getElementData(source, "strategizer.progress")
+			progress = progress + 1
+			setElementData(source, "strategizer.progress", progress)
+			-- Ensure the player can't move
+			toggleAllControls(source, false, true, false)
+			-- Ensure the player's car's physics are preserved
+			setElementFrozen(getPedOccupiedVehicle(source), false)
+			setElementCollisionsEnabled(getPedOccupiedVehicle(source), true)
+			-- Teleport player to next track
+			teleportPlayerToNextTrack(source)
+			enableNextCheckpoint(source, checkpoint + 1)	-- shouldnt be needed later TODO:
+			-- Tell the client to fade back in
+			triggerClientEvent(source, "fadeIn", resourceRoot)
+			setElementData(source, "strategizer.state", "fadein")
+			-- After two seconds, the player can go again!
+			setTimer ( function(player)
+				setElementData(player, "strategizer.state", "racing")
+				freePlayerControls(player)
+				triggerClientEvent(player, "playGoSound", resourceRoot)
+			end, 2000, 1, source)
+		end
+	end
+)
 
 
 function finish(rank, _time)
@@ -337,8 +454,20 @@ function finish(rank, _time)
 	triggerClientEvent(source, "fadeIn", resourceRoot)
 	setElementCollisionsEnabled(getPedOccupiedVehicle(source), true)
 	setElementFrozen(getPedOccupiedVehicle(source), false)
-	PLAYER_TRANSITIONING[source] = 2
+	setElementData(source, "strategizer.state", "finished")
 	teleportToFinish(source)
 	triggerClientEvent(source, "spectacularFinish", resourceRoot)
 end
 addEventHandler("onPlayerFinish", getRootElement(), finish)
+
+-- ??????? honestly what the fuck? Just fetch all this information client side (it should already have it) 
+-- rather than passing it along for the bazillionth time. Just do the triggerclientevent thing without all the junk
+function enableNextCheckpoint(player, progress)
+	-- progress = getElementData(player, "strategizer.progress")
+	local destination = CHECKPOINT_MARKERS[progress]
+	local x, y, z = getElementPosition(destination)
+	local size = getMarkerSize(destination)
+	local r, g, b = getMarkerColor(destination)
+
+	triggerClientEvent(player, "makeCheckpointVisible", resourceRoot, x,y,z,size,r,g,b)
+end
