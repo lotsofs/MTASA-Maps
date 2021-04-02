@@ -1,15 +1,20 @@
 spawners = getElementsByType("vehicleSpawner")
 starts = getElementsByType("start")
+finishes = getElementsByType("finish")
 tracks = getElementsByType("track")
 
 selectedCars = {}
 currentCar = 0
 spawnedCars = {}
+sortedCars = {}
+sortedCarsDistance = {}
+unassignedCars = {}
 
 assignedCarColors = {}
 carBlips = {}
 
 selectedTracks = {}
+selectedTrackNames = {}
 currentTrack = 0
 
 colors = {}
@@ -19,24 +24,58 @@ currentBlip = nil
 
 isSetup = false
 
-function onSetupFinished()
+radarArea = createRadarArea(150, -2850, 700, 700, 115, 138, 173, 64)
+
+function calculateCarAssignment(sortUnassigned) 
+	unassignedCars = {}
 	sortedCars = {}
-	for i, tr in pairs(selectedTracks) do
-		x1, y1, z1 = getElementPosition(tracks[tr])
-		distanceOld = 99999
+	for i, car in pairs(selectedCars) do
+		local x1, y1, z1 = getElementPosition(spawnedCars[i])
+		local distanceOld = 99999
 		chosenIndex = 0
-		for j, ca in pairs(spawnedCars) do
-			x2, y2, z2 = getElementPosition(ca)
-			distanceNew = getDistanceBetweenPoints3D(x1, y1, z1, x2, y2, z2)
-			if (distanceNew < distanceOld) then
-				chosenIndex = j
-				distanceOld = distanceNew
+		if (isInsideRadarArea(radarArea, x1, y1) == false) then
+			for j, tr in pairs(selectedTracks) do
+				x2, y2, z2 = getElementPosition(tracks[tr])
+				distanceNew = getDistanceBetweenPoints3D(x1, y1, z1, x2, y2, z2)
+				if (distanceNew < distanceOld) then
+					chosenIndex = j
+					distanceOld = distanceNew
+				end
 			end
+			if (sortedCars[chosenIndex] ~= nil) then
+				if (sortedCarsDistance[chosenIndex] > distanceOld) then
+					table.insert(unassignedCars, sortedCars[chosenIndex])
+					sortedCars[chosenIndex] = car
+					sortedCarsDistance[chosenIndex] = distanceOld
+				else
+					table.insert(unassignedCars, car)
+				end
+			else
+				sortedCars[chosenIndex] = car
+				sortedCarsDistance[chosenIndex] = distanceOld
+			end
+		else
+			table.insert(unassignedCars, car)
 		end
-		table.insert(sortedCars, getElementModel(spawnedCars[chosenIndex]))
-		destroyElement(spawnedCars[chosenIndex])
-		table.remove(spawnedCars, chosenIndex)
 	end
+	if (sortUnassigned == false or sortUnassigned == nil) then
+		return
+	end
+	j = 1
+	for i = 1, 10 do
+		if (sortedCars[i] == nil) then
+			sortedCars[i] = unassignedCars[j]
+			j = j + 1
+		end
+	end
+end
+
+function onSetupFinished()
+	calculateCarAssignment(true)
+	for i, sc in pairs(spawnedCars) do
+		destroyElement(sc)
+	end
+
 	isSetup = false
 	for i, v in pairs(carBlips) do
 		destroyElement(v)
@@ -46,7 +85,6 @@ end
 
 addEvent("onSetupFinished", true)
 addEventHandler("onSetupFinished", resourceRoot, onSetupFinished)
-
 
 function makeCheckpointVisible(x,y,z,size,r,g,b)
 	if (currentCp) then 
@@ -78,6 +116,7 @@ addEvent("dumpSpeed", true)
 addEventHandler("dumpSpeed", resourceRoot, dumpSpeed)
 
 function spectacularFinish()
+	createMarker(613, -2377, 9, "corona", size, 255, 255, 255, 127)
 	for i = 1, 9 do
 		setTimer(function(index)
 			vehicle = createVehicle(sortedCars[index], 613, -2377, 9, unpack(rotations[index]))
@@ -132,17 +171,27 @@ addEventHandler("checkpointFade", resourceRoot, checkpointFade)
 
 ------------------------------------------ setup stage ------------------------------
 
-function onCarSelectionFinished(cars, tracks, col)
-	selectedCars = cars
-	selectedTracks = tracks
+function onCarSelectionFinished(c, t, col)
+	selectedCars = c
+	selectedTracks = t
+	for i, track in pairs(selectedTracks) do
+		local name = getElementData(tracks[track], "name")
+		if (name == nil or name == "" or name == " ") then
+			name = getElementID(selectedTracks[track])
+		end
+		local x1, y1, z1 = getElementPosition(starts[track])
+		local x2, y2, z2 = getElementPosition(finishes[track])
+		local distance = getDistanceBetweenPoints3D(x1, y1, z1, x2, y2, z2)
+		selectedTrackNames[i] = "(" .. math.floor(distance) .. " M) " .. name
+	end
 	colors = col
 	for i, veh in pairs(spawners) do
-		if (i <= #cars) then
+		if (i <= #c) then
 			x,y,z = getElementPosition(veh)
 			u = getElementData(veh, "rotX")
 			v = getElementData(veh, "rotY")
 			w = getElementData(veh, "rotZ")
-			model = cars[i]
+			model = selectedCars[i]
 			spawnedCars[i] = createVehicle(model, x, y, z, u, v, w)
 			setVehicleColor(spawnedCars[i], 255, 255, 255, 0, 0, 0)
 			carBlips[i] = createBlipAttachedTo(spawnedCars[i],0,6,255,255,255,255,64, 1000)
@@ -150,6 +199,7 @@ function onCarSelectionFinished(cars, tracks, col)
 	end
 	changeCar(0)
 	isSetup = true
+	calculateCarAssignment()
 end
 
 addEvent("onCarSelectionFinished", true)
@@ -194,7 +244,7 @@ function changeCar(next)
 		b2 = 0
 	end
 	setVehicleColor(vehicle, r, g, b, r2, g2, b2)
-	triggerServerEvent("changeCar", resourceRoot, model, r, g, b, r2, g2, b2)
+	triggerServerEvent("onClientCarChange", resourceRoot, model, r, g, b, r2, g2, b2)
 end
 
 function changeTrack(next)
@@ -241,17 +291,29 @@ function assignCar(keyName, keyState)
 				distanceOld = distanceNew
 			end
 		end
-		r = colors[chosenIndex][1]
-		g = colors[chosenIndex][2]
-		b = colors[chosenIndex][3]
-		r2 = r/2
-		g2 = g/2
-		b2 = b/2
+		
+		if (isInsideRadarArea(radarArea, x, y)) then
+			r = 255
+			g = 255
+			b = 255
+			r2 = 0
+			g2 = 0
+			b2 = 0
+		else
+			r = colors[chosenIndex][1]
+			g = colors[chosenIndex][2]
+			b = colors[chosenIndex][3]
+			r2 = r/2
+			g2 = g/2
+			b2 = b/2
+		end
+
 		setVehicleColor(vehicle, r, g, b, r2, g2, b2)
 		setVehicleColor(spawnedCars[currentCar], r, g, b, r2, g2, b2)
 		setBlipColor(carBlips[currentCar], r, g, b, 255)
 		assignedCarColors[currentCar] = chosenIndex
-		triggerServerEvent("changeCar", resourceRoot, getElementModel(vehicle), r, g, b, r2, g2, b2)
+		triggerServerEvent("onClientCarChange", resourceRoot, getElementModel(vehicle), r, g, b, r2, g2, b2)
+		calculateCarAssignment()
 	end
 end
 
@@ -284,11 +346,11 @@ function prevTrack(keyName, keyState)
 end
 
 for keyName, state in pairs(getBoundKeys("special_control_up")) do
-	bindKey(keyName, "down", nextTrack)
+	bindKey(keyName, "down", prevTrack)
 end
 
 for keyName, state in pairs(getBoundKeys("special_control_down")) do
-	bindKey(keyName, "down", prevTrack)
+	bindKey(keyName, "down", nextTrack)
 end
 
 for keyName, state in pairs(getBoundKeys("special_control_left")) do

@@ -27,7 +27,7 @@
     <checkpoint id="checkpoint () (9)" type="ring" color="#FFFFFF99" size="5" alpha="255" interior="0" nextid="checkpoint () (10)" posX="580" posY="-2484" posZ="450" rotX="0" rotY="0" rotZ="0"></checkpoint>
     <checkpoint id="checkpoint () (10)" type="ring" nextid="false" color="#FFFFFF99" size="5" alpha="255" interior="0" posX="580" posY="-2484" posZ="500" rotX="0" rotY="0" rotZ="0"></checkpoint>
     <start id="start (1)" posX="2681.9004" posY="-1153" posZ="54.4" rotX="0" rotY="0" rotZ="270"></start>
-    <track id="track (1)" name="Vinewood Downhill" posX="2691.1006" posY="-1161.7002" posZ="54.4" rotX="0" rotY="0" rotZ="0"></track>
+    <track id="track (1)" name="Las Colinas Downhill" posX="2691.1006" posY="-1161.7002" posZ="54.4" rotX="0" rotY="0" rotZ="0"></track>
     <finish id="finish (1)" size="6" posX="2906.8999" posY="-1133.3" posZ="10.2" rotX="0" rotY="0" rotZ="0"></finish>
     <start id="start (2)" posX="584.29999" posY="855.59998" posZ="-41.8" rotX="0" rotY="0" rotZ="270"></start>
     <track id="track (2)" name="Quarry Climb To Exit" posX="601.59961" posY="866.59961" posZ="-42.3" rotX="0" rotY="0" rotZ="0"></track>
@@ -165,7 +165,7 @@
     <finish id="finish (47)" size="6" posX="2946.5" posY="-2051.8999" posZ="0" rotX="0" rotY="0" rotZ="0"></finish>
     <track id="track (47)" name="Playa Del Seville Silos" posX="2726.8" posY="-2092.6001" posZ="12.8" rotX="0" rotY="0" rotZ="0"></track>
     <start id="start (48)" posX="2909.3999" posY="-1613.3" posZ="12.2" rotX="0" rotY="0" rotZ="161.997"></start>
-    <track id="track (48)" name="East Beach To Playa Del Seville" posX="2918.3" posY="-1606.2" posZ="11.7" rotX="0" rotY="0" rotZ="0"></track>
+    <track id="track (48)" name="East Beach To Playa Del Seville" posX="2918.2998" posY="-1606.2002" posZ="11.7" rotX="0" rotY="0" rotZ="0"></track>
     <finish id="finish (48)" size="6" posX="2857.3999" posY="-2047.9" posZ="10" rotX="0" rotY="0" rotZ="0"></finish>
     <start id="start (50)" posX="2284.8999" posY="-2086.8999" posZ="14.5" rotX="0" rotY="0" rotZ="253.995"></start>
     <track id="track (50)" name="Ocean Docks Shortcuts" posX="2284.3" posY="-2095.3" posZ="14.2" rotX="0" rotY="0" rotZ="0"></track>
@@ -880,4 +880,76 @@
     <start id="start (284)" posX="2427.3999" posY="1774.8" posZ="11.9" rotX="0" rotY="0" rotZ="180"></start>
     <finish id="finish (284)" size="6" posX="2427.3" posY="575.5" posZ="8.5" rotX="0" rotY="0" rotZ="0"></finish>
     <track id="track (284)" name="Royal Casino To Rockshore West" posX="2421.2" posY="1784.6" posZ="11.5" rotX="0" rotY="0" rotZ="0"></track>
+    <start id="start (285)" posX="2524.8" posY="-1047.8" posZ="70.5" rotX="0" rotY="0" rotZ="270"></start>
+    <track id="track (285)" name="Las Colinas Downhill Drop" posX="2530.8999" posY="-1036.2" posZ="70.2" rotX="0" rotY="0" rotZ="0"></track>
+    <finish id="finish (285)" size="6" posX="2907.3999" posY="-1047.9" posZ="10.1" rotX="0" rotY="0" rotZ="0"></finish>
+    <start id="start (286)" posX="2638.5" posY="-1152.7" posZ="52.5" rotX="0" rotY="0" rotZ="270"></start>
+    <track id="track (286)" name="Los Flores Down And Up" posX="2634.2" posY="-1143.7" posZ="53.2" rotX="0" rotY="0" rotZ="0"></track>
+    <finish id="finish (286)" size="6" posX="2642.8" posY="-1122.5" posZ="65.4" rotX="0" rotY="0" rotZ="0"></finish>
+    <start id="start (287)" posX="2919.8999" posY="-1583.7" posZ="12.2" rotX="0" rotY="0" rotZ="350"></start>
+    <track id="track (287)" name="East Beach To Big Building" posX="2929.6001" posY="-1575" posZ="13.6" rotX="0" rotY="0" rotZ="0"></track>
+    <finish id="finish (287)" size="6" posX="2815.8" posY="-1088.3" posZ="29.8" rotX="0" rotY="0" rotZ="0"></finish>
+    <start id="start (288)" posX="2843.7" posY="-880.09998" posZ="11.9" rotX="0" rotY="0" rotZ="176"></start>
+    <track id="track (288)" name="East Beach Hill Road" posX="2853.3" posY="-883.90002" posZ="11.6" rotX="0" rotY="0" rotZ="0"></track>
+    <finish id="finish (288)" size="6" posX="2864" posY="-1325" posZ="9.9" rotX="0" rotY="0" rotZ="0"></finish>
+    <start id="start (289)" posX="2642.8" posY="-1203.6" posZ="51.2" rotX="0" rotY="0" rotZ="0"></start>
+    <finish id="finish (289)" size="6" posX="2671.3" posY="-1184.1" posZ="67.6" rotX="0" rotY="0" rotZ="0"></finish>
+    <track id="track (289)" name="Los Flores Tunnels And Bridges" posX="2651.5" posY="-1191.4" posZ="52.1" rotX="0" rotY="0" rotZ="0"></track>
+    <finish id="finish (290)" size="6" posX="2825.2" posY="-1182.4" posZ="24.2" rotX="0" rotY="0" rotZ="0"></finish>
+    <start id="start (290)" posX="1918.6" posY="-1023" posZ="35.8" rotX="0" rotY="0" rotZ="260"></start>
+    <track id="track (290)" name="Across Las Colinas" posX="1929.4" posY="-1017.4" posZ="34.7" rotX="0" rotY="0" rotZ="0"></track>
+    <start id="start (291)" posX="2737.8999" posY="-1187.2" posZ="70.4" rotX="0" rotY="0" rotZ="180"></start>
+    <finish id="finish (291)" size="6" posX="2735.7" posY="-1657.3" posZ="12.1" rotX="0" rotY="0" rotZ="0"></finish>
+    <track id="track (291)" name="The 69 Golden Palms" posX="2749.3" posY="-1181.4" posZ="70.1" rotX="0" rotY="0" rotZ="0"></track>
+    <start id="start (292)" posX="2737.8999" posY="-1372.3" posZ="41.9" rotX="0" rotY="0" rotZ="0"></start>
+    <finish id="finish (292)" size="6" posX="2914.1001" posY="-1227.2" posZ="10" rotX="0" rotY="0" rotZ="0"></finish>
+    <track id="track (292)" name="Los Flores Z Turn" posX="2730.2" posY="-1355.5" posZ="44.6" rotX="0" rotY="0" rotZ="0"></track>
+    <start id="start (293)" posX="2884.8" posY="-1383.5" posZ="12.2" rotX="0" rotY="0" rotZ="100"></start>
+    <finish id="finish (293)" size="6" posX="2450.6001" posY="-1184" posZ="35.6" rotX="0" rotY="0" rotZ="0"></finish>
+    <track id="track (293)" name="Santos Investments" posX="2866.8999" posY="-1397.1" posZ="11.7" rotX="0" rotY="0" rotZ="0"></track>
+    <start id="start (294)" posX="2694.5" posY="-1689.5" posZ="12.3" rotX="0" rotY="0" rotZ="34"></start>
+    <finish id="finish (294)" size="6" posX="2792.3999" posY="-1827.7" posZ="8.9" rotX="0" rotY="0" rotZ="0"></finish>
+    <track id="track (294)" name="Around Los Santos Forum" posX="2685.6001" posY="-1698.9" posZ="11" rotX="0" rotY="0" rotZ="0"></track>
+    <start id="start (295)" posX="2702.8999" posY="-1788.8" posZ="42.2" rotX="0" rotY="0" rotZ="310"></start>
+    <finish id="finish (295)" size="6" posX="2755.5" posY="-1047.8" posZ="45.5" rotX="0" rotY="0" rotZ="0"></finish>
+    <track id="track (295)" name="Los Santos Forum Roof" posX="2696.3999" posY="-1806.4" posZ="38.7" rotX="0" rotY="0" rotZ="0"></track>
+    <start id="start (296)" posX="2676.7" posY="-1547.6" posZ="28.1" rotX="0" rotY="0" rotZ="180"></start>
+    <finish id="finish (296)" size="6" posX="2276.3999" posY="-2028.5" posZ="12.6" rotX="0" rotY="0" rotZ="0"></finish>
+    <track id="track (296)" name="East Beach To Ocean Docks" posX="2666.3999" posY="-1559" posZ="27.9" rotX="0" rotY="0" rotZ="0"></track>
+    <start id="start (297)" posX="2937.5" posY="-1496.4" posZ="12.2" rotX="0" rotY="0" rotZ="80"></start>
+    <finish id="finish (297)" size="6" posX="2005.9" posY="-1442.2" posZ="12.6" rotX="0" rotY="0" rotZ="0"></finish>
+    <track id="track (297)" name="To Los Santos County Central Hospital" posX="2946.7" posY="-1487.9" posZ="11.7" rotX="0" rotY="0" rotZ="0"></track>
+    <start id="start (298)" posX="2777.8" posY="-1618.3" posZ="12" rotX="0" rotY="0" rotZ="310"></start>
+    <finish id="finish (298)" size="6" posX="2530.1001" posY="-1602" posZ="16.7" rotX="0" rotY="0" rotZ="0"></finish>
+    <track id="track (298)" name="East Beach Parking Lot" posX="2788.7" posY="-1598.5" posZ="13.1" rotX="0" rotY="0" rotZ="0"></track>
+    <start id="start (299)" posX="2594.1001" posY="-1602.1" posZ="5.1" rotX="0" rotY="0" rotZ="180"></start>
+    <finish id="finish (299)" size="6" posX="2528.6001" posY="-1618.3" posZ="16.7" rotX="0" rotY="0" rotZ="0"></finish>
+    <track id="track (299)" name="LS Storm Drains Under The Bridge" posX="2612.8" posY="-1616.2" posZ="4.1" rotX="0" rotY="0" rotZ="0"></track>
+    <start id="start (300)" posX="2808.6001" posY="-1952.9" posZ="15.3" rotX="0" rotY="0" rotZ="270"></start>
+    <finish id="finish (300)" size="6" posX="2610.2" posY="-1732.3" posZ="11.1" rotX="0" rotY="0" rotZ="0"></finish>
+    <track id="track (300)" name="Los Santos Forum Circumnavigation" posX="2809.1001" posY="-1960.6" posZ="14.2" rotX="0" rotY="0" rotZ="0"></track>
+    <start id="start (301)" posX="2635.2" posY="-1910.3" posZ="14.7" rotX="0" rotY="0" rotZ="320"></start>
+    <finish id="finish (301)" size="6" posX="2602.8999" posY="-1932.8" posZ="2.9" rotX="0" rotY="0" rotZ="0"></finish>
+    <track id="track (301)" name="Los Santos Forum Grass" posX="2625.3" posY="-1923.8" posZ="14.2" rotX="0" rotY="0" rotZ="0"></track>
+    <start id="start (302)" posX="2723.8999" posY="-1108.2" posZ="70.5" rotX="0" rotY="0" rotZ="180"></start>
+    <finish id="finish (302)" size="6" posX="2431.1001" posY="-1504.4" posZ="22.9" rotX="0" rotY="0" rotZ="0"></finish>
+    <track id="track (302)" name="Las Colinas Shopping Block" posX="2713.7" posY="-1112.4" posZ="70.2" rotX="0" rotY="0" rotZ="0"></track>
+    <start id="start (303)" posX="2723" posY="-1636.8" posZ="14" rotX="0" rotY="0" rotZ="0"></start>
+    <finish id="finish (303)" size="6" posX="2571" posY="-1184.1" posZ="60.7" rotX="0" rotY="0" rotZ="0"></finish>
+    <track id="track (303)" name="Saints Boulevard East Beach Los Santos" posX="2716.6001" posY="-1639.6" posZ="13.8" rotX="0" rotY="0" rotZ="0"></track>
+    <start id="start (304)" posX="2643.2" posY="-1003.3" posZ="86.1" rotX="0" rotY="0" rotZ="180"></start>
+    <track id="track (304)" name="Las Colinas Hills To Beach" posX="2651.5" posY="-1009" posZ="85.1" rotX="0" rotY="0" rotZ="0"></track>
+    <finish id="finish (304)" size="6" posX="2860.2" posY="-1890.3" posZ="10" rotX="0" rotY="0" rotZ="0"></finish>
+    <start id="start (305)" posX="2589" posY="-1275.8" posZ="82.3" rotX="0" rotY="0" rotZ="180"></start>
+    <finish id="finish (305)" size="6" posX="2603.6001" posY="-1509.6" posZ="14.4" rotX="0" rotY="0" rotZ="0"></finish>
+    <track id="track (305)" name="Los Flores Drop To Sewer" posX="2599.1001" posY="-1278" posZ="81.8" rotX="0" rotY="0" rotZ="0"></track>
+    <finish id="finish (306)" size="6" posX="2621" posY="-1501.6" posZ="15.1" rotX="0" rotY="0" rotZ="0"></finish>
+    <start id="start (306)" posX="2822.8999" posY="-1487.2" posZ="16.1" rotX="0" rotY="0" rotZ="0"></start>
+    <track id="track (306)" name="Through Big Smokes Tunnel" posX="2820" posY="-1470.4" posZ="16.9" rotX="0" rotY="0" rotZ="0"></track>
+    <start id="start (307)" posX="2913" posY="-807.20001" posZ="12.2" rotX="0" rotY="0" rotZ="180"></start>
+    <finish id="finish (307)" size="6" posX="2164.3999" posY="-1799.9" posZ="12.4" rotX="0" rotY="0" rotZ="0"></finish>
+    <track id="track (307)" name="Entering Los Santos At Las Colinas" posX="2921.3999" posY="-801.20001" posZ="11" rotX="0" rotY="0" rotZ="0"></track>
+    <start id="start (308)" posX="2838.2" posY="-1049.4" posZ="24.4" rotX="0" rotY="0" rotZ="90"></start>
+    <finish id="finish (308)" size="6" posX="2423.5" posY="-1107.5" posZ="40.4" rotX="0" rotY="0" rotZ="0"></finish>
+    <track id="track (308)" name="Las Colinas Up Then Down" posX="2827.3" posY="-1060.9" posZ="24.5" rotX="0" rotY="0" rotZ="0"></track>
 </map>

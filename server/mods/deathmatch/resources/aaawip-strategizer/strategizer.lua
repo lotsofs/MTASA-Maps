@@ -93,7 +93,7 @@ function shuffleTracksAll()
 	end
 
 	-- -- temporary code to disable shuffling
-	-- STARTAT = 235
+	-- STARTAT = 300
 	-- for i = STARTAT, STAGES + STARTAT - 1, 1 do
 	-- 	j = i - STARTAT + 1
 	-- 	if i <= #indices then
@@ -324,38 +324,45 @@ addEventHandler("onPlayerVehicleEnter", root, respawnDuringRace)
 
 ----------------------------- CLEAN UP EVERYTHING BELOW ---------------------------
 
-function checkpointHit(player, matchingDimension)
+function checkpointHit(playerWhoHitTheDamnCheckpoint, checkpoint)
 	-- figure out which checkpoint it is we just hit
 	for i, v in pairs(COL_SHAPES) do
-		if v == source then
-			if (source == COL_SHAPES[10]) then
+		if v == checkpoint then
+			if (checkpoint == COL_SHAPES[10]) then
 				outputChatBox("TODO: Do something else when you finish the race than just transitioning")
 			end
-			if i == getElementData(player, "strategizer.progress") then
+			if i == getElementData(playerWhoHitTheDamnCheckpoint, "strategizer.progress") then
 				-- start the transition for the player
-				transitionPlayer(player)
+				transitionPlayer(playerWhoHitTheDamnCheckpoint)
 				return
 			end
 		end
 	end
 end
 addEventHandler("onColShapeHit", resourceRoot, 
-	function(player, matchingDimension) 
+	function(hit, matchingDimension) 
 		-- only check players
-		if (getElementType(player) ~= "player") then
+		if (getElementType(hit) ~= "vehicle") then
+			return
+		end
+		local playerInCar = getVehicleOccupant(hit)
+		if (playerInCar == nil) then
 			return
 		end
 		-- spectators are really high in the sky
-		local x, y, z = getElementPosition(player)
+		local x, y, z = getElementPosition(playerInCar)
 		if (z > 10000) then
 			return
 		end
-		checkpointHit(player)
+		checkpointHit(playerInCar, source)
 	end
 )
 
 function transitionPlayer(player)
 	-- transition player out
+	if (getElementData(player, "strategizer.state") == "fadeout") then
+		return
+	end
 	setElementData(player, "strategizer.state", "fadeout")
 	toggleAllControls(player, false, true, false)
 	triggerClientEvent(player, "checkpointFade", resourceRoot)
@@ -383,22 +390,23 @@ function transitionPlayer(player)
 	-- failsafe in case the player dies at an unfortuante moment in the transition
 	local progress = getElementData(player, "strategizer.progress")
 	PLAYER_FAILSAFETIMERCOUNTERS[player] = 0
-	PLAYER_FAILSAFETIMERS[player] = setTimer ( function(player, oldProgress)
-		PLAYER_FAILSAFETIMERCOUNTERS[player] = PLAYER_FAILSAFETIMERCOUNTERS[player] + 1
+	PLAYER_FAILSAFETIMERS[player] = setTimer ( function(player2, oldProgress)
+		PLAYER_FAILSAFETIMERCOUNTERS[player2] = PLAYER_FAILSAFETIMERCOUNTERS[player2] + 1
 		-- dont do anything before 5 half seconds have passed
-		if (PLAYER_FAILSAFETIMERCOUNTERS[player] < 5) then
+		if (PLAYER_FAILSAFETIMERCOUNTERS[player2] < 6) then
 			return
 		end
 		-- if the player is still in fadeout (probably, otherwise this timer would've been killed already)
-		if getElementData(player, "strategizer.state") == "fadeout" then
-			local progress = getElementData(player, "strategizer.progress")
+		-- TODO: This breaks if a player quits when finished.
+		if getElementData(player2, "strategizer.state") == "fadeout" then
+			local progress = getElementData(player2, "strategizer.progress")
 			-- spam chat :)
-			local name = getPlayerName(player)
+			local name = getPlayerName(player2)
 			outputChatBox(name .. " has encountered a big fat error! Arguments: " .. progress .. " " .. oldProgress .. " " .. PLAYER_FAILSAFETIMERCOUNTERS[player], root, 227, 20, 32)
 			-- do the teleport again
-			cpNo = getElementData(player, "race.checkpoint")
+			cpNo = getElementData(player2, "race.checkpoint")
 			for i = cpNo, progress do
-				teleportPlayerToRaceCp(player, i)
+				teleportPlayerToRaceCp(player2, i)
 			end
 		end
 	end, 500, 0, player, progress)
@@ -418,11 +426,18 @@ end
 
 addEventHandler("onPlayerReachCheckpoint", root, 
 	function(checkpoint, time_)
+		-- iprint(tostring(source) .. " has collected race CP " .. checkpoint .. " in " .. time_)
 		-- ignore CPs the player already got
 		if (checkpoint == getElementData(source, "strategizer.progress")) then
 			-- Kill failsafe timers
 			-- PLAYER_FAILSAFETIMERCOUNTERS[player] = 0
-			killTimer(PLAYER_FAILSAFETIMERS[source])
+			if (PLAYER_FAILSAFETIMERS[source] ~= nil) then
+				killTimer(PLAYER_FAILSAFETIMERS[source])
+				PLAYER_FAILSAFETIMERS[source] = nil
+			else
+				name = getPlayerName(source)
+				outputChatBox(name .. " has encountered a big fat error! Arguments: nil", root, 227, 20, 32)
+			end
 			-- Increment player progress
 			progress = getElementData(source, "strategizer.progress")
 			progress = progress + 1
