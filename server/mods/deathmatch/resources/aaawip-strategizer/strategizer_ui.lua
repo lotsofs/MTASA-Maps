@@ -1,22 +1,33 @@
 screenWidth, screenHeight = guiGetScreenSize()
+-- local fontBold = dxCreateFont("tahoma.ttf", 9)
+
+
+function getKeyNames()
+	controlUp = next(getBoundKeys("special_control_up"))
+	controlDown = next(getBoundKeys("special_control_down"))
+	controlRight = next(getBoundKeys("special_control_right"))
+	controlLeft = next(getBoundKeys("special_control_left"))
+	controlSub = next(getBoundKeys("sub_mission"))
+end
+getKeyNames();
 
 function drawBorderedText(text, borderSize, width, height, width2, height2, color, size, font, horizAlign, vertiAlign, bool1, bool2, bool3, bool4)
 	text2 = string.gsub(text, "#%x%x%x%x%x%x", "")
-	width = width * screenWidth
-	height = height * screenHeight
-	width2 = width2 * screenWidth
-	height2 = height2 * screenHeight
-	size = screenWidth * size * 0.0005
-	borderSize = screenWidth * borderSize * 0.0005
+	-- width = width * screenWidth
+	-- height = height * screenHeight
+	-- width2 = width2 * screenWidth
+	-- height2 = height2 * screenHeight
+	-- size = screenWidth * size * 0.0005
+	-- borderSize = size
 
-	dxDrawText(text2, width+borderSize, height, width2+borderSize, height2, tocolor(5, 17, 26, 255), size, font, horizAlign, vertiAlign, bool1, bool2, bool3, bool4)
-	dxDrawText(text2, width, height+borderSize, width2, height2+borderSize, tocolor(5, 17, 26, 255), size, font, horizAlign, vertiAlign, bool1, bool2, bool3, bool4)
-	dxDrawText(text2, width, height-borderSize, width2, height2-borderSize, tocolor(5, 17, 26, 255), size, font, horizAlign, vertiAlign, bool1, bool2, bool3, bool4)
-	dxDrawText(text2, width-borderSize, height, width2-borderSize, height2, tocolor(5, 17, 26, 255), size, font, horizAlign, vertiAlign, bool1, bool2, bool3, bool4)
+	-- dxDrawText(text2, width+borderSize, height, width2+borderSize, height2, tocolor(5, 17, 26, 255), size, font, horizAlign, vertiAlign, bool1, bool2, bool3, bool4)
+	-- dxDrawText(text2, width, height+borderSize, width2, height2+borderSize, tocolor(5, 17, 26, 255), size, font, horizAlign, vertiAlign, bool1, bool2, bool3, bool4)
+	-- dxDrawText(text2, width, height-borderSize, width2, height2-borderSize, tocolor(5, 17, 26, 255), size, font, horizAlign, vertiAlign, bool1, bool2, bool3, bool4)
+	-- dxDrawText(text2, width-borderSize, height, width2-borderSize, height2, tocolor(5, 17, 26, 255), size, font, horizAlign, vertiAlign, bool1, bool2, bool3, bool4)
 	dxDrawText(text2, width+borderSize, height+borderSize, width2+borderSize, height2+borderSize, tocolor(5, 17, 26, 255), size, font, horizAlign, vertiAlign, bool1, bool2, bool3, bool4)
-	dxDrawText(text2, width-borderSize, height-borderSize, width2-borderSize, height2-borderSize, tocolor(5, 17, 26, 255), size, font, horizAlign, vertiAlign, bool1, bool2, bool3, bool4)
-	dxDrawText(text2, width+borderSize, height-borderSize, width2+borderSize, height2-borderSize, tocolor(5, 17, 26, 255), size, font, horizAlign, vertiAlign, bool1, bool2, bool3, bool4)
-	dxDrawText(text2, width-borderSize, height+borderSize, width2-borderSize, height2+borderSize, tocolor(5, 17, 26, 255), size, font, horizAlign, vertiAlign, bool1, bool2, bool3, bool4)
+	-- dxDrawText(text2, width-borderSize, height-borderSize, width2-borderSize, height2-borderSize, tocolor(5, 17, 26, 255), size, font, horizAlign, vertiAlign, bool1, bool2, bool3, bool4)
+	-- dxDrawText(text2, width+borderSize, height-borderSize, width2+borderSize, height2-borderSize, tocolor(5, 17, 26, 255), size, font, horizAlign, vertiAlign, bool1, bool2, bool3, bool4)
+	-- dxDrawText(text2, width-borderSize, height+borderSize, width2-borderSize, height2+borderSize, tocolor(5, 17, 26, 255), size, font, horizAlign, vertiAlign, bool1, bool2, bool3, bool4)
 	dxDrawText(text, width, height, width2, height2, color, size, font, horizAlign, vertiAlign, bool1, bool2, bool3, bool4)
 end
 
@@ -27,11 +38,31 @@ function drawHud()
 	if (isSetup == false) then
 		return
 	end
-	if (#selectedTrackNames == 0) then
-		drawBorderedText("Generating tracks...", 2, 0.02, 0.2 + (0*0.033), 0.8, 0.9, tocolor(255, 255, 255, 255), 1.8, "default-bold", "left", "top", false, true, true, false)
+	if (isPlayerMapVisible() == true) then
 		return
 	end
-	drawBorderedText("Assigned Car - (Est. Length) Track - Assigned Car", 2, 0.02, 0.2 + (0*0.033), 0.8, 0.9, tocolor(255, 255, 255, 255), 1.8, "default-bold", "left", "top", false, true, true, false)
+	drawBottomHud()
+	drawLeftHud()
+end
+
+function drawBottomHud()
+	local blurb = "Strategizer Race!!: In this race each player gets the same 10 tracks and the same 10 vehicles. You get 5 minutes to assign one vehicle to each track. After that, the race begins and each player will race the tracks with their chosen vehicles."
+	drawBorderedText(blurb, 1, screenWidth*0.25, screenHeight - 255, 800, 0.9, tocolor(255, 255, 255, 255), 1, "default-bold", "left", "top", false, true, true, false)
+	local controls = "Controls:\n#dbc191"
+	controls = controls .. controlLeft .. "#ffffff & #dbc191" .. controlRight .. "#ffffff: Change Vehicles.\n#dbc191"
+	controls = controls .. controlUp .. "#ffffff & #dbc191" .. controlDown .. "#ffffff: Change Tracks.\n#dbc191"
+	controls = controls .. controlSub .. "#ffffff: Assign current car to current track.\n#dbc191"
+	controls = controls .. "F9#ffffff: View Goal/More Information/Help.\n#dbc191"
+	controls = controls .. "F11#ffffff: View Map."
+	drawBorderedText(controls, 2, screenWidth*0.25, screenHeight - 180, 0.8, 0.9, tocolor(255, 255, 255, 255), 2, "default-bold", "left", "top", false, true, true, true)
+end
+
+function drawLeftHud()
+	if (#selectedTrackNames == 0) then
+		drawBorderedText("Generating tracks...", 1, 22, 196, 0.8, 0.9, tocolor(255, 255, 255, 255), 1, "default-bold", "left", "top", false, true, true, false)
+		return
+	end
+	drawBorderedText("Assigned Car - (Est. Length) Track - Assigned Car", 1, 22, 196, 0.8, 0.9, tocolor(255, 255, 255, 255), 1, "default-bold", "left", "top", false, true, true, false)
 	for i = 1, 10 do
 		text = selectedTrackNames[i]
 		if (sortedCars[i] ~= nil) then
@@ -42,7 +73,7 @@ function drawHud()
 		if (i == currentTrack) then
 			text = text .. " <==="
 		end
-		drawBorderedText(text, 2, 0.02, 0.2 + (i*0.033), 0.8, 0.9, tocolor(colors[i][1], colors[i][2], colors[i][3], 255), 1.8, "default", "left", "top", false, true, true, true)
+		drawBorderedText(text, 1, 22, 198 + (i*22), 0.8, 0.9, tocolor(colors[i][1], colors[i][2], colors[i][3], 255), 1, "default-bold", "left", "top", false, true, true, true)
 	end
 	if (#unassignedCars > 0) then
 		text = "Unassigned Cars: "
@@ -52,7 +83,7 @@ function drawHud()
 				text = text .. ", "
 			end
 		end
-		drawBorderedText(text, 2, 0.02, 0.2 + (12*0.033), 0.3, 0.9, tocolor(255, 255, 255, 255), 1.8, "default", "left", "top", false, true, true, false)
+		drawBorderedText(text, 1, 22, 206 + (11*22), 350, 0.9, tocolor(255, 255, 255, 255), 1, "default-bold", "left", "top", false, true, true, false)
 	end
 
 end
