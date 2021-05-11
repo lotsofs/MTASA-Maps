@@ -124,12 +124,17 @@ function spectacularFinish()
 			setElementVelocity(vehicle, unpack(velocities[index]))
 		end, 2000 - (200 * i), 1, i)			
 	end
+end
+addEvent("spectacularFinish", true)
+addEventHandler("spectacularFinish", resourceRoot, spectacularFinish)
+
+function spectacularPostFinish()
 	vehicle = getPedOccupiedVehicle(localPlayer)
 	setElementAngularVelocity(vehicle, unpack(angularVelocities[10]))
 	setElementVelocity(vehicle, unpack(velocities[10]))
 end
-addEvent("spectacularFinish", true)
-addEventHandler("spectacularFinish", resourceRoot, spectacularFinish)
+addEvent("spectacularPostFinish", true)
+addEventHandler("spectacularPostFinish", resourceRoot, spectacularPostFinish)
 
 -- function respawnCleanup()
 -- 	destroyElement(currentCp)

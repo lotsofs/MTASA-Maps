@@ -93,7 +93,7 @@ function shuffleTracksAll()
 	end
 
 	-- -- temporary code to disable shuffling
-	-- STARTAT = 330
+	-- STARTAT = 370
 	-- for i = STARTAT, STAGES + STARTAT - 1, 1 do
 	-- 	j = i - STARTAT + 1
 	-- 	if i <= #indices then
@@ -328,12 +328,13 @@ function checkpointHit(playerWhoHitTheDamnCheckpoint, checkpoint)
 	-- figure out which checkpoint it is we just hit
 	for i, v in pairs(COL_SHAPES) do
 		if v == checkpoint then
-			if (checkpoint == COL_SHAPES[10]) then
-				outputChatBox("TODO: Do something else when you finish the race than just transitioning")
-			end
 			if i == getElementData(playerWhoHitTheDamnCheckpoint, "strategizer.progress") then
-				-- start the transition for the player
-				transitionPlayer(playerWhoHitTheDamnCheckpoint)
+				if (checkpoint == COL_SHAPES[10]) then
+					finish(playerWhoHitTheDamnCheckpoint)
+				else
+					-- start the transition for the player
+					transitionPlayer(playerWhoHitTheDamnCheckpoint)
+				end
 				return
 			end
 		end
@@ -346,7 +347,7 @@ addEventHandler("onColShapeHit", resourceRoot,
 			return
 		end
 		local playerInCar = getVehicleOccupant(hit)
-		if (playerInCar == nil) then
+		if (playerInCar == false or playerInCar == nil) then
 			return
 		end
 		-- spectators are really high in the sky
@@ -424,6 +425,14 @@ function freePlayerControls(player)
 	setElementFrozen(getPedOccupiedVehicle(player), false)
 end
 
+addEventHandler("onElementDataChange", root, function (theKey, oldValue, newValue)
+    -- The client can only set 'special_thing' on its own player
+    if (theKey== "race.collideworld") then
+		-- TODO: Do all the freezing stuff in here in case a player dies during transitions.
+		-- setElementFrozen(source, true)
+    end
+end)
+
 addEventHandler("onPlayerReachCheckpoint", root, 
 	function(checkpoint, time_)
 		-- iprint(tostring(source) .. " has collected race CP " .. checkpoint .. " in " .. time_)
@@ -463,19 +472,86 @@ addEventHandler("onPlayerReachCheckpoint", root,
 	end
 )
 
+function finish(p)
+	-- transition player out
+	if (getElementData(p, "strategizer.state") == "fadeout") then
+		return
+	end
+	setElementData(p, "strategizer.state", "fadeout")
+	toggleAllControls(p, false, true, false)
+	triggerClientEvent(p, "checkpointFade", resourceRoot)
+	
+	setTimer ( function(pp)
+		local progress = getElementData(pp, "strategizer.progress")
+		-- I dont want to do all this on the server, but race conditions :)
+		local vehicle = getPedOccupiedVehicle(pp)
+		local matrix = getElementMatrix(vehicle)
+		local velocity = getElementVelocity(vehicle)
+		local angularVelocity = getElementAngularVelocity(vehicle)
+		-- Store these values on the client side so they can get a cool cinematic at the end
+		-- triggerClientEvent(player, "onCheckpointTransition", matrix, velocity, angularVelocity)
+		triggerClientEvent(pp, "dumpSpeed", resourceRoot, progress)
+		-- freeze the player
+		setElementVelocity(vehicle, 0 ,0,0)
+		setElementAngularVelocity(vehicle, 0, 0 ,0)
+		setElementFrozen(getPedOccupiedVehicle(pp), true)
+		finishCinematic(pp)
+		-- setElementData(player, "strategizer.progress", i + 1)
+	end, 2000, 1, p)
+	-- failsafe in case the player dies at an unfortuante moment in the transition
+	local progress = getElementData(p, "strategizer.progress")
+	PLAYER_FAILSAFETIMERCOUNTERS[p] = 0
+	PLAYER_FAILSAFETIMERS[p] = setTimer ( function(player2, oldProgress)
+		if (player2 == false or player2 == nil) then
+			return
+		end
+		PLAYER_FAILSAFETIMERCOUNTERS[player2] = PLAYER_FAILSAFETIMERCOUNTERS[player2] + 1
+		-- dont do anything before 5 half seconds have passed
+		if (PLAYER_FAILSAFETIMERCOUNTERS[player2] < 12) then
+			return
+		end
+		-- if the player is still in fadeout (probably, otherwise this timer would've been killed already)
+		-- TODO: This breaks if a player quits when finished.
+		if getElementData(player2, "strategizer.state") == "finishing" then
+			local progress = getElementData(player2, "strategizer.progress")
+			-- spam chat :)
+			local name = getPlayerName(player2)
+			outputChatBox(name .. " has encountered a big fat error 2! Arguments: " .. progress .. " " .. oldProgress .. " " .. PLAYER_FAILSAFETIMERCOUNTERS[player], root, 227, 20, 32)
+			-- do the teleport again
+			cpNo = getElementData(player2, "race.checkpoint")
+			for i = cpNo, progress do
+				teleportPlayerToRaceCp(player2, i)
+			end
+		end
+	end, 500, 0, p, progress)
+end
 
-function finish(rank, _time)
-	-- toggleAllControls(source, true)
-	triggerClientEvent(source, "fadeIn", resourceRoot)
-	setElementCollisionsEnabled(getPedOccupiedVehicle(source), true)
-	setElementFrozen(getPedOccupiedVehicle(source), false)
+function finishCinematic(thePlayer)
+	triggerClientEvent(thePlayer, "fadeIn", resourceRoot)
+	setElementData(thePlayer, "strategizer.state", "finishing")
+	teleportToFinish(thePlayer)
+	setTimer ( function(p)
+		triggerClientEvent(thePlayer, "spectacularFinish", resourceRoot)
+	end, 1000, 1, thePlayer)
+	setTimer ( function(p)
+		cpNo = getElementData(p, "race.checkpoint")
+		local progress = getElementData(p, "strategizer.progress")
+		for i = cpNo, progress do
+			teleportPlayerToRaceCp(p, i)
+		end
+	end, 3000, 1, thePlayer)
+end
+
+function finishForReal(rank, _time)
 	setElementData(source, "strategizer.state", "finished")
 	teleportToFinish(source)
-	triggerClientEvent(source, "spectacularFinish", resourceRoot)
+	setElementCollisionsEnabled(getPedOccupiedVehicle(source), true)
+	setElementFrozen(getPedOccupiedVehicle(source), false)
+	triggerClientEvent(source, "spectacularPostFinish", resourceRoot)
 end
-addEventHandler("onPlayerFinish", getRootElement(), finish)
+addEventHandler("onPlayerFinish", getRootElement(), finishForReal)
 
--- ??????? honestly what the fuck? Just fetch all this information client side (it should already have it) 
+-- ??????? TODO: honestly what the fuck? Just fetch all this information client side (it should already have it) 
 -- rather than passing it along for the bazillionth time. Just do the triggerclientevent thing without all the junk
 function enableNextCheckpoint(player, progress)
 	-- progress = getElementData(player, "strategizer.progress")
