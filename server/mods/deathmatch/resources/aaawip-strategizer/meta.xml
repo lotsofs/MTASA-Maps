@@ -3,6 +3,7 @@
     <script src="strategizer.lua" type="server"></script>
     <script src="strategizer_client.lua" type="client" validate="true"></script>
     <script src="strategizer_ui.lua" type="client" validate="true"></script>
+    <config src="help.xml" type="client" />
     <info gamemodes="race" type="map" name="Strategizer Race" author="S." version="1.0.0"></info>
     <map src="aaawip-strategizer.map" dimension="0"></map>
     <settings>
@@ -24,5 +25,4 @@
     </settings>
     <script src="mapEditorScriptingExtension_s.lua" type="server"></script>
     <script src="mapEditorScriptingExtension_c.lua" type="client" validate="false"></script>
-	<config src="help.xml" type="client" />
 </meta>
