@@ -38,10 +38,13 @@
 -- Janky launch spawns. Need to freeze probably.
 -- Trains
 -- Runway indicators on map?
--- Coach
+-- Coach, Mesa
 
 MARKER = getElementByID("_MARKER_EXPORT_PARK")
-MARKER_TANKER = getElementByID("_MARKER_EXPORT_TANKER")
+MARKER_BOAT = getElementByID("_MARKER_EXPORT_BOAT")
+REACH_CRANE1 = createColCircle(72.4, -339.4, 89)
+REACH_CRANE2 = createColCircle(-61.9, -286.4, 89)
+ZONE_BOAT = createColSphere(99.4, -414.6, 0, 10)
 
 SHUFFLED_CARS = {}
 PLAYER_PROGRESS = {}
@@ -53,6 +56,19 @@ REQUIRED_CHECKPOINTS = -1
 TIMER_POLL = nil
 
 PRE_SHUFFLED_CARS = {}
+
+BOATS = {
+	[472] = true,
+	[473] = true,
+	[493] = true,
+	[595] = true,
+	[484] = true,
+	[430] = true,
+	[453] = true,
+	[452] = true,
+	[446] = true,
+	[454] = true
+}
 
 DATABASE = dbConnect("sqlite", ":/fleischbergAutosTopTimes.db")
 	
@@ -261,16 +277,17 @@ function playerStoppedInMarker()
 		if (vehicle) then
 			x, y, z = getElementVelocity(vehicle)
 			shittyVelocity = x*x + y*y + z*z
+			-- vehicle handin location
 			if (shittyVelocity < 0.001 and isElementWithinMarker(vehicle, MARKER) and not TELEPORTING[v]) then
 				TELEPORTING[v] = true
 				PLAYER_PROGRESS[v] = PLAYER_PROGRESS[v] + 1
 				teleportToCheckpoints(v)
 			end
-			if (getElementModel(vehicle) == 514 and shittyVelocity < 0.001 and isElementWithinMarker(vehicle, MARKER_TANKER)) then
-				triggerClientEvent(v, "moveCrane", resourceRoot)
-				--TELEPORTING[v] = true
-				--PLAYER_PROGRESS[v] = PLAYER_PROGRESS[v] + 1
-				--teleportToCheckpoints(v)
+			-- boat marker
+			if (BOATS[getElementModel(vehicle)] and shittyVelocity < 0.001 and isElementWithinColShape(vehicle, REACH_CRANE2)) then
+				triggerClientEvent(v, "craneGrab", resourceRoot, 2)
+			elseif (BOATS[getElementModel(vehicle)] and shittyVelocity < 0.001 and isElementWithinColShape(vehicle, REACH_CRANE1)) then
+				triggerClientEvent(v, "craneGrab", resourceRoot, 1)
 			end
 		end
 	end
@@ -293,9 +310,16 @@ addCommandHandler("cheatprev", cheatPrevVehicle)
 
 function cheatTeleportVehicle(playerSource, commandName)
 	vehicle = getPedOccupiedVehicle(playerSource)
-	setElementPosition(vehicle, 0, 0, 10)
+	setElementPosition(vehicle, 0, 0, 20)
 end
 addCommandHandler("cheattp", cheatTeleportVehicle)
+
+function cheatTeleportBoat(playerSource, commandName)
+	vehicle = getPedOccupiedVehicle(playerSource)
+	setElementPosition(vehicle, -219, -604, 20)
+end
+addCommandHandler("cheattpboat", cheatTeleportBoat)
+
 
 function teleportToCheckpoints(player)
 	vehicle = getPedOccupiedVehicle(player)

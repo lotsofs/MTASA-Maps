@@ -1,6 +1,6 @@
 <map edf:definitions="race,editor_main">
     <marker id="_MARKER_EXPORT_PARK" type="cylinder" color="#FF0000FF" size="5" interior="0" dimension="0" alpha="255" posX="-50.2" posY="-222.3" posZ="4.4" rotX="0" rotY="0" rotZ="0"></marker>
-    <marker id="_MARKER_EXPORT_BOAT" type="cylinder" color="#0B00FEFF" size="5" interior="0" dimension="0" alpha="255" posX="99.4" posY="-414.60001" posZ="0" rotX="0" rotY="0" rotZ="0"></marker>
+    <marker id="_MARKER_EXPORT_BOAT" type="cylinder" color="#0B00FEFF" size="15" interior="0" dimension="0" alpha="255" posX="99.4" posY="-414.60001" posZ="-8.5" rotX="0" rotY="0" rotZ="0"></marker>
     <object id="object (CARRIER_LIFT1_SFSE) (1)" breakable="true" interior="0" collisions="true" alpha="255" model="3115" doublesided="false" scale="1" dimension="0" posX="-1456.7" posY="501.29999" posZ="9.9" rotX="0" rotY="0" rotZ="0"></object>
     <object id="object (CARRIER_LIFT2_SFSE) (1)" breakable="true" interior="0" collisions="true" alpha="255" model="3114" doublesided="false" scale="1" dimension="0" posX="-1414.5" posY="516.40002" posZ="9.6" rotX="0" rotY="0" rotZ="0"></object>
     <object id="object (Carter_GROUND) (1)" breakable="true" interior="0" collisions="true" alpha="255" model="17946" doublesided="false" scale="1" dimension="0" posX="2533.79" posY="-1290.55" posZ="36.95" rotX="0" rotY="0" rotZ="0"></object>
@@ -13,8 +13,8 @@
     <object id="object (sw_breweryFence01) (2)" breakable="true" interior="0" collisions="true" alpha="255" model="12933" doublesided="true" scale="1" dimension="0" posX="-29.03125" posY="-302.125" posZ="6.6718" rotX="0" rotY="0" rotZ="0"></object>
     <object id="object (TwrCrane_M_04) (2)" breakable="true" interior="0" collisions="true" alpha="255" model="1383" doublesided="true" scale="1" dimension="0" posX="-61.9" posY="-286.39999" posZ="38" rotX="0" rotY="0" rotZ="0"></object>
     <object id="object (TwrCrane_S_03) (4)" breakable="true" interior="0" collisions="true" alpha="255" model="1391" doublesided="true" scale="1" dimension="0" posX="72.4" posY="-339.39999" posZ="33.1" rotX="0" rotY="0" rotZ="0"></object>
-    <object id="_CRANE1_POLE" breakable="true" interior="0" collisions="true" alpha="255" model="1391" doublesided="true" scale="1.5" dimension="0" posX="-61.9" posY="-286.39999" posZ="51.7" rotX="0" rotY="0" rotZ="0"></object>
-    <object id="_CRANE2_POLE" breakable="true" interior="0" collisions="true" alpha="255" model="1391" doublesided="true" scale="1.5" dimension="0" posX="72.4" posY="-339.39999" posZ="26.9" rotX="0" rotY="0" rotZ="0"></object>
+    <object id="_CRANE2_POLE" breakable="true" interior="0" collisions="true" alpha="255" model="1391" doublesided="true" scale="1.5" dimension="0" posX="-61.9" posY="-286.39999" posZ="51.7" rotX="0" rotY="0" rotZ="0"></object>
+    <object id="_CRANE1_POLE" breakable="true" interior="0" collisions="true" alpha="255" model="1391" doublesided="true" scale="1.5" dimension="0" posX="72.4" posY="-339.39999" posZ="26.9" rotX="0" rotY="0" rotZ="0"></object>
     <object id="object (vgsbighngrdoor) (1)" breakable="true" interior="0" collisions="true" alpha="255" model="8378" doublesided="false" scale="1" dimension="0" posX="1586.30005" posY="1222.69995" posZ="0.4" rotX="0" rotY="0" rotZ="0"></object>
     <object id="_CRANE1_BAR" breakable="true" interior="0" collisions="true" alpha="255" model="1394" doublesided="true" scale="1.5" dimension="0" posX="72.2" posY="-339.39999" posZ="45.7" rotX="0" rotY="0" rotZ="0"></object>
     <object id="_CRANE1_HOOK" breakable="true" interior="0" collisions="false" alpha="255" model="1390" doublesided="true" scale="3" dimension="0" posX="72" posY="-252" posZ="38" rotX="0" rotY="0" rotZ="0"></object>
