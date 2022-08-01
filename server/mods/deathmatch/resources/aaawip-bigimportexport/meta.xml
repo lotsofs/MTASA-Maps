@@ -9,15 +9,15 @@
         <setting name="#useLODs" value="[ true ]"></setting>
         <setting name="#gamespeed" value="[ 1 ]"></setting>
         <setting name="#ghostmode" value='[ &quot;true&quot; ]'></setting>
-        <setting name="#time" value="9:0"></setting>
-        <setting name="#vehicleweapons" value='[ &quot;false&quot; ]'></setting>
+        <setting name="#time" value="6:0"></setting>
+        <setting name="#vehicleweapons" value='[ &quot;true&quot; ]'></setting>
         <setting name="#minplayers" value="[ 0 ]"></setting>
         <setting name="#respawntime" value="[ 0 ]"></setting>
         <setting name="#gravity" value="[ 0.0080000004 ]"></setting>
         <setting name="#waveheight" value="[ 0 ]"></setting>
         <setting name="#weather" value="[ 0 ]"></setting>
         <setting name="#locked_time" value="[ false ]"></setting>
-        <setting name="#duration" value="[ 36000 ]"></setting>
+        <setting name="#duration" value="[ 86400 ]"></setting>
         <setting name="#respawn" value='[ &quot;timelimit&quot; ]'></setting>
     </settings>
     <script src="mapEditorScriptingExtension_s.lua" type="server"></script>
