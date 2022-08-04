@@ -1,8 +1,15 @@
-MARKER_TANKER = getElementByID("_MARKER_EXPORT_TANKER")
+local RACE_RESOURCE = getResourceDynamicElementRoot(getResourceFromName("race"))
+
+MARKER_EXPORT = getElementByID("_MARKER_EXPORT_PARK")
+MARKER_BOAT = getElementByID("_MARKER_EXPORT_BOAT")
+
+BOAT_DETECTOR = createColCuboid(-476, -966, -5, 929, 839, 15)
+REACH_CRANE1 = createColCircle(72.4, -339.4, 89)
+REACH_CRANE2 = createColCircle(-61.9, -286.4, 89)
+GODMODE_REGION_BOAT = createColCircle(-12.5, -342.0, 15)
+GODMODE_REGION_PLANE = createColRectangle(-61, -233, 30, 29)
 CRANE1_STATE = "init"
 CRANE2_STATE = "init"
-BOAT_DETECTOR = createColCuboid(-476, -966, -5, 929, 839, 15)
-LAST_CAR = false
 
 CRANE_HOOK_VERTICAL_SPEED = 131
 CRANE_HOOK_HORIZONTAL_SPEED = 181
@@ -10,12 +17,31 @@ CRANE_TURN_SPEED = 220
 CRANE_TURN_ODDS = 50
 HOOK_BOAT_HEIGHT_OFFSET = 6
 
+SHUFFLED_CARS = {}
+PLAYER_CURRENT_TARGET = 1
+-- LAST_CAR = false
+
+
 VEHICLE_WEAPONS = {
 	[38] = true, --hunter minigun
 	[37] = true, --havent a clue, somethign with the hydra
 	[51] = true, --hunter missiles, tank
 	[31] = true, --rustler, seasparrow, rc baron
 	[28] = true --predator
+}
+
+BIG_PLANES = {
+	[577] = true,
+	[553] = true,
+	[592] = true
+}
+
+VEHICLES_WITH_GUNS = {
+	[476] = true,
+	[447] = true,
+	[430] = true,
+	[464] = true,
+	[425] = true
 }
 
 BOATS = {
@@ -70,18 +96,93 @@ TRAINS = {
 	[449] = true
 }
 
-function shuffleCars(cars)
-	shuffledCars = {}
-	for i = #cars, 1, -1 do
-		randomIndex = math.random(1,i)
-		shuffledCars[i] = cars[randomIndex]
-		table.remove(cars, randomIndex)
+function playerStoppedInMarker()
+	local x, y, z = getElementPosition(localPlayer)
+	if (z > 1000) then
+		-- When spectating, do nothing
+		return
 	end
-	triggerServerEvent("shuffleDone", resourceRoot, shuffledCars)
+	local vehicle = getPedOccupiedVehicle(localPlayer)
+	if (not vehicle) then
+		return
+	end
+	x, y, z = getElementVelocity(vehicle)
+	shittyVelocity = x*x + y*y + z*z
+	if (shittyVelocity > 0.001) then
+		return
+	end
+
+	-- Check if the player is stopped by any of the cranes. Check crane 2 first because 1 doesnt need to do anything if 2 can handle it.
+	if (BOATS[getElementModel(vehicle)] and isElementWithinColShape(vehicle, REACH_CRANE2)) then
+		craneGrab(2)
+	elseif (BOATS[getElementModel(vehicle)] and isElementWithinColShape(vehicle, REACH_CRANE1)) then
+		craneGrab(1)
+	end
+
+	if (not isElementWithinMarker(vehicle, MARKER_EXPORT)) then
+		return
+	end
+
+	if (getElementAttachedTo(vehicle) ~= false) then
+		return
+	end
+
+	collectCheckpoints(PLAYER_CURRENT_TARGET)
+
+	triggerServerEvent("updateProgress", resourceRoot, PLAYER_CURRENT_TARGET)
+end
+setTimer(playerStoppedInMarker, 1, 0)
+
+function collectCheckpoints(target)
+    local vehicle = getPedOccupiedVehicle(localPlayer)
+    local checkpoint = getElementData(localPlayer, "race.checkpoint")
+    for i=checkpoint, target do
+        local colshapes = getElementsByType("colshape", RACE_RESOURCE)
+        triggerEvent("onClientColShapeHit",
+            colshapes[#colshapes], vehicle, true)
+    end
 end
 
-addEvent("shuffle", true)
-addEventHandler("shuffle", resourceRoot, shuffleCars)
+function updateTarget(new)
+	PLAYER_CURRENT_TARGET = new
+	CRANE1_STATE = "available"
+	CRANE2_STATE = "available"
+end
+addEvent("updateTarget", true)
+addEventHandler("updateTarget", localPlayer, updateTarget)
+
+---- Prevent players from harming one another
+---- Prevent players from harming one another
+---- Prevent players from harming one another
+---- Prevent players from harming one another
+---- Prevent players from harming one another
+
+function handleVehicleExplosions(x, y, z, theType)
+	-- 2 = hunter
+	-- 3 = hydra heat seek
+	-- 10 = tank
+	if (theType == 2 or theType == 3 or theType == 10) then
+		-- u, v, w = getElementPosition(localPlayer)
+		-- if (getDistanceBetweenPoints3D ( x, y, z, u, v, w ) < 120) then
+		-- 	playSFX("genrl", 45, 3, false)
+		-- end
+		-- playSFX("genrl", 45, 1, false)
+		if (source ~= localPlayer) then
+			-- createEffect("explosion_medium", x,y,z, 270, 0, 0, 0, true)
+			createExplosion(x,y,z,1)
+			cancelEvent()
+		end
+		-- createExplosion(x, y, z, theType, true, -1.0, true)
+	end
+end
+addEventHandler("onClientExplosion", root, handleVehicleExplosions)
+
+function handleVehicleDamage(attacker, weapon, loss, x, y, z, tire)
+	if (VEHICLE_WEAPONS[weapon] and attacker ~= localPlayer) then
+		cancelEvent()
+	end
+end
+addEventHandler("onClientVehicleDamage", root, handleVehicleDamage)
 
 -- New Crane Stuff
 -- New Crane Stuff
@@ -309,34 +410,6 @@ function checkVehicleHealthOnCrane()
 end
 setTimer(checkVehicleHealthOnCrane, 100, 0)
 
-function handleVehicleExplosions(x, y, z, theType)
-	-- 2 = hunter
-	-- 3 = hydra heat seek
-	-- 10 = tank
-	if (theType == 2 or theType == 3 or theType == 10) then
-		-- u, v, w = getElementPosition(localPlayer)
-		-- if (getDistanceBetweenPoints3D ( x, y, z, u, v, w ) < 120) then
-		-- 	playSFX("genrl", 45, 3, false)
-		-- end
-		-- playSFX("genrl", 45, 1, false)
-		if (source ~= localPlayer) then
-			-- createEffect("explosion_medium", x,y,z, 270, 0, 0, 0, true)
-			createExplosion(x,y,z,1)
-			cancelEvent()
-		end
-		-- createExplosion(x, y, z, theType, true, -1.0, true)
-	end
-end
-addEventHandler("onClientExplosion", root, handleVehicleExplosions)
-
-function handleVehicleDamage(attacker, weapon, loss, x, y, z, tire)
-	iprint(attacker)
-	if (VEHICLE_WEAPONS[weapon] and attacker ~= localPlayer) then
-		cancelEvent()
-	end
-end
-addEventHandler("onClientVehicleDamage", root, handleVehicleDamage)
-
 function setCraneBoatState(craneID, state)
 	if (craneID == 1) then
 		if (CRANE1_STATE:find("^boat") ~= nil) then
@@ -361,6 +434,9 @@ function craneTimerTick()
 	end
 	
 	local vehicle = getPedOccupiedVehicle(localPlayer)
+	if (not vehicle) then
+		return
+	end
 	local vehicleModel = getElementModel(vehicle)
 	if (BOATS[vehicleModel]) then
 		if (CRANE1_STATE == "available") then
@@ -453,13 +529,6 @@ function makeCraneAvailable(craneID)
 	end
 end
 
-function makeCranesAvailable()
-	CRANE1_STATE = "available"
-	CRANE2_STATE = "available"
-end
-addEvent("makeCranesAvailable", true)
-addEventHandler("makeCranesAvailable", resourceRoot, makeCranesAvailable)
-
 -- attach the hook to the bar after moving it
 function attachHook(craneID)
 	if (craneID == 1) then
@@ -524,17 +593,6 @@ function moveHook(craneID, destinationZ, destinationD, speedMultiplier)
 	return duration
 end
 
-function hookTest(playerSource, commandName)
-	moveHook(1, 41, 5)
-end
-addCommandHandler("hookTest", hookTest)
-
-function hookTest2(playerSource, commandName)
-	moveHook(1, 41, 89)
-end
-addCommandHandler("hookTest2", hookTest2)
-
-
 function craneGrab(craneID)
 	if (craneID == 1) then
 		if (CRANE1_STATE:find("^boat") ~= nil) then
@@ -553,11 +611,9 @@ function craneGrab(craneID)
 		end
 	end
 end
-addEvent("craneGrab", true)
-addEventHandler("craneGrab", root, craneGrab)
 
 function craneDetectBoat(element, matchingDimension)
-	-- and not in spawn area
+	-- TODO: and not in spawn area
 	if (element ~= localPlayer) then
 		return
 	end
@@ -573,32 +629,73 @@ function craneDetectBoat(element, matchingDimension)
 end
 addEventHandler("onClientColShapeHit", BOAT_DETECTOR, craneDetectBoat)
 
+--- Other Stuff
+--- Other Stuff
+--- Other Stuff
+--- Other Stuff
+--- Other Stuff
+--- Other Stuff
+--- Other Stuff
+--- Other Stuff
 
+function enableGodMode(element, matchingDimension)
+	if (getElementType(element) ~= "vehicle") then
+		return
+	end
+	if (source == GODMODE_REGION_BOAT) then
+		if (BOATS[getElementModel(element)]) then
+			setVehicleDamageProof(element, true)
+		end
+	elseif (source == GODMODE_REGION_PLANE) then
+		if (BIG_PLANES[getElementModel(element)]) then
+			iprint(getElementModel(element))
+			setVehicleDamageProof(element, true)
+		end
+	end
 
-
-
-
-
-
-
-
-function teleportToCraneForFinish()
-	vehicle = getPedOccupiedVehicle(localPlayer)
-	magnet = getElementByID("_CRANE_MAGNET")
-	x,y,z = getElementPosition(magnet)
-	setElementFrozen(vehicle, true)
-	vehicle = getPedOccupiedVehicle(localPlayer)
-	a,b,c,d,e,f = getElementBoundingBox(vehicle)
-	aa,bb,cc,dd,ee,ff = getElementBoundingBox(magnet)
-	setElementPosition(vehicle, x, y, z - f + aa + 1)
 end
-addEvent("teleportToCraneForFinish", true)
-addEventHandler("teleportToCraneForFinish", resourceRoot, teleportToCraneForFinish)
+addEventHandler("onClientColShapeHit", GODMODE_REGION_BOAT, enableGodMode)
+addEventHandler("onClientColShapeHit", GODMODE_REGION_PLANE, enableGodMode)
 
--- function disableCameraClip()
-	-- setCameraClip(true)
--- end
--- addEventHandler( "onClientResourceStop", resourceRoot, disableCameraClip)
+function disableGodMode(element, matchingDimension)
+	if (getElementType(element) ~= "vehicle") then
+		return
+	end
+	setVehicleDamageProof(element, false)
+end
+addEventHandler("onClientColShapeLeave", GODMODE_REGION_BOAT, disableGodMode)
+addEventHandler("onClientColShapeLeave", GODMODE_REGION_PLANE, disableGodMode)
+
+-- Helper functions
+-- Helper functions
+-- Helper functions
+-- Helper functions
+-- Helper functions
+-- Helper functions
+-- Helper functions
+-- Helper functions
+
+function findRotation( x1, y1, x2, y2 ) 
+    local t = -math.deg( math.atan2( x2 - x1, y2 - y1 ) )
+    return t < 0 and t + 360 or t
+end
+
+function getPointFromDistanceRotation(x, y, dist, angle)
+    local a = math.rad(90 - angle);
+    local dx = math.cos(a) * dist;
+    local dy = math.sin(a) * dist;
+    return x-dx, y+dy;
+end
+
+---- Scoreboard stuff
+---- Scoreboard stuff
+---- Scoreboard stuff
+---- Scoreboard stuff
+---- Scoreboard stuff
+---- Scoreboard stuff
+---- Scoreboard stuff
+---- Scoreboard stuff
+---- Scoreboard stuff
 
 TEXT = ""
 SHOW = false
@@ -677,16 +774,3 @@ function drawScoreBoard()
 end
 addEventHandler("onClientRender", root, drawScoreBoard)
 
--- Helper functions
-
-function findRotation( x1, y1, x2, y2 ) 
-    local t = -math.deg( math.atan2( x2 - x1, y2 - y1 ) )
-    return t < 0 and t + 360 or t
-end
-
-function getPointFromDistanceRotation(x, y, dist, angle)
-    local a = math.rad(90 - angle);
-    local dx = math.cos(a) * dist;
-    local dy = math.sin(a) * dist;
-    return x-dx, y+dy;
-end

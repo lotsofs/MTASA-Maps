@@ -44,31 +44,31 @@
 -- DONE - Trains
 -- Runway indicators on map?
 -- Coach
+-- Cranes still seem to bug out sometimes particularly with trains/trailers that spawn inside the area. Fixed by KYS, but not ideal
 -- Test: One of the trains does not spawn in range ( the one across from handin marker)
 -- Some tall light poles can have visual collisions on the crane. Maybe lower them or delete them or sth.
 -- Finale outro cutscene. Lots of errors currently and youre just floating.
--- Spectate ghost thing. Do an additional failsafe for if someone respawns in the air above the marker and stays there.
+-- DONE - Spectate ghost thing. Do an additional failsafe for if someone respawns in the air above the marker and stays there.
 -- Ladder trailer bounces a lot and then dies or doesnt hit the marker
 -- Heli blades disable for otherr players but not self
 -- SPeedyFolf parked in the marker but it didnae work?
+-- Progress save system
+-- On reosurce end/wgeb fuinishing a race, restore all control (vehicle fire/secondary fire)
+-- Spawn area
+-- Tropic Doesn't fit under the bridge
+-- Add pedestrians as spectators as some sort of endurance reward. Make them no collision. Maybe other decorations as well.
+-- Add a noob friendlier option for planes that's really slow. Perhaps using cranes.
+-- NTH: Output to text
 
-MARKER_EXPORT = getElementByID("_MARKER_EXPORT_PARK")
-MARKER_BOAT = getElementByID("_MARKER_EXPORT_BOAT")
-REACH_CRANE1 = createColCircle(72.4, -339.4, 89)
-REACH_CRANE2 = createColCircle(-61.9, -286.4, 89)
-GODMODE_REGION = createColCircle(-12.5, -342.0, 15)
-
-SHUFFLED_CARS = {}
-PLAYER_PROGRESS = {}
-TELEPORTING = {}
-PLAYER_TRAIN_IN_MARKER = {}
 CHECKPOINT = {}
 CHECKPOINTS = getElementsByType("checkpoint")
 
 REQUIRED_CHECKPOINTS = -1
 TIMER_POLL = nil
 
-PRE_SHUFFLED_CARS = {}
+CHOSEN_CARS = {}
+SHUFFLED_INDICES_PER_PLAYER = {}
+PLAYER_PROGRESS = {}
 
 VEHICLES_WITH_GUNS = {
 	[476] = true,
@@ -76,7 +76,7 @@ VEHICLES_WITH_GUNS = {
 	[430] = true,
 	[464] = true,
 	[425] = true
-}
+} -- do not delete
 
 BOATS = {
 	[472] = true,
@@ -112,99 +112,128 @@ TRAINS = {
 	[569] = true,
 	[537] = true,
 	[449] = true
-}
+} -- do not delete
 
 DATABASE = dbConnect("sqlite", ":/fleischbergAutosTopTimes.db")
 	
 ------------------------------------------------------ Start of race ------------------------------------------------------
 
 function shuffleCarsAll()
-	-- do nothing if game hasnt started yet
-	if (REQUIRED_CHECKPOINTS == -1) then
-		return
-	end
-	cars = getElementsByType("exportable")
-	for i, v in pairs(getElementsByType("player")) do
-		if (not SHUFFLED_CARS[v]) then
-			if (REQUIRED_CHECKPOINTS == #cars) then
-				PRE_SHUFFLED_CARS = cars
-			else
-				if (#PRE_SHUFFLED_CARS == 0) then
-					for i = #cars, #cars - REQUIRED_CHECKPOINTS + 1, -1 do
-						randomIndex = math.random(1,i)
-						table.insert(PRE_SHUFFLED_CARS, cars[randomIndex])
-						table.remove(cars, randomIndex)
-					end
-				end
-			end
-			colorGenerator(v)
-			triggerClientEvent(v, "shuffle", resourceRoot, PRE_SHUFFLED_CARS)
-		else
-			colorGenerator(v)
-			teleportToNext(v)
-		end
-	end
-end
-
-function inStarterCarFailsafe()
-	for i,v in pairs(getElementsByType("player")) do
-		vehicle = getPedOccupiedVehicle(v)
-		model = getElementModel(vehicle)
-		-- if (model == 522 or model == 420 or model == 438) then
-			-- do nothing if game hasnt started yet
-			if (REQUIRED_CHECKPOINTS == -1) then
-				return
-			end
-			cars = getElementsByType("exportable")
-			if (not SHUFFLED_CARS[v]) then
-				if (REQUIRED_CHECKPOINTS == #cars) then
-					PRE_SHUFFLED_CARS = cars
-				else
-					if (#PRE_SHUFFLED_CARS == 0) then
-						for i = #cars, #cars - REQUIRED_CHECKPOINTS + 1, -1 do
-							randomIndex = math.random(1,i)
-							table.insert(PRE_SHUFFLED_CARS, cars[randomIndex])
-							table.remove(cars, randomIndex)
-						end
-					end
-				end
-				colorGenerator(v)
-				triggerClientEvent(v, "shuffle", resourceRoot, PRE_SHUFFLED_CARS)
-			-- else
-				-- colorGenerator(v)
-				-- teleportToNext(v)
-			end			
-		-- end
-	end
-end
-setTimer(inStarterCarFailsafe, 10000, 0)
-
-function shuffleCarsOnePlayer(theVehicle, seat, jacked)
-	-- do nothing if game hasnt started yet
-	if (REQUIRED_CHECKPOINTS == -1) then
-		return
-	end
-	cars = getElementsByType("exportable")
-	if (not SHUFFLED_CARS[source]) then
-		if (REQUIRED_CHECKPOINTS == #cars) then
-			PRE_SHUFFLED_CARS = cars
-		else
-			if (#PRE_SHUFFLED_CARS == 0) then
-				for i = #cars, #cars - REQUIRED_CHECKPOINTS + 1, -1 do
-					randomIndex = math.random(1,i)
-					table.insert(PRE_SHUFFLED_CARS, cars[randomIndex])
-					table.remove(cars, randomIndex)
-				end
-			end
-		end
-		colorGenerator(source)
-		triggerClientEvent(source, "shuffle", resourceRoot, PRE_SHUFFLED_CARS)
+	local cars = getElementsByType("exportable")
+	if (REQUIRED_CHECKPOINTS == #cars) then
+		CHOSEN_CARS = cars
 	else
-		colorGenerator(source)
-		teleportToNext(source)
+		for i = #cars, #cars - REQUIRED_CHECKPOINTS + 1, -1 do
+			randomIndex = math.random(1,i)
+			table.insert(CHOSEN_CARS, cars[randomIndex])
+			table.remove(cars, randomIndex)
+		end
+	end
+	for i, v in pairs(getElementsByType("player")) do
+		local intsTable = {}
+		SHUFFLED_INDICES_PER_PLAYER[v] = {}
+		for i = #CHOSEN_CARS, 1, -1 do
+			table.insert(intsTable, i)
+		end
+		for i = #intsTable, 1, -1 do
+			randomIndex = math.random(1,i)
+			table.insert(SHUFFLED_INDICES_PER_PLAYER[v], intsTable[randomIndex])
+			table.remove(intsTable, randomIndex)
+		end
+
+		setPlayerScriptDebugLevel(v, 3)
+		colorGenerator(v)
+		PLAYER_PROGRESS[v] = 1
+		teleportToNext(1, v)
 	end
 end
-addEventHandler("onPlayerVehicleEnter", root, shuffleCarsOnePlayer)
+
+function teleportToNext(progress, player)
+	-- get our destination
+	element = CHOSEN_CARS[SHUFFLED_INDICES_PER_PLAYER[player][progress]]
+	x = getElementData(element, "posX")
+	y = getElementData(element, "posY")
+	z = getElementData(element, "posZ")
+	rX = getElementData(element, "rotX")
+	rY = getElementData(element, "rotY")
+	rZ = getElementData(element, "rotZ")
+	model = getElementData(element, "model")
+	model = tonumber(model)
+	-- go there
+	local vehicle = getPedOccupiedVehicle(player)
+	setElementModel(vehicle, model)
+	if (TRAINS[model]) then
+		setTrainDerailed(vehicle, true)
+	end
+
+	if (VEHICLES_WITH_GUNS[model]) then
+		toggleControl(player, 'vehicle_secondary_fire', false)
+		if (model == 430) then -- predator
+			toggleControl(player, 'vehicle_fire', false)
+		end
+	else
+		toggleControl(player, 'vehicle_fire', true)
+		toggleControl(player, 'vehicle_secondary_fire', true)
+	end
+
+	setElementPosition(vehicle, x, y, z)
+	setElementRotation(vehicle, rX, rY, rZ)
+	fixVehicle(vehicle)
+end
+
+function updateProgress(target)
+	progress = target + 1
+
+	PLAYER_PROGRESS[client] = progress
+	
+	teleportToNext(progress, client)
+	triggerClientEvent(client, "updateTarget", client, progress)
+end
+addEvent("updateProgress", true)
+addEventHandler("updateProgress", resourceRoot, updateProgress)
+
+-- function inStarterCarFailsafe()
+-- 	for i,v in pairs(getElementsByType("player")) do
+-- 		vehicle = getPedOccupiedVehicle(v)
+-- 		model = getElementModel(vehicle)
+-- 		-- if (model == 522 or model == 420 or model == 438) then
+-- 			-- do nothing if game hasnt started yet
+-- 			if (REQUIRED_CHECKPOINTS == -1) then
+-- 				return
+-- 			end
+-- 			cars = getElementsByType("exportable")
+-- 			if (not SHUFFLED_CARS[v]) then
+-- 				if (REQUIRED_CHECKPOINTS == #cars) then
+-- 					PRE_SHUFFLED_CARS = cars
+-- 				else
+-- 					if (#PRE_SHUFFLED_CARS == 0) then
+-- 						for i = #cars, #cars - REQUIRED_CHECKPOINTS + 1, -1 do
+-- 							randomIndex = math.random(1,i)
+-- 							table.insert(PRE_SHUFFLED_CARS, cars[randomIndex])
+-- 							table.remove(cars, randomIndex)
+-- 						end
+-- 					end
+-- 				end
+-- 				colorGenerator(v)
+-- 				triggerClientEvent(v, "shuffle", resourceRoot, PRE_SHUFFLED_CARS)
+-- 			-- else
+-- 				-- colorGenerator(v)
+-- 				-- teleportToNext(v)
+-- 			end			
+-- 		-- end
+-- 	end
+-- end
+-- setTimer(inStarterCarFailsafe, 10000, 0)
+
+function playerRespawn(theVehicle, seat, jacked)
+	-- do nothing if game hasnt started yet
+	if (REQUIRED_CHECKPOINTS == -1) then
+		return
+	end
+	colorGenerator(source)
+	teleportToNext(PLAYER_PROGRESS[source], source)
+end
+addEventHandler("onPlayerVehicleEnter", root, playerRespawn)
 
 function nrgFailsafe(newState, oldState)
 	if (newState ~= "GridCountdown") then
@@ -241,20 +270,13 @@ end
 addEvent("onRaceStateChanging", true)
 addEventHandler("onRaceStateChanging", root, nrgFailsafe)
 
-function startGame(count)
+function startGame(pollResult)
 	killTimer(TIMER_POLL)
-	REQUIRED_CHECKPOINTS = count
+	REQUIRED_CHECKPOINTS = pollResult
 	shuffleCarsAll()
 end
 addEvent("pollFinished", true)
 addEventHandler("pollFinished", resourceRoot, startGame)
-
-function receiveShuffledCars(shuffledCars)
-	SHUFFLED_CARS[client] = shuffledCars
-	PLAYER_PROGRESS[client] = 1
-	teleportToNext(client)
-	colorGenerator(client)
-end
 
 function colorGenerator(player)
 	colors = {}
@@ -291,85 +313,95 @@ function colorGenerator(player)
 	setVehicleColor(vehicle, colors[1], colors[2], colors[3], colors[4], colors[5], colors[6], colors[7], colors[8], colors[9], colors[10], colors[11], colors[12])
 end
 
-function teleportToNext(player)
-	-- get our destination
-	element = SHUFFLED_CARS[player][PLAYER_PROGRESS[player]]
-	x = getElementData(element, "posX")
-	y = getElementData(element, "posY")
-	z = getElementData(element, "posZ")
-	rX = getElementData(element, "rotX")
-	rY = getElementData(element, "rotY")
-	rZ = getElementData(element, "rotZ")
-	model = getElementData(element, "model")
-	model = tonumber(model)
-	-- go there
-	local vehicle = getPedOccupiedVehicle(player)
-	setElementModel(vehicle, model)
-	if (TRAINS[model]) then
-		setTrainDerailed(vehicle, true)
-	end
+-- function teleportToNext(player)
+-- 	-- get our destination
+-- 	element = SHUFFLED_CARS[player][PLAYER_PROGRESS[player]]
+-- 	x = getElementData(element, "posX")
+-- 	y = getElementData(element, "posY")
+-- 	z = getElementData(element, "posZ")
+-- 	rX = getElementData(element, "rotX")
+-- 	rY = getElementData(element, "rotY")
+-- 	rZ = getElementData(element, "rotZ")
+-- 	model = getElementData(element, "model")
+-- 	model = tonumber(model)
+-- 	-- go there
+-- 	local vehicle = getPedOccupiedVehicle(player)
+-- 	setElementModel(vehicle, model)
+-- 	if (TRAINS[model]) then
+-- 		setTrainDerailed(vehicle, true)
+-- 	end
 
-	if (VEHICLES_WITH_GUNS[model]) then
-		toggleControl(player, 'vehicle_secondary_fire', false)
-		if (model == 430) then -- predator
-			toggleControl(player, 'vehicle_fire', false)
-		end
-	else
-		toggleControl(player, 'vehicle_fire', true)
-		toggleControl(player, 'vehicle_secondary_fire', true)
-	end
+-- 	if (VEHICLES_WITH_GUNS[model]) then
+-- 		toggleControl(player, 'vehicle_secondary_fire', false)
+-- 		if (model == 430) then -- predator
+-- 			toggleControl(player, 'vehicle_fire', false)
+-- 		end
+-- 	else
+-- 		toggleControl(player, 'vehicle_fire', true)
+-- 		toggleControl(player, 'vehicle_secondary_fire', true)
+-- 	end
 
-	setElementPosition(vehicle, x, y, z)
-	setElementRotation(vehicle, rX, rY, rZ)
-	fixVehicle(vehicle)
-	PLAYER_TRAIN_IN_MARKER[player] = false
-	TELEPORTING[player] = false
-	triggerClientEvent(player, "makeCranesAvailable", resourceRoot)
-end
+-- 	setElementPosition(vehicle, x, y, z)
+-- 	setElementRotation(vehicle, rX, rY, rZ)
+-- 	fixVehicle(vehicle)
+-- 	PLAYER_TRAIN_IN_MARKER[player] = false
+-- 	TELEPORTING[player] = false
+-- 	triggerClientEvent(player, "makeCranesAvailable", resourceRoot)
+-- end
 
-addEvent("shuffleDone", true)
-addEventHandler("shuffleDone", resourceRoot, receiveShuffledCars)
+-- addEvent("shuffleDone", true)
+-- addEventHandler("shuffleDone", resourceRoot, receiveShuffledCars)
 
 ------------------------------------------------------ Player progress ------------------------------------------------------
 
-function playerStoppedInMarker()
-	for i,v in ipairs(getElementsByType("player")) do	
-		local x, y, z = getElementPosition(v)
-		if (z > 1000) then
-			return
-		end
-		vehicle = getPedOccupiedVehicle(v)
-		if (vehicle) then
-			x, y, z = getElementVelocity(vehicle)
-			shittyVelocity = x*x + y*y + z*z
-			-- vehicle handin location
-			if (TRAINS[getElementModel(vehicle)] and not PLAYER_TRAIN_IN_MARKER[v] and isElementWithinMarker(vehicle, MARKER_EXPORT)) then
-				PLAYER_TRAIN_IN_MARKER[v] = true
-				setTimer(function()
-					TELEPORTING[v] = true
-					PLAYER_PROGRESS[v] = PLAYER_PROGRESS[v] + 1
-					teleportToCheckpoints(v)
-				end, 1000, 1)
-			elseif (not PLAYER_TRAIN_IN_MARKER[v] and shittyVelocity < 0.001 and isElementWithinMarker(vehicle, MARKER_EXPORT) and not TELEPORTING[v]) then
-				TELEPORTING[v] = true
-				PLAYER_PROGRESS[v] = PLAYER_PROGRESS[v] + 1
-				teleportToCheckpoints(v)
-			end
-			-- boat marker
-			if (BOATS[getElementModel(vehicle)] and shittyVelocity < 0.001 and isElementWithinColShape(vehicle, REACH_CRANE2)) then
-				triggerClientEvent(v, "craneGrab", resourceRoot, 2)
-			elseif (BOATS[getElementModel(vehicle)] and shittyVelocity < 0.001 and isElementWithinColShape(vehicle, REACH_CRANE1)) then
-				triggerClientEvent(v, "craneGrab", resourceRoot, 1)
-			end
-		end
-	end
+-- function playerStoppedInMarker()
+-- 	for i,v in ipairs(getElementsByType("player")) do	
+-- 		local x, y, z = getElementPosition(v)
+-- 		if (z > 1000) then
+-- 			return
+-- 		end
+-- 		local vehicle = getPedOccupiedVehicle(v)
+-- 		if (vehicle) then
+-- 			x, y, z = getElementVelocity(vehicle)
+-- 			shittyVelocity = x*x + y*y + z*z
+-- 			-- vehicle handin location
+-- 			if (TRAINS[getElementModel(vehicle)] and not PLAYER_TRAIN_IN_MARKER[v] and isElementWithinMarker(vehicle, MARKER_EXPORT)) then
+-- 				PLAYER_TRAIN_IN_MARKER[v] = true
+-- 				setTimer(function()
+-- 					TELEPORTING[v] = true
+-- 					PLAYER_PROGRESS[v] = PLAYER_PROGRESS[v] + 1
+-- 					teleportToCheckpoints(v)
+-- 				end, 1000, 1)
+-- 			elseif (not PLAYER_TRAIN_IN_MARKER[v] and shittyVelocity < 0.001 and isElementWithinMarker(vehicle, MARKER_EXPORT)) then
+-- 				TELEPORTING[v] = true
+-- 				PLAYER_PROGRESS[v] = PLAYER_PROGRESS[v] + 1
+-- 				teleportToCheckpoints(v)
+-- 			end
+-- 			-- boat marker
+-- 			if (BOATS[getElementModel(vehicle)] and shittyVelocity < 0.001 and isElementWithinColShape(vehicle, REACH_CRANE2)) then
+-- 				triggerClientEvent(v, "craneGrab", resourceRoot, 2)
+-- 			elseif (BOATS[getElementModel(vehicle)] and shittyVelocity < 0.001 and isElementWithinColShape(vehicle, REACH_CRANE1)) then
+-- 				triggerClientEvent(v, "craneGrab", resourceRoot, 1)
+-- 			end
+-- 		end
+-- 	end
+-- end
+-- setTimer(playerStoppedInMarker, 1, 0)
+
+function cheatData(playerSource, commandName)
+	v = getPlayerFromName("SpeedyFolf")
+	local vehicle = getPedOccupiedVehicle(v)
+	iprint(v, TRAINS[getElementModel(vehicle)], PLAYER_TRAIN_IN_MARKER[v], isElementWithinMarker(vehicle, MARKER_EXPORT), TELEPORTING[v], PLAYER_PROGRESS[v])
 end
-setTimer(playerStoppedInMarker, 1, 0)
+addCommandHandler("cheatdata", cheatData)
 
 function cheatSkipVehicle(playerSource, commandName)
-	TELEPORTING[playerSource] = true
-	PLAYER_PROGRESS[playerSource] = PLAYER_PROGRESS[playerSource] + 1
-	teleportToCheckpoints(playerSource)
+	progress = PLAYER_PROGRESS[playerSource] + 1
+
+	PLAYER_PROGRESS[playerSource] = progress
+	
+	teleportToNext(progress, playerSource)
+	triggerClientEvent(playerSource, "updateTarget", playerSource, progress)
 end
 addCommandHandler("cheatnext", cheatSkipVehicle)
 
@@ -380,9 +412,12 @@ end
 addCommandHandler("cheatflip", cheatFlipVehicle)
 
 function cheatPrevVehicle(playerSource, commandName)
-	TELEPORTING[playerSource] = true
-	PLAYER_PROGRESS[playerSource] = PLAYER_PROGRESS[playerSource] - 1
-	killPed(playerSource)
+	progress = PLAYER_PROGRESS[playerSource] - 1
+
+	PLAYER_PROGRESS[playerSource] = progress
+	
+	teleportToNext(progress, playerSource)
+	triggerClientEvent(playerSource, "updateTarget", playerSource, progress)
 end
 addCommandHandler("cheatprev", cheatPrevVehicle)
 
@@ -398,27 +433,6 @@ function cheatTeleportBoat(playerSource, commandName)
 end
 addCommandHandler("cheattpboat", cheatTeleportBoat)
 
-
-function teleportToCheckpoints(player)
-	vehicle = getPedOccupiedVehicle(player)
-	for i = 1, PLAYER_PROGRESS[player] - 1, 1 do
-		x,y,z = getElementPosition(CHECKPOINTS[i])
-		setElementPosition(vehicle, x, y, z)
-	end
-end
-
-function grabCheckpoint(checkpoint, time_)
-	if (checkpoint < PLAYER_PROGRESS[source] - 1 and checkpoint < REQUIRED_CHECKPOINTS) then
-		--TELEPORTING[source] = false
-		teleportToCheckpoints(source)
-	elseif (checkpoint == REQUIRED_CHECKPOINTS) then
-		PLAYER_PROGRESS[source] = #getElementsByType("checkpoint") + 1
-		teleportToCheckpoints(source)
-	elseif (checkpoint < REQUIRED_CHECKPOINTS) then
-		teleportToNext(source)
-	end
-end
-addEventHandler("onPlayerReachCheckpoint", getRootElement(), grabCheckpoint)
 
 function finish(rank, _time)
 	triggerClientEvent(source, "teleportToCraneForFinish", resourceRoot)
@@ -445,27 +459,6 @@ function finish(rank, _time)
 	end
 end
 addEventHandler("onPlayerFinish", getRootElement(), finish)
-
--- Other stuff
-
-function enableGodMode(element, matchingDimension)
-	if (getElementType(element) == "vehicle") then
-		iprint("yes")
-		setVehicleDamageProof(element, true)
-		return
-	end
-end
-addEventHandler("onColShapeHit", GODMODE_REGION, enableGodMode)
-
-function disableGodMode(element, matchingDimension)
-	if (getElementType(element) == "vehicle") then
-		iprint("no")
-		setVehicleDamageProof(element, false)
-		return
-	end
-end
-addEventHandler("onColShapeLeave", GODMODE_REGION, disableGodMode)
-
 
 -- database stuff
 -- --------------
