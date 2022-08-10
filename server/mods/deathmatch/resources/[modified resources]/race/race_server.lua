@@ -85,6 +85,7 @@ addEventHandler('onSettingChange', g_ResRoot,
 function cacheGameOptions()
 	g_GameOptions = {}
 	g_GameOptions.timeafterfirstfinish  = getNumber('race.timeafterfirstfinish',30) * 1000
+	g_GameOptions.percentagetimeafterfirstfinish  = getNumber('race.percentagetimeafterfirstfinish',25)
 	g_GameOptions.hurrytime				= getNumber('race.hurrytime',15) * 1000
 	g_GameOptions.defaultrespawnmode	= getString('race.respawnmode','none')
 	g_GameOptions.defaultrespawntime	= getNumber('race.respawntime',5) * 1000

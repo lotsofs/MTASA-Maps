@@ -269,7 +269,7 @@ function RaceMode:onPlayerReachCheckpoint(player, checkpointNum)
 			end
 			self.rankingBoard = RankingBoard:create()
 			if g_MapOptions.duration then
-				self:setTimeLeft( g_GameOptions.timeafterfirstfinish )
+				self:setTimeLeft( g_GameOptions.percentagetimeafterfirstfinish * self:getTimePassed() / 100)
 			end
 		else
 			showMessage('You finished ' .. rank .. ( (rank < 10 or rank > 20) and ({ [1] = 'st', [2] = 'nd', [3] = 'rd' })[rank % 10] or 'th' ) .. '!', 0, 255, 0, player)
