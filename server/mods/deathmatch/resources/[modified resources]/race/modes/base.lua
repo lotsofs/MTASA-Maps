@@ -245,7 +245,7 @@ function RaceMode:onPlayerReachCheckpoint(player, checkpointNum)
 				getElementVelocity(vehicle)
 			},
 			turnvelocity = {
-				getVehicleTurnVelocity(vehicle)
+				getElementAngularVelocity(vehicle)
 			},
 			geardown = getVehicleLandingGearDown(vehicle) or false,
 			hasNitro = getVehicleUpgradeOnSlot(vehicle, 8) > 0
@@ -448,7 +448,7 @@ function restorePlayer(id, player, bNoFade, bDontFix)
 	local vehicle = RaceMode.getPlayerVehicle(player)
 	if vehicle then
         setElementVelocity( vehicle, 0,0,0 )
-        setVehicleTurnVelocity( vehicle, 0,0,0 )
+        setElementAngularVelocity( vehicle, 0,0,0 )
 		setElementPosition(vehicle, unpack(bkp.position))
 		local rx, ry, rz = unpack(bkp.rotation)
 		setElementRotation(vehicle, rx or 0, ry or 0, rz or 0)
@@ -490,7 +490,7 @@ function restorePlayerUnfreeze(id, player, bDontFix)
 	local checkpointNum = getPlayerCurrentCheckpoint(player) - 1
 	local bkp = RaceMode.instances[id].checkpointBackups[player][checkpointNum]
 	setElementVelocity(vehicle, unpack(bkp.velocity))
-	setVehicleTurnVelocity(g_Vehicles[player], unpack(bkp.turnvelocity))
+	setElementAngularVelocity(g_Vehicles[player], unpack(bkp.turnvelocity))
 	triggerClientEvent(player, 'race:startNosAgain', resourceRoot, checkpointNum)
 end
 

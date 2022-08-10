@@ -48,7 +48,7 @@ end
 function GhostRecord:checkForCountdownEnd()
 	local vehicle = getPedOccupiedVehicle( getLocalPlayer() )
 	if vehicle then
-		local frozen = isVehicleFrozen( vehicle )
+		local frozen = isElementFrozen( vehicle )
 		if not frozen then
 			self.currentVehicleType = getElementModel( vehicle )
 			local pedModel = getElementModel( getLocalPlayer() )
@@ -153,7 +153,7 @@ end
 function GhostRecord:checkStateChanges()
 	-- Keys
 	for _, v in ipairs( keyNames ) do
-		local state = getControlState( v )
+		local state = getPedControlState( v )
 		if not state and analogNames[v] then
 			-- Not a really good implementation, but didn't think if anything else
 			state = getAnalogControlState( v ) >= 0.5

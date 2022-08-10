@@ -57,10 +57,10 @@ end
 function GhostPlayback:checkForCountdownEnd()
 	local vehicle = getPedOccupiedVehicle( getLocalPlayer() )
 	if vehicle then
-		local frozen = isVehicleFrozen( vehicle )
+		local frozen = isElementFrozen( vehicle )
 		if not frozen then
 			outputDebug( "Playback started." )
-			setVehicleFrozen( self.vehicle, false )
+			setElementFrozen( self.vehicle, false )
 			if self.checkForCountdownEnd_HANDLER then removeEventHandler( "onClientRender", g_Root, self.checkForCountdownEnd_HANDLER ) self.checkForCountdownEnd_HANDLER = nil end
 			self:startPlayback()
 		end
