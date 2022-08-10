@@ -30,13 +30,13 @@
 -- DONE - Bicycles were unable to hop. Fix
 -- DONE - Make the cranes work
 -- Tweak cranes if needed
--- Make work for players joining midway through
+-- DONE - Make work for players joining midway through
 -- DONE - Boat Detector: Could probably shave the eastern edge of the boat hitbox further west since you'll only be approaching with a Reefer from that direction. West and southern border are fine.
 -- DONE - Repair boats maybe
 -- DONE - Protection when landing big planes such as AT-400
 -- DONE - Can bicycles cheese the non-collision fence? Fix
 -- Tutorial cutscene & more polls
--- There's a failsafe for new players joining (is it needed?). But this triggers by them being in a 'wrong' vehicle. However, there are no wrong vehicles. Workaround.
+-- DONE - There's a failsafe for new players joining (is it needed?). But this triggers by them being in a 'wrong' vehicle. However, there are no wrong vehicles. Workaround.
 -- Map loading upon teleporting. If I can't find a way to preload map regions, I think I'll just have to do a freeze before move, or do the hold the line thing.
 -- Add options for no planes, boats, etc
 -- Janky launch spawns. Need to freeze probably.
@@ -45,7 +45,7 @@
 -- Runway indicators on map?
 -- Coach
 -- Cranes still seem to bug out sometimes particularly with trains/trailers that spawn inside the area. Fixed by KYS, but not ideal
--- Test: One of the trains does not spawn in range ( the one across from handin marker)
+-- DONE - Test: One of the trains does not spawn in range ( the one across from handin marker)
 -- Some tall light poles can have visual collisions on the crane. Maybe lower them or delete them or sth.
 -- Finale outro cutscene. Lots of errors currently and youre just floating.
 -- DONE - Spectate ghost thing. Do an additional failsafe for if someone respawns in the air above the marker and stays there.
@@ -63,6 +63,7 @@
 -- DONE - Boats get delivered before dropping to the ground
 -- DONE - Reset cranes on death
 -- Trains and trailers: Instant hook pls
+-- Train in corner that was bad before clips through the wall behind it
 
 CHECKPOINT = {}
 CHECKPOINTS = getElementsByType("checkpoint")
@@ -124,23 +125,27 @@ DATABASE = dbConnect("sqlite", ":/fleischbergAutosTopTimes.db")
 
 function shuffleCarsAll()
 	local cars = getElementsByType("exportable")
-	if (REQUIRED_CHECKPOINTS == #cars) then
-		CHOSEN_CARS = cars
-	else
-		for i = #cars, #cars - REQUIRED_CHECKPOINTS + 1, -1 do
-			randomIndex = math.random(1,i)
-			table.insert(CHOSEN_CARS, cars[randomIndex])
-			table.remove(cars, randomIndex)
+	-- Select cars for every player
+	if (#CHOSEN_CARS == 0) then
+		if (REQUIRED_CHECKPOINTS == #cars) then
+			CHOSEN_CARS = cars
+		else
+			for i = #cars, #cars - REQUIRED_CHECKPOINTS + 1, -1 do
+				randomIndex = math.random(1,i)
+				table.insert(CHOSEN_CARS, cars[randomIndex])
+				table.remove(cars, randomIndex)
+			end
 		end
 	end
+	-- Shuffle the cars for each player
 	for i, v in pairs(getElementsByType("player")) do
 		local intsTable = {}
 		SHUFFLED_INDICES_PER_PLAYER[v] = {}
-		for i = #CHOSEN_CARS, 1, -1 do
-			table.insert(intsTable, i)
+		for j = #CHOSEN_CARS, 1, -1 do
+			table.insert(intsTable, j)
 		end
-		for i = #intsTable, 1, -1 do
-			randomIndex = math.random(1,i)
+		for j = #intsTable, 1, -1 do
+			randomIndex = math.random(1,j)
 			table.insert(SHUFFLED_INDICES_PER_PLAYER[v], intsTable[randomIndex])
 			table.remove(intsTable, randomIndex)
 		end
@@ -151,6 +156,34 @@ function shuffleCarsAll()
 		teleportToNext(1, v)
 	end
 end
+
+function shuffleCarsOne(theVehicle, seat, jacked)
+	-- A new player joining gets put in a vehicle
+	if (#CHOSEN_CARS == 0) then
+		-- Race hasn't started yet
+		return
+	end
+	local sipp = SHUFFLED_INDICES_PER_PLAYER[source]
+	if (sipp ~= nil and #sipp > 0) then
+		-- This player is not new
+		return
+	end
+	local intsTable = {}
+	SHUFFLED_INDICES_PER_PLAYER[source] = {}
+	for i = #CHOSEN_CARS, 1, -1 do
+		table.insert(intsTable, i)
+	end
+	for i = #intsTable, 1, -1 do
+		randomIndex = math.random(1,i)
+		table.insert(SHUFFLED_INDICES_PER_PLAYER[source], intsTable[randomIndex])
+		table.remove(intsTable, randomIndex)
+	end
+	setPlayerScriptDebugLevel(source, 3)
+	colorGenerator(source)
+	PLAYER_PROGRESS[source] = 1
+	teleportToNext(1, source)
+end
+addEventHandler("onPlayerVehicleEnter", root, shuffleCarsOne)
 
 function teleportToNext(progress, player)
 	-- get our destination
@@ -474,8 +507,10 @@ addEventHandler("onPlayerFinish", getRootElement(), finish)
 
 
 function cleanup(stoppedResource)
-	toggleControl(player, 'vehicle_fire', true)
-	toggleControl(player, 'vehicle_secondary_fire', true)
+	for i, v in ipairs(getElementsByType("player")) do
+		toggleControl(v, 'vehicle_fire', true)
+		toggleControl(v, 'vehicle_secondary_fire', true)
+	end
 end
 addEventHandler( "onResourceStop", resourceRoot, cleanup)
 
