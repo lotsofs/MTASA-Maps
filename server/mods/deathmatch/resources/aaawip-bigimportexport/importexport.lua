@@ -3,11 +3,14 @@ local RACE_RESOURCE = getResourceDynamicElementRoot(getResourceFromName("race"))
 MARKER_EXPORT = getElementByID("_MARKER_EXPORT_PARK")
 MARKER_BOAT = getElementByID("_MARKER_EXPORT_BOAT")
 
+BLOCKING_BRIDGE = getElementByID("_NON_COLLIDE_BRIDGE")
+
+BRIDGE_DETECTOR = createColCircle(37, -530, 22)
 BOAT_DETECTOR = createColCuboid(-476, -966, -5, 929, 839, 15)
 REACH_CRANE1 = createColCircle(72.4, -339.4, 89)
 REACH_CRANE2 = createColCircle(-61.9, -286.4, 89)
 GODMODE_REGION_BOAT = createColCircle(-12.5, -342.0, 15)
-GODMODE_REGION_PLANE = createColRectangle(-61, -233, 30, 29)
+GODMODE_REGION_PLANE = createColCuboid(-61, -233, 0, 30, 29, 25)
 CRANE1_STATE = "init"
 CRANE2_STATE = "init"
 
@@ -16,6 +19,9 @@ CRANE_HOOK_HORIZONTAL_SPEED = 181
 CRANE_TURN_SPEED = 220
 CRANE_TURN_ODDS = 50
 HOOK_BOAT_HEIGHT_OFFSET = 6
+LOW_DAMAGE_DIVISOR = 2
+
+LOW_DAMAGE = false
 
 SHUFFLED_CARS = {}
 PLAYER_CURRENT_TARGET = 1
@@ -44,6 +50,20 @@ VEHICLES_WITH_GUNS = {
 	[425] = true
 }
 
+HELICOPTERS = {
+	[548] = true,
+	[425] = true,
+	[417] = true,
+	[487] = true,
+	[488] = true,
+	[497] = true,
+	[563] = true,
+	[447] = true,
+	[469] = true,
+	[465] = true,
+	[501] = true
+}
+
 BOATS = {
 	[472] = true,
 	[473] = true,
@@ -62,6 +82,7 @@ BOATS = {
 	[435] = true,
 	[450] = true,
 	[591] = true,
+	[611] = true,
 	
 	[590] = true,
 	[538] = true,
@@ -78,6 +99,7 @@ TRAILERS = {
 	[435] = true,
 	[450] = true,
 	[591] = true,
+	[611] = true,
 	
 	[590] = true,
 	[538] = true,
@@ -98,8 +120,8 @@ TRAINS = {
 
 function playerStoppedInMarker()
 	local x, y, z = getElementPosition(localPlayer)
-	if (z > 1000) then
-		-- When spectating, do nothing
+	if (z > 21) then
+		-- When spectating or on the crane still, do nothing
 		return
 	end
 	local vehicle = getPedOccupiedVehicle(localPlayer)
@@ -108,7 +130,7 @@ function playerStoppedInMarker()
 	end
 	x, y, z = getElementVelocity(vehicle)
 	shittyVelocity = x*x + y*y + z*z
-	if (shittyVelocity > 0.001) then
+	if (shittyVelocity > 0.0001) then
 		return
 	end
 
@@ -128,7 +150,6 @@ function playerStoppedInMarker()
 	end
 
 	collectCheckpoints(PLAYER_CURRENT_TARGET)
-
 	triggerServerEvent("updateProgress", resourceRoot, PLAYER_CURRENT_TARGET)
 end
 setTimer(playerStoppedInMarker, 1, 0)
@@ -138,24 +159,104 @@ function collectCheckpoints(target)
     local checkpoint = getElementData(localPlayer, "race.checkpoint")
     for i=checkpoint, target do
         local colshapes = getElementsByType("colshape", RACE_RESOURCE)
-        triggerEvent("onClientColShapeHit",
+		triggerEvent("onClientColShapeHit",
             colshapes[#colshapes], vehicle, true)
     end
 end
+
+function finishRace(new)
+	collectCheckpoints(#getElementsByType("checkpoint"))
+end
+addEvent("finishRace", true)
+addEventHandler("finishRace", localPlayer, finishRace)
 
 function updateTarget(new)
 	PLAYER_CURRENT_TARGET = new
 	CRANE1_STATE = "available"
 	CRANE2_STATE = "available"
+	setElementCollisionsEnabled(BLOCKING_BRIDGE, true)
 end
 addEvent("updateTarget", true)
 addEventHandler("updateTarget", localPlayer, updateTarget)
 
----- Prevent players from harming one another
----- Prevent players from harming one another
----- Prevent players from harming one another
----- Prevent players from harming one another
----- Prevent players from harming one another
+---- Prevent players from harming one another or themselves in certain cases
+---- Prevent players from harming one another or themselves in certain cases
+---- Prevent players from harming one another or themselves in certain cases
+---- Prevent players from harming one another or themselves in certain cases
+---- Prevent players from harming one another or themselves in certain cases
+
+function enableGodMode(element, matchingDimension)
+	if (getElementType(element) ~= "vehicle") then
+		return
+	end
+	if (source == GODMODE_REGION_BOAT) then
+		if (BOATS[getElementModel(element)]) then
+			LOW_DAMAGE = true
+			-- setVehicleDamageProof(element, true)
+		end
+	elseif (source == GODMODE_REGION_PLANE) then
+		if (BIG_PLANES[getElementModel(element)]) then
+			LOW_DAMAGE = true
+			-- setVehicleDamageProof(element, true)
+		end
+	end
+
+end
+addEventHandler("onClientColShapeHit", GODMODE_REGION_BOAT, enableGodMode)
+addEventHandler("onClientColShapeHit", GODMODE_REGION_PLANE, enableGodMode)
+
+function disableGodMode(element, matchingDimension)
+	if (getElementType(element) ~= "vehicle") then
+		return
+	end
+	LOW_DAMAGE = false
+	-- setVehicleDamageProof(element, false)
+end
+addEventHandler("onClientColShapeLeave", GODMODE_REGION_BOAT, disableGodMode)
+addEventHandler("onClientColShapeLeave", GODMODE_REGION_PLANE, disableGodMode)
+
+function bigPlaneDelivery()
+	veh = getPedOccupiedVehicle(localPlayer)
+	if (not veh) then
+		return
+	end
+	if (veh ~= getPedOccupiedVehicle(localPlayer)) then
+		return
+	end
+	if (not BIG_PLANES[getElementModel(veh)]) then
+		return
+	end
+	if (not isElementWithinColShape(veh, GODMODE_REGION_PLANE)) then
+		return
+	end
+	x, y, z = getElementVelocity(veh)
+	shittyVelocity = x*x + y*y + z*z
+	if (shittyVelocity > 0.0001) then
+		return
+	end
+	collectCheckpoints(PLAYER_CURRENT_TARGET)
+	triggerServerEvent("updateProgress", resourceRoot, PLAYER_CURRENT_TARGET)
+end
+setTimer(bigPlaneDelivery, 100, 0)
+
+-- function deliverExplodedVehicle(element, matchingDimension)
+-- 	if (source ~= getPedOccupiedVehicle(localPlayer)) then
+-- 		return
+-- 	end
+-- 	if (not BIG_PLANES[getElementModel(source)]) then
+-- 		return
+-- 	end
+-- 	if (not isElementWithinColShape(source, GODMODE_REGION_PLANE)) then
+-- 		return
+-- 	end
+-- 	setElementHealth(source, getElementHealth(1000))
+-- 	iprint(":)")
+-- 	cancelEvent()
+-- 	-- deliver vehicle anyway if it's a big plane inside the godmode region plane and it's ours:
+-- 	collectCheckpoints(PLAYER_CURRENT_TARGET)
+-- 	triggerServerEvent("updateProgress", resourceRoot, PLAYER_CURRENT_TARGET)
+-- end
+-- addEventHandler("onClientVehicleExplode", root, deliverExplodedVehicle)
 
 function handleVehicleExplosions(x, y, z, theType)
 	-- 2 = hunter
@@ -177,10 +278,54 @@ function handleVehicleExplosions(x, y, z, theType)
 end
 addEventHandler("onClientExplosion", root, handleVehicleExplosions)
 
+-- function restoreHeliBlades()
+-- 	local veh = getPedOccupiedVehicle(localPlayer)
+-- 	if (not veh) then
+-- 		return
+-- 	end
+-- 	if (not HELICOPTERS[getElementModel(veh)]) then
+-- 		iprint(math.random(0, 233))
+-- 		return
+-- 	end
+-- 	iprint("WOAAHASDFIAHSDIAHUSD")
+-- 	setHeliBladeCollisionsEnabled ( veh, true )
+-- end
+-- setTimer(restoreHeliBlades, 2000, 0)
+
 function handleVehicleDamage(attacker, weapon, loss, x, y, z, tire)
+	-- iprint(source, attacker, weapon)
+	-- if (HELICOPTERS[getElementModel(source)] and attacker ~= nil) then
+	-- 	setHeliBladeCollisionsEnabled ( source, false )
+	-- 	cancelEvent()
+	-- end
 	if (VEHICLE_WEAPONS[weapon] and attacker ~= localPlayer) then
 		cancelEvent()
+	elseif (LOW_DAMAGE) then
+		setElementHealth(source, getElementHealth(source) - (loss / LOW_DAMAGE_DIVISOR))
+		cancelEvent()
 	end
+-- 	x, y, z = getElementPosition(source)
+-- 	iprint(z)
+-- 	if (getElementHealth(source) > 250) then
+-- 		iprint(":)")
+-- 		return
+-- 	end
+-- 	iprint(":D")
+
+-- 	if (source ~= getPedOccupiedVehicle(localPlayer)) then
+-- 		return
+-- 	end
+-- 	if (not BIG_PLANES[getElementModel(source)]) then
+-- 		return
+-- 	end
+-- 	if (not isElementWithinColShape(source, GODMODE_REGION_PLANE)) then
+-- 		return
+-- 	end
+-- 	setElementHealth(source, 1000)
+-- 	cancelEvent()
+-- 	-- deliver vehicle anyway if it's a big plane inside the godmode region plane and it's ours:
+-- 	collectCheckpoints(PLAYER_CURRENT_TARGET)
+-- 	triggerServerEvent("updateProgress", resourceRoot, PLAYER_CURRENT_TARGET)
 end
 addEventHandler("onClientVehicleDamage", root, handleVehicleDamage)
 
@@ -188,6 +333,13 @@ addEventHandler("onClientVehicleDamage", root, handleVehicleDamage)
 -- New Crane Stuff
 -- New Crane Stuff
 -- New Crane Stuff
+
+function resetCranes(killer, weapon, bodypart)
+	CRANE1_STATE = "available"
+	CRANE2_STATE = "available"
+	setElementCollisionsEnabled(BLOCKING_BRIDGE, true)
+end
+addEventHandler("onClientPlayerWasted", localPlayer, resetCranes)
 
 -- Initialize all the crane stuff
 function configureCrane()
@@ -236,6 +388,14 @@ function configureCrane()
 	setTimer(craneTimerTick, 100, 0)
 
 	createBlip(99.4, -414.6, 0, 9)
+
+	local allVehicles = getElementsByType("vehicle")
+	local myVehicle = getPedOccupiedVehicle(localPlayer)
+	for i, v in ipairs(allVehicles) do
+		if (v ~= myVehicle) then
+			setHeliBladeCollisionsEnabled ( v, false )
+		end
+	end
 end
 addEvent("configureCrane", true)
 addEventHandler("configureCrane", resourceRoot, configureCrane)
@@ -248,7 +408,7 @@ function craneOneBoatGrab()
 	local u2,v2,w2 = getElementRotation(vehicle)
 	if (CRANE1_STATE == "boat 0") then
 		-- move bar above boat
-		CRANE1_STATE = "boat 1"
+		setCraneBoatState(1, "boat 1")
 		local r = findRotation(x1,y1,x2,y2)
 		local d
 		if (TRAILERS[getElementModel(vehicle)]) then
@@ -256,27 +416,27 @@ function craneOneBoatGrab()
 		end
 		local duration = rotateCraneTo(1, r, d, 0.25)
 		setTimer(function()
-			CRANE1_STATE = "boat 2"
+			setCraneBoatState(1, "boat 2")
 		end, duration, 1)
 	elseif (CRANE1_STATE == "boat 2") then
 		-- move hook into boat
-		CRANE1_STATE = "boat 3"
+		setCraneBoatState(1, "boat 3")
 		local d = getDistanceBetweenPoints2D ( x1,y1,x2,y2 )
 		local duration = moveHook(1, z2 + HOOK_BOAT_HEIGHT_OFFSET, math.min(d,89), 0.5)
 		setTimer(function()
-			CRANE1_STATE = "boat 4"
+			setCraneBoatState(1, "boat 4")
 		end, duration, 1)
 	elseif (CRANE1_STATE == "boat 4") then
 		-- raise hook up with boat
-		CRANE1_STATE = "boat 5"
+		setCraneBoatState(1, "boat 5")
 		local x3,y3,z3 = getElementPosition(crane["hook1"])
 		local d = getDistanceBetweenPoints2D ( x3,y3,x2,y2 )
 		-- if (d > 90) then
-		-- 	CRANE1_STATE = "waiting for boat"
+		-- 	setCraneBoatState(1, "waiting for boat"
 		-- 	return
 		-- end
 		if (d > 1) then
-			CRANE1_STATE = "boat 0"
+			setCraneBoatState(1, "boat 0")
 			return
 		end
 		if (getElementHealth(vehicle) >= 250) then
@@ -285,37 +445,37 @@ function craneOneBoatGrab()
 		rotateCraneTo(2, 218, nil, 0.5) -- rotate crane 2 into position
 		local duration = moveHook(1, math.random(35,41), -1)
 		setTimer(function()
-			CRANE1_STATE = "boat 6"
+			setCraneBoatState(1, "boat 6")
 		end, duration, 1)
 	elseif (CRANE1_STATE == "boat 6") then
 		-- rotate crane with boat
-		CRANE1_STATE = "boat 7"
+		setCraneBoatState(1, "boat 7")
 		local duration = rotateCraneTo(1, 94, nil, 0.5)
 		setTimer(function()
-			CRANE1_STATE = "boat 8"
+			setCraneBoatState(1, "boat 8")
 		end, duration, 1)
 	elseif (CRANE1_STATE == "boat 8") then
 		-- move hook into range of other crane if not there yet
-		CRANE1_STATE = "boat 9"
+		setCraneBoatState(1, "boat 9")
 		local d = getDistanceBetweenPoints2D ( x1,y1,x2,y2 )
 		if (d < 70) then
 			local duration = moveHook(1, -1, math.random(70,89))
 			setTimer(function()
-				CRANE1_STATE = "boat 10"
+				setCraneBoatState(1, "boat 10")
 			end, duration, 1)
 		else
-			CRANE1_STATE = "boat 10"
+			setCraneBoatState(1, "boat 10")
 		end
 	elseif (CRANE1_STATE == "boat 10") then
 		-- drop boat
-		CRANE1_STATE = "boat 11"
+		setCraneBoatState(1, "boat 11")
 		detachElements(vehicle)
 		setTimer(function()
-			CRANE1_STATE = "boat 12"
+			setCraneBoatState(1, "boat 12")
 		end, 500, 1)
 	elseif (CRANE1_STATE == "boat 12") then
 		-- move crane out of the way
-		CRANE1_STATE = "boat 13"
+		setCraneBoatState(1, "boat 13")
 		local duration = rotateCraneTo(1, math.random(135, 405))
 	end
 end
@@ -328,31 +488,31 @@ function craneTwoBoatGrab()
 	u2,v2,w2 = getElementRotation(vehicle)
 	if (CRANE2_STATE == "boat 0") then
 		-- move bar above boat
-		CRANE2_STATE = "boat 1"
+		setCraneBoatState(2, "boat 1")
 		local r = findRotation(x1,y1,x2,y2)
 		local d
 		if (TRAILERS[getElementModel(vehicle)]) then
 			d = 0
 		end
-		local duration = rotateCraneTo(2, r, d, 0.2)
+		local duration = rotateCraneTo(2, r, 3000)
 		setTimer(function()
-			CRANE2_STATE = "boat 2"
+			setCraneBoatState(2, "boat 2")
 		end, duration, 1)
 	elseif (CRANE2_STATE == "boat 2") then
 		-- move hook into boat
-		CRANE2_STATE = "boat 3"
+		setCraneBoatState(2, "boat 3")
 		local d = getDistanceBetweenPoints2D ( x1,y1,x2,y2 )
 		local duration = moveHook(2, z2 + HOOK_BOAT_HEIGHT_OFFSET, math.min(d,95), 0.5)
 		setTimer(function()
-			CRANE2_STATE = "boat 4"
+			setCraneBoatState(2, "boat 4")
 		end, duration, 1)
 	elseif (CRANE2_STATE == "boat 4") then
 		-- raise hook up with boat
-		CRANE2_STATE = "boat 5"
+		setCraneBoatState(2, "boat 5")
 		local x3,y3,z3 = getElementPosition(crane["hook2"])
 		local d = getDistanceBetweenPoints2D ( x3,y3,x2,y2 )
 		if (d > 1) then
-			CRANE2_STATE = "boat 0"
+			setCraneBoatState(2, "boat 0")
 			return
 		end
 		if (getElementHealth(vehicle) >= 250) then
@@ -360,55 +520,55 @@ function craneTwoBoatGrab()
 		end
 		local duration = moveHook(2, 68, -1)
 		setTimer(function()
-			CRANE2_STATE = "boat 6"
+			setCraneBoatState(2, "boat 6")
 		end, duration, 1)
 	elseif (CRANE2_STATE == "boat 6") then
 		-- rotate crane with boat
-		CRANE2_STATE = "boat 7"
+		setCraneBoatState(2, "boat 7")
 		local duration = rotateCraneTo(2, 350, nil, 0.3)
 		setTimer(function()
-			CRANE2_STATE = "boat 8"
+			setCraneBoatState(2, "boat 8")
 		end, duration, 1)
 	elseif (CRANE2_STATE == "boat 8") then
 		-- move hook above marker
-		CRANE2_STATE = "boat 9"
+		setCraneBoatState(2, "boat 9")
 		local d = getDistanceBetweenPoints2D ( x1,y1,x2,y2 )
 		if (d > 0) then
 			local duration = moveHook(2, -1, 65.5)
 			setTimer(function()
-				CRANE2_STATE = "boat 10"
+				setCraneBoatState(2, "boat 10")
 			end, duration, 1)
 		else
-			CRANE2_STATE = "boat 10"
+			setCraneBoatState(2, "boat 10")
 		end
 	elseif (CRANE2_STATE == "boat 10") then
 		-- drop boat
-		CRANE2_STATE = "boat 11"
+		setCraneBoatState(2, "boat 11")
 		if (TRAINS[getElementModel(vehicle)]) then
 			local duration = moveHook(2, 12.8, -1)
 			setTimer(function()
-				CRANE2_STATE = "boat 12"
+				setCraneBoatState(2, "boat 12")
 			end, duration, 1)
 		else
 			detachElements(vehicle)
 			setTimer(function()
-				CRANE2_STATE = "boat 99"
+				setCraneBoatState(2, "boat 99")
 			end, 500, 1)
 		end	
 	elseif (CRANE2_STATE == "boat 12") then
-		CRANE2_STATE = "boat 99"
+		setCraneBoatState(2, "boat 99")
 		detachElements(vehicle)
 		local duration = moveHook(2, math.random(20,41), -1)
 	end
 end
 
-function checkVehicleHealthOnCrane()
+function repairVehicleOnCrane()
 	local veh = getPedOccupiedVehicle(localPlayer)
 	if (veh and getElementAttachedTo(veh) ~= false and getElementHealth(veh) < 250) then
 		setElementHealth(veh, 251)
 	end
 end
-setTimer(checkVehicleHealthOnCrane, 100, 0)
+setTimer(repairVehicleOnCrane, 100, 0)
 
 function setCraneBoatState(craneID, state)
 	if (craneID == 1) then
@@ -612,12 +772,17 @@ function craneGrab(craneID)
 	end
 end
 
-function craneDetectBoat(element, matchingDimension)
+function craneDetectApproachingBoat(element, matchingDimension)
 	-- TODO: and not in spawn area
+	
 	if (element ~= localPlayer) then
 		return
 	end
-	local vehicle = getElementModel(getPedOccupiedVehicle(localPlayer))
+	local vehicle = getPedOccupiedVehicle(localPlayer)
+	if (not vehicle) then
+		return
+	end
+	vehicle = getElementModel(vehicle)
 	if (not vehicle or not BOATS[vehicle]) then
 		return
 	end
@@ -627,44 +792,27 @@ function craneDetectBoat(element, matchingDimension)
 	end
 	rotateCraneTo(1, 200, 20000)
 end
-addEventHandler("onClientColShapeHit", BOAT_DETECTOR, craneDetectBoat)
+addEventHandler("onClientColShapeHit", BOAT_DETECTOR, craneDetectApproachingBoat)
 
---- Other Stuff
---- Other Stuff
---- Other Stuff
---- Other Stuff
---- Other Stuff
---- Other Stuff
---- Other Stuff
---- Other Stuff
-
-function enableGodMode(element, matchingDimension)
-	if (getElementType(element) ~= "vehicle") then
+function bridgeTropicCollisionDisable(element, matchingDimension)
+	if (element ~= localPlayer) then
 		return
 	end
-	if (source == GODMODE_REGION_BOAT) then
-		if (BOATS[getElementModel(element)]) then
-			setVehicleDamageProof(element, true)
-		end
-	elseif (source == GODMODE_REGION_PLANE) then
-		if (BIG_PLANES[getElementModel(element)]) then
-			iprint(getElementModel(element))
-			setVehicleDamageProof(element, true)
-		end
-	end
-
-end
-addEventHandler("onClientColShapeHit", GODMODE_REGION_BOAT, enableGodMode)
-addEventHandler("onClientColShapeHit", GODMODE_REGION_PLANE, enableGodMode)
-
-function disableGodMode(element, matchingDimension)
-	if (getElementType(element) ~= "vehicle") then
+	local vehicle = getElementModel(getPedOccupiedVehicle(localPlayer))
+	if (not vehicle or vehicle ~= 454) then -- tropic
 		return
 	end
-	setVehicleDamageProof(element, false)
+	setElementCollisionsEnabled(BLOCKING_BRIDGE, false)
 end
-addEventHandler("onClientColShapeLeave", GODMODE_REGION_BOAT, disableGodMode)
-addEventHandler("onClientColShapeLeave", GODMODE_REGION_PLANE, disableGodMode)
+addEventHandler("onClientColShapeHit", BRIDGE_DETECTOR, bridgeTropicCollisionDisable)
+--- Other Stuff
+--- Other Stuff
+--- Other Stuff
+--- Other Stuff
+--- Other Stuff
+--- Other Stuff
+--- Other Stuff
+--- Other Stuff
 
 -- Helper functions
 -- Helper functions

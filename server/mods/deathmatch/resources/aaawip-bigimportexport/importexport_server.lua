@@ -33,7 +33,7 @@
 -- Make work for players joining midway through
 -- DONE - Boat Detector: Could probably shave the eastern edge of the boat hitbox further west since you'll only be approaching with a Reefer from that direction. West and southern border are fine.
 -- DONE - Repair boats maybe
--- Protection when landing big planes such as AT-400
+-- DONE - Protection when landing big planes such as AT-400
 -- DONE - Can bicycles cheese the non-collision fence? Fix
 -- Tutorial cutscene & more polls
 -- There's a failsafe for new players joining (is it needed?). But this triggers by them being in a 'wrong' vehicle. However, there are no wrong vehicles. Workaround.
@@ -50,15 +50,19 @@
 -- Finale outro cutscene. Lots of errors currently and youre just floating.
 -- DONE - Spectate ghost thing. Do an additional failsafe for if someone respawns in the air above the marker and stays there.
 -- Ladder trailer bounces a lot and then dies or doesnt hit the marker
--- Heli blades disable for otherr players but not self
--- SPeedyFolf parked in the marker but it didnae work?
+-- DONE (Cant fix, MTA limitation) - Heli blades disable for otherr players but not self
+-- SpeedyFolf parked in the marker but it didnae work?
 -- Progress save system
--- On reosurce end/wgeb fuinishing a race, restore all control (vehicle fire/secondary fire)
+-- DONE - On reosurce end/wgeb fuinishing a race, restore all control (vehicle fire/secondary fire)
 -- Spawn area
--- Tropic Doesn't fit under the bridge
+-- DONE - Tropic Doesn't fit under the bridge
 -- Add pedestrians as spectators as some sort of endurance reward. Make them no collision. Maybe other decorations as well.
 -- Add a noob friendlier option for planes that's really slow. Perhaps using cranes.
--- NTH: Output to text
+-- nth: Output to text
+-- Cranes do not seem to get reset properly upon delivering a vehicle with them
+-- DONE - Boats get delivered before dropping to the ground
+-- DONE - Reset cranes on death
+-- Trains and trailers: Instant hook pls
 
 CHECKPOINT = {}
 CHECKPOINTS = getElementsByType("checkpoint")
@@ -184,10 +188,19 @@ end
 function updateProgress(target)
 	progress = target + 1
 
-	PLAYER_PROGRESS[client] = progress
-	
-	teleportToNext(progress, client)
-	triggerClientEvent(client, "updateTarget", client, progress)
+	if (getElementData(client, "race.finished")) then
+		iprint("iprint")
+		return
+	end
+
+	if (progress > REQUIRED_CHECKPOINTS) then
+		PLAYER_PROGRESS[client] = #getElementsByType("checkpoint")
+		triggerClientEvent(client, "finishRace", client)
+	else
+		PLAYER_PROGRESS[client] = progress
+		teleportToNext(progress, client)
+		triggerClientEvent(client, "updateTarget", client, progress)
+	end
 end
 addEvent("updateProgress", true)
 addEventHandler("updateProgress", resourceRoot, updateProgress)
@@ -435,7 +448,6 @@ addCommandHandler("cheattpboat", cheatTeleportBoat)
 
 
 function finish(rank, _time)
-	triggerClientEvent(source, "teleportToCraneForFinish", resourceRoot)
 	name = getPlayerName(source)
 	if (REQUIRED_CHECKPOINTS == #getElementsByType("checkpoint")) then
 		if (DATABASE) then
@@ -459,6 +471,13 @@ function finish(rank, _time)
 	end
 end
 addEventHandler("onPlayerFinish", getRootElement(), finish)
+
+
+function cleanup(stoppedResource)
+	toggleControl(player, 'vehicle_fire', true)
+	toggleControl(player, 'vehicle_secondary_fire', true)
+end
+addEventHandler( "onResourceStop", resourceRoot, cleanup)
 
 -- database stuff
 -- --------------

@@ -22,6 +22,8 @@
     <object id="_CRANE2_BAR" breakable="true" interior="0" collisions="true" alpha="255" model="1394" doublesided="true" scale="1.5" dimension="0" posX="-61.7" posY="-286.70001" posZ="70.6" rotX="360" rotY="0" rotZ="0"></object>
     <object id="_CRANE2_HOOK" breakable="true" interior="0" collisions="false" alpha="255" model="1390" doublesided="true" scale="3" dimension="0" posX="-61" posY="-198" posZ="63" rotX="0" rotY="0" rotZ="0"></object>
     <object id="_CRANE2_ROPE" breakable="true" interior="0" collisions="false" alpha="255" model="16101" doublesided="false" scale="1" dimension="0" posX="-61" posY="-197.97" posZ="66" rotX="0" rotY="0" rotZ="0"></object>
+    <object id="_NON_COLLIDE_BRIDGE" breakable="true" interior="0" alpha="255" model="12852" doublesided="true" scale="1" dimension="0" posX="-26.46875" posY="-554.82031" posZ="2.42188" rotX="0" rotY="0" rotZ="0"></object>
+    <removeWorldObject id="removeWorldObject (cunte_roads30) (1)" radius="172.82428" interior="0" model="12852" lodModel="13233" posX="-26.46875" posY="-554.82031" posZ="2.42188" rotX="0" rotY="0" rotZ="0"></removeWorldObject>
     <removeWorldObject id="removeWorldObject (CE_safedoor01) (1)" radius="4.7190113" interior="0" model="13817" lodModel="0" posX="1353.4766" posY="-626.625" posZ="109.82031" rotX="0" rotY="0" rotZ="0"></removeWorldObject>
     <removeWorldObject id="removeWorldObject (cn2_savgardr2_) (1)" radius="6.181365" interior="0" model="16501" lodModel="0" posX="429.98438" posY="2546.5156" posZ="17.35156" rotX="0" rotY="0" rotZ="0"></removeWorldObject>
     <removeWorldObject id="removeWorldObject (Gen_doorEXT11) (1)" radius="3.4591658" interior="0" model="1532" lodModel="0" posX="-2241.4141" posY="129.34375" posZ="34.32813" rotX="0" rotY="0" rotZ="0"></removeWorldObject>
@@ -455,5 +457,4 @@
     <exportable id="exportable (Yankee) (1)" sirens="false" paintjob="3" interior="0" alpha="255" model="456" plate="IPBBEF9" dimension="0" color="54,65,85,148,157,159,0,0,0,0,0,0" posX="2706.1001" posY="905.79999" posZ="10.8" rotX="0" rotY="0" rotZ="179.999"></exportable>
     <exportable id="exportable (Yosemite) (1)" sirens="false" paintjob="3" interior="0" alpha="255" model="554" plate="IG9IX9T" dimension="0" color="214,218,214,132,148,171,0,0,0,0,0,0" posX="2154.7" posY="-99" posZ="2.9" rotX="0" rotY="0" rotZ="0"></exportable>
     <exportable id="exportable (ZR-350) (1)" sirens="false" paintjob="3" interior="0" alpha="255" model="477" plate="970IBJH" dimension="0" color="31,37,59,245,245,245,0,0,0,0,0,0" posX="1467" posY="1017.8" posZ="10.7" rotX="0" rotY="0" rotZ="180"></exportable>
-
 </map>
