@@ -218,6 +218,9 @@ function initRace(vehicle, checkpoints, objects, pickups, mapoptions, ranked, du
     outputDebug( 'MISC', 'initRace start' )
 	unloadAll()
 	
+	math.randomseed(mapName)
+	cpColorRandom = { math.random(0,255), math.random(0,255), math.random(0,255) } 
+	
 	g_Players = getElementsByType('player')
 	g_MapOptions = mapoptions
 	g_GameOptions = gameoptions
@@ -1334,7 +1337,7 @@ function createCheckpoint(i)
 		return
 	end
 	local pos = checkpoint.position
-	local color = checkpoint.color or { 0, 0, 255 }
+	local color = checkpoint.color or cpColorRandom or { 255, 255, 255 }
 	checkpoint.marker = createMarker(pos[1], pos[2], pos[3], checkpoint.type or 'checkpoint', checkpoint.size, color[1], color[2], color[3])
 	if (not checkpoint.type or checkpoint.type == 'checkpoint') and i == #g_Checkpoints then
 		setMarkerIcon(checkpoint.marker, 'finish')
