@@ -251,7 +251,7 @@ function initRace(vehicle, checkpoints, objects, pickups, mapoptions, ranked, du
 
 	-- checkpoints
 	g_Checkpoints = checkpoints
-	
+
 	-- pickups
 	local object
 	local pos
@@ -322,11 +322,13 @@ function initRace(vehicle, checkpoints, objects, pickups, mapoptions, ranked, du
 
     -- Delay readyness until after title
     TitleScreen.bringForwardFadeout(3000)
-    delay = delay + math.max( 0, TitleScreen.getTicksRemaining() - 1500 )
+    delay = 0
+	-- delay = delay + math.max( 0, TitleScreen.getTicksRemaining() - 1500 )
 
     -- Do fadeup and then tell server client is ready
-    setTimer(fadeCamera, delay + 750, 1, true, 10.0)
-    setTimer(fadeCamera, delay + 1500, 1, true, 2.0)
+	fadeCamera(true, 2)
+    -- setTimer(fadeCamera, delay + 750, 1, true, 10.0)
+    -- setTimer(fadeCamera, delay + 1500, 1, true, 2.0)
 
     setTimer( function() triggerServerEvent('onNotifyPlayerReady', g_Me) end, delay + 3500, 1 )
     outputDebug( 'MISC', 'initRace end' )
@@ -360,7 +362,7 @@ function launchRace(duration)
 	end
 	
 	setVehicleDamageProof(g_Vehicle, false)
-	
+
 	g_StartTick = getTickCount()
 	triggerEvent('onClientElementDataChange', g_Me, 'race rank') -- Refresh at start of race since init is too early
 end
