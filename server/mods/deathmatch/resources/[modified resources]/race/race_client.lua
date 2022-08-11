@@ -34,7 +34,7 @@ addEventHandler('onClientResourceStart', g_ResRoot,
             authordisplayName = dxText:create('AUTHOR', 45, screenHeight - 50, false, 'default-bold', 1.2, 'left'),
 			
 			nextdisplay = dxText:create('Next:', 4, screenHeight - 70, false, 'default-bold', 1.2, 'left'),
-			nextdisplayName = dxText:create('NONE', 45, screenHeight - 70, false, 'default-bold', 1.2, 'left'),
+			nextdisplayName = dxText:create('NEXT', 45, screenHeight - 70, false, 'default-bold', 1.2, 'left'),
 			
 			PingDisplay = dxText:create('Ping:', 4, screenHeight - 90, false, 'default-bold', 1.2, 'left'),
 			PingDisplayCount = dxText:create('0', 45, screenHeight - 90, false, 'default-bold', 1.2, 'left'),
@@ -42,33 +42,33 @@ addEventHandler('onClientResourceStart', g_ResRoot,
 			FPSDisplay = dxText:create('FPS:', 4, screenHeight - 110, false, 'default-bold', 1.2, 'left'),
 			FPSDisplayCount = dxText:create('0', 45, screenHeight - 110, false, 'default-bold', 1.2, 'left'),
 		}
-
-		g_dxGUI.mapdisplay:color(150, 255, 0, 255)
+		
+		g_dxGUI.mapdisplay:color(255, 100, 200, 255)
 		g_dxGUI.mapdisplay:type('stroke', 1.5)
 		g_dxGUI.mapdisplayName:color(255, 255, 255, 255)
 		g_dxGUI.mapdisplayName:type('stroke', 1.5)
 
-		g_dxGUI.authordisplay:color(150, 255, 0, 255)
+		g_dxGUI.authordisplay:color(255, 100, 200, 255)
 		g_dxGUI.authordisplay:type('stroke', 1.5)
 		g_dxGUI.authordisplayName:color(255, 255, 255, 255)
 		g_dxGUI.authordisplayName:type('stroke', 1.5)
 
-		g_dxGUI.nextdisplay:color(150, 255, 0, 255)
+		g_dxGUI.nextdisplay:color(255, 100, 200, 255)
 		g_dxGUI.nextdisplay:type('stroke', 1.5)
 		g_dxGUI.nextdisplayName:color(255, 255, 255, 255)
 		g_dxGUI.nextdisplayName:type('stroke', 1.5)
 
-		g_dxGUI.FPSDisplay:color(150, 255, 0, 255)
+		g_dxGUI.FPSDisplay:color(255, 100, 200, 255)
 		g_dxGUI.FPSDisplay:type('stroke', 1.5)
 		g_dxGUI.FPSDisplayCount:color(255, 255, 255, 255)
 		g_dxGUI.FPSDisplayCount:type('stroke', 1.5)
 
-		g_dxGUI.PingDisplay:color(150, 255, 0, 255)
+		g_dxGUI.PingDisplay:color(255, 100, 200, 255)
 		g_dxGUI.PingDisplay:type('stroke', 1.5)
 		g_dxGUI.PingDisplayCount:color(255, 255, 255, 255)
 		g_dxGUI.PingDisplayCount:type('stroke', 1.5)
 		
-		g_dxGUI.FileDisplay:color(150, 255, 0, 255)
+		g_dxGUI.FileDisplay:color(255, 100, 200, 255)
 		g_dxGUI.FileDisplay:type('stroke', 1.5)
 		g_dxGUI.FileDisplayName:color(255, 255, 255, 255)
 		g_dxGUI.FileDisplayName:type('stroke', 1.5)
@@ -236,10 +236,11 @@ function initRace(vehicle, checkpoints, objects, pickups, mapoptions, ranked, du
     g_PlayerInfo = playerInfo
     triggerEvent('onClientMapStarting', g_Me, mapinfo )
 	
-	g_dxGUI.authordisplayName:text(g_MapInfo.author)
-	g_dxGUI.mapdisplayName:text(g_MapInfo.name)
-	g_dxGUI.FileDisplayName:text(g_MapInfo.resname)
-	
+	g_dxGUI.authordisplayName:text(g_MapInfo.author or "<none>")
+	g_dxGUI.mapdisplayName:text(g_MapInfo.name or "<none>")
+	g_dxGUI.FileDisplayName:text(g_MapInfo.resname or "<none>")
+	g_dxGUI.nextdisplayName:text("<none>")
+
 	fadeCamera(true)
 	showHUD(false)
 	
