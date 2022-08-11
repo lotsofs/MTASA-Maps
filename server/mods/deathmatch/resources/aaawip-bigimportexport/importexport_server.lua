@@ -22,7 +22,7 @@
 -- DONE - check if player drove their truck off the ship or died somehow on the ship
 -- DONE - shuffle is not called on laptop
 -- DONE - use the new crane technology to attach the player to it when they finish
--- people entering --> line 208 in server, attempt to perform arithmetic on a nil value
+-- DONE - people entering --> line 208 in server, attempt to perform arithmetic on a nil value
 -- DONE - outputchatbox
 
 
@@ -49,7 +49,7 @@
 -- Some tall light poles can have visual collisions on the crane. Maybe lower them or delete them or sth.
 -- Finale outro cutscene. Lots of errors currently and youre just floating.
 -- DONE - Spectate ghost thing. Do an additional failsafe for if someone respawns in the air above the marker and stays there.
--- Ladder trailer bounces a lot and then dies or doesnt hit the marker
+-- Farm & Ladder trailer bounces a lot and then dies or doesnt hit the marker, Yes this is actually important
 -- DONE (Cant fix, MTA limitation) - Heli blades disable for otherr players but not self
 -- SpeedyFolf parked in the marker but it didnae work?
 -- Progress save system
@@ -64,6 +64,10 @@
 -- DONE - Reset cranes on death
 -- Trains and trailers: Instant hook pls
 -- Train in corner that was bad before clips through the wall behind it
+-- Joining messes up the disabled guns in hunter etc -- Probably because of cheat over/underflow. Needs more investigating
+-- None of this crap about it into a LEFT PLAYERS table, just index with player serials everywhere
+-- Dont forget to remove the cheats, debug levels, and iprints when publishuing this thing
+-- Saved progress persists between map sessions?
 
 CHECKPOINT = {}
 CHECKPOINTS = getElementsByType("checkpoint")
@@ -74,6 +78,9 @@ TIMER_POLL = nil
 CHOSEN_CARS = {}
 SHUFFLED_INDICES_PER_PLAYER = {}
 PLAYER_PROGRESS = {}
+
+LEFT_PLAYERS_PROGRESS = {}
+LEFT_PLAYERS_SHUFFLED_CARS = {}
 
 VEHICLES_WITH_GUNS = {
 	[476] = true,
@@ -157,8 +164,14 @@ function shuffleCarsAll()
 	end
 end
 
-function shuffleCarsOne(theVehicle, seat, jacked)
+function shuffleCarsOne(theVehicle, seat, jacked, whose)
+	if (whose ~= nil) then
+		source = whose
+	end
 	-- A new player joining gets put in a vehicle
+	if (getElementType(source) ~= "player") then
+		return
+	end
 	if (#CHOSEN_CARS == 0) then
 		-- Race hasn't started yet
 		return
@@ -168,20 +181,31 @@ function shuffleCarsOne(theVehicle, seat, jacked)
 		-- This player is not new
 		return
 	end
-	local intsTable = {}
-	SHUFFLED_INDICES_PER_PLAYER[source] = {}
-	for i = #CHOSEN_CARS, 1, -1 do
-		table.insert(intsTable, i)
+
+	local serial = getPlayerSerial(source)
+	if (LEFT_PLAYERS_PROGRESS[serial]) then
+		PLAYER_PROGRESS[source] = LEFT_PLAYERS_PROGRESS[serial]
+		LEFT_PLAYERS_PROGRESS[serial] = nil
+		SHUFFLED_INDICES_PER_PLAYER[source] = LEFT_PLAYERS_SHUFFLED_CARS[serial]
+		teleportToNext(PLAYER_PROGRESS[source], source)
+		triggerClientEvent(source, "updateTarget", source, PLAYER_PROGRESS[source])
+	else	
+		local intsTable = {}
+		SHUFFLED_INDICES_PER_PLAYER[source] = {}
+		for i = #CHOSEN_CARS, 1, -1 do
+			table.insert(intsTable, i)
+		end
+		for i = #intsTable, 1, -1 do
+			randomIndex = math.random(1,i)
+			table.insert(SHUFFLED_INDICES_PER_PLAYER[source], intsTable[randomIndex])
+			table.remove(intsTable, randomIndex)
+		end
+		PLAYER_PROGRESS[source] = 1
+		teleportToNext(1, source)
 	end
-	for i = #intsTable, 1, -1 do
-		randomIndex = math.random(1,i)
-		table.insert(SHUFFLED_INDICES_PER_PLAYER[source], intsTable[randomIndex])
-		table.remove(intsTable, randomIndex)
-	end
+	triggerClientEvent ( source, "configureCrane", resourceRoot )
 	setPlayerScriptDebugLevel(source, 3)
 	colorGenerator(source)
-	PLAYER_PROGRESS[source] = 1
-	teleportToNext(1, source)
 end
 addEventHandler("onPlayerVehicleEnter", root, shuffleCarsOne)
 
@@ -222,7 +246,6 @@ function updateProgress(target)
 	progress = target + 1
 
 	if (getElementData(client, "race.finished")) then
-		iprint("iprint")
 		return
 	end
 
@@ -238,39 +261,6 @@ end
 addEvent("updateProgress", true)
 addEventHandler("updateProgress", resourceRoot, updateProgress)
 
--- function inStarterCarFailsafe()
--- 	for i,v in pairs(getElementsByType("player")) do
--- 		vehicle = getPedOccupiedVehicle(v)
--- 		model = getElementModel(vehicle)
--- 		-- if (model == 522 or model == 420 or model == 438) then
--- 			-- do nothing if game hasnt started yet
--- 			if (REQUIRED_CHECKPOINTS == -1) then
--- 				return
--- 			end
--- 			cars = getElementsByType("exportable")
--- 			if (not SHUFFLED_CARS[v]) then
--- 				if (REQUIRED_CHECKPOINTS == #cars) then
--- 					PRE_SHUFFLED_CARS = cars
--- 				else
--- 					if (#PRE_SHUFFLED_CARS == 0) then
--- 						for i = #cars, #cars - REQUIRED_CHECKPOINTS + 1, -1 do
--- 							randomIndex = math.random(1,i)
--- 							table.insert(PRE_SHUFFLED_CARS, cars[randomIndex])
--- 							table.remove(cars, randomIndex)
--- 						end
--- 					end
--- 				end
--- 				colorGenerator(v)
--- 				triggerClientEvent(v, "shuffle", resourceRoot, PRE_SHUFFLED_CARS)
--- 			-- else
--- 				-- colorGenerator(v)
--- 				-- teleportToNext(v)
--- 			end			
--- 		-- end
--- 	end
--- end
--- setTimer(inStarterCarFailsafe, 10000, 0)
-
 function playerRespawn(theVehicle, seat, jacked)
 	-- do nothing if game hasnt started yet
 	if (REQUIRED_CHECKPOINTS == -1) then
@@ -281,7 +271,7 @@ function playerRespawn(theVehicle, seat, jacked)
 end
 addEventHandler("onPlayerVehicleEnter", root, playerRespawn)
 
-function nrgFailsafe(newState, oldState)
+function startRacePoll(newState, oldState)
 	if (newState ~= "GridCountdown") then
 		return
 	end
@@ -314,7 +304,7 @@ function nrgFailsafe(newState, oldState)
 	-- end
 end
 addEvent("onRaceStateChanging", true)
-addEventHandler("onRaceStateChanging", root, nrgFailsafe)
+addEventHandler("onRaceStateChanging", root, startRacePoll)
 
 function startGame(pollResult)
 	killTimer(TIMER_POLL)
@@ -359,80 +349,25 @@ function colorGenerator(player)
 	setVehicleColor(vehicle, colors[1], colors[2], colors[3], colors[4], colors[5], colors[6], colors[7], colors[8], colors[9], colors[10], colors[11], colors[12])
 end
 
--- function teleportToNext(player)
--- 	-- get our destination
--- 	element = SHUFFLED_CARS[player][PLAYER_PROGRESS[player]]
--- 	x = getElementData(element, "posX")
--- 	y = getElementData(element, "posY")
--- 	z = getElementData(element, "posZ")
--- 	rX = getElementData(element, "rotX")
--- 	rY = getElementData(element, "rotY")
--- 	rZ = getElementData(element, "rotZ")
--- 	model = getElementData(element, "model")
--- 	model = tonumber(model)
--- 	-- go there
--- 	local vehicle = getPedOccupiedVehicle(player)
--- 	setElementModel(vehicle, model)
--- 	if (TRAINS[model]) then
--- 		setTrainDerailed(vehicle, true)
--- 	end
 
--- 	if (VEHICLES_WITH_GUNS[model]) then
--- 		toggleControl(player, 'vehicle_secondary_fire', false)
--- 		if (model == 430) then -- predator
--- 			toggleControl(player, 'vehicle_fire', false)
--- 		end
--- 	else
--- 		toggleControl(player, 'vehicle_fire', true)
--- 		toggleControl(player, 'vehicle_secondary_fire', true)
--- 	end
+------------------------------------------------------ Cheats ------------------------------------------------------
+------------------------------------------------------ Cheats ------------------------------------------------------
+------------------------------------------------------ Cheats ------------------------------------------------------
+------------------------------------------------------ Cheats ------------------------------------------------------
+------------------------------------------------------ Cheats ------------------------------------------------------
+------------------------------------------------------ Cheats ------------------------------------------------------
+------------------------------------------------------ Cheats ------------------------------------------------------
+------------------------------------------------------ Cheats ------------------------------------------------------
+------------------------------------------------------ Cheats ------------------------------------------------------
 
--- 	setElementPosition(vehicle, x, y, z)
--- 	setElementRotation(vehicle, rX, rY, rZ)
--- 	fixVehicle(vehicle)
--- 	PLAYER_TRAIN_IN_MARKER[player] = false
--- 	TELEPORTING[player] = false
--- 	triggerClientEvent(player, "makeCranesAvailable", resourceRoot)
--- end
-
--- addEvent("shuffleDone", true)
--- addEventHandler("shuffleDone", resourceRoot, receiveShuffledCars)
-
------------------------------------------------------- Player progress ------------------------------------------------------
-
--- function playerStoppedInMarker()
--- 	for i,v in ipairs(getElementsByType("player")) do	
--- 		local x, y, z = getElementPosition(v)
--- 		if (z > 1000) then
--- 			return
--- 		end
--- 		local vehicle = getPedOccupiedVehicle(v)
--- 		if (vehicle) then
--- 			x, y, z = getElementVelocity(vehicle)
--- 			shittyVelocity = x*x + y*y + z*z
--- 			-- vehicle handin location
--- 			if (TRAINS[getElementModel(vehicle)] and not PLAYER_TRAIN_IN_MARKER[v] and isElementWithinMarker(vehicle, MARKER_EXPORT)) then
--- 				PLAYER_TRAIN_IN_MARKER[v] = true
--- 				setTimer(function()
--- 					TELEPORTING[v] = true
--- 					PLAYER_PROGRESS[v] = PLAYER_PROGRESS[v] + 1
--- 					teleportToCheckpoints(v)
--- 				end, 1000, 1)
--- 			elseif (not PLAYER_TRAIN_IN_MARKER[v] and shittyVelocity < 0.001 and isElementWithinMarker(vehicle, MARKER_EXPORT)) then
--- 				TELEPORTING[v] = true
--- 				PLAYER_PROGRESS[v] = PLAYER_PROGRESS[v] + 1
--- 				teleportToCheckpoints(v)
--- 			end
--- 			-- boat marker
--- 			if (BOATS[getElementModel(vehicle)] and shittyVelocity < 0.001 and isElementWithinColShape(vehicle, REACH_CRANE2)) then
--- 				triggerClientEvent(v, "craneGrab", resourceRoot, 2)
--- 			elseif (BOATS[getElementModel(vehicle)] and shittyVelocity < 0.001 and isElementWithinColShape(vehicle, REACH_CRANE1)) then
--- 				triggerClientEvent(v, "craneGrab", resourceRoot, 1)
--- 			end
--- 		end
--- 	end
--- end
--- setTimer(playerStoppedInMarker, 1, 0)
+function cheatResetProgress(playerSource, commandName)
+	outputChatBox ( "Resetting Progress", playerSource, 255, 0, 0, true )
+	SHUFFLED_INDICES_PER_PLAYER[playerSource] = {}
+	PLAYER_PROGRESS[playerSource] = 1
+	shuffleCarsOne(nil, nil, nil, playerSource)
+	triggerClientEvent(playerSource, "updateTarget", playerSource, progress)
+end
+addCommandHandler("resetprogress", cheatResetProgress)
 
 function cheatData(playerSource, commandName)
 	v = getPlayerFromName("SpeedyFolf")
@@ -443,7 +378,9 @@ addCommandHandler("cheatdata", cheatData)
 
 function cheatSkipVehicle(playerSource, commandName)
 	progress = PLAYER_PROGRESS[playerSource] + 1
-
+	if (progress > REQUIRED_CHECKPOINTS) then
+		return
+	end
 	PLAYER_PROGRESS[playerSource] = progress
 	
 	teleportToNext(progress, playerSource)
@@ -459,7 +396,9 @@ addCommandHandler("cheatflip", cheatFlipVehicle)
 
 function cheatPrevVehicle(playerSource, commandName)
 	progress = PLAYER_PROGRESS[playerSource] - 1
-
+	if (progress == 0) then
+		return
+	end
 	PLAYER_PROGRESS[playerSource] = progress
 	
 	teleportToNext(progress, playerSource)
@@ -478,7 +417,6 @@ function cheatTeleportBoat(playerSource, commandName)
 	setElementPosition(vehicle, -219, -604, 20)
 end
 addCommandHandler("cheattpboat", cheatTeleportBoat)
-
 
 function finish(rank, _time)
 	name = getPlayerName(source)
@@ -514,6 +452,19 @@ function cleanup(stoppedResource)
 end
 addEventHandler( "onResourceStop", resourceRoot, cleanup)
 
+function playerLeaving(quitType)
+	if (#CHOSEN_CARS == 0) then
+		-- Race hasn't started yet
+		return
+	end
+	if (getElementData(source, "race.finished")) then
+		return
+	end
+	local serial = getPlayerSerial(source)
+	LEFT_PLAYERS_PROGRESS[serial] = PLAYER_PROGRESS[source]
+	LEFT_PLAYERS_SHUFFLED_CARS[serial] = SHUFFLED_INDICES_PER_PLAYER[source]
+end
+addEventHandler( "onPlayerQuit", root, playerLeaving)
 -- database stuff
 -- --------------
 
