@@ -24,20 +24,23 @@ addEventHandler('onClientResourceStart', g_ResRoot,
 			checkpoint = dxText:create('0/0', screenWidth - 15, screenHeight - 54, false, 'bankgothic', 0.8, 'right'),
 			timepassed = dxText:create('0:00:00', screenWidth - 10, screenHeight - 25, false, 'bankgothic', 0.7, 'right'),
 			
-			mapdisplay = dxText:create('Map:', 4, screenHeight - 10, false, 'default-bold', 1.2, 'left'),
-			mapdisplayName = dxText:create('MAPNAME', 45, screenHeight - 10, false, 'default-bold', 1.2, 'left'),
+			FileDisplay = dxText:create('File:', 4, screenHeight - 10, false, 'default-bold', 1.2, 'left'),
+			FileDisplayName = dxText:create('FILENME', 45, screenHeight - 10, false, 'default-bold', 1.2, 'left'),
 			
-			authordisplay = dxText:create('By:', 4, screenHeight - 30, false, 'default-bold', 1.2, 'left'),
-			authordisplayName = dxText:create('AUTHOR', 45, screenHeight - 30, false, 'default-bold', 1.2, 'left'),
+			mapdisplay = dxText:create('Map:', 4, screenHeight - 30, false, 'default-bold', 1.2, 'left'),
+			mapdisplayName = dxText:create('MAPNAME', 45, screenHeight - 30, false, 'default-bold', 1.2, 'left'),
 
-			nextdisplay = dxText:create('Next:', 4, screenHeight - 50, false, 'default-bold', 1.2, 'left'),
-            nextdisplayName = dxText:create('None', 45, screenHeight - 50, false, 'default-bold', 1.2, 'left'),
+			authordisplay = dxText:create('By:', 4, screenHeight - 50, false, 'default-bold', 1.2, 'left'),
+            authordisplayName = dxText:create('AUTHOR', 45, screenHeight - 50, false, 'default-bold', 1.2, 'left'),
 			
-			FPSDisplay = dxText:create('FPS:', 4, screenHeight - 70, false, 'default-bold', 1.2, 'left'),
-			FPSDisplayCount = dxText:create('0', 45, screenHeight - 70, false, 'default-bold', 1.2, 'left'),
+			nextdisplay = dxText:create('Next:', 4, screenHeight - 70, false, 'default-bold', 1.2, 'left'),
+			nextdisplayName = dxText:create('NONE', 45, screenHeight - 70, false, 'default-bold', 1.2, 'left'),
 			
 			PingDisplay = dxText:create('Ping:', 4, screenHeight - 90, false, 'default-bold', 1.2, 'left'),
 			PingDisplayCount = dxText:create('0', 45, screenHeight - 90, false, 'default-bold', 1.2, 'left'),
+			
+			FPSDisplay = dxText:create('FPS:', 4, screenHeight - 110, false, 'default-bold', 1.2, 'left'),
+			FPSDisplayCount = dxText:create('0', 45, screenHeight - 110, false, 'default-bold', 1.2, 'left'),
 		}
 
 		g_dxGUI.mapdisplay:color(150, 255, 0, 255)
@@ -64,6 +67,11 @@ addEventHandler('onClientResourceStart', g_ResRoot,
 		g_dxGUI.PingDisplay:type('stroke', 1.5)
 		g_dxGUI.PingDisplayCount:color(255, 255, 255, 255)
 		g_dxGUI.PingDisplayCount:type('stroke', 1.5)
+		
+		g_dxGUI.FileDisplay:color(150, 255, 0, 255)
+		g_dxGUI.FileDisplay:type('stroke', 1.5)
+		g_dxGUI.FileDisplayName:color(255, 255, 255, 255)
+		g_dxGUI.FileDisplayName:type('stroke', 1.5)
 
 		g_dxGUI.ranknum:type('stroke', 2, 0, 0, 0, 255)
 		g_dxGUI.ranksuffix:type('stroke', 2, 0, 0, 0, 255)
@@ -228,8 +236,9 @@ function initRace(vehicle, checkpoints, objects, pickups, mapoptions, ranked, du
     g_PlayerInfo = playerInfo
     triggerEvent('onClientMapStarting', g_Me, mapinfo )
 	
-	g_dxGUI.mapdisplayName:text(g_MapInfo.name)
 	g_dxGUI.authordisplayName:text(g_MapInfo.author)
+	g_dxGUI.mapdisplayName:text(g_MapInfo.name)
+	g_dxGUI.FileDisplayName:text(g_MapInfo.resname)
 	
 	fadeCamera(true)
 	showHUD(false)
