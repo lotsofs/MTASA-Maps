@@ -11,6 +11,8 @@ REACH_CRANE1 = createColCircle(72.4, -339.4, 89)
 REACH_CRANE2 = createColCircle(-61.9, -286.4, 89)
 GODMODE_REGION_BOAT = createColCircle(-12.5, -342.0, 15)
 GODMODE_REGION_PLANE = createColCuboid(-61, -233, 0, 30, 29, 25)
+SPAWN_AREA = createColCuboid(20, -329, 1, 91, 34, 23)
+
 CRANE1_STATE = "init"
 CRANE2_STATE = "init"
 
@@ -65,31 +67,31 @@ HELICOPTERS = {
 }
 
 BOATS = {
-	[472] = true,
-	[473] = true,
-	[493] = true,
-	[595] = true,
-	[484] = true,
-	[430] = true,
-	[453] = true,
-	[452] = true,
-	[446] = true,
-	[454] = true,
+	[472] = {41, 41},
+	[473] = {41, 42},
+	[493] = {42, 43},
+	[595] = {42, 44},
+	[484] = {42, 45},
+	[430] = {41, 46},
+	[453] = {42, 47},
+	[452] = {41, 43},
+	[446] = {42, 44},
+	[454] = {42, 45},
 
-	[610] = true,
-	[584] = true,
-	[608] = true,
-	[435] = true,
-	[450] = true,
-	[591] = true,
-	[611] = true,
-	
-	[590] = true,
-	[538] = true,
-	[570] = true,
-	[569] = true,
-	[537] = true,
-	[449] = true
+	[610] = {0, 16}, 
+	[591] = {25, 29},
+	[608] = {18, 26},
+	[435] = {42, 42},
+	[450] = {45, 45},
+	[584] = {42, 42},
+	[611] = {0, 18},
+
+	[590] = {0, 46},
+	[538] = {0, 66},
+	[570] = {0, 22},
+	[569] = {0, 30},
+	[537] = {0, 41},
+	[449] = {0, 42} 
 }
 
 TRAILERS = {
@@ -335,6 +337,10 @@ addEventHandler("onClientVehicleDamage", root, handleVehicleDamage)
 -- New Crane Stuff
 
 function resetCranes(killer, weapon, bodypart)
+	veh = getPedOccupiedVehicle(source)
+	if (veh) then
+		detachElements(veh)
+	end
 	CRANE1_STATE = "available"
 	CRANE2_STATE = "available"
 	setElementCollisionsEnabled(BLOCKING_BRIDGE, true)
@@ -422,7 +428,11 @@ function craneOneBoatGrab()
 		-- move hook into boat
 		setCraneBoatState(1, "boat 3")
 		local d = getDistanceBetweenPoints2D ( x1,y1,x2,y2 )
-		local duration = moveHook(1, z2 + HOOK_BOAT_HEIGHT_OFFSET, math.min(d,89), 0.5)
+		t = nil
+		if (TRAILERS[getElementModel(vehicle)]) then
+			t = 3000
+		end
+		local duration = moveHook(1, z2 + HOOK_BOAT_HEIGHT_OFFSET, math.min(d,89), 0.5, t)
 		setTimer(function()
 			setCraneBoatState(1, "boat 4")
 		end, duration, 1)
@@ -443,7 +453,7 @@ function craneOneBoatGrab()
 			attachElements(vehicle, crane["rope1"], 0, 0, -HOOK_BOAT_HEIGHT_OFFSET, u2-u1, v2-v1, w2-w1)
 		end
 		rotateCraneTo(2, 218, nil, 0.5) -- rotate crane 2 into position
-		local duration = moveHook(1, math.random(35,41), -1)
+		local duration = moveHook(1, BOATS[getElementModel(vehicle)][1], -1) -- formerly 35 - 41
 		setTimer(function()
 			setCraneBoatState(1, "boat 6")
 		end, duration, 1)
@@ -459,7 +469,7 @@ function craneOneBoatGrab()
 		setCraneBoatState(1, "boat 9")
 		local d = getDistanceBetweenPoints2D ( x1,y1,x2,y2 )
 		if (d < 70) then
-			local duration = moveHook(1, -1, math.random(70,89))
+			local duration = moveHook(1, -1, 83) -- former math.random(70,89)
 			setTimer(function()
 				setCraneBoatState(1, "boat 10")
 			end, duration, 1)
@@ -490,11 +500,11 @@ function craneTwoBoatGrab()
 		-- move bar above boat
 		setCraneBoatState(2, "boat 1")
 		local r = findRotation(x1,y1,x2,y2)
-		local d
+		local d = 3000
 		if (TRAILERS[getElementModel(vehicle)]) then
 			d = 0
 		end
-		local duration = rotateCraneTo(2, r, 3000)
+		local duration = rotateCraneTo(2, r, d)
 		setTimer(function()
 			setCraneBoatState(2, "boat 2")
 		end, duration, 1)
@@ -502,7 +512,11 @@ function craneTwoBoatGrab()
 		-- move hook into boat
 		setCraneBoatState(2, "boat 3")
 		local d = getDistanceBetweenPoints2D ( x1,y1,x2,y2 )
-		local duration = moveHook(2, z2 + HOOK_BOAT_HEIGHT_OFFSET, math.min(d,95), 0.5)
+		t = nil
+		if (TRAILERS[getElementModel(vehicle)]) then
+			t = 3000
+		end
+		local duration = moveHook(2, z2 + HOOK_BOAT_HEIGHT_OFFSET, math.min(d,95), 0.5, t)
 		setTimer(function()
 			setCraneBoatState(2, "boat 4")
 		end, duration, 1)
@@ -518,7 +532,7 @@ function craneTwoBoatGrab()
 		if (getElementHealth(vehicle) >= 250) then
 			attachElements(vehicle, crane["rope2"], 0, 0, -HOOK_BOAT_HEIGHT_OFFSET, u2-u1, v2-v1, w2-w1)
 		end
-		local duration = moveHook(2, 68, -1)
+		local duration = moveHook(2, BOATS[getElementModel(vehicle)][2], -1)
 		setTimer(function()
 			setCraneBoatState(2, "boat 6")
 		end, duration, 1)
@@ -706,7 +720,7 @@ function attachHook(craneID)
 end
 
 -- raise or lower the hook
-function moveHook(craneID, destinationZ, destinationD, speedMultiplier)
+function moveHook(craneID, destinationZ, destinationD, speedMultiplier, time)
 	-- max values for crane 1: Z = 41, D = 89
 	-- max values for crane 2: Z = 70.6, D = 89
 	-- min D = 5ish
@@ -747,6 +761,9 @@ function moveHook(craneID, destinationZ, destinationD, speedMultiplier)
 	if (speedMultiplier ~= nil) then
 		duration = duration * speedMultiplier
 	end
+	if (time ~= nil) then
+		duration = time
+	end
 
 	moveObject(rope, duration, xNew, yNew, destinationZ, 0, 0, 0, "InOutQuad")
 	setTimer(attachHook, duration, 1, craneID)
@@ -779,6 +796,15 @@ function craneDetectApproachingBoat(element, matchingDimension)
 		return
 	end
 	local vehicle = getPedOccupiedVehicle(localPlayer)
+
+	-- local f1,f2,f3,f5,f6,f7,f8,f9 = getCameraMatrix()
+	-- setCameraMatrix(-1587, 702, -4)
+	-- -- setCameraMatrix(f1,f2,f3,f5,f6,f7,f8,f9)
+	-- setCameraTarget(localPlayer)
+	-- setTimer(function(vehicle)
+	-- 	setElementPosition(vehicle, -1587, 702, -4)
+	-- end, 10000, 1, vehicle)	
+
 	if (not vehicle) then
 		return
 	end
@@ -813,6 +839,12 @@ addEventHandler("onClientColShapeHit", BRIDGE_DETECTOR, bridgeTropicCollisionDis
 --- Other Stuff
 --- Other Stuff
 --- Other Stuff
+
+function playGoSound()
+	playSoundFrontEnd(43)
+end
+addEvent("playGoSound", true)
+addEventHandler("playGoSound", resourceRoot, playGoSound)
 
 -- Helper functions
 -- Helper functions

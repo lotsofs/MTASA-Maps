@@ -29,51 +29,61 @@
 -- DONE - Allow tanks to fire without damaging other players
 -- DONE - Bicycles were unable to hop. Fix
 -- DONE - Make the cranes work
--- Tweak cranes if needed
+-- DONE - Tweak cranes if needed
 -- DONE - Make work for players joining midway through
 -- DONE - Boat Detector: Could probably shave the eastern edge of the boat hitbox further west since you'll only be approaching with a Reefer from that direction. West and southern border are fine.
 -- DONE - Repair boats maybe
 -- DONE - Protection when landing big planes such as AT-400
 -- DONE - Can bicycles cheese the non-collision fence? Fix
--- Tutorial cutscene & more polls
 -- DONE - There's a failsafe for new players joining (is it needed?). But this triggers by them being in a 'wrong' vehicle. However, there are no wrong vehicles. Workaround.
--- Map loading upon teleporting. If I can't find a way to preload map regions, I think I'll just have to do a freeze before move, or do the hold the line thing.
--- Add options for no planes, boats, etc
--- Janky launch spawns. Need to freeze probably.
--- Base on the vehicle how high the hook goes. Some dont need to go high. Others do.
+-- DONE - Map loading upon teleporting. If I can't find a way to preload map regions, I think I'll just have to do a freeze before move, or do the hold the line thing.
+-- DONE - Base on the vehicle how high the hook goes. Some dont need to go high. Others do.
 -- DONE - Trains
--- Runway indicators on map?
--- Coach
--- Cranes still seem to bug out sometimes particularly with trains/trailers that spawn inside the area. Fixed by KYS, but not ideal
+-- DONE - Cranes still seem to bug out sometimes particularly with trains/trailers that spawn inside the area. Fixed by KYS, but not ideal
 -- DONE - Test: One of the trains does not spawn in range ( the one across from handin marker)
--- Some tall light poles can have visual collisions on the crane. Maybe lower them or delete them or sth.
--- Finale outro cutscene. Lots of errors currently and youre just floating.
+-- DONE - Some tall light poles can have visual collisions on the crane. Maybe lower them or delete them or sth.
 -- DONE - Spectate ghost thing. Do an additional failsafe for if someone respawns in the air above the marker and stays there.
--- Farm & Ladder trailer bounces a lot and then dies or doesnt hit the marker, Yes this is actually important
--- DONE (Cant fix, MTA limitation) - Heli blades disable for otherr players but not self
--- SpeedyFolf parked in the marker but it didnae work?
--- Progress save system
+-- DONE - (Cant fix, MTA limitation) Heli blades disable for otherr players but not self
+-- DONE - SpeedyFolf parked in the marker but it didnae work?
+-- DONE - Progress save system
 -- DONE - On reosurce end/wgeb fuinishing a race, restore all control (vehicle fire/secondary fire)
--- Spawn area
+-- DONE - Spawn area
 -- DONE - Tropic Doesn't fit under the bridge
--- Add pedestrians as spectators as some sort of endurance reward. Make them no collision. Maybe other decorations as well.
--- Add a noob friendlier option for planes that's really slow. Perhaps using cranes.
--- nth: Output to text
--- Cranes do not seem to get reset properly upon delivering a vehicle with them
+-- DONE - Cranes do not seem to get reset properly upon delivering a vehicle with them
 -- DONE - Boats get delivered before dropping to the ground
 -- DONE - Reset cranes on death
--- Trains and trailers: Instant hook pls
--- Train in corner that was bad before clips through the wall behind it
--- Joining messes up the disabled guns in hunter etc -- Probably because of cheat over/underflow. Needs more investigating
--- None of this crap about it into a LEFT PLAYERS table, just index with player serials everywhere
+-- DONE - Trains and trailers: Instant hook pls
+-- DONE - Train in corner that was bad before clips through the wall behind it
+-- DONE - Joining messes up the disabled guns in hunter etc -- Probably because of cheat over/underflow. Needs more investigating
+-- DONE - Janky launch spawns. Need to freeze probably.
+-- DONE - !!! Dying on the cranes fucks them up
+-- DONE - Reset PRogress broke chief
 -- Dont forget to remove the cheats, debug levels, and iprints when publishuing this thing
+-- Finale outro cutscene. Lots of errors currently and youre just floating.
+-- Tutorial cutscene & more polls
+-- Runway indicators on map?
+-- Coach & look over other vehicles again
+-- Add a noob friendlier option for planes that's really slow. Perhaps using cranes.
+-- Go through rpoblematic spawns and replace the ground where needed (eg. the underground popo garages)
+-- Farm & Ladder trailer bounces a lot and then dies or doesnt hit the marker, Yes this is actually important
 -- Saved progress persists between map sessions?
+-- Move transparency code client side
+-- Add options for no planes, boats, etc
+-- Add pedestrians as spectators as some sort of endurance reward. Make them no collision. Maybe other decorations as well.
+-- None of this crap about it into a LEFT PLAYERS table, just index with player serials everywhere
+-- Crane one really likes to make 350 degree turns, but doesn't affect the actual deliveries. Only visual.
+-- nth: Output to text
+-- Hide boat icon if not in boat
+-- meta
 
 CHECKPOINT = {}
 CHECKPOINTS = getElementsByType("checkpoint")
 
 REQUIRED_CHECKPOINTS = -1
 TIMER_POLL = nil
+
+MARKER_START = getElementByID("_MARKER_GAME_START")
+
 
 CHOSEN_CARS = {}
 SHUFFLED_INDICES_PER_PLAYER = {}
@@ -164,7 +174,11 @@ function shuffleCarsAll()
 	end
 end
 
-function shuffleCarsOne(theVehicle, seat, jacked, whose)
+function shuffleCarsOne(markerHit, matchingDimension, dumpVariable, whose)
+	if (markerHit ~= MARKER_START and marketHit ~= nil) then
+		return
+	end
+
 	if (whose ~= nil) then
 		source = whose
 	end
@@ -207,7 +221,7 @@ function shuffleCarsOne(theVehicle, seat, jacked, whose)
 	setPlayerScriptDebugLevel(source, 3)
 	colorGenerator(source)
 end
-addEventHandler("onPlayerVehicleEnter", root, shuffleCarsOne)
+addEventHandler("onPlayerMarkerHit", root, shuffleCarsOne)
 
 function teleportToNext(progress, player)
 	-- get our destination
@@ -237,9 +251,31 @@ function teleportToNext(progress, player)
 		toggleControl(player, 'vehicle_secondary_fire', true)
 	end
 
+	-- setElementFrozen(vehicle, true)
+	disableMovementControls(player, true)
 	setElementPosition(vehicle, x, y, z)
+	setElementAngularVelocity(vehicle, 0, 0, 0)
+	setElementVelocity(vehicle, 0, 0, 0)
 	setElementRotation(vehicle, rX, rY, rZ)
 	fixVehicle(vehicle)
+	setElementAlpha ( vehicle, 0 ) 
+
+	setTimer( function(vehicle)
+		if (not isElement(vehicle)) then
+			return
+		end
+		setElementAlpha(vehicle, math.min(255, getElementAlpha(vehicle) + 17))
+	end, 100, 16, vehicle)
+
+	setTimer ( function(player)
+		if (not isElement(player)) then
+			-- player left
+			return
+		end
+		setElementAlpha ( vehicle, 255 ) 
+		disableMovementControls(player, false)
+		triggerClientEvent(player, "playGoSound", resourceRoot)
+	end, 2000, 1, player)
 end
 
 function updateProgress(target)
@@ -264,6 +300,11 @@ addEventHandler("updateProgress", resourceRoot, updateProgress)
 function playerRespawn(theVehicle, seat, jacked)
 	-- do nothing if game hasnt started yet
 	if (REQUIRED_CHECKPOINTS == -1) then
+		return
+	end
+	local sipp = SHUFFLED_INDICES_PER_PLAYER[source]
+	if (sipp == nil or #sipp == 0) then
+		-- This player is new
 		return
 	end
 	colorGenerator(source)
@@ -349,6 +390,17 @@ function colorGenerator(player)
 	setVehicleColor(vehicle, colors[1], colors[2], colors[3], colors[4], colors[5], colors[6], colors[7], colors[8], colors[9], colors[10], colors[11], colors[12])
 end
 
+function disableMovementControls(player, yes)
+	yes = not yes
+	toggleControl(player, 'vehicle_left', yes)
+	toggleControl(player, 'vehicle_right', yes)
+	toggleControl(player, 'steer_forward', yes)
+	toggleControl(player, 'steer_back', yes)
+	toggleControl(player, 'brake_reverse', yes)
+	toggleControl(player, 'accelerate', yes)
+	toggleControl(player, 'special_control_up', yes)
+	toggleControl(player, 'special_control_down', yes)
+end
 
 ------------------------------------------------------ Cheats ------------------------------------------------------
 ------------------------------------------------------ Cheats ------------------------------------------------------
@@ -448,6 +500,14 @@ function cleanup(stoppedResource)
 	for i, v in ipairs(getElementsByType("player")) do
 		toggleControl(v, 'vehicle_fire', true)
 		toggleControl(v, 'vehicle_secondary_fire', true)
+		toggleControl(v, 'vehicle_left', true)
+		toggleControl(v, 'vehicle_right', true)
+		toggleControl(v, 'steer_forward', true)
+		toggleControl(v, 'steer_back', true)
+		toggleControl(v, 'brake_reverse', true)
+		toggleControl(v, 'accelerate', true)
+		toggleControl(v, 'special_control_up', true)
+		toggleControl(v, 'special_control_down', true)
 	end
 end
 addEventHandler( "onResourceStop", resourceRoot, cleanup)
