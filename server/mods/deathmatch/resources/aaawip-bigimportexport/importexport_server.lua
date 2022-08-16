@@ -58,36 +58,40 @@
 -- DONE - Janky launch spawns. Need to freeze probably.
 -- DONE - !!! Dying on the cranes fucks them up
 -- DONE - Reset PRogress broke chief
--- Dont forget to remove the cheats, debug levels, and iprints when publishuing this thing
+-- DONE - Tutorial cutscene
+-- Dont forget to remove the cheats, debug levels, and iprsints when publishuing this thing
 -- Finale outro cutscene. Lots of errors currently and youre just floating.
--- Tutorial cutscene & more polls
+-- meta
+-- Test the fucking planes!
+-- Add a noob friendlier option for planes that's really slow. Perhaps using cranes.
 -- Runway indicators on map?
 -- Coach & look over other vehicles again
--- Add a noob friendlier option for planes that's really slow. Perhaps using cranes.
 -- Go through rpoblematic spawns and replace the ground where needed (eg. the underground popo garages)
+-- Hide boat icon if not in boat
 -- Farm & Ladder trailer bounces a lot and then dies or doesnt hit the marker, Yes this is actually important
--- Saved progress persists between map sessions?
 -- Move transparency code client side
--- Add options for no planes, boats, etc
 -- Add pedestrians as spectators as some sort of endurance reward. Make them no collision. Maybe other decorations as well.
 -- None of this crap about it into a LEFT PLAYERS table, just index with player serials everywhere
+-- Saved progress persists between map sessions?
 -- Crane one really likes to make 350 degree turns, but doesn't affect the actual deliveries. Only visual.
+-- Add options for no planes, boats, etc
 -- nth: Output to text
--- Hide boat icon if not in boat
--- meta
 
 CHECKPOINT = {}
 CHECKPOINTS = getElementsByType("checkpoint")
 
 REQUIRED_CHECKPOINTS = -1
-TIMER_POLL = nil
+POLL_ACTIVE = false
 
 MARKER_START = getElementByID("_MARKER_GAME_START")
 
+CUTSCENE_LENGTH_IN_SECONDS = 29
 
 CHOSEN_CARS = {}
 SHUFFLED_INDICES_PER_PLAYER = {}
 PLAYER_PROGRESS = {}
+
+PLAYERS_WHO_JOINED_DURING_CUTSCENE = {}
 
 LEFT_PLAYERS_PROGRESS = {}
 LEFT_PLAYERS_SHUFFLED_CARS = {}
@@ -156,72 +160,88 @@ function shuffleCarsAll()
 	end
 	-- Shuffle the cars for each player
 	for i, v in pairs(getElementsByType("player")) do
-		local intsTable = {}
-		SHUFFLED_INDICES_PER_PLAYER[v] = {}
-		for j = #CHOSEN_CARS, 1, -1 do
-			table.insert(intsTable, j)
+		if (not PLAYERS_WHO_JOINED_DURING_CUTSCENE[v]) then
+			local intsTable = {}
+			SHUFFLED_INDICES_PER_PLAYER[v] = {}
+			for j = #CHOSEN_CARS, 1, -1 do
+				table.insert(intsTable, j)
+			end
+			for j = #intsTable, 1, -1 do
+				randomIndex = math.random(1,j)
+				table.insert(SHUFFLED_INDICES_PER_PLAYER[v], intsTable[randomIndex])
+				table.remove(intsTable, randomIndex)
+			end
+	
+			setPlayerScriptDebugLevel(v, 3)
+			colorGenerator(v)
+			PLAYER_PROGRESS[v] = 1
+			teleportToNext(1, v)
 		end
-		for j = #intsTable, 1, -1 do
-			randomIndex = math.random(1,j)
-			table.insert(SHUFFLED_INDICES_PER_PLAYER[v], intsTable[randomIndex])
-			table.remove(intsTable, randomIndex)
-		end
-
-		setPlayerScriptDebugLevel(v, 3)
-		colorGenerator(v)
-		PLAYER_PROGRESS[v] = 1
-		teleportToNext(1, v)
 	end
 end
 
-function shuffleCarsOne(markerHit, matchingDimension, dumpVariable, whose)
-	if (markerHit ~= MARKER_START and marketHit ~= nil) then
-		return
-	end
-
-	if (whose ~= nil) then
-		source = whose
-	end
-	-- A new player joining gets put in a vehicle
-	if (getElementType(source) ~= "player") then
-		return
-	end
+function shuffleCarsOne(whose)
 	if (#CHOSEN_CARS == 0) then
 		-- Race hasn't started yet
 		return
 	end
-	local sipp = SHUFFLED_INDICES_PER_PLAYER[source]
+	local sipp = SHUFFLED_INDICES_PER_PLAYER[whose]
 	if (sipp ~= nil and #sipp > 0) then
 		-- This player is not new
 		return
 	end
 
-	local serial = getPlayerSerial(source)
+	local serial = getPlayerSerial(whose)
 	if (LEFT_PLAYERS_PROGRESS[serial]) then
-		PLAYER_PROGRESS[source] = LEFT_PLAYERS_PROGRESS[serial]
+		PLAYER_PROGRESS[whose] = LEFT_PLAYERS_PROGRESS[serial]
 		LEFT_PLAYERS_PROGRESS[serial] = nil
-		SHUFFLED_INDICES_PER_PLAYER[source] = LEFT_PLAYERS_SHUFFLED_CARS[serial]
-		teleportToNext(PLAYER_PROGRESS[source], source)
-		triggerClientEvent(source, "updateTarget", source, PLAYER_PROGRESS[source])
+		SHUFFLED_INDICES_PER_PLAYER[whose] = LEFT_PLAYERS_SHUFFLED_CARS[serial]
+		teleportToNext(PLAYER_PROGRESS[whose], whose)
+		triggerClientEvent(whose, "updateTarget", whose, PLAYER_PROGRESS[whose])
 	else	
 		local intsTable = {}
-		SHUFFLED_INDICES_PER_PLAYER[source] = {}
+		SHUFFLED_INDICES_PER_PLAYER[whose] = {}
 		for i = #CHOSEN_CARS, 1, -1 do
 			table.insert(intsTable, i)
 		end
 		for i = #intsTable, 1, -1 do
 			randomIndex = math.random(1,i)
-			table.insert(SHUFFLED_INDICES_PER_PLAYER[source], intsTable[randomIndex])
+			table.insert(SHUFFLED_INDICES_PER_PLAYER[whose], intsTable[randomIndex])
 			table.remove(intsTable, randomIndex)
 		end
-		PLAYER_PROGRESS[source] = 1
-		teleportToNext(1, source)
+		PLAYER_PROGRESS[whose] = 1
+		teleportToNext(1, whose)
 	end
-	triggerClientEvent ( source, "configureCrane", resourceRoot )
-	setPlayerScriptDebugLevel(source, 3)
-	colorGenerator(source)
+	-- triggerClientEvent ( whose, "configureCrane", resourceRoot )
+	setPlayerScriptDebugLevel(whose, 3)
+	colorGenerator(whose)
 end
-addEventHandler("onPlayerMarkerHit", root, shuffleCarsOne)
+
+function newJoineeMarkerHit(markerHit, matchingDimension, dumpVariable)
+	if (markerHit ~= MARKER_START and marketHit ~= nil) then
+		return
+	end
+	if (getElementType(source) ~= "player") then
+		return
+	end
+
+	-- if (#CHOSEN_CARS == 0) then
+	-- 	-- Race hasn't started yet
+	-- 	return
+	-- end
+	local sipp = SHUFFLED_INDICES_PER_PLAYER[source]
+	if (sipp ~= nil and #sipp > 0) then
+		-- This player is not new
+		-- shuffleCarsOne(source)
+		return
+	end
+
+	triggerClientEvent ( source, "configureCrane", resourceRoot )
+	setTimer(function(whom)
+		shuffleCarsOne(whom)
+	end, (CUTSCENE_LENGTH_IN_SECONDS+0.5)*1000, 1, source)
+end
+addEventHandler("onPlayerMarkerHit", root, newJoineeMarkerHit)
 
 function teleportToNext(progress, player)
 	-- get our destination
@@ -236,6 +256,9 @@ function teleportToNext(progress, player)
 	model = tonumber(model)
 	-- go there
 	local vehicle = getPedOccupiedVehicle(player)
+	if (not vehicle) then
+		return
+	end
 	setElementModel(vehicle, model)
 	if (TRAINS[model]) then
 		setTrainDerailed(vehicle, true)
@@ -259,6 +282,7 @@ function teleportToNext(progress, player)
 	setElementRotation(vehicle, rX, rY, rZ)
 	fixVehicle(vehicle)
 	setElementAlpha ( vehicle, 0 ) 
+	setCameraTarget ( player, player )
 
 	setTimer( function(vehicle)
 		if (not isElement(vehicle)) then
@@ -317,24 +341,28 @@ function startRacePoll(newState, oldState)
 		return
 	end
 	triggerClientEvent ( root, "configureCrane", resourceRoot )
+	
+	POLL_ACTIVE = true
 	-- poll thing, half of which I dont understand what it means
 	poll = exports.votemanager:startPoll {
-	   --start settings (dictionary part)
-	   title="Choose the map length:",
-	   percentage=75,
-	   timeout=11,
-	   allowchange=true,
+	--start settings (dictionary part)
+	title="Choose the map length:",
+	percentage=100,
+	timeout=CUTSCENE_LENGTH_IN_SECONDS,
+	allowchange=true,
 
-	   --start options (array part)
-	   [1]={"Bite Sized Chunk (5)", "pollFinished" , resourceRoot, 5},		
-	   [2]={"One List (10)", "pollFinished" , resourceRoot, 10},			
-	   [3]={"Classic (30)", "pollFinished" , resourceRoot, 30},			
-	   [4]={"Full Experience (212)", "pollFinished", resourceRoot, 212},
+	--start options (array part)
+	[1]={"Bite Sized Chunk (5)", "pollFinished" , resourceRoot, 5},		
+	[2]={"One List (10)", "pollFinished" , resourceRoot, 10},			
+	[3]={"Classic (30)", "pollFinished" , resourceRoot, 30},			
+	[4]={"Full Experience (212)", "pollFinished", resourceRoot, 212},
 	}
 	if not poll then
-		startGame(30)
+		applyPollResult(20)
 	end
-	TIMER_POLL = setTimer(startGame, 20000, 1, 30)
+	
+	setTimer(startGame, (CUTSCENE_LENGTH_IN_SECONDS+0.5)*1000, 1)
+
 
 	-- -- This might become obsolete
 	-- for i, v in pairs(getElementsByType("player")) do
@@ -347,13 +375,16 @@ end
 addEvent("onRaceStateChanging", true)
 addEventHandler("onRaceStateChanging", root, startRacePoll)
 
-function startGame(pollResult)
-	killTimer(TIMER_POLL)
+function applyPollResult(pollResult)
 	REQUIRED_CHECKPOINTS = pollResult
-	shuffleCarsAll()
 end
 addEvent("pollFinished", true)
-addEventHandler("pollFinished", resourceRoot, startGame)
+addEventHandler("pollFinished", resourceRoot, applyPollResult)
+
+function startGame()
+	POLL_ACTIVE = false
+	shuffleCarsAll()
+end
 
 function colorGenerator(player)
 	colors = {}
@@ -421,13 +452,6 @@ function cheatResetProgress(playerSource, commandName)
 end
 addCommandHandler("resetprogress", cheatResetProgress)
 
-function cheatData(playerSource, commandName)
-	v = getPlayerFromName("SpeedyFolf")
-	local vehicle = getPedOccupiedVehicle(v)
-	iprint(v, TRAINS[getElementModel(vehicle)], PLAYER_TRAIN_IN_MARKER[v], isElementWithinMarker(vehicle, MARKER_EXPORT), TELEPORTING[v], PLAYER_PROGRESS[v])
-end
-addCommandHandler("cheatdata", cheatData)
-
 function cheatSkipVehicle(playerSource, commandName)
 	progress = PLAYER_PROGRESS[playerSource] + 1
 	if (progress > REQUIRED_CHECKPOINTS) then
@@ -463,6 +487,12 @@ function cheatTeleportVehicle(playerSource, commandName)
 	setElementPosition(vehicle, 0, 0, 20)
 end
 addCommandHandler("cheattp", cheatTeleportVehicle)
+
+function cheatTeleportVehicleOp(playerSource, commandName)
+	vehicle = getPedOccupiedVehicle(playerSource)
+	setElementPosition(vehicle, 5, -241, 20)
+end
+addCommandHandler("cheattpop", cheatTeleportVehicleOp)
 
 function cheatTeleportBoat(playerSource, commandName)
 	vehicle = getPedOccupiedVehicle(playerSource)
@@ -525,12 +555,29 @@ function playerLeaving(quitType)
 	LEFT_PLAYERS_SHUFFLED_CARS[serial] = SHUFFLED_INDICES_PER_PLAYER[source]
 end
 addEventHandler( "onPlayerQuit", root, playerLeaving)
+
+function playerJoining(loadedResource)
+	if (loadedResource ~= resource) then
+		return
+	end
+	didWeStartYet = 0
+	if (#CHOSEN_CARS > 0) then
+		didWeStartYet = 2
+	end
+	if (POLL_ACTIVE == true) then
+		didWeStartYet = 1
+		PLAYERS_WHO_JOINED_DURING_CUTSCENE[source] = true
+	end
+	triggerClientEvent("didWeStartYet", source, didWeStartYet)
+end
+addEventHandler("onPlayerResourceStart", root, playerJoining)
+
 -- database stuff
 -- --------------
 
 function showScores(newState, oldState)
 	if (newState == "Running") then
-		triggerClientEvent(root, "showScoreBoard", resourceRoot, true, 5000)
+		triggerClientEvent(root, "showScoreBoard", resourceRoot, true, 31000)
 		return
 	elseif (newState == "GridCountdown") then
 		if (DATABASE) then

@@ -24,18 +24,54 @@ HOOK_BOAT_HEIGHT_OFFSET = 6
 LOW_DAMAGE_DIVISOR = 2
 
 LOW_DAMAGE = false
+CAR_DELIVERING = false
+
+SCREENWIDTH, SCREENHEIGHT = guiGetScreenSize()
+TUTORIAL_BLURB = "<blurb>"
 
 SHUFFLED_CARS = {}
 PLAYER_CURRENT_TARGET = 1
 -- LAST_CAR = false
 
+RACE_STARTED_ALREADY = 0
+
 
 VEHICLE_WEAPONS = {
 	[38] = true, --hunter minigun
-	[37] = true, --havent a clue, somethign with the hydra
+	[37] = true, --heat seeking missiles I think
 	[51] = true, --hunter missiles, tank
 	[31] = true, --rustler, seasparrow, rc baron
 	[28] = true --predator
+}
+
+HELICOPTERS = {
+	[548] = true,
+	[425] = true,
+	[417] = true,
+	[487] = true,
+	[488] = true,
+	[497] = true,
+	[563] = true,
+	[447] = true,
+	[469] = true,
+
+	[460] = true,
+	[511] = true,
+	[519] = true,
+
+	[577] = true,
+	[553] = true,
+	[592] = true	
+}
+
+MEDIUM_PLANES = {
+	[460] = true,
+	[511] = true,
+	[519] = true,
+
+	[577] = true,
+	[553] = true,
+	[592] = true
 }
 
 BIG_PLANES = {
@@ -67,6 +103,14 @@ HELICOPTERS = {
 }
 
 BOATS = {
+	[460] = {41, 70},
+	[511] = {41, 70},
+	[519] = {41, 70},
+
+	[577] = {41, 70},
+	[553] = {41, 70},
+	[592] = {41, 70},
+
 	[472] = {41, 41},
 	[473] = {41, 42},
 	[493] = {42, 43},
@@ -121,6 +165,9 @@ TRAINS = {
 }
 
 function playerStoppedInMarker()
+	if (CAR_DELIVERING) then
+		return
+	end
 	local x, y, z = getElementPosition(localPlayer)
 	if (z > 21) then
 		-- When spectating or on the crane still, do nothing
@@ -150,8 +197,7 @@ function playerStoppedInMarker()
 	if (getElementAttachedTo(vehicle) ~= false) then
 		return
 	end
-
-	collectCheckpoints(PLAYER_CURRENT_TARGET)
+	CAR_DELIVERING = true
 	triggerServerEvent("updateProgress", resourceRoot, PLAYER_CURRENT_TARGET)
 end
 setTimer(playerStoppedInMarker, 1, 0)
@@ -160,7 +206,10 @@ function collectCheckpoints(target)
     local vehicle = getPedOccupiedVehicle(localPlayer)
     local checkpoint = getElementData(localPlayer, "race.checkpoint")
     for i=checkpoint, target do
-        local colshapes = getElementsByType("colshape", RACE_RESOURCE)
+		local colshapes = getElementsByType("colshape", RACE_RESOURCE)
+		if (#colshapes == 0) then
+			break
+		end
 		triggerEvent("onClientColShapeHit",
             colshapes[#colshapes], vehicle, true)
     end
@@ -173,6 +222,8 @@ addEvent("finishRace", true)
 addEventHandler("finishRace", localPlayer, finishRace)
 
 function updateTarget(new)
+	CAR_DELIVERING = false
+	collectCheckpoints(PLAYER_CURRENT_TARGET)
 	PLAYER_CURRENT_TARGET = new
 	CRANE1_STATE = "available"
 	CRANE2_STATE = "available"
@@ -197,7 +248,7 @@ function enableGodMode(element, matchingDimension)
 			-- setVehicleDamageProof(element, true)
 		end
 	elseif (source == GODMODE_REGION_PLANE) then
-		if (BIG_PLANES[getElementModel(element)]) then
+		if (HELICOPTERS[getElementModel(element)]) then
 			LOW_DAMAGE = true
 			-- setVehicleDamageProof(element, true)
 		end
@@ -236,29 +287,10 @@ function bigPlaneDelivery()
 	if (shittyVelocity > 0.0001) then
 		return
 	end
-	collectCheckpoints(PLAYER_CURRENT_TARGET)
+	-- collectCheckpoints(PLAYER_CURRENT_TARGET)
 	triggerServerEvent("updateProgress", resourceRoot, PLAYER_CURRENT_TARGET)
 end
 setTimer(bigPlaneDelivery, 100, 0)
-
--- function deliverExplodedVehicle(element, matchingDimension)
--- 	if (source ~= getPedOccupiedVehicle(localPlayer)) then
--- 		return
--- 	end
--- 	if (not BIG_PLANES[getElementModel(source)]) then
--- 		return
--- 	end
--- 	if (not isElementWithinColShape(source, GODMODE_REGION_PLANE)) then
--- 		return
--- 	end
--- 	setElementHealth(source, getElementHealth(1000))
--- 	iprint(":)")
--- 	cancelEvent()
--- 	-- deliver vehicle anyway if it's a big plane inside the godmode region plane and it's ours:
--- 	collectCheckpoints(PLAYER_CURRENT_TARGET)
--- 	triggerServerEvent("updateProgress", resourceRoot, PLAYER_CURRENT_TARGET)
--- end
--- addEventHandler("onClientVehicleExplode", root, deliverExplodedVehicle)
 
 function handleVehicleExplosions(x, y, z, theType)
 	-- 2 = hunter
@@ -280,22 +312,7 @@ function handleVehicleExplosions(x, y, z, theType)
 end
 addEventHandler("onClientExplosion", root, handleVehicleExplosions)
 
--- function restoreHeliBlades()
--- 	local veh = getPedOccupiedVehicle(localPlayer)
--- 	if (not veh) then
--- 		return
--- 	end
--- 	if (not HELICOPTERS[getElementModel(veh)]) then
--- 		iprint(math.random(0, 233))
--- 		return
--- 	end
--- 	iprint("WOAAHASDFIAHSDIAHUSD")
--- 	setHeliBladeCollisionsEnabled ( veh, true )
--- end
--- setTimer(restoreHeliBlades, 2000, 0)
-
 function handleVehicleDamage(attacker, weapon, loss, x, y, z, tire)
-	-- iprint(source, attacker, weapon)
 	-- if (HELICOPTERS[getElementModel(source)] and attacker ~= nil) then
 	-- 	setHeliBladeCollisionsEnabled ( source, false )
 	-- 	cancelEvent()
@@ -306,28 +323,25 @@ function handleVehicleDamage(attacker, weapon, loss, x, y, z, tire)
 		setElementHealth(source, getElementHealth(source) - (loss / LOW_DAMAGE_DIVISOR))
 		cancelEvent()
 	end
--- 	x, y, z = getElementPosition(source)
--- 	iprint(z)
--- 	if (getElementHealth(source) > 250) then
--- 		iprint(":)")
--- 		return
--- 	end
--- 	iprint(":D")
+		-- 	x, y, z = getElementPosition(source)
+		-- 	if (getElementHealth(source) > 250) then
+		-- 		return
+		-- 	end
 
--- 	if (source ~= getPedOccupiedVehicle(localPlayer)) then
--- 		return
--- 	end
--- 	if (not BIG_PLANES[getElementModel(source)]) then
--- 		return
--- 	end
--- 	if (not isElementWithinColShape(source, GODMODE_REGION_PLANE)) then
--- 		return
--- 	end
--- 	setElementHealth(source, 1000)
--- 	cancelEvent()
--- 	-- deliver vehicle anyway if it's a big plane inside the godmode region plane and it's ours:
--- 	collectCheckpoints(PLAYER_CURRENT_TARGET)
--- 	triggerServerEvent("updateProgress", resourceRoot, PLAYER_CURRENT_TARGET)
+		-- 	if (source ~= getPedOccupiedVehicle(localPlayer)) then
+		-- 		return
+		-- 	end
+		-- 	if (not BIG_PLANES[getElementModel(source)]) then
+		-- 		return
+		-- 	end
+		-- 	if (not isElementWithinColShape(source, GODMODE_REGION_PLANE)) then
+		-- 		return
+		-- 	end
+		-- 	setElementHealth(source, 1000)
+		-- 	cancelEvent()
+		-- 	-- deliver vehicle anyway if it's a big plane inside the godmode region plane and it's ours:
+		-- 	collectCheckpoints(PLAYER_CURRENT_TARGET)
+		-- 	triggerServerEvent("updateProgress", resourceRoot, PLAYER_CURRENT_TARGET)
 end
 addEventHandler("onClientVehicleDamage", root, handleVehicleDamage)
 
@@ -347,7 +361,6 @@ function resetCranes(killer, weapon, bodypart)
 end
 addEventHandler("onClientPlayerWasted", localPlayer, resetCranes)
 
--- Initialize all the crane stuff
 function configureCrane()
 	crane = {}
 	crane["base1"] = getElementByID("_CRANE1_POLE")
@@ -392,9 +405,86 @@ function configureCrane()
 	CRANE2_STATE = "available"
 
 	setTimer(craneTimerTick, 100, 0)
+end
 
-	createBlip(99.4, -414.6, 0, 9)
+function preRace()
+	configureCrane()
+	if (RACE_STARTED_ALREADY > 0) then
+		return
+	end
+	setTimer(function()
+		if (RACE_STARTED_ALREADY > 0) then
+			return
+		end
+		setCameraMatrix (  -213.5, -453.5, 63.5, -118.0, -353.8, 0.5)
+	end, 1000, 1)
+end
+addEventHandler("onClientMapStarting", localPlayer, preRace)
 
+function didWeStartYet(yes)
+	RACE_STARTED_ALREADY = yes
+	setCameraTarget ( localPlayer )
+end
+addEvent("didWeStartYet", true)
+addEventHandler("didWeStartYet", localPlayer, didWeStartYet)
+
+function introCutscene()
+	local vehicle = getPedOccupiedVehicle(localPlayer)
+	if (vehicle) then
+		setElementPosition(vehicle, 135.9, -309.1, 9.2)
+	end
+	setCameraMatrix ( -213.5, -453.5, 63.5, -118.0, -353.8, 0.5)
+	setTimer(function()
+		setCameraMatrix ( -4.6, -99.4, 38.0, -55.0, -233.0, 26.0)
+		-- SHOW_TUTORIAL = true
+	end, 6000, 1)
+	setTimer(function()
+		TUTORIAL_BLURB = "Deliver all the vehicles to the FleischBerg© factory!"
+		SHOW_TUTORIAL = true
+	end, 7000, 1)
+	setTimer(function()
+		setCameraMatrix ( -27.7, -209.6, 10.9, -50.2, -222.3, 6.4)
+		SHOW_TUTORIAL = false
+	end, 11000, 1)
+	setTimer(function()
+		TUTORIAL_BLURB = "Vehicles can be delivered by parking them in this marker."
+		SHOW_TUTORIAL = true
+	end, 11500, 1)
+	setTimer(function()
+		setCameraMatrix ( 150.0, -392.0, 55.0, -39.0, -293.0, 32.0)
+		SHOW_TUTORIAL = false
+	end, 16000, 1)
+	setTimer(function()
+		TUTORIAL_BLURB = "These cranes will assist you with boats, trains, large planes, and trailers."
+		SHOW_TUTORIAL = true
+	end, 16500, 1)
+	setTimer(function()
+		setCameraMatrix ( 170.5, -432.8, 18.0, 100.3, -399.5, 6.8)
+		SHOW_TUTORIAL = false
+	end, 22000, 1)
+	setTimer(function()
+		TUTORIAL_BLURB = "Simply park these vehicles anywhere within the cranes' range, such as inside this blue marker."
+		SHOW_TUTORIAL = true
+	end, 22500, 1)
+	setTimer(function()
+		SHOW_TUTORIAL = false
+	end, 28000, 1)
+	setTimer(function()
+		if (getCameraTarget(localPlayer) ~= localPlayer) then
+			setCameraTarget ( localPlayer )
+		end
+	end, 32000, 1)
+end
+
+-- Initialize all the crane stuff
+function gameStart()
+	introCutscene()
+
+	createBlip(99.4, -414.6, 0, 9) -- Boat blip
+
+	-- Heli blades are scoffed in ghost mode and MTA does not support any way to fix them decently.
+	-- However I can at least disable heliblade collisions of other players so they don't knock you out of the way
+	-- You can still knock yourself out of the way by hitting other players with your blades though, despite them being ghost
 	local allVehicles = getElementsByType("vehicle")
 	local myVehicle = getPedOccupiedVehicle(localPlayer)
 	for i, v in ipairs(allVehicles) do
@@ -404,7 +494,7 @@ function configureCrane()
 	end
 end
 addEvent("configureCrane", true)
-addEventHandler("configureCrane", resourceRoot, configureCrane)
+addEventHandler("configureCrane", resourceRoot, gameStart)
 
 function craneOneBoatGrab()
 	local vehicle = getPedOccupiedVehicle(localPlayer)
@@ -867,18 +957,18 @@ function getPointFromDistanceRotation(x, y, dist, angle)
     return x-dx, y+dy;
 end
 
----- Scoreboard stuff
----- Scoreboard stuff
----- Scoreboard stuff
----- Scoreboard stuff
----- Scoreboard stuff
----- Scoreboard stuff
----- Scoreboard stuff
----- Scoreboard stuff
----- Scoreboard stuff
+---- Scoreboard and UI stuff
+---- Scoreboard and UI stuff
+---- Scoreboard and UI stuff
+---- Scoreboard and UI stuff
+---- Scoreboard and UI stuff
+---- Scoreboard and UI stuff
+---- Scoreboard and UI stuff
+---- Scoreboard and UI stuff
+---- Scoreboard and UI stuff
 
 TEXT = ""
-SHOW = false
+SHOW_SCOREBOARD = false
 
 function setScoreBoard(scores)
 	text = "Top times for the Full Experience:\n_______________________________________\n"
@@ -930,10 +1020,10 @@ function showScoreBoardCmd()
 end
 
 function showScoreBoard(enabled, duration)
-	SHOW = enabled
+	SHOW_SCOREBOARD = enabled
 	if (duration) then
 		setTimer(function()
-			SHOW = false
+			SHOW_SCOREBOARD = false
 		end, duration, 1)
 	end
 end
@@ -942,7 +1032,7 @@ addEventHandler("showScoreBoard", root, showScoreBoard)
 addCommandHandler("showtimes", showScoreBoardCmd)
 
 function drawScoreBoard()
-	if (SHOW) then
+	if (SHOW_SCOREBOARD) then
 		local width,height = guiGetScreenSize()
 		boxX = width * 0.275
 		boxY = height * 0.015
@@ -951,6 +1041,28 @@ function drawScoreBoard()
 		dxDrawRectangle(boxX, boxY, boxWidth, boxHeight, tocolor(5, 33, 51, 127))
 		dxDrawText(TEXT, width*0.28, height*0.025, width*0.8, height*0.9, tocolor(230, 245, 255, 255), width / 1600, "default-bold", "left", "top", false, true, false, false)
 	end
+	if (SHOW_TUTORIAL) then
+		drawBorderedText(TUTORIAL_BLURB, 2, SCREENWIDTH*0.20, SCREENHEIGHT*0.35, SCREENWIDTH*0.8, SCREENHEIGHT, tocolor(255, 255, 255, 255), 3, "default-bold", "center", "top", false, true, true, false)
+	end
 end
 addEventHandler("onClientRender", root, drawScoreBoard)
 
+function drawBorderedText(text, borderSize, width, height, width2, height2, color, size, font, horizAlign, vertiAlign, bool1, bool2, bool3, bool4)
+	text2 = string.gsub(text, "#%x%x%x%x%x%x", "")
+	-- width = width * screenWidth
+	-- height = height * screenHeight
+	-- width2 = width2 * screenWidth
+	-- height2 = height2 * screenHeight
+	-- size = screenWidth * size * 0.0005
+	-- borderSize = size
+
+	dxDrawText(text2, width+borderSize, height, width2+borderSize, height2, tocolor(5, 17, 26, 255), size, font, horizAlign, vertiAlign, bool1, bool2, bool3, bool4)
+	dxDrawText(text2, width, height+borderSize, width2, height2+borderSize, tocolor(5, 17, 26, 255), size, font, horizAlign, vertiAlign, bool1, bool2, bool3, bool4)
+	dxDrawText(text2, width, height-borderSize, width2, height2-borderSize, tocolor(5, 17, 26, 255), size, font, horizAlign, vertiAlign, bool1, bool2, bool3, bool4)
+	dxDrawText(text2, width-borderSize, height, width2-borderSize, height2, tocolor(5, 17, 26, 255), size, font, horizAlign, vertiAlign, bool1, bool2, bool3, bool4)
+	dxDrawText(text2, width+borderSize, height+borderSize, width2+borderSize, height2+borderSize, tocolor(5, 17, 26, 255), size, font, horizAlign, vertiAlign, bool1, bool2, bool3, bool4)
+	dxDrawText(text2, width-borderSize, height-borderSize, width2-borderSize, height2-borderSize, tocolor(5, 17, 26, 255), size, font, horizAlign, vertiAlign, bool1, bool2, bool3, bool4)
+	dxDrawText(text2, width+borderSize, height-borderSize, width2+borderSize, height2-borderSize, tocolor(5, 17, 26, 255), size, font, horizAlign, vertiAlign, bool1, bool2, bool3, bool4)
+	dxDrawText(text2, width-borderSize, height+borderSize, width2-borderSize, height2+borderSize, tocolor(5, 17, 26, 255), size, font, horizAlign, vertiAlign, bool1, bool2, bool3, bool4)
+	dxDrawText(text, width, height, width2, height2, color, size, font, horizAlign, vertiAlign, bool1, bool2, bool3, bool4)
+end
