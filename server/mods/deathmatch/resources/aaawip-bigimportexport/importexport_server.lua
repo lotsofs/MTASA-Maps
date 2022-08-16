@@ -59,6 +59,8 @@
 -- DONE - !!! Dying on the cranes fucks them up
 -- DONE - Reset PRogress broke chief
 -- DONE - Tutorial cutscene
+-- Upon laoding, do players instantly get CPd?
+-- Test the 212 CP proper
 -- Dont forget to remove the cheats, debug levels, and iprsints when publishuing this thing
 -- Finale outro cutscene. Lots of errors currently and youre just floating.
 -- meta
