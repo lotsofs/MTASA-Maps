@@ -59,25 +59,34 @@
 -- DONE - !!! Dying on the cranes fucks them up
 -- DONE - Reset PRogress broke chief
 -- DONE - Tutorial cutscene
--- Upon laoding, do players instantly get CPd?
--- Test the 212 CP proper
--- Dont forget to remove the cheats, debug levels, and iprsints when publishuing this thing
--- Finale outro cutscene. Lots of errors currently and youre just floating.
--- meta
--- Test the fucking planes!
--- Add a noob friendlier option for planes that's really slow. Perhaps using cranes.
--- Runway indicators on map?
--- Coach & look over other vehicles again
+-- DONE - Upon laoding, do players instantly get CPd?
+-- DONE - Finale outro cutscene. Lots of errors currently and youre just floating.
+-- DONE - Add a noob friendlier option for planes that's really slow. Perhaps using cranes.
+-- DONE - Test the fucking planes!
+-- DONE - Coach & look over other vehicles again
+-- DONE - Farm & Ladder trailer bounces a lot and then dies or doesnt hit the marker, Yes this is actually important
+-- DONE - Cheat Spectate
+-- DONE - Test the 212 CP proper
+-- DONE - meta..
+-- DONE - Dont forget to remove the cheats, debug levels, and iprsints when publishuing this thing
+
+-- Move pizzaboy
+-- Saved progress persists between map sessions?
+-- Add small planes to the boat list
+-- Runway indicators on map
+-- Add some disco lights or something when last vehicle is being delivered?
+
 -- Go through rpoblematic spawns and replace the ground where needed (eg. the underground popo garages)
 -- Hide boat icon if not in boat
--- Farm & Ladder trailer bounces a lot and then dies or doesnt hit the marker, Yes this is actually important
 -- Move transparency code client side
 -- Add pedestrians as spectators as some sort of endurance reward. Make them no collision. Maybe other decorations as well.
+-- Add points mechanic for damage
 -- None of this crap about it into a LEFT PLAYERS table, just index with player serials everywhere
--- Saved progress persists between map sessions?
 -- Crane one really likes to make 350 degree turns, but doesn't affect the actual deliveries. Only visual.
 -- Add options for no planes, boats, etc
+-- you could inform the client of the required_cp_count and do the collectCP *before* communicating with the server
 -- nth: Output to text
+-- blank box for newcomers (leaderboard)
 
 CHECKPOINT = {}
 CHECKPOINTS = getElementsByType("checkpoint")
@@ -174,7 +183,7 @@ function shuffleCarsAll()
 				table.remove(intsTable, randomIndex)
 			end
 	
-			setPlayerScriptDebugLevel(v, 3)
+			-- setPlayerScriptDebugLevel(v, 3)
 			colorGenerator(v)
 			PLAYER_PROGRESS[v] = 1
 			teleportToNext(1, v)
@@ -215,7 +224,7 @@ function shuffleCarsOne(whose)
 		teleportToNext(1, whose)
 	end
 	-- triggerClientEvent ( whose, "configureCrane", resourceRoot )
-	setPlayerScriptDebugLevel(whose, 3)
+	-- setPlayerScriptDebugLevel(whose, 3)
 	colorGenerator(whose)
 end
 
@@ -449,58 +458,87 @@ function cheatResetProgress(playerSource, commandName)
 	outputChatBox ( "Resetting Progress", playerSource, 255, 0, 0, true )
 	SHUFFLED_INDICES_PER_PLAYER[playerSource] = {}
 	PLAYER_PROGRESS[playerSource] = 1
-	shuffleCarsOne(nil, nil, nil, playerSource)
+	shuffleCarsOne(playerSource)
 	triggerClientEvent(playerSource, "updateTarget", playerSource, progress)
 end
 addCommandHandler("resetprogress", cheatResetProgress)
 
-function cheatSkipVehicle(playerSource, commandName)
-	progress = PLAYER_PROGRESS[playerSource] + 1
-	if (progress > REQUIRED_CHECKPOINTS) then
-		return
-	end
-	PLAYER_PROGRESS[playerSource] = progress
+-- function cheatSkipVehicle(playerSource, commandName)
+-- 	progress = PLAYER_PROGRESS[playerSource] + 1
+-- 	if (progress > REQUIRED_CHECKPOINTS) then
+-- 		return
+-- 	end
+-- 	PLAYER_PROGRESS[playerSource] = progress
 	
-	teleportToNext(progress, playerSource)
-	triggerClientEvent(playerSource, "updateTarget", playerSource, progress)
-end
-addCommandHandler("cheatnext", cheatSkipVehicle)
+-- 	teleportToNext(progress, playerSource)
+-- 	triggerClientEvent(playerSource, "updateTarget", playerSource, progress)
+-- end
+-- addCommandHandler("cheatnext", cheatSkipVehicle)
 
-function cheatFlipVehicle(playerSource, commandName)
-	vehicle = getPedOccupiedVehicle(playerSource)
-	setElementRotation(vehicle, 0, 180, 0)
-end
-addCommandHandler("cheatflip", cheatFlipVehicle)
+function cheatSkipForPlayer(playerSource, commandName, name)
+	if isObjectInACLGroup("user." .. getAccountName(getPlayerAccount(playerSource)), aclGetGroup ("Admin")) then
+		local playa = getPlayerFromName ( name )
+		if (not playa) then
+			iprint("no such player")
+			return
+		end
 
-function cheatPrevVehicle(playerSource, commandName)
-	progress = PLAYER_PROGRESS[playerSource] - 1
-	if (progress == 0) then
-		return
+		progress = PLAYER_PROGRESS[playa] + 1
+		if (progress > REQUIRED_CHECKPOINTS) then
+			return
+		end
+		PLAYER_PROGRESS[playa] = progress
+		
+		teleportToNext(progress, playa)
+		triggerClientEvent(playa, "updateTarget", playa, progress)
 	end
-	PLAYER_PROGRESS[playerSource] = progress
+end
+addCommandHandler("ie_cheatSkipForPlayer", cheatSkipForPlayer )
+
+-- function cheatFlipVehicle(playerSource, commandName)
+-- 	vehicle = getPedOccupiedVehicle(playerSource)
+-- 	setElementRotation(vehicle, 0, 180, 0)
+-- end
+-- addCommandHandler("cheatflip", cheatFlipVehicle)
+
+-- function cheatPrevVehicle(playerSource, commandName)
+-- 	progress = PLAYER_PROGRESS[playerSource] - 1
+-- 	if (progress == 0) then
+-- 		return
+-- 	end
+-- 	PLAYER_PROGRESS[playerSource] = progress
 	
-	teleportToNext(progress, playerSource)
-	triggerClientEvent(playerSource, "updateTarget", playerSource, progress)
-end
-addCommandHandler("cheatprev", cheatPrevVehicle)
+-- 	teleportToNext(progress, playerSource)
+-- 	triggerClientEvent(playerSource, "updateTarget", playerSource, progress)
+-- end
+-- addCommandHandler("cheatprev", cheatPrevVehicle)
 
-function cheatTeleportVehicle(playerSource, commandName)
-	vehicle = getPedOccupiedVehicle(playerSource)
-	setElementPosition(vehicle, 0, 0, 20)
-end
-addCommandHandler("cheattp", cheatTeleportVehicle)
+-- function cheatTeleportVehicle(playerSource, commandName)
+-- 	vehicle = getPedOccupiedVehicle(playerSource)
+-- 	setElementPosition(vehicle, 0, 0, 20)
+-- end
+-- addCommandHandler("cheattp", cheatTeleportVehicle)
 
-function cheatTeleportVehicleOp(playerSource, commandName)
-	vehicle = getPedOccupiedVehicle(playerSource)
-	setElementPosition(vehicle, 5, -241, 20)
-end
-addCommandHandler("cheattpop", cheatTeleportVehicleOp)
+-- function cheatTeleportVehicleOp(playerSource, commandName)
+-- 	vehicle = getPedOccupiedVehicle(playerSource)
+-- 	setElementPosition(vehicle, 5, -241, 20)
+-- end
+-- addCommandHandler("cheattpop", cheatTeleportVehicleOp)
 
-function cheatTeleportBoat(playerSource, commandName)
-	vehicle = getPedOccupiedVehicle(playerSource)
-	setElementPosition(vehicle, -219, -604, 20)
-end
-addCommandHandler("cheattpboat", cheatTeleportBoat)
+-- function cheatTeleportBoat(playerSource, commandName)
+-- 	vehicle = getPedOccupiedVehicle(playerSource)
+-- 	setElementPosition(vehicle, -219, -604, 20)
+-- end
+-- addCommandHandler("cheattpboat", cheatTeleportBoat)
+
+---------------------------------
+---------------------------------
+---------------------------------
+---------------------------------
+---------------------------------
+---------------------------------
+---------------------------------
+---------------------------------
 
 function finish(rank, _time)
 	name = getPlayerName(source)
@@ -570,7 +608,7 @@ function playerJoining(loadedResource)
 		didWeStartYet = 1
 		PLAYERS_WHO_JOINED_DURING_CUTSCENE[source] = true
 	end
-	triggerClientEvent("didWeStartYet", source, didWeStartYet)
+	triggerClientEvent(source, "didWeStartYet", source, didWeStartYet)
 end
 addEventHandler("onPlayerResourceStart", root, playerJoining)
 

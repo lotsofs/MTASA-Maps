@@ -7,14 +7,19 @@ BLOCKING_BRIDGE = getElementByID("_NON_COLLIDE_BRIDGE")
 
 BRIDGE_DETECTOR = createColCircle(37, -530, 22)
 BOAT_DETECTOR = createColCuboid(-476, -966, -5, 929, 839, 15)
+AT_APPROACH_DETECTOR = createColSphere(-51.1, -192.5, -3, 600)
 REACH_CRANE1 = createColCircle(72.4, -339.4, 89)
 REACH_CRANE2 = createColCircle(-61.9, -286.4, 89)
-GODMODE_REGION_BOAT = createColCircle(-12.5, -342.0, 15)
+GODMODE_REGION_BOAT = createColCircle(-12.5, -342.0, 30)
 GODMODE_REGION_PLANE = createColCuboid(-61, -233, 0, 30, 29, 25)
 SPAWN_AREA = createColCuboid(20, -329, 1, 91, 34, 23)
 
 CRANE1_STATE = "init"
 CRANE2_STATE = "init"
+
+AT_RAMP_1 = getElementByID("AT_RAMP_1")
+AT_RAMP_2 = getElementByID("AT_RAMP_2")
+AT_RAMP_3 = getElementByID("AT_RAMP_3")
 
 CRANE_HOOK_VERTICAL_SPEED = 131
 CRANE_HOOK_HORIZONTAL_SPEED = 181
@@ -28,6 +33,7 @@ CAR_DELIVERING = false
 
 SCREENWIDTH, SCREENHEIGHT = guiGetScreenSize()
 TUTORIAL_BLURB = "<blurb>"
+MID_PLAY_BLURB = nil
 
 SHUFFLED_CARS = {}
 PLAYER_CURRENT_TARGET = 1
@@ -65,6 +71,12 @@ HELICOPTERS = {
 }
 
 MEDIUM_PLANES = {
+	[512] = true,
+	[593] = true,
+	[520] = true,
+	[476] = true,
+	[513] = true,
+
 	[460] = true,
 	[511] = true,
 	[519] = true,
@@ -103,13 +115,19 @@ HELICOPTERS = {
 }
 
 BOATS = {
-	[460] = {41, 70},
-	[511] = {41, 70},
-	[519] = {41, 70},
+	[512] = {41, 67},
+	[593] = {41, 67},
+	[520] = {41, 67},
+	[476] = {41, 67},
+	[513] = {41, 67},
 
-	[577] = {41, 70},
-	[553] = {41, 70},
-	[592] = {41, 70},
+	[460] = {41, 67},
+	[511] = {41, 67},
+	[519] = {41, 67},
+
+	[577] = {41, 67},
+	[553] = {41, 67},
+	[592] = {41, 67},
 
 	[472] = {41, 41},
 	[473] = {41, 42},
@@ -169,7 +187,7 @@ function playerStoppedInMarker()
 		return
 	end
 	local x, y, z = getElementPosition(localPlayer)
-	if (z > 21) then
+	if (z > 1000) then
 		-- When spectating or on the crane still, do nothing
 		return
 	end
@@ -182,7 +200,7 @@ function playerStoppedInMarker()
 	if (shittyVelocity > 0.0001) then
 		return
 	end
-
+	
 	-- Check if the player is stopped by any of the cranes. Check crane 2 first because 1 doesnt need to do anything if 2 can handle it.
 	if (BOATS[getElementModel(vehicle)] and isElementWithinColShape(vehicle, REACH_CRANE2)) then
 		craneGrab(2)
@@ -216,6 +234,7 @@ function collectCheckpoints(target)
 end
 
 function finishRace(new)
+	setCameraMatrix (-213.5, -453.5, 63.5, -118.0, -353.8, 0.5)
 	collectCheckpoints(#getElementsByType("checkpoint"))
 end
 addEvent("finishRace", true)
@@ -223,11 +242,28 @@ addEventHandler("finishRace", localPlayer, finishRace)
 
 function updateTarget(new)
 	CAR_DELIVERING = false
+	if (new > PLAYER_CURRENT_TARGET + 1) then
+		PLAYER_CURRENT_TARGET = new - 1
+		MID_PLAY_BLURB = "Your saved progress has been restored. Use /resetprogress to undo."
+		SHOW_MID_PLAY_TUTORIAL = true
+		setTimer(function()
+			SHOW_MID_PLAY_TUTORIAL = false
+		end, 7000, 1)
+	end
 	collectCheckpoints(PLAYER_CURRENT_TARGET)
 	PLAYER_CURRENT_TARGET = new
 	CRANE1_STATE = "available"
 	CRANE2_STATE = "available"
 	setElementCollisionsEnabled(BLOCKING_BRIDGE, true)
+	setElementAlpha(AT_RAMP_1, 0)
+	setElementAlpha(AT_RAMP_2, 0)
+	setElementAlpha(AT_RAMP_3, 0)
+	setElementCollisionsEnabled(AT_RAMP_1, false)
+	setElementCollisionsEnabled(AT_RAMP_2, false)
+	setElementCollisionsEnabled(AT_RAMP_3, false)
+	setElementPosition(AT_RAMP_1, -51.1, -192.5, -33)
+	setElementPosition(AT_RAMP_2, -50.7, -197.5, -35.1)
+	setElementPosition(AT_RAMP_3, -41.2, -202.2, -35.3)
 end
 addEvent("updateTarget", true)
 addEventHandler("updateTarget", localPlayer, updateTarget)
@@ -276,10 +312,21 @@ function bigPlaneDelivery()
 	if (veh ~= getPedOccupiedVehicle(localPlayer)) then
 		return
 	end
+	if (not MEDIUM_PLANES[getElementModel(veh)]) then
+		return
+	end
+	if (CRANE2_STATE == "boat 99") then
+		CRANE2_STATE = "boat 100"
+		triggerServerEvent("updateProgress", resourceRoot, PLAYER_CURRENT_TARGET)
+		return
+	end
 	if (not BIG_PLANES[getElementModel(veh)]) then
 		return
 	end
 	if (not isElementWithinColShape(veh, GODMODE_REGION_PLANE)) then
+		return
+	end
+	if (getElementAttachedTo(veh) ~= false) then
 		return
 	end
 	x, y, z = getElementVelocity(veh)
@@ -358,6 +405,15 @@ function resetCranes(killer, weapon, bodypart)
 	CRANE1_STATE = "available"
 	CRANE2_STATE = "available"
 	setElementCollisionsEnabled(BLOCKING_BRIDGE, true)
+	setElementAlpha(AT_RAMP_1, 0)
+	setElementAlpha(AT_RAMP_2, 0)
+	setElementAlpha(AT_RAMP_3, 0)
+	setElementCollisionsEnabled(AT_RAMP_1, false)
+	setElementCollisionsEnabled(AT_RAMP_2, false)
+	setElementCollisionsEnabled(AT_RAMP_3, false)
+	setElementPosition(AT_RAMP_1, -51.1, -192.5, -33)
+	setElementPosition(AT_RAMP_2, -50.7, -197.5, -35.1)
+	setElementPosition(AT_RAMP_3, -41.2, -202.2, -35.3)
 end
 addEventHandler("onClientPlayerWasted", localPlayer, resetCranes)
 
@@ -455,7 +511,7 @@ function introCutscene()
 		SHOW_TUTORIAL = false
 	end, 16000, 1)
 	setTimer(function()
-		TUTORIAL_BLURB = "These cranes will assist you with boats, trains, large planes, and trailers."
+		TUTORIAL_BLURB = "These cranes will assist you with boats, trains, planes, and trailers."
 		SHOW_TUTORIAL = true
 	end, 16500, 1)
 	setTimer(function()
@@ -480,7 +536,8 @@ end
 function gameStart()
 	introCutscene()
 
-	createBlip(99.4, -414.6, 0, 9) -- Boat blip
+	local x, y, z = getElementPosition(MARKER_BOAT)
+	createBlip(x, y, z, 9) -- Boat blip
 
 	-- Heli blades are scoffed in ghost mode and MTA does not support any way to fix them decently.
 	-- However I can at least disable heliblade collisions of other players so they don't knock you out of the way
@@ -904,11 +961,56 @@ function craneDetectApproachingBoat(element, matchingDimension)
 	end
 	if (CRANE1_STATE ~= "waiting for boat") then
 		CRANE1_STATE = "waiting for boat"
-		iprint("Crane wasn't ready yet")
+		-- iprint("Crane wasn't ready yet")
 	end
 	rotateCraneTo(1, 200, 20000)
 end
 addEventHandler("onClientColShapeHit", BOAT_DETECTOR, craneDetectApproachingBoat)
+
+function erectAtHelperRamp(element, matchingDimension)
+	if (element ~= localPlayer) then
+		return
+	end
+	local vehicle = getPedOccupiedVehicle(localPlayer)
+	if (not vehicle) then
+		return
+	end
+	vehicle = getElementModel(vehicle)
+	if (not vehicle) then
+		return
+	end
+	if (MEDIUM_PLANES[vehicle]) then
+		CRANE1_STATE = "waiting for boat"
+		CRANE2_STATE = "waiting for boat"
+	end
+	if (not vehicle or vehicle ~= 577) then -- at400
+		if (AT_TUTORIAL_SHOWN) then
+			AT_TUTORIAL_SHOWN = false
+			MID_PLAY_BLURB = "The large mess has unfortunately been cleaned up."
+			SHOW_MID_PLAY_TUTORIAL = true
+			setTimer(function()
+				SHOW_MID_PLAY_TUTORIAL = false
+			end, 7000, 1)
+		end
+		return
+	end
+	setElementAlpha(AT_RAMP_1, 255)
+	setElementAlpha(AT_RAMP_2, 255)
+	setElementAlpha(AT_RAMP_3, 255)
+	setElementCollisionsEnabled(AT_RAMP_1, true)
+	setElementCollisionsEnabled(AT_RAMP_2, true)
+	setElementCollisionsEnabled(AT_RAMP_3, true)
+	setElementPosition(AT_RAMP_1, -51.1, -192.5, -3)
+	setElementPosition(AT_RAMP_2, -50.7, -197.5, 5.1)
+	setElementPosition(AT_RAMP_3, -41.2, -202.2, 5.3)
+	AT_TUTORIAL_SHOWN = true
+	MID_PLAY_BLURB = "Hey! Someone spilled a lot of junk next to the delivery point. That might come in handy!"
+	SHOW_MID_PLAY_TUTORIAL = true
+	setTimer(function()
+		SHOW_MID_PLAY_TUTORIAL = false
+	end, 7000, 1)
+end
+addEventHandler("onClientColShapeHit", AT_APPROACH_DETECTOR, erectAtHelperRamp)
 
 function bridgeTropicCollisionDisable(element, matchingDimension)
 	if (element ~= localPlayer) then
@@ -930,8 +1032,35 @@ addEventHandler("onClientColShapeHit", BRIDGE_DETECTOR, bridgeTropicCollisionDis
 --- Other Stuff
 --- Other Stuff
 
+CAMERA_ANGLE = 0
+function cheatSpectate(playerSource, commandName)
+	setElementFrozen(getPedOccupiedVehicle(localPlayer), true)
+	if (CAMERA_ANGLE == 0) then
+		setCameraMatrix (-213.5, -453.5, 63.5, -118.0, -353.8, 0.5)
+		CAMERA_ANGLE = 1
+	elseif (CAMERA_ANGLE == 1) then
+		setCameraMatrix ( -4.6, -99.4, 38.0, -55.0, -233.0, 26.0)
+		CAMERA_ANGLE = 2
+	elseif (CAMERA_ANGLE == 2) then
+		setCameraMatrix ( 150.0, -392.0, 55.0, -39.0, -293.0, 32.0)
+		CAMERA_ANGLE = 3
+	elseif (CAMERA_ANGLE == 3) then
+		setCameraMatrix ( -27.7, -209.6, 10.9, -50.2, -222.3, 6.4)
+		CAMERA_ANGLE = 4
+	elseif (CAMERA_ANGLE == 4) then
+		setCameraMatrix ( 170.5, -432.8, 18.0, 100.3, -399.5, 6.8)
+		CAMERA_ANGLE = 5
+	elseif (CAMERA_ANGLE == 5) then
+		CAMERA_ANGLE = 0
+		setElementFrozen(getPedOccupiedVehicle(localPlayer), false)
+		setElementHealth(localPlayer, 0)
+		setCameraTarget ( localPlayer )
+	end
+end
+addCommandHandler("ie_spectate", cheatSpectate)
+
 function playGoSound()
-	playSoundFrontEnd(43)
+	playSoundFrontEnd(45)
 end
 addEvent("playGoSound", true)
 addEventHandler("playGoSound", resourceRoot, playGoSound)
@@ -1042,7 +1171,10 @@ function drawScoreBoard()
 		dxDrawText(TEXT, width*0.28, height*0.025, width*0.8, height*0.9, tocolor(230, 245, 255, 255), width / 1600, "default-bold", "left", "top", false, true, false, false)
 	end
 	if (SHOW_TUTORIAL) then
-		drawBorderedText(TUTORIAL_BLURB, 2, SCREENWIDTH*0.20, SCREENHEIGHT*0.35, SCREENWIDTH*0.8, SCREENHEIGHT, tocolor(255, 255, 255, 255), 3, "default-bold", "center", "top", false, true, true, false)
+		drawBorderedText(TUTORIAL_BLURB, 2, SCREENWIDTH*0.20, SCREENHEIGHT*0.25, SCREENWIDTH*0.8, SCREENHEIGHT, tocolor(255, 255, 255, 255), 3, "default-bold", "center", "top", false, true, true, false)
+	end
+	if (SHOW_MID_PLAY_TUTORIAL) then
+		drawBorderedText(MID_PLAY_BLURB, 2, SCREENWIDTH*0.25, SCREENHEIGHT*0.75, SCREENWIDTH*0.75, SCREENHEIGHT, tocolor(255, 255, 255, 255), 2, "default-bold", "center", "top", false, true, true, false)
 	end
 end
 addEventHandler("onClientRender", root, drawScoreBoard)
