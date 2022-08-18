@@ -7,7 +7,7 @@ BLOCKING_BRIDGE = getElementByID("_NON_COLLIDE_BRIDGE")
 
 BRIDGE_DETECTOR = createColCircle(37, -530, 22)
 BOAT_DETECTOR = createColCuboid(-476, -966, -5, 929, 839, 15)
-AT_APPROACH_DETECTOR = createColSphere(-51.1, -192.5, -3, 600)
+AT_APPROACH_DETECTOR = createColSphere(-51.1, -192.5, -3, 900)
 REACH_CRANE1 = createColCircle(72.4, -339.4, 89)
 REACH_CRANE2 = createColCircle(-61.9, -286.4, 89)
 GODMODE_REGION_BOAT = createColCircle(-12.5, -342.0, 30)
@@ -20,6 +20,16 @@ CRANE2_STATE = "init"
 AT_RAMP_1 = getElementByID("AT_RAMP_1")
 AT_RAMP_2 = getElementByID("AT_RAMP_2")
 AT_RAMP_3 = getElementByID("AT_RAMP_3")
+
+PARTY_PRESENT = false
+PARTY_LIGHTS = {getElementByID("PARTY_LIGHTS_1"),
+				getElementByID("PARTY_LIGHTS_2"),
+				getElementByID("PARTY_LIGHTS_3"),
+				getElementByID("PARTY_LIGHTS_4"),
+				getElementByID("PARTY_LIGHTS_5"),
+				getElementByID("PARTY_LIGHTS_6"),
+				getElementByID("PARTY_LIGHTS_7")}
+
 
 CRANE_HOOK_VERTICAL_SPEED = 131
 CRANE_HOOK_HORIZONTAL_SPEED = 181
@@ -250,6 +260,9 @@ function updateTarget(new)
 			SHOW_MID_PLAY_TUTORIAL = false
 		end, 7000, 1)
 	end
+	if (new < PLAYER_CURRENT_TARGET) then
+		PLAYER_CURRENT_TARGET = new - 1
+	end
 	collectCheckpoints(PLAYER_CURRENT_TARGET)
 	PLAYER_CURRENT_TARGET = new
 	CRANE1_STATE = "available"
@@ -264,6 +277,12 @@ function updateTarget(new)
 	setElementPosition(AT_RAMP_1, -51.1, -192.5, -33)
 	setElementPosition(AT_RAMP_2, -50.7, -197.5, -35.1)
 	setElementPosition(AT_RAMP_3, -41.2, -202.2, -35.3)
+	if (new == 212 and not PARTY_PRESENT) then
+		for i=#PARTY_LIGHTS,1,-1 do
+			local x, y, z = getElementPosition(PARTY_LIGHTS[i])
+			setElementPosition(PARTY_LIGHTS[i], x, y, z + 30)
+		end
+	end
 end
 addEvent("updateTarget", true)
 addEventHandler("updateTarget", localPlayer, updateTarget)

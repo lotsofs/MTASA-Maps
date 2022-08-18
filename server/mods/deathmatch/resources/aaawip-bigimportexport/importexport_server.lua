@@ -69,13 +69,14 @@
 -- DONE - Test the 212 CP proper
 -- DONE - meta..
 -- DONE - Dont forget to remove the cheats, debug levels, and iprsints when publishuing this thing
+-- DONE - Move pizzaboy
+-- DONE - Add small planes to the boat list
+-- DONE - Add some disco lights or something when last vehicle is being delivered?
+-- DONE - There's an error in line 245 (if CUR > new + 1), but the bug report is not very good.
+-- DONE - Saved progress persists between map sessions?
 
--- Move pizzaboy
--- Saved progress persists between map sessions?
--- Add small planes to the boat list
+
 -- Runway indicators on map
--- Add some disco lights or something when last vehicle is being delivered?
-
 -- Go through rpoblematic spawns and replace the ground where needed (eg. the underground popo garages)
 -- Hide boat icon if not in boat
 -- Move transparency code client side
@@ -151,7 +152,7 @@ TRAINS = {
 	[449] = true
 } -- do not delete
 
-DATABASE = dbConnect("sqlite", ":/fleischbergAutosTopTimes.db")
+DATABASE = dbConnect("sqlite", ":/mapSuperFleischbergAutos.db")
 	
 ------------------------------------------------------ Start of race ------------------------------------------------------
 
@@ -171,23 +172,24 @@ function shuffleCarsAll()
 	end
 	-- Shuffle the cars for each player
 	for i, v in pairs(getElementsByType("player")) do
-		if (not PLAYERS_WHO_JOINED_DURING_CUTSCENE[v]) then
-			local intsTable = {}
-			SHUFFLED_INDICES_PER_PLAYER[v] = {}
-			for j = #CHOSEN_CARS, 1, -1 do
-				table.insert(intsTable, j)
-			end
-			for j = #intsTable, 1, -1 do
-				randomIndex = math.random(1,j)
-				table.insert(SHUFFLED_INDICES_PER_PLAYER[v], intsTable[randomIndex])
-				table.remove(intsTable, randomIndex)
-			end
+		shuffleCarsOne(v)
+		-- if (not PLAYERS_WHO_JOINED_DURING_CUTSCENE[v]) then
+		-- 	local intsTable = {}
+		-- 	SHUFFLED_INDICES_PER_PLAYER[v] = {}
+		-- 	for j = #CHOSEN_CARS, 1, -1 do
+		-- 		table.insert(intsTable, j)
+		-- 	end
+		-- 	for j = #intsTable, 1, -1 do
+		-- 		randomIndex = math.random(1,j)
+		-- 		table.insert(SHUFFLED_INDICES_PER_PLAYER[v], intsTable[randomIndex])
+		-- 		table.remove(intsTable, randomIndex)
+		-- 	end
 	
-			-- setPlayerScriptDebugLevel(v, 3)
-			colorGenerator(v)
-			PLAYER_PROGRESS[v] = 1
-			teleportToNext(1, v)
-		end
+		-- 	-- setPlayerScriptDebugLevel(v, 3)
+		-- 	colorGenerator(v)
+		-- 	PLAYER_PROGRESS[v] = 1
+		-- 	teleportToNext(1, v)
+		-- end
 	end
 end
 
@@ -196,12 +198,11 @@ function shuffleCarsOne(whose)
 		-- Race hasn't started yet
 		return
 	end
-	local sipp = SHUFFLED_INDICES_PER_PLAYER[whose]
 	if (sipp ~= nil and #sipp > 0) then
 		-- This player is not new
 		return
 	end
-
+	
 	local serial = getPlayerSerial(whose)
 	if (LEFT_PLAYERS_PROGRESS[serial]) then
 		PLAYER_PROGRESS[whose] = LEFT_PLAYERS_PROGRESS[serial]
@@ -455,11 +456,11 @@ end
 ------------------------------------------------------ Cheats ------------------------------------------------------
 
 function cheatResetProgress(playerSource, commandName)
-	outputChatBox ( "Resetting Progress", playerSource, 255, 0, 0, true )
+	outputChatBox ( "Resetting Progress", playerSource, 255, 127, 127, true )
 	SHUFFLED_INDICES_PER_PLAYER[playerSource] = {}
 	PLAYER_PROGRESS[playerSource] = 1
 	shuffleCarsOne(playerSource)
-	triggerClientEvent(playerSource, "updateTarget", playerSource, progress)
+	triggerClientEvent(playerSource, "updateTarget", playerSource, PLAYER_PROGRESS[playerSource])
 end
 addCommandHandler("resetprogress", cheatResetProgress)
 
@@ -479,7 +480,7 @@ function cheatSkipForPlayer(playerSource, commandName, name)
 	if isObjectInACLGroup("user." .. getAccountName(getPlayerAccount(playerSource)), aclGetGroup ("Admin")) then
 		local playa = getPlayerFromName ( name )
 		if (not playa) then
-			iprint("no such player")
+			iprint("[FleischBerg Autos] no such player")
 			return
 		end
 
@@ -542,12 +543,22 @@ addCommandHandler("ie_cheatSkipForPlayer", cheatSkipForPlayer )
 
 function finish(rank, _time)
 	name = getPlayerName(source)
-	if (REQUIRED_CHECKPOINTS == #getElementsByType("checkpoint")) then
-		if (DATABASE) then
+	RACE_FINISHED = true
+	if (DATABASE) then
+		dbExec(DATABASE, "CREATE TABLE IF NOT EXISTS progressTable (serial TEXT, progress INTEGER, indices TEXT)")
+		local s = getPlayerSerial(source)
+		local query = dbQuery(DATABASE, "SELECT * FROM progressTable WHERE serial=? LIMIT 1", s)
+		local results = dbPoll(query, -1)
+		if (results and #results > 0) then
+			dbExec(DATABASE, "DELETE FROM progressTable WHERE serial=?", s)
+		end
+		if (REQUIRED_CHECKPOINTS == #getElementsByType("checkpoint")) then
 			dbExec(DATABASE, "CREATE TABLE IF NOT EXISTS scoresTable (playername TEXT, score integer)")
 			query = dbQuery(DATABASE, "SELECT * FROM scoresTable WHERE playername = ?", name)
 			results = dbPoll(query, -1)		
-
+			if (LOADED_GAME_FROM_DB) then
+				return
+			end
 			if (results and #results > 0) then
 				if (_time < results[1]["score"]) then
 					dbExec(DATABASE, "UPDATE scoresTable SET score = ? WHERE playername = ?", _time, name)
@@ -581,6 +592,47 @@ function cleanup(stoppedResource)
 	end
 end
 addEventHandler( "onResourceStop", resourceRoot, cleanup)
+
+function LoadGameFromDatabase(playerSource, commandName)
+	if isObjectInACLGroup("user." .. getAccountName(getPlayerAccount(playerSource)), aclGetGroup ("Admin")) then
+		LOADED_GAME_FROM_DB = true
+		outputChatBox ( "Loading game from Database", root, 255, 0, 0, true )
+		if (DATABASE) then
+			for i, v in pairs(getElementsByType("player")) do
+				-- read the database	
+				local s = getPlayerSerial(v)
+				dbExec(DATABASE, "CREATE TABLE IF NOT EXISTS progressTable (serial TEXT, progress INTEGER, indices TEXT)")
+				query = dbQuery(DATABASE, "SELECT * FROM progressTable WHERE serial=? LIMIT 1", s)
+				results = dbPoll(query, -1)
+				if (results[1]["progress"]) then
+					LEFT_PLAYERS_PROGRESS[s] = results[1]["progress"]
+					LEFT_PLAYERS_SHUFFLED_CARS[s] = fromJSON(results[1]["indices"])
+				end
+			end
+		end
+	end
+end
+addCommandHandler("ie_loadGame", LoadGameFromDatabase )
+
+function autoSave()
+	if (#CHOSEN_CARS == 0 or RACE_FINISHED) then
+		-- Race hasn't started yet or has ended
+		return
+	end
+	-- iprint("[FleischBerg Autos] Autosaving")
+	if (DATABASE) then
+		for i, v in pairs(getElementsByType("player")) do
+			s = getPlayerSerial(v)
+			local json = toJSON(SHUFFLED_INDICES_PER_PLAYER[v])
+			if (results and #results > 0) then
+				dbExec(DATABASE, "UPDATE progressTable SET progress = ?, indices = ? WHERE serial = ?", PLAYER_PROGRESS[v], json, s)
+			else
+				dbExec(DATABASE, "INSERT INTO progressTable(serial, progress, indices) VALUES (?,?,?)", getPlayerSerial(v), PLAYER_PROGRESS[v], json)
+			end
+		end	
+	end
+end
+setTimer(autoSave, 60000, 0) -- autosave every 1 minutes
 
 function playerLeaving(quitType)
 	if (#CHOSEN_CARS == 0) then
@@ -617,19 +669,13 @@ addEventHandler("onPlayerResourceStart", root, playerJoining)
 
 function showScores(newState, oldState)
 	if (newState == "Running") then
+		-- triggerClientEvent(root, "setScoreBoard", resourceRoot, results)
 		triggerClientEvent(root, "showScoreBoard", resourceRoot, true, 31000)
 		return
 	elseif (newState == "GridCountdown") then
 		if (DATABASE) then
 			-- read the database
 			dbExec(DATABASE, "CREATE TABLE IF NOT EXISTS scoresTable (playername TEXT, score integer)")
-			-- dbExec(DATABASE, "INSERT INTO scoresTable(playername, score) VALUES (?,?)", "iguana", 87645)
-			-- dbExec(DATABASE, "INSERT INTO scoresTable(playername, score) VALUES (?,?)", "zerogott", 23)
-			-- dbExec(DATABASE, "INSERT INTO scoresTable(playername, score) VALUES (?,?)", "jivel", 1011)
-			-- dbExec(DATABASE, "INSERT INTO scoresTable(playername, score) VALUES (?,?)", "thedamngod", 45302)
-			-- dbExec(DATABASE, "INSERT INTO scoresTable(playername, score) VALUES (?,?)", "kavakcz", 999)
-			-- dbExec(DATABASE, "INSERT INTO scoresTable(playername, score) VALUES (?,?)", "uber_dragon", 4)
-			-- dbExec(DATABASE, "INSERT INTO scoresTable(playername, score) VALUES (?,?)", "wayno717", 171)
 			query = dbQuery(DATABASE, "SELECT * FROM scoresTable ORDER BY score ASC LIMIT 10")
 			results = dbPoll(query, -1)
 			triggerClientEvent(root, "setScoreBoard", resourceRoot, results)
