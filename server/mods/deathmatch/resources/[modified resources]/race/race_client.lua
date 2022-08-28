@@ -811,10 +811,17 @@ function checkpointReached(elem)
 					.. ' g_Me:' .. tostring(g_Me)
 					.. ' getElementHealth(g_Me):' .. tostring(getElementHealth(g_Me))
 					)
-	if elem ~= g_Vehicle or isVehicleBlown(g_Vehicle) or getElementHealth(g_Me) == 0 or Spectate.active then
+	-- LotsOfS: Added extra checks for when the player is on foot in on foot races
+	if (not g_MapOptions.allowonfoot and elem ~= g_Vehicle) then
+		return
+	end
+	if (Spectate.active or getElementHealth(g_Me) == 0 or isVehicleBlown(g_Vehicle)) then
 		return
 	end
 	
+	if elem ~= g_Vehicle and elem ~= g_Me then
+		return
+	end
 	if g_Checkpoints[g_CurrentCheckpoint].vehicle and g_Checkpoints[g_CurrentCheckpoint].vehicle ~= getElementModel(g_Vehicle) then
 		g_PrevVehicleHeight = getElementDistanceFromCentreOfMassToBaseOfModel(g_Vehicle)
 		local health = nil
