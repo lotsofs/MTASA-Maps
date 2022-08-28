@@ -608,9 +608,18 @@ function vehicleUnloading()
 end
 
 function updateBars()
-	if g_Vehicle then
-		g_GUI.healthbar:setProgress(getElementHealth(g_Vehicle))
-		local vx, vy, vz = getElementVelocity(g_Vehicle)
+	-- LotsOfS: I had to change this to work with on foot health for the pedestrian. If in a vehicle, it would check g_Vehicle health, but it now is possible to enter any vehicle.
+	if (not isPedInVehicle(localPlayer)) then
+		local stat = getPedStat(localPlayer, 24) -- max health
+		local maxHP = 100 + (stat - 569) / 4.31
+		g_GUI.healthbar:setProgress(getElementHealth(localPlayer) / maxHP * 750 + 250) -- health bar goes from 250 - 1000 because it's made for vehicles
+		local vx, vy, vz = getElementVelocity(localPlayer)
+		g_GUI.speedbar:setProgress(math.sqrt(vx*vx + vy*vy + vz*vz))
+	else 
+		local veh = getPedOccupiedVehicle(localPlayer)
+		if (not veh) then return end
+		g_GUI.healthbar:setProgress(getElementHealth(veh))
+		local vx, vy, vz = getElementVelocity(veh)
 		g_GUI.speedbar:setProgress(math.sqrt(vx*vx + vy*vy + vz*vz))
 	end
 end
