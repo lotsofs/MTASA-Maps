@@ -254,6 +254,7 @@ function initRace(vehicle, checkpoints, objects, pickups, mapoptions, ranked, du
 	updateVehicleWeapons()
 	setCloudsEnabled(g_GameOptions.cloudsenable)
 	setBlurLevel(g_GameOptions.blurlevel)
+	setPedCanBeKnockedOffBike(g_Me, g_MapOptions.allowonfoot and g_MapOptions.falloffbike)
 	g_dxGUI.mapdisplay:visible(g_GameOptions.showmapname)
 	if engineSetAsynchronousLoading then
 		engineSetAsynchronousLoading( g_GameOptions.asyncloading )

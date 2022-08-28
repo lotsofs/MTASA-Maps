@@ -52,6 +52,7 @@ addEventHandler('onGamemodeMapStart', g_Root,
 			outputDebugString('Unloading previous map')
 			unloadAll()
 		end
+
 		TimerManager.createTimerFor("raceresource","loadmap"):setTimer( doLoadMap, 50, 1 ,mapres )
 	end
 )
@@ -108,6 +109,8 @@ function cacheGameOptions()
 	g_GameOptions.countdowneffect		= getBool('race.countdowneffect',true)
 	g_GameOptions.showmapname			= getBool('race.showmapname',true)
 	g_GameOptions.hunterminigun			= getBool('race.hunterminigun',true)
+	g_GameOptions.allowonfoot			= getBool('race.allowonfoot',false)
+	g_GameOptions.falloffbike			= getBool('race.falloffbike',false)
 	g_GameOptions.securitylevel			= getNumber('race.securitylevel',2)
 	g_GameOptions.anyonecanspec			= getBool('race.anyonecanspec',true)
 	g_GameOptions.norsadminspectate		= getBool('race.norsadminspectate',false)
@@ -140,18 +143,20 @@ function cacheMapOptions(map)
 	if g_MapOptions.respawn ~= 'timelimit' and g_MapOptions.respawn ~= 'none' then
 		g_MapOptions.respawn = 'timelimit'
 	end
-	g_MapOptions.respawntime	= g_MapOptions.respawn == 'timelimit' and (map.respawntime and map.respawntime*1000 or g_GameOptions.defaultrespawntime)
-	g_MapOptions.time			= map.time or '12:00'
-	g_MapOptions.weather		= map.weather or 0
+	g_MapOptions.respawntime		= g_MapOptions.respawn == 'timelimit' and (map.respawntime and map.respawntime*1000 or g_GameOptions.defaultrespawntime)
+	g_MapOptions.time				= map.time or '12:00'
+	g_MapOptions.weather			= map.weather or 0
 
-	g_MapOptions.skins			= map.skins or 'cj'
-	g_MapOptions.vehicleweapons = map.vehicleweapons == 'true'
-	g_MapOptions.ghostmode		= map.ghostmode == 'true'
-	g_MapOptions.autopimp		= map.autopimp == 'true'
-	g_MapOptions.firewater		= map.firewater == 'true'
-	g_MapOptions.classicchangez	= map.classicchangez == 'true'
-	g_MapOptions.hunterminigun	= map.hunterminigun == 'true'
-
+	g_MapOptions.skins				= map.skins or 'cj'
+	g_MapOptions.vehicleweapons 	= map.vehicleweapons == 'true'
+	g_MapOptions.ghostmode			= map.ghostmode == 'true'
+	g_MapOptions.autopimp			= map.autopimp == 'true'
+	g_MapOptions.firewater			= map.firewater == 'true'
+	g_MapOptions.classicchangez		= map.classicchangez == 'true'
+	g_MapOptions.hunterminigun		= map.hunterminigun == 'true'
+	g_MapOptions.allowonfoot		= map.allowonfoot == 'true'
+	g_MapOptions.falloffbike	 	= map.falloffbike == 'true'
+	
 	outputDebug("MISC", "duration = "..g_MapOptions.duration.."  respawn = "..g_MapOptions.respawn.."  respawntime = "..tostring(g_MapOptions.respawntime).."  time = "..g_MapOptions.time.."  weather = "..g_MapOptions.weather)
 	
 	if g_MapOptions.time then
@@ -228,19 +233,21 @@ function loadMap(res)
     g_MapInfo.resname   = map.info['resname'] or getResourceName(res)
 
 	g_SavedMapSettings = {}
-	g_SavedMapSettings.duration			= map.duration
-	g_SavedMapSettings.respawn			= map.respawn
-	g_SavedMapSettings.respawntime		= map.respawntime
-	g_SavedMapSettings.time				= map.time
-	g_SavedMapSettings.weather			= map.weather
-	g_SavedMapSettings.skins			= map.skins
-	g_SavedMapSettings.vehicleweapons	= map.vehicleweapons
-	g_SavedMapSettings.ghostmode		= map.ghostmode
-	g_SavedMapSettings.autopimp			= map.autopimp
-	g_SavedMapSettings.firewater		= map.firewater
-	g_SavedMapSettings.classicchangez	= map.classicchangez
-	g_SavedMapSettings.firewater		= map.firewater
-	g_SavedMapSettings.hunterminigun	= map.hunterminigun
+	g_SavedMapSettings.duration				= map.duration
+	g_SavedMapSettings.respawn				= map.respawn
+	g_SavedMapSettings.respawntime			= map.respawntime
+	g_SavedMapSettings.time					= map.time
+	g_SavedMapSettings.weather				= map.weather
+	g_SavedMapSettings.skins				= map.skins
+	g_SavedMapSettings.vehicleweapons		= map.vehicleweapons
+	g_SavedMapSettings.ghostmode			= map.ghostmode
+	g_SavedMapSettings.autopimp				= map.autopimp
+	g_SavedMapSettings.firewater			= map.firewater
+	g_SavedMapSettings.classicchangez		= map.classicchangez
+	g_SavedMapSettings.firewater			= map.firewater
+	g_SavedMapSettings.hunterminigun		= map.hunterminigun
+	g_SavedMapSettings.allowonfoot			= map.allowonfoot
+	g_SavedMapSettings.falloffbike		= map.falloffbike
 
 	cacheMapOptions(g_SavedMapSettings)
 
@@ -889,7 +896,12 @@ addEventHandler('onPlayerQuit', g_Root,
 	end
 )
 
-addEventHandler('onVehicleStartExit', g_Root, function() cancelEvent() end)
+addEventHandler('onVehicleStartExit', g_Root, 
+function() 
+	if (not g_SavedMapSettings.allowonfoot or isElementFrozen(source)) then
+		cancelEvent() 
+	end
+end)
 
 function getPlayerCurrentCheckpoint(player)
 	return getElementData(player, 'race.checkpoint') or 1
@@ -1330,6 +1342,12 @@ g_checkPedIndex = 0
 
 TimerManager.createTimerFor("raceresource","warppeds"):setTimer(
 	function ()
+		if (#g_Players == 0 ) then
+			return -- LotsOfS: Had to add this check because this would get called even in empty servers, and spam errors because there's no map loaded.
+		end
+		if (g_SavedMapSettings.allowonfoot) then
+			return
+		end
 		-- Make sure all players are in a vehicle
 		local maxCheck = 6		-- Max number to check per call
 		local maxWarp = 3		-- Max number to warp per call
