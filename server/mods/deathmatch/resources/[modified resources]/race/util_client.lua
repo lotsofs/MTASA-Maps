@@ -155,6 +155,7 @@ function alignVehicleToGround(vehicle)
 end
 
 function checkVehicleIsHelicopter()
+	if (not g_Vehicle) then return end -- LotsOfS: This would throw warnings upon a race start often.
 	local vehID = getElementModel(g_Vehicle)
 	if vehID == 417 or vehID == 425 or vehID == 447 or vehID == 465 or vehID == 469 or vehID == 487 or vehID == 488 or vehID == 497 or vehID == 501 or vehID == 548 or vehID == 563 then
 		setHelicopterRotorSpeed (g_Vehicle, 0.2)

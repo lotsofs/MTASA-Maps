@@ -5,6 +5,8 @@
 	<setting name="ghostmode" friendlyname="Ghost mode" type="selection:true,false" description="Whether Ghost Mode is enabled.  This mode allows vehicles to drive through each other during the race." default="false" required="true"/>
 	<setting name="skins" friendlyname="Driver skins" type="selection:cj,random" description="What kind of skins players will spawn as.  CJ means that players will spawn as CJ, with varying motor clothes on.  Random means that random ped skins will be used." default="cj" required="true"/>
 	<setting name="respawntime" friendlyname="Respawn delay" type="natural" description="Time from death to respawn in seconds. Default is 5." default="5" required="true"/>
+	<setting name="allowonfoot" friendlyname="Allow on foot" type="selection:true,false" description="Whether players are supposed or allowed to leave their vehicles" default="false" required="false"/>
+	<setting name="falloffbike" friendlyname="Fall Off Bike" type="selection:true,false" description="Enable falling off bike for on foot enabled races" default="false" required="false"/>
 
 	<element name="spawnpoint" friendlyname="Spawnpoint" icon="edf/spawnpoint.png">
 		<data name="position" type="coord3d" default="0,0,0" />
