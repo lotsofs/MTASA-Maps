@@ -23,9 +23,15 @@ addEventHandler('onClientElementStreamIn', g_Root,
 
 addEventHandler('onClientElementDataChange', g_Root,
 	function(dataName)
-		if dataName == "race.collideothers" or dataName == "race.collideworld" or dataName == "race.alpha"  then
+		if dataName == "race.collideothers" or dataName == "race.collideworld" or dataName == "race.alpha" or dataName == "raceiv.taken" then
 			OverrideClient.updateVars( source )
 		end
+	end
+)
+
+addEventHandler('onClientPlayerVehicleExit', g_Root, 
+	function(theVehicle, seat)
+		OverrideClient.updateVars( source )
 	end
 )
 
@@ -55,10 +61,139 @@ function OverrideClient.updateVars( element )
 		-- 1.0.2
 		-- Collide others
 		local collideothers = isCollideOthers ( element )
-		for _,other in ipairs( getElementsByType( "vehicle" ) ) do
+		local otherVehicles = getElementsByType( "vehicle" )
+		for _,other in ipairs( otherVehicles ) do
 			local docollide = collideothers and isCollideOthers ( other )
 			setElementCollidableWith ( element, other, docollide )
 		end
+		-- LotsOfS: Code to handle interactive cars, primarily for foot races, though the cars can be used for normal races as well
+		-- First off, we need to handle the players too, not just their vehicles
+		local otherPlayers = getElementsByType( "player" )
+		local ghostModeOff = false
+		if (g_MapOptions) then
+			ghostModeOff = not g_MapOptions.ghostmode or false
+		end
+
+		if (getElementData(element, "raceiv.interactable")) then
+			local ugv = getElementData(element, "raceiv.unclaimedcollidewithvehicles")
+			local ugp = getElementData(element, "raceiv.unclaimedcollidewithplayers")
+			local cg = getElementData(element, "raceiv.claimedcollisions")
+			local t = getElementData(element, "raceiv.taken")
+			local o = getElementData(element, "raceiv.owner")
+			if (t and o) then
+				-- someone else's car
+				for _,other in ipairs( otherPlayers ) do
+					if (other == o) then
+						setElementCollidableWith ( element, other, cg )	
+					else
+						setElementCollidableWith ( element, other, ghostModeOff )	
+					end
+				end
+				for _,other in ipairs( otherVehicles ) do
+					local ugv2 = getElementData(other, "raceiv.unclaimedcollidewithvehicles")
+					local cg2 = getElementData(other, "raceiv.claimedcollisions")
+					local t2 = getElementData(other, "raceiv.taken")
+					local o2 = getElementData(other, "raceiv.owner")
+					if ((t2 and cg2 and o2 == o) or (not t2 and o2 == o)) then
+						-- enable collisions with their own vehicles
+						setElementCollidableWith(element, other, cg)
+					elseif (t2 and o2) then
+						-- enable cols with other players based on ghost mode setting
+						setElementCollidableWith ( element, other, ghostModeOff )	
+					elseif (not t2 and getElementData(other, "raceiv.interactable")) then
+						-- disable cols with parked cars
+						setElementCollidableWith ( element, other, ugv2 )
+					else	
+						-- non interactive vehicles
+						setElementCollidableWith ( element, other, isCollideOthers ( other ) )	
+					end
+				end
+			elseif (t and not o) then
+				-- a car pushed out of its spawn area
+				for _,other in ipairs( otherPlayers ) do
+					setElementCollidableWith ( element, other, ghostModeOff )	
+				end
+				for _,other in ipairs( otherVehicles ) do
+					local ugv2 = getElementData(other, "raceiv.unclaimedcollidewithvehicles")
+					local t2 = getElementData(other, "raceiv.taken")
+					local o2 = getElementData(other, "raceiv.owner")
+					if (t2 and o2) then
+						-- enable cols with other players based on ghost mode setting
+						setElementCollidableWith ( element, other, ghostModeOff )	
+					elseif (not t2 and getElementData(other, "raceiv.interactable")) then
+						-- disable cols with parked cars
+						setElementCollidableWith ( element, other, ugv2 )
+					else	
+						-- non interactive vehicles
+						setElementCollidableWith ( element, other, isCollideOthers ( other ) )	
+					end
+				end
+			elseif (not t) then
+				-- parked cars
+				for _,other in ipairs( otherPlayers ) do
+					setElementCollidableWith ( element, other, ugp )	
+				end
+				for _,other in ipairs( otherVehicles ) do
+					setElementCollidableWith ( element, other, ugv )	
+				end
+			end
+		elseif (getElementData(element, "raceiv.owner")) then
+			-- This is the main starter vehicle and it needs to be interacted with as well
+			local o = getElementData(element, "raceiv.owner")
+			for _,other in ipairs( otherPlayers ) do
+				if (other == o) then
+					setElementCollidableWith ( element, other, true )	
+				else
+					setElementCollidableWith ( element, other, not ghostModeOff )	
+				end
+			end
+			for _,other in ipairs( otherVehicles ) do
+				local ugv2 = getElementData(other, "raceiv.unclaimedcollidewithvehicles")
+				local cg2 = getElementData(other, "raceiv.claimedcollisions")
+				local t2 = getElementData(other, "raceiv.taken")
+				local o2 = getElementData(other, "raceiv.owner")
+				if ((t2 and cg2 and o2 == o) or (not t2 and o2 == o)) then
+					-- enable collisions with their own vehicles
+					setElementCollidableWith(element, other, true)
+				elseif (t2 and o2) then
+					-- enable cols with other players based on ghost mode setting
+					setElementCollidableWith ( element, other, not ghostModeOff )	
+				elseif (not t2 and getElementData(other, "raceiv.interactable")) then
+					-- disable cols with parked cars
+					setElementCollidableWith ( element, other, ugv2 )
+				else	
+					-- non interactive vehicles
+					setElementCollidableWith ( element, other, isCollideOthers ( other ) )	
+				end
+			end
+		elseif (getElementType(element) == "player") then
+			local o = element
+			for _,other in ipairs( otherPlayers ) do
+				if (other ~= o) then
+					setElementCollidableWith ( element, other, ghostModeOff )	
+				end
+			end
+			for _,other in ipairs( otherVehicles ) do
+				local ugp2 = getElementData(other, "raceiv.unclaimedcollidewithplayers")
+				local cg2 = getElementData(other, "raceiv.claimedcollisions")
+				local t2 = getElementData(other, "raceiv.taken")
+				local o2 = getElementData(other, "raceiv.owner")
+				if ((t2 and cg2 and o2 == o) or (not t2 and o2 == o)) then
+					-- enable collisions with their own vehicles
+					setElementCollidableWith(element, other, true)
+				elseif (t2 and o2) then
+					-- enable cols with other players based on ghost mode setting
+					setElementCollidableWith ( element, other, ghostModeOff )	
+				elseif (not t2 and getElementData(other, "raceiv.interactable")) then
+					-- disable cols with parked cars
+					setElementCollidableWith ( element, other, ugp2 )
+				else	
+					-- non interactive vehicles
+					setElementCollidableWith ( element, other, isCollideOthers ( other ) )	
+				end
+			end
+		end
+		-- End LotsOfS
 		-- Collide world
 		local collideworld = isCollideWorld ( element )
 		setElementCollisionsEnabled ( element, collideworld )

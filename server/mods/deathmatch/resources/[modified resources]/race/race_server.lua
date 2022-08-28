@@ -504,6 +504,7 @@ function joinHandlerBoth(player)
 				setElementSyncer( vehicle, false )
 			end
             g_Vehicles[player] = vehicle
+			setElementData(vehicle, "raceiv.owner", player) -- LotsOfS Edit: For Interactive Vehicles/ Foot Races
 			Override.setAlpha( "ForRCVehicles", player, g_RCVehicleIDs[spawnpoint.vehicle] and 0 or nil )
             RaceMode.playerFreeze(player)
             outputDebug( 'MISC', 'joinHandlerBoth: setElementFrozen true for ' .. tostring(getPlayerName(player)) .. '  vehicle:' .. tostring(vehicle) )
