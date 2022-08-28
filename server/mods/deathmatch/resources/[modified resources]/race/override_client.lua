@@ -23,7 +23,7 @@ addEventHandler('onClientElementStreamIn', g_Root,
 
 addEventHandler('onClientElementDataChange', g_Root,
 	function(dataName)
-		if dataName == "race.collideothers" or dataName == "race.collideworld" or dataName == "race.alpha" or dataName == "raceiv.taken" then
+		if dataName == "race.collideothers" or dataName == "race.collideworld" or dataName == "race.alpha" or string.sub(dataName, 1, 7) == "raceiv." then
 			OverrideClient.updateVars( source )
 		end
 	end
@@ -32,6 +32,14 @@ addEventHandler('onClientElementDataChange', g_Root,
 addEventHandler('onClientPlayerVehicleExit', g_Root, 
 	function(theVehicle, seat)
 		OverrideClient.updateVars( source )
+	end
+)
+
+addEventHandler('onClientMapStarting', g_Root,
+	function(mapInfo)
+		for i, v in pairs(getElementsByType("vehicle")) do
+			OverrideClient.updateVars( v )
+		end
 	end
 )
 
@@ -70,8 +78,10 @@ function OverrideClient.updateVars( element )
 		-- First off, we need to handle the players too, not just their vehicles
 		local otherPlayers = getElementsByType( "player" )
 		local ghostModeOff = false
+		local allowOnFoot = false
 		if (g_MapOptions) then
 			ghostModeOff = not g_MapOptions.ghostmode or false
+			allowOnFoot = g_MapOptions.allowonfoot or false
 		end
 
 		if (getElementData(element, "raceiv.interactable")) then
@@ -81,7 +91,18 @@ function OverrideClient.updateVars( element )
 			local t = getElementData(element, "raceiv.taken")
 			local o = getElementData(element, "raceiv.owner")
 			if (t and o) then
-				-- someone else's car
+				-- someone's car
+				if (allowOnFoot) then
+					if (o == g_Me) then
+						if (cg) then
+							setElementAlpha (element, 255)
+						else
+							setElementAlpha (element, 210)
+						end
+					else
+							setElementAlpha (element, ghostModeOff and 210 or 180)
+					end
+				end
 				for _,other in ipairs( otherPlayers ) do
 					if (other == o) then
 						setElementCollidableWith ( element, other, cg )	
@@ -110,6 +131,13 @@ function OverrideClient.updateVars( element )
 				end
 			elseif (t and not o) then
 				-- a car pushed out of its spawn area
+				if (allowOnFoot) then
+					if (ghostModeOff) then
+						setElementAlpha (element, 255)
+					else
+						setElementAlpha (element, ghostModeOff and 210 or 180)
+					end
+				end
 				for _,other in ipairs( otherPlayers ) do
 					setElementCollidableWith ( element, other, ghostModeOff )	
 				end
@@ -130,6 +158,13 @@ function OverrideClient.updateVars( element )
 				end
 			elseif (not t) then
 				-- parked cars
+				if (allowOnFoot) then
+					if (ugv) then
+						setElementAlpha (element, 255)
+					else
+						setElementAlpha (element, 210)
+					end
+				end
 				for _,other in ipairs( otherPlayers ) do
 					setElementCollidableWith ( element, other, ugp )	
 				end
@@ -140,11 +175,16 @@ function OverrideClient.updateVars( element )
 		elseif (getElementData(element, "raceiv.owner")) then
 			-- This is the main starter vehicle and it needs to be interacted with as well
 			local o = getElementData(element, "raceiv.owner")
+			if (allowOnFoot) then
+				if (o == g_Me) then
+					setElementAlpha (element, 255)
+				end
+			end
 			for _,other in ipairs( otherPlayers ) do
 				if (other == o) then
 					setElementCollidableWith ( element, other, true )	
 				else
-					setElementCollidableWith ( element, other, not ghostModeOff )	
+					setElementCollidableWith ( element, other, ghostModeOff )	
 				end
 			end
 			for _,other in ipairs( otherVehicles ) do
@@ -157,7 +197,7 @@ function OverrideClient.updateVars( element )
 					setElementCollidableWith(element, other, true)
 				elseif (t2 and o2) then
 					-- enable cols with other players based on ghost mode setting
-					setElementCollidableWith ( element, other, not ghostModeOff )	
+					setElementCollidableWith ( element, other, ghostModeOff )	
 				elseif (not t2 and getElementData(other, "raceiv.interactable")) then
 					-- disable cols with parked cars
 					setElementCollidableWith ( element, other, ugv2 )
@@ -167,7 +207,13 @@ function OverrideClient.updateVars( element )
 				end
 			end
 		elseif (getElementType(element) == "player") then
+			-- Lastly, take care of players themselves
 			local o = element
+			if (allowOnFoot) then
+				if (o == g_Me) then
+					setElementAlpha (element, 255)
+				end
+			end
 			for _,other in ipairs( otherPlayers ) do
 				if (other ~= o) then
 					setElementCollidableWith ( element, other, ghostModeOff )	

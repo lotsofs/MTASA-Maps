@@ -83,11 +83,13 @@ setTimer(function()
 			setElementData(vehicle, "raceiv.taken", true)
 		end
 		local occupants = getVehicleOccupants(vehicle)
-		if (not occupants[0] and #occupants == 0 and getElementData(vehicle, "raceiv.taken")) then
-			-- Driver died or left the game without calling OnVehicleExit.
-			local despawnTimer = g_IVDespawnTimers[vehicle]
-			if (not despawnTimer) then
-				markInteractiveVehicleForDespawn(vehicle)
+		if (not occupants[0] and #occupants == 0) then
+			if (getElementData(vehicle, "raceiv.taken")) then
+				-- Driver died or left the game without calling OnVehicleExit.
+				local despawnTimer = g_IVDespawnTimers[vehicle]
+				if (not despawnTimer) then
+					markInteractiveVehicleForDespawn(vehicle)
+				end
 			end
 		end
 	end
@@ -98,17 +100,6 @@ addEventHandler("onPlayerVehicleExit", root, function(theVehicle, seat, jacked)
 end)
 
 addEventHandler("onPlayerVehicleEnter", root, function(theVehicle, seat, jacked)
-	local data = g_IVSpawns[theVehicle]
-	if (not data) then
-		return
-	end
-	if (getElementData(theVehicle, "raceiv.taken")) then
-		return
-	end
-	if (data.shared ~= "true" and not getElementData(theVehicle, "raceiv.owner")) then
-		setElementData(theVehicle, "raceiv.owner", source)
-	end
-	setElementData(theVehicle, "raceiv.taken", true)
 	local despawnTimer = g_IVDespawnTimers[theVehicle]
 	if (despawnTimer) then
 		killTimer(despawnTimer)
@@ -140,9 +131,33 @@ addEventHandler("onVehicleStartEnter", root, function(player, seat, jacked)
 	if (not data) then
 		return
 	end
+	if (data.shared ~= "true" and not getElementData(source, "raceiv.owner")) then
+		setElementData(source, "raceiv.owner", player)
+	end
+	if (getElementData(source, "raceiv.taken")) then
+		return
+	end
+	setElementData(source, "raceiv.taken", true)
 	local respawnTime = data.respawntime
 	if (respawnTime >= 0) then
 		setTimer(spawnInteractiveVehicle, respawnTime, 1, data)
 	end
 	
+end)
+
+addEvent("onClientStreamInVehicle", true)
+addEventHandler("onClientStreamInVehicle", resourceRoot, function(theVehicle)
+	setElementPosition(theVehicle, getElementPosition(theVehicle))
+end)
+
+addEventHandler("onElementStopSync", resourceRoot, function()
+	if (getElementType(source) == "vehicle" and getElementData(source, "raceiv.interactable")) then
+		setElementFrozen(source, true)
+	end
+end)
+
+addEventHandler("onElementStartSync", resourceRoot, function()
+	if (getElementType(source) == "vehicle" and getElementData(source, "raceiv.interactable")) then
+		setElementFrozen(source, false)
+	end
 end)
