@@ -691,6 +691,9 @@ addEventHandler('onClientElementDataChange', g_Root,
 
 function checkWater()
     if g_Vehicle then
+		if (g_MapOptions.allowonfoot) then
+			return --LotsOfS: Allow swimming and tossing cars in the drink
+		end
         if not g_WaterCraftIDs[getElementModel(g_Vehicle)] then
             local x, y, z = getElementPosition(g_Me)
             local waterZ = getWaterLevel(x, y, z)
