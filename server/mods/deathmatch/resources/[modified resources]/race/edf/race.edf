@@ -8,7 +8,7 @@
 	<setting name="allowonfoot" friendlyname="Allow on foot" type="selection:true,false" description="Whether players are supposed or allowed to leave their vehicles" default="false" required="false"/>
 	<setting name="falloffbike" friendlyname="Fall Off Bike" type="selection:true,false" description="Enable falling off bike for on foot enabled races" default="false" required="false"/>
 
-	<element name="spawnpoint" friendlyname="Spawnpoint" icon="edf/spawnpoint.png">
+	<element name="spawnpoint" friendlyname="Spawnpoint" icon="edf/spawnpoint.png" shortcut="model">
 		<data name="position" type="coord3d" default="0,0,0" />
 		<data name="rotation" type="coord3d" default="0,0,0" />
 		<data name="vehicle" type="vehicleID" default="522" />
@@ -17,7 +17,7 @@
 	<element name="checkpoint" friendlyname="Checkpoint" icon="edf/checkpoint.png">
 		<data name="position" type="coord3d" default="0,0,0" />
 		<data name="type" type="selection:checkpoint,ring,corona" default="checkpoint" />
-		<data name="color" type="color" description="color (#RRGGBBAA hex string)" default="#00F9" />
+		<data name="color" type="color" description="color (#RRGGBBAA hex string)" default="#0F09" />
 		<data name="size" type="number" description="marker size" default="2.25" />
 		<data name="nextid" type="element:checkpoint" description="The next checkpoint after this one" required="false" default="" />
 		<data name="vehicle" type="vehicleID" required="false"/>
@@ -31,6 +31,27 @@
 		<object model="2221" position="0,0,0" />
 		<object model="1234" position="0,0,0" editorOnly="true" alpha="0"/>
 		<marker position="0,0,0" type="corona" color="#00000000" editorOnly="true"/>
+	</element>
+	<element name="vehicle_interactive" friendlyname="Interactive Vehicle" icon="edf/vehicle.png">
+		<data name="model" type="vehicleID" description="vehicle model" default="400" />
+		<data name="position" type="coord3d" description="XYZ position" default="0,0,0" />
+		<data name="rotation" type="coord3d" description="XYZ rotation" default="0,0,0" />
+		<data name="colora" type="color" description="RGB vehicle color 1" required="false" />
+		<data name="colorb" type="color" description="RGB vehicle color 2" required="false" />
+		<data name="colorc" type="color" description="RGB vehicle color 3" required="false" />
+		<data name="colord" type="color" description="RGB vehicle color 4" required="false" />
+		<data name="paintjob" type="selection:0,1,2,3" description="vehicle paintjob" required="false" />
+		<data name="upgrades" type="string" description="installed vehicle upgrades" required="false" />
+		<data name="plate" type="plate" description="number plate" required="false" />
+		<data name="sirens" type="selection:false,true" description="Vehicle sirens" required="false" default="false"/>
+		<data name="maxmovedistance" type="integer" default="10" description="Mark the vehicle as taken if it moves this far away from its spawnpoint without a driver." required="true"/>
+		<data name="shared" type="selection:false,true" description="If set to false, once this vehicle is entered by a player it becomes claimed and cannot be entered by anyone else anymore. If set to true, anyone can enter after, including jacking the car." required="false" default="false"/>
+		<data name="despawntime" type="integer" default="-1" description="Time in ms before it despawns when abandoned. -1 for never." required="false" />
+		<data name="respawntime" type="integer" default="-1" description="Time in ms before it respawns when one is taken. -1 for never." required="false" />
+		<data name="unclaimedcollidewithvehicles" type="selection:false,true" default="true" required="false" description="Does this vehicle have collisions with other vehicles before any players took it?" />
+		<data name="unclaimedcollidewithplayers" type="selection:false,true" default="true" required="false" description="Does this vehicle have collisions with on-foot players before any players took it?" />
+		<data name="claimedcollisions" type="selection:false,true" default="true" required="false" description="Does this vehicle have collisions with other vehicles owned by the player after it has been taken?" />
+		<vehicle model="!model!" rotation="!rotation!" color="!color!" editorOnly="true"/>
 	</element>
 	
 	<script src="edf/edf.lua" />

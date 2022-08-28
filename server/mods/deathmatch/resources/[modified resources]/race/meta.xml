@@ -26,6 +26,8 @@
     <script src="override_server.lua" type="server" />
     <script src="editor_support_server.lua" type="server" />
     
+    <script src="interactive_vehicles.lua" type="server" />
+    
     <script src="_common.lua" type="client" />
     <script src="_joiner_client.lua" type="client" />
     <script src="util_client.lua" type="client" />
@@ -73,6 +75,7 @@
     <file src="edf/checkpoint.png" />
     <file src="edf/pickup.png" />
     <file src="edf/spawnpoint.png" />
+    <file src="edf/vehicle.png" />
     
     <export function="getTimePassed" type="server" />
     <export function="getPlayerRank" type="server" />
