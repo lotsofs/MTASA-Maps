@@ -619,6 +619,13 @@ function RaceMode.playerUnfreeze(player, bDontFix)
 end
 --------------------------------------
 
+-- addCommandHandler("unequipJetpack", function(player)
+	-- if (isPedWearingJetpack(player) and isPedOnGround(player)) then
+		-- setPedWearingJetpack(player, false)
+	-- end
+-- end
+-- bindKey( next(getBoundKeys"enter_exit"), "down", "unequipJetpack")
+
 -- Handle admin panel unfreeze
 addEventHandler ( "onPlayerFreeze", root,
 	function ( state )

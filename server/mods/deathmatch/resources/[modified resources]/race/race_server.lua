@@ -176,6 +176,11 @@ function cacheMapOptions(map)
 			outputChatBox( 'Notice: Collisions are turned on for this map' )
 		end
 	end
+	
+
+	if g_MapOptions.allowonfoot then
+		outputChatBox( 'Notice: Vehicle entering/exiting is turned on for this map' )
+	end
 
 	-- Set skins from g_GameOptions if not defined in the map, or map override not allowed
 	if not map.skins or not g_GameOptions.skins_map_can_override then

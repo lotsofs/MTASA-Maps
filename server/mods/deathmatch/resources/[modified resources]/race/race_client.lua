@@ -1553,7 +1553,14 @@ function kill()
 		if Spectate.savePos then
 			triggerServerEvent('onClientRequestSpectate', g_Me, false )
 		end
-    else
+	elseif (g_MapOptions.allowonfoot) then
+		-- LotsOfS: Kill is the same button as enter/exit vehicle. Add an additional restriction to allow vehicle enter/exit
+		if (getPedControlState(localPlayer, "action") or getPedControlState(localPlayer, "vehicle_secondary_fire")) then
+			Spectate.blockManual = true
+			triggerServerEvent('onRequestKillPlayer', g_Me)
+			Spectate.blockManualTimer = setTimer(function() Spectate.blockManual = false end, 3000, 1)
+		end
+    elseif (not g_MapOptions.allowonfoot) then
 		Spectate.blockManual = true
 		triggerServerEvent('onRequestKillPlayer', g_Me)
 		Spectate.blockManualTimer = setTimer(function() Spectate.blockManual = false end, 3000, 1)
