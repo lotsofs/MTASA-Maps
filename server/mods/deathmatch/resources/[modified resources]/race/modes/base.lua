@@ -232,29 +232,9 @@ function RaceMode:onPlayerReachCheckpoint(player, checkpointNum)
 	local time = self:getTimePassed()
 	if checkpointNum < RaceMode.getNumberOfCheckpoints() then
 		-- Regular checkpoint
-		local vehicle = getPedOccupiedVehicle(player) --RaceMode.getPlayerVehicle(player)
-		if (vehicle) then
-			self.checkpointBackups[player][checkpointNum] = {
-				onfoot = false ,
-				borrowed = g_IVSpawns[vehicle],
-				vehicle = getElementModel(vehicle),
-				position = {
-					getElementPosition(vehicle)
-				},
-				rotation = {
-					getElementRotation(vehicle)
-				},
-				velocity = {
-					getElementVelocity(vehicle)
-				},
-				turnvelocity = {
-					getElementAngularVelocity(vehicle)
-				},
-				geardown = getVehicleLandingGearDown(vehicle) or false,
-				hasNitro = getVehicleUpgradeOnSlot(vehicle, 8) > 0
-			}
-			triggerClientEvent(player, 'race:saveNosLevel', resourceRoot, checkpointNum)
-		else
+		local vehicle = getPedOccupiedVehicle(player)
+		local vehicle2 = RaceMode.getPlayerVehicle(player) -- LotsOfS: We can have multiple vehicles now
+		if (not vehicle) then
 			self.checkpointBackups[player][checkpointNum] = {
 				onfoot = true ,
 				borrowed = nil,
@@ -273,8 +253,65 @@ function RaceMode:onPlayerReachCheckpoint(player, checkpointNum)
 				},
 				geardown = false,
 				hasNitro = false,
-				jetpack = isPedWearingJetpack(player)
+				jetpack = isPedWearingJetpack(player),
+				vehicle2 = getElementModel(vehicle2),
+				position2 = {getElementPosition(vehicle2)},
+				rotation2 = {getElementRotation(vehicle2)},
+				velocity2 = {getElementVelocity(vehicle2)},
+				turnvelocity2 = {getElementAngularVelocity(vehicle2)},
+				geardown2 = getVehicleLandingGearDown(vehicle2) or false,
+				hasNitro2 = getVehicleUpgradeOnSlot(vehicle2, 8) > 0
 			}
+		elseif (vehicle == vehicle2) then
+			self.checkpointBackups[player][checkpointNum] = {
+				onfoot = false ,
+				borrowed = g_IVSpawns[vehicle],
+				vehicle = getElementModel(vehicle),
+				position = {
+					getElementPosition(vehicle)
+				},
+				rotation = {
+					getElementRotation(vehicle)
+				},
+				velocity = {
+					getElementVelocity(vehicle)
+				},
+				turnvelocity = {
+					getElementAngularVelocity(vehicle)
+				},
+				geardown = getVehicleLandingGearDown(vehicle) or false,
+				hasNitro = getVehicleUpgradeOnSlot(vehicle, 8) > 0,
+			}
+			triggerClientEvent(player, 'race:saveNosLevel', resourceRoot, checkpointNum)
+		else
+			self.checkpointBackups[player][checkpointNum] = {
+				onfoot = false ,
+				borrowed = g_IVSpawns[vehicle],
+				vehicle = getElementModel(vehicle),
+				position = {
+					getElementPosition(vehicle)
+				},
+				rotation = {
+					getElementRotation(vehicle)
+				},
+				velocity = {
+					getElementVelocity(vehicle)
+				},
+				turnvelocity = {
+					getElementAngularVelocity(vehicle)
+				},
+				geardown = getVehicleLandingGearDown(vehicle) or false,
+				hasNitro = getVehicleUpgradeOnSlot(vehicle, 8) > 0,
+				
+				vehicle2 = getElementModel(vehicle2),
+				position2 = {getElementPosition(vehicle2)},
+				rotation2 = {getElementRotation(vehicle2)},
+				velocity2 = {getElementVelocity(vehicle2)},
+				turnvelocity2 = {getElementAngularVelocity(vehicle2)},
+				geardown2 = getVehicleLandingGearDown(vehicle2) or false,
+				hasNitro2 = getVehicleUpgradeOnSlot(vehicle2, 8) > 0
+			}
+			triggerClientEvent(player, 'race:saveNosLevel', resourceRoot, checkpointNum)
 		end
 		self.checkpointBackups[player].goingback = true
 		TimerManager.destroyTimersFor("checkpointBackup",player)
@@ -469,6 +506,8 @@ function restorePlayer(id, player, bNoFade, bDontFix)
 	end
 
 	local vehicle = RaceMode.getPlayerVehicle(player)
+	local vehicle2 = vehicle
+
 
 	local rx, ry, rz = unpack(bkp.rotation)
 	local x, y, z = unpack(bkp.position)
@@ -476,10 +515,31 @@ function restorePlayer(id, player, bNoFade, bDontFix)
 	if (bkp.borrowed) then 
 		-- LotsOfS: Create our own vehicle if we hit the checkpoint with a vehicle that isn't the 'main'
 		vehicle = spawnInteractiveVehicle(bkp.borrowed)
-		setElementData(vehicle, "taken", true)
+		setElementData(vehicle, "raceiv.taken", true)
 		warpPlayerIntoVehicle(player, vehicle)-- LotsOfS: This is deprecated, but warpPedIntoVehicle doesn't work for some reason with my own created vehicle, not even with a timer or in the other script.
+	end
+	if (bkp.borrowed or bkp.onfoot) then
+		-- LotsOfS: Move our main vehicle back to where it was in case you drove off with it, then died, and respawned next to where it was but now it's gone
+        setElementVelocity( vehicle2, 0,0,0 )
+        setElementAngularVelocity( vehicle2, 0,0,0 )
+		local rx2, ry2, rz2 = unpack(bkp.rotation2)
+		local x2, y2, z2 = unpack(bkp.position2)
+		setElementPosition(vehicle2, x2, y2, z2)
+		setElementRotation(vehicle2, rx2 or 0, ry2 or 0, rz2 or 0)
+		if not bDontFix then
+			fixVehicle(vehicle2)
 		end
-	
+		setVehicleID(vehicle2, 481)	-- BMX (fix engine sound)
+		if getElementModel(vehicle2) ~= bkp.vehicle2 then
+			setVehicleID(vehicle2, bkp.vehicle2)
+		end
+		setVehicleLandingGearDown(vehicle2,bkp.geardown2)	
+		
+		removeVehicleUpgrade(vehicle2, 1010) -- remove nitro
+		if bkp.hasNitro2 then
+			addVehicleUpgrade(vehicle2, 1010) -- add nos if player had nos
+		end
+	end
 	if vehicle and not bkp.onfoot then
         setElementVelocity( vehicle, 0,0,0 )
         setElementAngularVelocity( vehicle, 0,0,0 )
@@ -532,19 +592,23 @@ function restorePlayerUnfreeze(id, player, bDontFix)
 		return
 	end
 	RaceMode.playerUnfreeze(player, bDontFix)
-	local vehicle = RaceMode.getPlayerVehicle(player)
-	local vehicle2 = getPedOccupiedVehicle(player)
-	if (vehicle2) then
+	local vehicle = getPedOccupiedVehicle(player)
+	local vehicle2 = RaceMode.getPlayerVehicle(player)
+	if (not vehicle) then
 		vehicle = vehicle2
 	end
     outputDebug( 'MISC', 'restorePlayerUnfreeze: vehicle false for ' .. tostring(getPlayerName(player)) .. '  vehicle:' .. tostring(vehicle) )
 	local checkpointNum = getPlayerCurrentCheckpoint(player) - 1
 	local bkp = RaceMode.instances[id].checkpointBackups[player][checkpointNum]
+	if (bkp.onfoot or bkp.borrowed) then
+		setElementVelocity(vehicle2, unpack(bkp.velocity2))
+		setElementAngularVelocity(vehicle2, unpack(bkp.turnvelocity2))
+	end
 	if (bkp.onfoot) then
 		setElementVelocity(player, unpack(bkp.velocity))
 	else
 		setElementVelocity(vehicle, unpack(bkp.velocity))
-		setElementAngularVelocity(g_Vehicles[player], unpack(bkp.turnvelocity))
+		setElementAngularVelocity(vehicle, unpack(bkp.turnvelocity))
 		triggerClientEvent(player, 'race:startNosAgain', resourceRoot, checkpointNum)
 	end
 end
@@ -555,9 +619,10 @@ end
 function RaceMode.playerFreeze(player, bRespawn, bDontFix, bOnFoot)
     toggleAllControls(player,true)
 	clientCall( player, "updateVehicleWeapons" )
-	local vehicle = RaceMode.getPlayerVehicle(player)
-	local vehicle2 = getPedOccupiedVehicle(player)
-	if (vehicle2) then
+	local vehicle = getPedOccupiedVehicle(player)
+	local vehicle2 = RaceMode.getPlayerVehicle(player)
+	-- LotsOfS: We can have multiple vehicles now, but not always.
+	if (not vehicle) then
 		vehicle = vehicle2
 	end
 
@@ -567,27 +632,31 @@ function RaceMode.playerFreeze(player, bRespawn, bDontFix, bOnFoot)
 	end
 
 	-- Reset move away stuff
-	Override.setCollideOthers( "ForSpectating", vehicle, nil )
-	Override.setCollideOthers( "ForMoveAway", vehicle, nil )
-	Override.setAlpha( "ForMoveAway", {player, vehicle}, nil )
+	Override.setCollideOthers( "ForSpectating", {vehicle, vehicle2}, nil )
+	Override.setCollideOthers( "ForMoveAway", {vehicle, vehicle2}, nil )
+	Override.setAlpha( "ForMoveAway", {player, vehicle, vehicle2}, nil )
 
 	-- Setup ghost mode for this vehicle
-	Override.setCollideOthers( "ForGhostCollisions", vehicle, g_MapOptions.ghostmode and 0 or nil )
-	Override.setAlpha( "ForGhostAlpha", {player, vehicle}, g_MapOptions.ghostmode and g_GameOptions.ghostalpha and 180 or nil )
+	Override.setCollideOthers( "ForGhostCollisions", {vehicle, vehicle2}, g_MapOptions.ghostmode and 0 or nil )
+	Override.setAlpha( "ForGhostAlpha", {player, vehicle, vehicle2}, g_MapOptions.ghostmode and g_GameOptions.ghostalpha and 180 or nil )
 
 	-- Show non-ghost vehicles as semi-transparent while respawning
-	Override.setAlpha( "ForRespawnEffect", {player, vehicle}, bRespawn and not g_MapOptions.ghostmode and 120 or nil )
+	Override.setAlpha( "ForRespawnEffect", {player, vehicle, vehicle2}, bRespawn and not g_MapOptions.ghostmode and 120 or nil )
 
 	-- No collisions while frozen
-	Override.setCollideOthers( "ForVehicleSpawnFreeze", vehicle, 0 )
+	Override.setCollideOthers( "ForVehicleSpawnFreeze", {vehicle, vehicle2}, 0 )
 
 	if not bDontFix then
 		fixVehicle(vehicle)
+		fixVehicle(vehicle2)
 	end
 	setElementFrozen(player, true)
 	setElementFrozen(vehicle, true)
+	setElementFrozen(vehicle2, true)
     setVehicleDamageProof(vehicle, true)
+	setVehicleDamageProof(vehicle2, true)
 	Override.setCollideWorld( "ForVehicleJudder", vehicle, 0 )
+	Override.setCollideWorld( "ForVehicleJudder", vehicle2, 0 )
 	Override.flushAll()
 end
 
@@ -597,24 +666,29 @@ function RaceMode.playerUnfreeze(player, bDontFix)
 	end
     toggleAllControls(player,true)
 	clientCall( player, "updateVehicleWeapons" )
-	local vehicle = RaceMode.getPlayerVehicle(player)
-	local vehicle2 = getPedOccupiedVehicle(player)
-	if (vehicle2) then
+	local vehicle = getPedOccupiedVehicle(player)
+	local vehicle2 = RaceMode.getPlayerVehicle(player)
+	-- LotsOfS: We can have multiple vehicles now, but not always.
+	if (not vehicle) then
 		vehicle = vehicle2
 	end
 	
 	if not bDontFix then
 		fixVehicle(vehicle)
+		fixVehicle(vehicle2)
 	end
     setVehicleDamageProof(vehicle, false)
+    setVehicleDamageProof(vehicle2, false)
     setVehicleEngineState(vehicle, true)
+    setVehicleEngineState(vehicle2, true)
 	setElementFrozen(player, false)
 	setElementFrozen(vehicle, false)
+	setElementFrozen(vehicle2, false)
 
 	-- Remove things added for freeze only
-	Override.setCollideWorld( "ForVehicleJudder", {player, vehicle}, nil )
-	Override.setCollideOthers( "ForVehicleSpawnFreeze", {player, vehicle}, nil )
-	Override.setAlpha( "ForRespawnEffect", {player, vehicle}, nil )
+	Override.setCollideWorld( "ForVehicleJudder", {player, vehicle, vehicle2}, nil )
+	Override.setCollideOthers( "ForVehicleSpawnFreeze", {player, vehicle, vehicle2}, nil )
+	Override.setAlpha( "ForRespawnEffect", {player, vehicle, vehicle2}, nil )
 	Override.flushAll()
 end
 --------------------------------------

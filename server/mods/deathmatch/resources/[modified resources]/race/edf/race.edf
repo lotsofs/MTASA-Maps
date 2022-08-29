@@ -7,6 +7,7 @@
 	<setting name="respawntime" friendlyname="Respawn delay" type="natural" description="Time from death to respawn in seconds. Default is 5." default="5" required="true"/>
 	<setting name="allowonfoot" friendlyname="Allow on foot" type="selection:true,false" description="Whether players are supposed or allowed to leave their vehicles" default="false" required="false"/>
 	<setting name="falloffbike" friendlyname="Fall Off Bike" type="selection:true,false" description="Enable falling off bike for on foot enabled races" default="false" required="false"/>
+	<setting name="spectatevehiclespersist" friendlyname="Spectator Vehicles Persist" type="selection:true,false" description"If a player goes into spectate mode (eg. when Finished), their vehicle remains in the world" default="false" required="false"/>
 
 	<element name="spawnpoint" friendlyname="Spawnpoint" icon="edf/spawnpoint.png" shortcut="model">
 		<data name="position" type="coord3d" default="0,0,0" />
@@ -21,6 +22,8 @@
 		<data name="size" type="number" description="marker size" default="2.25" />
 		<data name="nextid" type="element:checkpoint" description="The next checkpoint after this one" required="false" default="" />
 		<data name="vehicle" type="vehicleID" required="false"/>
+		<data name="extrasize" type="integer" default="4" description="How much bigger the checkpoint's hitbox is compared to its visual appearance" required="false"/>
+		<data name="showradarblip" type="selection:true,false" default="true" description="Whether this checkpoint has a blip on the radar" required="false"/>
 		<marker color="!color!" type="!type!" size="!size!"/>
 	</element>
 	<element name="racepickup" friendlyname="Race pickup" icon="edf/pickup.png">
@@ -44,6 +47,7 @@
 		<data name="upgrades" type="string" description="installed vehicle upgrades" required="false" />
 		<data name="plate" type="plate" description="number plate" required="false" />
 		<data name="sirens" type="selection:false,true" description="Vehicle sirens" required="false" default="false"/>
+		<data name="locked" type="selection:false,true" description="Locked doors" required="false" default="false"/>
 		<data name="maxmovedistance" type="integer" default="10" description="Mark the vehicle as taken if it moves this far away from its spawnpoint without a driver." required="true"/>
 		<data name="shared" type="selection:false,true" description="If set to false, once this vehicle is entered by a player it becomes claimed and cannot be entered by anyone else anymore. If set to true, anyone can enter after, including jacking the car." required="false" default="false"/>
 		<data name="despawntime" type="integer" default="-1" description="Time in ms before it despawns when abandoned. -1 for never." required="false" />

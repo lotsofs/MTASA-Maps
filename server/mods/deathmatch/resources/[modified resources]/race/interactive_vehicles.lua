@@ -16,6 +16,7 @@ function spawnInteractiveVehicle(stats)
 	if (stats.plate) then setVehiclePlateText(veh, stats.plate) end
 	if (stats.paintjob and stats.paintjob ~= "false" and stats.paintjob ~= "nil") then setVehiclePaintjob(veh, tonumber(stats.paintjob)) end
 	setVehicleSirensOn(veh, stats.sirens == 'true')
+	setVehicleLocked(veh, stats.locked == 'true')
 	if (stats.upgrades and type(stats.upgrades) == "table") then
 		for _, u in ipairs(stats.upgrades) do
 			addVehicleUpgrade(veh, u)
@@ -68,6 +69,17 @@ function markInteractiveVehicleForDespawn(theVehicle)
 		g_IVDespawnTimers[theVehicle] = setTimer(despawnInteractiveVehicle, despawnTime, 1, theVehicle)
 	end
 end
+
+setTimer(function()
+	for p, v in pairs(g_Vehicles) do
+		if (not getVehicleOccupant(v, 0)) then
+			setElementPosition(v, getElementPosition(v))
+			setElementRotation(v, getElementRotation(v))
+			setElementVelocity(v, getElementVelocity(v))
+			setElementAngularVelocity(v, getElementAngularVelocity(v))
+		end
+	end
+end, 5000, 0)
 
 setTimer(function()
 	for vehicle, data in pairs(g_IVSpawns) do
@@ -172,16 +184,27 @@ end)
 addEvent("onClientStreamInVehicle", true)
 addEventHandler("onClientStreamInVehicle", resourceRoot, function(theVehicle)
 	setElementPosition(theVehicle, getElementPosition(theVehicle))
+	setElementRotation(theVehicle, getElementRotation(theVehicle))
+	setElementVelocity(theVehicle, getElementVelocity(theVehicle))
+	setElementAngularVelocity(theVehicle, getElementAngularVelocity(theVehicle))
 end)
 
 addEventHandler("onElementStopSync", resourceRoot, function()
-	if (getElementType(source) == "vehicle" and getElementData(source, "raceiv.interactable")) then
+	if (getElementType(source) == "vehicle" and getElementData(source, "raceiv.interactable")) or g_Vehicles[source] then
 		setElementFrozen(source, true)
+		setElementPosition(source, getElementPosition(source))
+		setElementRotation(source, getElementRotation(source))
+		setElementVelocity(source, getElementVelocity(source))
+		setElementAngularVelocity(source, getElementAngularVelocity(source))
 	end
 end)
 
 addEventHandler("onElementStartSync", resourceRoot, function()
-	if (getElementType(source) == "vehicle" and getElementData(source, "raceiv.interactable")) then
+	if (getElementType(source) == "vehicle" and getElementData(source, "raceiv.interactable")) or g_Vehicles[source] then
 		setElementFrozen(source, false)
+		setElementPosition(source, getElementPosition(source))
+		setElementRotation(source, getElementRotation(source))
+		setElementVelocity(source, getElementVelocity(source))
+		setElementAngularVelocity(source, getElementAngularVelocity(source))
 	end
 end)

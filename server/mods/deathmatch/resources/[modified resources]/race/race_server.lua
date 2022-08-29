@@ -147,15 +147,16 @@ function cacheMapOptions(map)
 	g_MapOptions.time				= map.time or '12:00'
 	g_MapOptions.weather			= map.weather or 0
 
-	g_MapOptions.skins				= map.skins or 'cj'
-	g_MapOptions.vehicleweapons 	= map.vehicleweapons == 'true'
-	g_MapOptions.ghostmode			= map.ghostmode == 'true'
-	g_MapOptions.autopimp			= map.autopimp == 'true'
-	g_MapOptions.firewater			= map.firewater == 'true'
-	g_MapOptions.classicchangez		= map.classicchangez == 'true'
-	g_MapOptions.hunterminigun		= map.hunterminigun == 'true'
-	g_MapOptions.allowonfoot		= map.allowonfoot == 'true'
-	g_MapOptions.falloffbike	 	= map.falloffbike == 'true'
+	g_MapOptions.skins						= map.skins or 'cj'
+	g_MapOptions.vehicleweapons 			= map.vehicleweapons == 'true'
+	g_MapOptions.ghostmode					= map.ghostmode == 'true'
+	g_MapOptions.autopimp					= map.autopimp == 'true'
+	g_MapOptions.firewater					= map.firewater == 'true'
+	g_MapOptions.classicchangez				= map.classicchangez == 'true'
+	g_MapOptions.hunterminigun				= map.hunterminigun == 'true'
+	g_MapOptions.allowonfoot				= map.allowonfoot == 'true'
+	g_MapOptions.falloffbike	 			= map.falloffbike == 'true'
+	g_MapOptions.spectatevehiclespersist	= map.spectatevehiclespersist == 'true'
 	
 	outputDebug("MISC", "duration = "..g_MapOptions.duration.."  respawn = "..g_MapOptions.respawn.."  respawntime = "..tostring(g_MapOptions.respawntime).."  time = "..g_MapOptions.time.."  weather = "..g_MapOptions.weather)
 	
@@ -238,21 +239,22 @@ function loadMap(res)
     g_MapInfo.resname   = map.info['resname'] or getResourceName(res)
 
 	g_SavedMapSettings = {}
-	g_SavedMapSettings.duration				= map.duration
-	g_SavedMapSettings.respawn				= map.respawn
-	g_SavedMapSettings.respawntime			= map.respawntime
-	g_SavedMapSettings.time					= map.time
-	g_SavedMapSettings.weather				= map.weather
-	g_SavedMapSettings.skins				= map.skins
-	g_SavedMapSettings.vehicleweapons		= map.vehicleweapons
-	g_SavedMapSettings.ghostmode			= map.ghostmode
-	g_SavedMapSettings.autopimp				= map.autopimp
-	g_SavedMapSettings.firewater			= map.firewater
-	g_SavedMapSettings.classicchangez		= map.classicchangez
-	g_SavedMapSettings.firewater			= map.firewater
-	g_SavedMapSettings.hunterminigun		= map.hunterminigun
-	g_SavedMapSettings.allowonfoot			= map.allowonfoot
-	g_SavedMapSettings.falloffbike		= map.falloffbike
+	g_SavedMapSettings.duration					= map.duration
+	g_SavedMapSettings.respawn					= map.respawn
+	g_SavedMapSettings.respawntime				= map.respawntime
+	g_SavedMapSettings.time						= map.time
+	g_SavedMapSettings.weather					= map.weather
+	g_SavedMapSettings.skins					= map.skins
+	g_SavedMapSettings.vehicleweapons			= map.vehicleweapons
+	g_SavedMapSettings.ghostmode				= map.ghostmode
+	g_SavedMapSettings.autopimp					= map.autopimp
+	g_SavedMapSettings.firewater				= map.firewater
+	g_SavedMapSettings.classicchangez			= map.classicchangez
+	g_SavedMapSettings.firewater				= map.firewater
+	g_SavedMapSettings.hunterminigun			= map.hunterminigun
+	g_SavedMapSettings.allowonfoot				= map.allowonfoot
+	g_SavedMapSettings.falloffbike				= map.falloffbike
+	g_SavedMapSettings.spectatevehiclespersist 	= map.spectatevehiclespersist
 
 	cacheMapOptions(g_SavedMapSettings)
 
@@ -500,7 +502,8 @@ function joinHandlerBoth(player)
 			-- Replace groups of unprintable characters with a space, and then remove any leading space
 			local plate = getPlayerName(player):gsub( '[^%a%d]+', ' ' ):gsub( '^ ', '' )
 			vehicle = createVehicle(spawnpoint.vehicle, x, y, z, rx, ry, rz, plate:sub(1, 8))
-			if setElementSyncer then
+			if setElementSyncer and not g_MapOptions.allowonfoot then
+				iprint("not syncing")
 				setElementSyncer( vehicle, false )
 			end
             g_Vehicles[player] = vehicle
@@ -1503,3 +1506,17 @@ function checkClient(checkAccess,player,...)
 	end
 	return false
 end
+
+
+----------------------
+-- LotsOfS
+
+addEvent('moveUnoccupiedVehicleForSpectate', true)
+addEventHandler('moveUnoccupiedVehicleForSpectate', resourceRoot, function(x, y, z, r)
+	fixVehicle( source)
+	setElementFrozen ( source, true )
+	setElementPosition( source, x, y, z )
+	setElementVelocity( source, 0,0,0 )
+	setElementAngularVelocity( source, 0,0,0 )
+	setElementRotation ( source, 0,0, r )
+end)

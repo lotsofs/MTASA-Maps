@@ -81,7 +81,14 @@ function OverrideClient.updateVars( element )
 			local docollide = collideothers and isCollideOthers ( other )
 			setElementCollidableWith ( element, other, docollide )
 		end
+		-- Collide world
+		local collideworld = isCollideWorld ( element )
+		setElementCollisionsEnabled ( element, collideworld )
 		-- LotsOfS: Code to handle interactive cars, primarily for foot races, though the cars can be used for normal races as well
+		if (alpha == 120) then 
+			iprint("alpha120")
+			return 
+		end -- Ignore if respawn effect
 		-- First off, we need to handle the players too, not just their vehicles
 		local otherPlayers = getElementsByType( "player" )
 		local ghostModeOff = false
@@ -132,7 +139,7 @@ function OverrideClient.updateVars( element )
 						setElementCollidableWith(element, other, cg)
 					elseif (t2) then
 						-- enable cols with other players based on ghost mode setting
-						setElementCollidableWith ( element, other, ghostModeOff )	
+						setElementCollidableWith ( element, other, cg2 and ghostModeOff )	
 					elseif (not t2 and getElementData(other, "raceiv.interactable")) then
 						-- disable cols with parked cars
 						setElementCollidableWith ( element, other, ugv2 )
@@ -151,12 +158,13 @@ function OverrideClient.updateVars( element )
 				end
 				for _,other in ipairs( otherVehicles ) do
 					local ugv2 = getElementData(other, "raceiv.unclaimedcollidewithvehicles")
+					local cg2 = getElementData(other, "raceiv.claimedcollisions")
 					local t2 = getElementData(other, "raceiv.taken")
 					local o2 = getElementData(other, "raceiv.owner")
 					local vo2 = getVehicleOccupant(other, 0)
 					if (t2) then
 						-- enable cols with other players based on ghost mode setting
-						setElementCollidableWith ( element, other, ghostModeOff )	
+						setElementCollidableWith ( element, other, cg2 and ghostModeOff )	
 					elseif (not t2 and getElementData(other, "raceiv.interactable")) then
 						-- disable cols with parked cars
 						setElementCollidableWith ( element, other, ugv2 )
@@ -207,7 +215,7 @@ function OverrideClient.updateVars( element )
 					setElementCollidableWith(element, other, true)
 				elseif (t2) then
 					-- enable cols with other players based on ghost mode setting
-					setElementCollidableWith ( element, other, ghostModeOff )	
+					setElementCollidableWith ( element, other, cg2 and ghostModeOff )	
 				elseif (not t2 and getElementData(other, "raceiv.interactable")) then
 					-- disable cols with parked cars
 					setElementCollidableWith ( element, other, ugv2 )
@@ -240,7 +248,7 @@ function OverrideClient.updateVars( element )
 					setElementCollidableWith(element, other, true)
 				elseif (t2) then
 					-- enable cols with other players based on ghost mode setting
-					setElementCollidableWith ( element, other, ghostModeOff )	
+					setElementCollidableWith ( element, other, cg2 and ghostModeOff )	
 				elseif (not t2 and getElementData(other, "raceiv.interactable")) then
 					-- disable cols with parked cars
 					setElementCollidableWith ( element, other, ugp2 )
@@ -251,9 +259,6 @@ function OverrideClient.updateVars( element )
 			end
 		end
 		-- End LotsOfS
-		-- Collide world
-		local collideworld = isCollideWorld ( element )
-		setElementCollisionsEnabled ( element, collideworld )
 	end
 
 end

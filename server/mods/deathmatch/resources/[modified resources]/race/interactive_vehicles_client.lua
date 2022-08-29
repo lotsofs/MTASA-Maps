@@ -7,7 +7,7 @@ end)
 
 addEventHandler( "onClientElementStreamIn", root,
     function ( )
-        if getElementType( source ) == "vehicle" and getElementData(source, "raceiv.interactable") then
+        if (getElementType( source ) == "vehicle" and getElementData(source, "raceiv.interactable")) or (getElementData(source, "raceiv.owner") and getVehicleOccupant(source, 0)) then
             triggerServerEvent("onClientStreamInVehicle", resourceRoot, source)
         end
     end

@@ -1238,6 +1238,11 @@ function MovePlayerAway.update(nozcheck)
 	local camTarget = getCameraTarget()
 	if not getPedOccupiedVehicle(g_Me) then
 		setElementPosition( g_Me, MovePlayerAway.posX-10, MovePlayerAway.posY-10, MovePlayerAway.posZ )
+		setElementFrozen ( g_Me, true )
+		local vehicle = g_Vehicle
+		if vehicle and not g_MapOptions.spectatevehiclespersist then
+			triggerServerEvent('moveUnoccupiedVehicleForSpectate', vehicle, MovePlayerAway.posX, MovePlayerAway.posY, MovePlayerAway.posZ, MovePlayerAway.rotZ)
+		end
 	end
 	if getPedOccupiedVehicle(g_Me) then
 		if not nozcheck then
@@ -1254,13 +1259,15 @@ function MovePlayerAway.update(nozcheck)
 			end  
 		end
 		local vehicle = g_Vehicle
-		if vehicle then
-			fixVehicle( vehicle )
+		if vehicle and not g_MapOptions.spectatevehiclespersist then
+			fixVehicle( vehicle)
 			setElementFrozen ( vehicle, true )
 			setElementPosition( vehicle, MovePlayerAway.posX, MovePlayerAway.posY, MovePlayerAway.posZ )
 			setElementVelocity( vehicle, 0,0,0 )
 			setElementAngularVelocity( vehicle, 0,0,0 )
 			setElementRotation ( vehicle, 0,0,MovePlayerAway.rotZ )
+		elseif vehicle and g_MapOptions.spectatevehiclespersist then
+			setPedExitVehicle(g_Me)
 		end
 	end
 	setElementHealth( g_Me, 90 )
@@ -1377,8 +1384,10 @@ function createCheckpoint(i)
 	if checkpoint.type == 'ring' and i < #g_Checkpoints then
 		setMarkerTarget(checkpoint.marker, unpack(g_Checkpoints[i+1].position))
 	end
-	checkpoint.blip = createBlip(pos[1], pos[2], pos[3], 0, isCurrent and 2 or 1, color[1], color[2], color[3])
-	setBlipOrdering(checkpoint.blip, 1)
+	if (checkpoint.showradarblip == "true") then
+		checkpoint.blip = createBlip(pos[1], pos[2], pos[3], 0, isCurrent and 2 or 1, color[1], color[2], color[3])
+		setBlipOrdering(checkpoint.blip, 1)
+	end
 	return checkpoint.marker
 end
 
@@ -1386,17 +1395,18 @@ function makeCheckpointCurrent(i,bOtherPlayer)
 	local checkpoint = g_Checkpoints[i]
 	local pos = checkpoint.position
 	local color = checkpoint.color or { 255, 0, 0 }
-	if not checkpoint.blip then
-		checkpoint.blip = createBlip(pos[1], pos[2], pos[3], 0, 2, color[1], color[2], color[3])
-		setBlipOrdering(checkpoint.blip, 1)
-	else
-		setBlipSize(checkpoint.blip, 2)
-	end
-	
+	if (checkpoint.showradarblip == "true") then
+		if not checkpoint.blip then
+			checkpoint.blip = createBlip(pos[1], pos[2], pos[3], 0, 2, color[1], color[2], color[3])
+			setBlipOrdering(checkpoint.blip, 1)
+		else
+			setBlipSize(checkpoint.blip, 2)
+		end
+	end	
 	if not checkpoint.type or checkpoint.type == 'checkpoint' then
-		checkpoint.colshape = createColCircle(pos[1], pos[2], checkpoint.size + 4)
+		checkpoint.colshape = createColCircle(pos[1], pos[2], checkpoint.size + (checkpoint.extrasize or 4))
 	else
-		checkpoint.colshape = createColSphere(pos[1], pos[2], pos[3], checkpoint.size + 4)
+		checkpoint.colshape = createColSphere(pos[1], pos[2], pos[3], checkpoint.size + (checkpoint.extrasize or 4))
 	end
 	if not bOtherPlayer then
 		addEventHandler('onClientColShapeHit', checkpoint.colshape, checkpointReached)
@@ -1408,8 +1418,10 @@ function destroyCheckpoint(i)
 	if checkpoint and checkpoint.marker then
 		destroyElement(checkpoint.marker)
 		checkpoint.marker = nil
-		destroyElement(checkpoint.blip)
-		checkpoint.blip = nil
+		if (checkpoint.showradarblip == "true") then
+			destroyElement(checkpoint.blip)
+			checkpoint.blip = nil
+		end
 		if checkpoint.colshape then
 			destroyElement(checkpoint.colshape)
 			checkpoint.colshape = nil
