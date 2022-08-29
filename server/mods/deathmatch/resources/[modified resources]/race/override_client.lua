@@ -29,8 +29,15 @@ addEventHandler('onClientElementDataChange', g_Root,
 	end
 )
 
-addEventHandler('onClientPlayerVehicleExit', g_Root, 
-	function(theVehicle, seat)
+addEventHandler('onClientVehicleExit', g_Root, 
+	function(thePlayer, seat)
+		OverrideClient.updateVars( source )
+		OverrideClient.updateVars( thePlayer )
+	end
+)
+
+addEventHandler('onClientVehicleStartEnter', g_Root, 
+	function(player, seat, door)
 		OverrideClient.updateVars( source )
 	end
 )
@@ -90,17 +97,21 @@ function OverrideClient.updateVars( element )
 			local cg = getElementData(element, "raceiv.claimedcollisions")
 			local t = getElementData(element, "raceiv.taken")
 			local o = getElementData(element, "raceiv.owner")
-			if (t and o) then
+			local vo = getVehicleOccupant(element, 0)
+			if (t and (o or vo)) then
 				-- someone's car
+				if (vo and o ~= vo) then
+					o = vo
+				end
 				if (allowOnFoot) then
 					if (o == g_Me) then
 						if (cg) then
 							setElementAlpha (element, 255)
 						else
-							setElementAlpha (element, 210)
+							setElementAlpha (element, 180)
 						end
 					else
-							setElementAlpha (element, ghostModeOff and 210 or 180)
+						setElementAlpha (element, ghostModeOff and 255 or 180)
 					end
 				end
 				for _,other in ipairs( otherPlayers ) do
@@ -115,10 +126,11 @@ function OverrideClient.updateVars( element )
 					local cg2 = getElementData(other, "raceiv.claimedcollisions")
 					local t2 = getElementData(other, "raceiv.taken")
 					local o2 = getElementData(other, "raceiv.owner")
+					local vo2 = getVehicleOccupant(other, 0)
 					if ((t2 and cg2 and o2 == o) or (not t2 and o2 == o)) then
 						-- enable collisions with their own vehicles
 						setElementCollidableWith(element, other, cg)
-					elseif (t2 and o2) then
+					elseif (t2) then
 						-- enable cols with other players based on ghost mode setting
 						setElementCollidableWith ( element, other, ghostModeOff )	
 					elseif (not t2 and getElementData(other, "raceiv.interactable")) then
@@ -130,13 +142,9 @@ function OverrideClient.updateVars( element )
 					end
 				end
 			elseif (t and not o) then
-				-- a car pushed out of its spawn area
+				-- a car pushed out of its spawn area or shared car
 				if (allowOnFoot) then
-					if (ghostModeOff) then
-						setElementAlpha (element, 255)
-					else
-						setElementAlpha (element, ghostModeOff and 210 or 180)
-					end
+					setElementAlpha (element, ghostModeOff and 255 or 180)
 				end
 				for _,other in ipairs( otherPlayers ) do
 					setElementCollidableWith ( element, other, ghostModeOff )	
@@ -145,7 +153,8 @@ function OverrideClient.updateVars( element )
 					local ugv2 = getElementData(other, "raceiv.unclaimedcollidewithvehicles")
 					local t2 = getElementData(other, "raceiv.taken")
 					local o2 = getElementData(other, "raceiv.owner")
-					if (t2 and o2) then
+					local vo2 = getVehicleOccupant(other, 0)
+					if (t2) then
 						-- enable cols with other players based on ghost mode setting
 						setElementCollidableWith ( element, other, ghostModeOff )	
 					elseif (not t2 and getElementData(other, "raceiv.interactable")) then
@@ -192,10 +201,11 @@ function OverrideClient.updateVars( element )
 				local cg2 = getElementData(other, "raceiv.claimedcollisions")
 				local t2 = getElementData(other, "raceiv.taken")
 				local o2 = getElementData(other, "raceiv.owner")
+				local vo2 = getVehicleOccupant(other, 0)
 				if ((t2 and cg2 and o2 == o) or (not t2 and o2 == o)) then
 					-- enable collisions with their own vehicles
 					setElementCollidableWith(element, other, true)
-				elseif (t2 and o2) then
+				elseif (t2) then
 					-- enable cols with other players based on ghost mode setting
 					setElementCollidableWith ( element, other, ghostModeOff )	
 				elseif (not t2 and getElementData(other, "raceiv.interactable")) then
@@ -224,10 +234,11 @@ function OverrideClient.updateVars( element )
 				local cg2 = getElementData(other, "raceiv.claimedcollisions")
 				local t2 = getElementData(other, "raceiv.taken")
 				local o2 = getElementData(other, "raceiv.owner")
+				local vo2 = getVehicleOccupant(other, 0)
 				if ((t2 and cg2 and o2 == o) or (not t2 and o2 == o)) then
 					-- enable collisions with their own vehicles
 					setElementCollidableWith(element, other, true)
-				elseif (t2 and o2) then
+				elseif (t2) then
 					-- enable cols with other players based on ghost mode setting
 					setElementCollidableWith ( element, other, ghostModeOff )	
 				elseif (not t2 and getElementData(other, "raceiv.interactable")) then

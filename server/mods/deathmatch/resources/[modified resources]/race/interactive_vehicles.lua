@@ -107,6 +107,24 @@ addEventHandler("onPlayerVehicleEnter", root, function(theVehicle, seat, jacked)
 	end
 end)
 
+function findFreeVehicle(player) 
+	local lastMinDis = 10
+	local nearestVeh = false
+	local px,py,pz = getElementPosition(player)
+	for _,v in pairs(getElementsWithinRange(px,py,pz,10,"vehicle")) do
+		local owner = getElementData(v, "raceiv.owner")
+		if ((not owner or owner == player) and not isVehicleBlown(v)) then
+			local vx,vy,vz = getElementPosition(v)
+			local dis = getDistanceBetweenPoints3D(px,py,pz,vx,vy,vz)
+			if dis < lastMinDis then 
+				lastMinDis = dis
+				nearestVeh = v
+			end
+		end
+	end
+	return nearestVeh
+end
+
 addEventHandler("onVehicleStartEnter", root, function(player, seat, jacked)
 	if (getElementType(player) ~= "player") then
 		return
@@ -117,6 +135,9 @@ addEventHandler("onVehicleStartEnter", root, function(player, seat, jacked)
 		if (p ~= player) then
 			if (v == source) then
 				cancelEvent()
+				local alternative = findFreeVehicle(player)
+				if (alternative) then triggerClientEvent(player, "onEnterAlternativeVehicle", alternative) end
+				return
 			end
 		end
 	end
@@ -124,6 +145,9 @@ addEventHandler("onVehicleStartEnter", root, function(player, seat, jacked)
 	local owner = getElementData(source, "raceiv.owner")
 	if (owner and owner ~= player) then
 		cancelEvent()
+		local alternative = findFreeVehicle(player)
+		if (alternative) then triggerClientEvent(player, "onEnterAlternativeVehicle", alternative) end
+		return
 	end
 
 	-- Spawn a new vehicle as someone starts entering so that other players can also take a car
