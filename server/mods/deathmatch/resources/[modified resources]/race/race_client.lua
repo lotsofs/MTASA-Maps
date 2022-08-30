@@ -818,7 +818,9 @@ function checkpointReached(elem)
 	if (Spectate.active or getElementHealth(g_Me) == 0 or isVehicleBlown(g_Vehicle)) then
 		return
 	end
-	
+	if (elem == g_Vehicle and not getVehicleOccupant(g_Vehicle, 0)) then
+		return
+	end
 	if elem ~= g_Vehicle and elem ~= g_Me then
 		return
 	end

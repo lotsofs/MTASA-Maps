@@ -201,6 +201,9 @@ end)
 
 addEventHandler("onElementStartSync", resourceRoot, function()
 	if (getElementType(source) == "vehicle" and getElementData(source, "raceiv.interactable")) or g_Vehicles[source] then
+		if (getVehicleOccupant(source, 0)) then
+			return
+		end
 		setElementFrozen(source, false)
 		setElementPosition(source, getElementPosition(source))
 		setElementRotation(source, getElementRotation(source))

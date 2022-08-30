@@ -86,7 +86,6 @@ function OverrideClient.updateVars( element )
 		setElementCollisionsEnabled ( element, collideworld )
 		-- LotsOfS: Code to handle interactive cars, primarily for foot races, though the cars can be used for normal races as well
 		if (alpha == 120) then 
-			iprint("alpha120")
 			return 
 		end -- Ignore if respawn effect
 		-- First off, we need to handle the players too, not just their vehicles

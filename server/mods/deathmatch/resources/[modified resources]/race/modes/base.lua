@@ -287,6 +287,7 @@ function RaceMode:onPlayerReachCheckpoint(player, checkpointNum)
 			self.checkpointBackups[player][checkpointNum] = {
 				onfoot = false ,
 				borrowed = g_IVSpawns[vehicle],
+				original = vehicle,
 				vehicle = getElementModel(vehicle),
 				position = {
 					getElementPosition(vehicle)
@@ -331,9 +332,9 @@ function RaceMode:onPlayerReachCheckpoint(player, checkpointNum)
 			self.rankingBoard = RankingBoard:create()
 			if g_MapOptions.duration then
 				if (g_GameOptions.percentagetimeafterfirstfinish > 0) then
-					self:setTimeLeft( g_GameOptions.percentagetimeafterfirstfinish * self:getTimePassed() / 100)
+					self:setTimeLeft( math.max(g_GameOptions.percentagetimeafterfirstfinish * self:getTimePassed() / 100, g_MapOptions.timeafterfirstfinish ))
 				else
-					self:setTimeLeft( g_GameOptions.timeafterfirstfinish )
+					self:setTimeLeft( g_MapOptions.timeafterfirstfinish )
 				end
 			end
 		else
@@ -518,9 +519,12 @@ function restorePlayer(id, player, bNoFade, bDontFix)
 	spawnPlayer(player, x, y, z, rz or 0, getElementModel(player))
 	if (bkp.borrowed) then 
 		-- LotsOfS: Create our own vehicle if we hit the checkpoint with a vehicle that isn't the 'main'
-		vehicle = spawnInteractiveVehicle(bkp.borrowed)
-		setElementData(vehicle, "raceiv.taken", true)
-		warpPlayerIntoVehicle(player, vehicle)-- LotsOfS: This is deprecated, but warpPedIntoVehicle doesn't work for some reason with my own created vehicle, not even with a timer or in the other script.
+		if (isElement(bkp.original) and not getVehicleOccupant(bkp.original, 0)) then
+			vehicle = bkp.original
+		else
+			vehicle = spawnInteractiveVehicle(bkp.borrowed)
+			setElementData(vehicle, "raceiv.taken", true)
+		end
 	end
 	if (bkp.borrowed or bkp.onfoot) then
 		-- LotsOfS: Move our main vehicle back to where it was in case you drove off with it, then died, and respawned next to where it was but now it's gone
@@ -559,8 +563,9 @@ function restorePlayer(id, player, bNoFade, bDontFix)
 
 		if (not bkp.borrowed) then 
 			warpPedIntoVehicle(player, vehicle)	
+		else
+			warpPlayerIntoVehicle(player, vehicle)-- LotsOfS: This is deprecated, but warpPedIntoVehicle doesn't work for some reason with my own created vehicle, not even with a timer or in the other script.
 		end
-
 		setVehicleLandingGearDown(vehicle,bkp.geardown)		
 
 		RaceMode.playerFreeze(player, true, bDontFix, bkp.onfoot)
@@ -657,7 +662,7 @@ function RaceMode.playerFreeze(player, bRespawn, bDontFix, bOnFoot)
 	setElementFrozen(player, true)
 	setElementFrozen(vehicle, true)
 	setElementFrozen(vehicle2, true)
-    setVehicleDamageProof(vehicle, true)
+	setVehicleDamageProof(vehicle, true)
 	setVehicleDamageProof(vehicle2, true)
 	Override.setCollideWorld( "ForVehicleJudder", vehicle, 0 )
 	Override.setCollideWorld( "ForVehicleJudder", vehicle2, 0 )
