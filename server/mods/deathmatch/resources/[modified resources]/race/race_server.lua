@@ -106,6 +106,7 @@ function cacheGameOptions()
 	g_GameOptions.cloudsenable			= getBool('race.clouds',true)
 	g_GameOptions.joinspectating		= getBool('race.joinspectating',true)
 	g_GameOptions.stealthspectate		= getBool('race.stealthspectate',true)
+	g_GameOptions.countdownduration		= getNumber('race.countdownduration', 3)
 	g_GameOptions.countdowneffect		= getBool('race.countdowneffect',true)
 	g_GameOptions.showmapname			= getBool('race.showmapname',true)
 	g_GameOptions.hunterminigun			= getBool('race.hunterminigun',true)
@@ -143,10 +144,12 @@ function cacheMapOptions(map)
 	if g_MapOptions.respawn ~= 'timelimit' and g_MapOptions.respawn ~= 'none' then
 		g_MapOptions.respawn = 'timelimit'
 	end
-	g_MapOptions.respawntime		= g_MapOptions.respawn == 'timelimit' and (map.respawntime and map.respawntime*1000 or g_GameOptions.defaultrespawntime)
-	g_MapOptions.time				= map.time or '12:00'
-	g_MapOptions.weather			= map.weather or 0
-
+	g_MapOptions.respawntime			= g_MapOptions.respawn == 'timelimit' and (map.respawntime and map.respawntime*1000 or g_GameOptions.defaultrespawntime)
+	g_MapOptions.time					= map.time or '12:00'
+	g_MapOptions.weather				= map.weather or 0
+	g_MapOptions.timeafterfirstfinish	= map.timeafterfirstfinish and tonumber(map.timeafterfirstfinish) > 0 and map.timeafterfirstfinish*1000 or g_GameOptions.timeafterfirstfinish
+	g_MapOptions.countdownduration		= map.countdownduration and tonumber(map.countdownduration) > 0 and map.countdownduration or g_GameOptions.countdownduration
+	
 	g_MapOptions.skins						= map.skins or 'cj'
 	g_MapOptions.vehicleweapons 			= map.vehicleweapons == 'true'
 	g_MapOptions.ghostmode					= map.ghostmode == 'true'
@@ -255,6 +258,8 @@ function loadMap(res)
 	g_SavedMapSettings.allowonfoot				= map.allowonfoot
 	g_SavedMapSettings.falloffbike				= map.falloffbike
 	g_SavedMapSettings.spectatevehiclespersist 	= map.spectatevehiclespersist
+	g_SavedMapSettings.timeafterfirstfinish		= map.timeafterfirstfinish
+	g_SavedMapSettings.countdownduration		= map.countdownduration
 
 	cacheMapOptions(g_SavedMapSettings)
 
@@ -376,7 +381,7 @@ function launchRace()
     gotoState('Running')
 end
 
-g_RaceStartCountdown = Countdown.create(1, launchRace)
+g_RaceStartCountdown = Countdown.create(6, launchRace)
 g_RaceStartCountdown:useImages('img/countdown_%d.png', 474, 204)
 g_RaceStartCountdown:enableFade(true)
 g_RaceStartCountdown:addClientHook(3, 'playSoundFrontEnd', 44)
@@ -434,6 +439,7 @@ function joinHandlerBoth(player)
 				TimerManager.destroyTimersFor("spawn")
                 if stateAllowsGridCountdown() then
                     gotoState('GridCountdown')
+					g_RaceStartCountdown.startvalue = g_MapOptions.countdownduration -- LotsOfS: Hack to make this map dependent
 			        g_RaceStartCountdown:start()
                 end
     		end
@@ -503,7 +509,6 @@ function joinHandlerBoth(player)
 			local plate = getPlayerName(player):gsub( '[^%a%d]+', ' ' ):gsub( '^ ', '' )
 			vehicle = createVehicle(spawnpoint.vehicle, x, y, z, rx, ry, rz, plate:sub(1, 8))
 			if setElementSyncer and not g_MapOptions.allowonfoot then
-				iprint("not syncing")
 				setElementSyncer( vehicle, false )
 			end
             g_Vehicles[player] = vehicle

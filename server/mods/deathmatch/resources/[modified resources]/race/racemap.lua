@@ -8,7 +8,8 @@
 g_MapSettingNames = table.create(
 	{'time', 'weather', 'respawn', 'respawntime', 'duration', 'skins', 'bikehats', 'bikehatchance', 'carhats', 'carhatchance',
 	 'hairstyles', 'glasses', 'glasseschance', 'shirts', 'trousers', 'shoes',
-	 'ghostmode', 'vehicleweapons', 'autopimp', 'firewater', 'classicchangez', 'hunterminigun', 'allowonfoot', 'falloffbike', 'spectatevehiclespersist'},
+	 'ghostmode', 'vehicleweapons', 'autopimp', 'firewater', 'classicchangez', 'hunterminigun', 
+	 'allowonfoot', 'falloffbike', 'spectatevehiclespersist', 'timeafterfirstfinish', 'countdownduration'},
 	true
 )
 
