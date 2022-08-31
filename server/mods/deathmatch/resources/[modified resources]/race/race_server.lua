@@ -806,6 +806,7 @@ function unloadAll()
 	g_Objects = {}
 	g_Pickups = {}
 	unloadedPickups = {}
+	destroyInteractiveVehicles()
 	if g_CurrentRaceMode then
 		g_CurrentRaceMode:destroy()
 	end

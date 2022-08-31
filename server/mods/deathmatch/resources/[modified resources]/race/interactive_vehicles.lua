@@ -1,12 +1,33 @@
 g_IVSpawners = {}
 g_IVSpawns = {}
 g_IVDespawnTimers = {}
+g_IVRespawnTimers = {}
 
 function processInteractiveVehicles(intVehs)
 	g_IVSpawners = intVehs
 	for i, v in ipairs(g_IVSpawners) do
 		spawnInteractiveVehicle(v)
 	end
+end
+
+function destroyInteractiveVehicles()
+	for i, t in pairs(g_IVDespawnTimers) do
+		if (t) then
+			killTimer(t)
+		end
+	end
+	for i, t in pairs(g_IVRespawnTimers) do
+		if (t and isElement(t)) then
+			killTimer(t)
+		end
+	end
+	for v, d in pairs(g_IVSpawns) do
+		destroyElement(v)
+	end
+	g_IVSpawners = {}
+	g_IVSpawns = {}
+	g_IVDespawnTimers = {}
+	g_IVRespawnTimers = {}
 end
 
 function spawnInteractiveVehicle(stats)
@@ -90,7 +111,7 @@ setTimer(function()
 			-- Car is pushed too far outside of its spawn area or destroyed.
 			local respawnTime = data.respawntime
 			if (respawnTime >= 0) then
-				setTimer(spawnInteractiveVehicle, respawnTime, 1, data)
+				table.insert(g_IVRespawnTimers, setTimer(spawnInteractiveVehicle, respawnTime, 1, data))
 			end
 			setElementData(vehicle, "raceiv.taken", true)
 		end
@@ -176,7 +197,7 @@ addEventHandler("onVehicleStartEnter", root, function(player, seat, jacked)
 	setElementData(source, "raceiv.taken", true)
 	local respawnTime = data.respawntime
 	if (respawnTime >= 0) then
-		setTimer(spawnInteractiveVehicle, respawnTime, 1, data)
+		table.insert(g_IVRespawnTimers, setTimer(spawnInteractiveVehicle, respawnTime, 1, data))
 	end
 	
 end)

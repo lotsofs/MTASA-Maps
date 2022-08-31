@@ -52,3 +52,10 @@ setTimer(function()
         end
     end
 end, 15, 0)
+
+addEventHandler("onClientMapStopping", resourceRoot, function()
+    for i, v in pairs(g_IVArrows) do
+        destroyElement(v)
+    end
+    g_IVArrows = { }
+end)
