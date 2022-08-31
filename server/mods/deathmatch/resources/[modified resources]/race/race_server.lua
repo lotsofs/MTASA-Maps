@@ -15,6 +15,7 @@ g_Spawnpoints = {}			-- { i = { position={x, y, z}, rotation={x, y, z}, vehicle=
 g_Checkpoints = {}			-- { i = { position={x, y, z}, size=size, color={r, g, b}, type=type, vehicle=vehicleID, paintjob=paintjob, upgrades={...} } }
 g_Objects = {}				-- { i = { position={x, y, z}, rotation={x, y, z}, model=modelID } }
 g_Pickups = {}				-- { i = { position={x, y, z}, type=type, vehicle=vehicleID, paintjob=paintjob, upgrades={...} }
+g_OnfootSpawnpoints = {}
 
 g_Players = {}				-- { i = player }
 g_Vehicles = {}				-- { player = vehicle }
@@ -284,6 +285,7 @@ function loadMap(res)
 	
 	-- read spawnpoints
 	g_Spawnpoints = map:getAll('spawnpoint')
+	g_OnfootSpawnpoints = map:getAll('spawnpoint_onfoot')
 	
 	-- read checkpoints
 	g_Checkpoints = map:getAll('checkpoint')
@@ -550,7 +552,24 @@ function joinHandlerBoth(player)
                     end
                 end
             end
-            warpPedIntoVehicle(player, vehicle)	
+    
+			-- LotsOfS: On-foot spawnpoint support
+			local onfootspawn = false
+			if (spawnpoint.onfootspawn) then
+				for i, v in ipairs(g_OnfootSpawnpoints) do
+					if v.id == spawnpoint.onfootspawn then
+						onfootspawn = v
+						break
+					end
+				end
+			end
+							
+			if onfootspawn then
+				setElementPosition(player, unpack(onfootspawn.position))
+				setElementRotation(player, unpack(onfootspawn.rotation))
+			else
+				warpPedIntoVehicle(player, vehicle)
+			end
         end
         
 		destroyBlipsAttachedTo(player)
@@ -802,6 +821,7 @@ function unloadAll()
 	table.each(g_Vehicles, destroyElement)
 	g_Vehicles = {}
 	g_Spawnpoints = {}
+	g_OnfootSpawnpoins = {}
 	g_Checkpoints = {}
 	g_Objects = {}
 	g_Pickups = {}

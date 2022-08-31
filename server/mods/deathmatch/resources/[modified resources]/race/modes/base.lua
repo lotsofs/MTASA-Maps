@@ -50,6 +50,18 @@ function RaceMode.getSpawnpoint(i)
 	return g_Spawnpoints[i]
 end
 
+function RaceMode.getOnfootSpawnpoints()
+	return g_OnfootSpawnpoints
+end
+
+function RaceMode.getNumberOfOnfootSpawnpoints()
+	return #g_OnfootSpawnpoints
+end
+
+function RaceMode.getOnfootSpawnpoint(i)
+	return g_OnfootSpawnpoints[i]
+end
+
 function RaceMode.getMapOption(option)
 	return g_MapOptions[option]
 end

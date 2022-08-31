@@ -15,7 +15,13 @@
 		<data name="position" type="coord3d" default="0,0,0" />
 		<data name="rotation" type="coord3d" default="0,0,0" />
 		<data name="vehicle" type="vehicleID" default="522" />
+		<data name="onfootspawn" type="element:spawnpoint_onfoot" description="A car must always be present for racemode to work. After spawning, teleport the player on foot to this onfoot spawn." required="false" default="" />
 		<vehicle model="!vehicle!" rotation="!rotation!"/>
+	</element>
+	<element name="spawnpoint_onfoot" friendlyname="On Foot Spawnpoint" icon="edf/ped.png">
+		<data name="position" type="coord3d" default="0,0,0" />
+		<data name="rotation" type="coord3d" default="0,0,0" />
+		<ped model="0" rotation="!rotation!" editorOnly="true"/>
 	</element>
 	<element name="checkpoint" friendlyname="Checkpoint" icon="edf/checkpoint.png">
 		<data name="position" type="coord3d" default="0,0,0" />

@@ -1,9 +1,10 @@
 ﻿g_MapObjAttrs = {
-	spawnpoint = { 'position', 'rotation', 'vehicle', 'paintjob', 'upgrades' },
 	checkpoint = { 'id', 'nextid', 'position', 'size', 'color', 'type', 'vehicle', 'paintjob', 'upgrades', 'extrasize', 'showradarblip' },
+	spawnpoint = { 'position', 'rotation', 'vehicle', 'paintjob', 'upgrades', 'onfootspawn' },
 	object = { 'position', 'rotation', 'model' },
 	pickup = { 'position', 'type', 'vehicle', 'paintjob', 'upgrades', 'respawn' },
-	vehicle_interactive = { 'model', 'position', 'rotation', 'colora', 'colorb', 'colorc', 'colord', 'paintjob', 'plate', 'sirens', 'locked', 'shared', 'maxmovedistance', 'despawntime', 'respawntime', 'upgrades', 'unclaimedcollidewithvehicles', 'unclaimedcollidewithplayers', 'claimedcollisions' }
+	vehicle_interactive = { 'model', 'position', 'rotation', 'colora', 'colorb', 'colorc', 'colord', 'paintjob', 'plate', 'sirens', 'locked', 'shared', 'maxmovedistance', 'despawntime', 'respawntime', 'upgrades', 'unclaimedcollidewithvehicles', 'unclaimedcollidewithplayers', 'claimedcollisions' },
+	spawnpoint_onfoot = { 'position', 'rotation' }
 }
 g_MapSettingNames = table.create(
 	{'time', 'weather', 'respawn', 'respawntime', 'duration', 'skins', 'bikehats', 'bikehatchance', 'carhats', 'carhatchance',
