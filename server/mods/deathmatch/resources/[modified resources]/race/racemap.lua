@@ -1,6 +1,6 @@
 ﻿g_MapObjAttrs = {
-	checkpoint = { 'id', 'nextid', 'position', 'size', 'color', 'type', 'vehicle', 'paintjob', 'upgrades', 'extrasize', 'showradarblip' },
 	spawnpoint = { 'position', 'rotation', 'vehicle', 'paintjob', 'upgrades', 'onfootspawn' },
+	checkpoint = { 'id', 'nextid', 'position', 'size', 'color', 'type', 'vehicle', 'paintjob', 'upgrades', 'extrasize', 'hideradarblip' },
 	object = { 'position', 'rotation', 'model' },
 	pickup = { 'position', 'type', 'vehicle', 'paintjob', 'upgrades', 'respawn' },
 	vehicle_interactive = { 'model', 'position', 'rotation', 'colora', 'colorb', 'colorc', 'colord', 'paintjob', 'plate', 'sirens', 'locked', 'shared', 'maxmovedistance', 'despawntime', 'respawntime', 'upgrades', 'unclaimedcollidewithvehicles', 'unclaimedcollidewithplayers', 'claimedcollisions' },

@@ -1386,7 +1386,7 @@ function createCheckpoint(i)
 	if checkpoint.type == 'ring' and i < #g_Checkpoints then
 		setMarkerTarget(checkpoint.marker, unpack(g_Checkpoints[i+1].position))
 	end
-	if (checkpoint.showradarblip == "true") then
+	if (checkpoint.hideradarblip ~= "true") then
 		checkpoint.blip = createBlip(pos[1], pos[2], pos[3], 0, isCurrent and 2 or 1, color[1], color[2], color[3])
 		setBlipOrdering(checkpoint.blip, 1)
 	end
@@ -1397,7 +1397,7 @@ function makeCheckpointCurrent(i,bOtherPlayer)
 	local checkpoint = g_Checkpoints[i]
 	local pos = checkpoint.position
 	local color = checkpoint.color or { 255, 0, 0 }
-	if (checkpoint.showradarblip == "true") then
+	if (checkpoint.hideradarblip ~= "true") then
 		if not checkpoint.blip then
 			checkpoint.blip = createBlip(pos[1], pos[2], pos[3], 0, 2, color[1], color[2], color[3])
 			setBlipOrdering(checkpoint.blip, 1)
@@ -1420,7 +1420,7 @@ function destroyCheckpoint(i)
 	if checkpoint and checkpoint.marker then
 		destroyElement(checkpoint.marker)
 		checkpoint.marker = nil
-		if (checkpoint.showradarblip == "true") then
+		if (checkpoint.hideradarblip ~= "true") then
 			destroyElement(checkpoint.blip)
 			checkpoint.blip = nil
 		end

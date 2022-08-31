@@ -31,7 +31,7 @@
 		<data name="nextid" type="element:checkpoint" description="The next checkpoint after this one" required="false" default="" />
 		<data name="vehicle" type="vehicleID" required="false"/>
 		<data name="extrasize" type="integer" default="4" description="How much bigger the checkpoint's hitbox is compared to its visual appearance" required="false"/>
-		<data name="showradarblip" type="selection:true,false" default="true" description="Whether this checkpoint has a blip on the radar" required="false"/>
+		<data name="hideradarblip" type="selection:true,false" default="false" description="Whether to hide this CP's blip on the radar" required="false"/>
 		<marker color="!color!" type="!type!" size="!size!"/>
 	</element>
 	<element name="racepickup" friendlyname="Race pickup" icon="edf/pickup.png">
