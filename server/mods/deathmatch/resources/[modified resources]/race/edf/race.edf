@@ -9,7 +9,7 @@
 	<setting name="falloffbike" friendlyname="Fall Off Bike" type="selection:true,false" description="Enable falling off bike for on foot enabled races" default="false" required="false"/>
 	<setting name="spectatevehiclespersist" friendlyname="Spectator Vehicles Persist" type="selection:true,false" description="If a player goes into spectate mode (eg. when Finished), their vehicle remains in the world" default="false" required="false"/>
 	<setting name="timeafterfirstfinish" friendlyname="Time After Finish" type="integer" default="0" description="The number of seconds the race continues for after someone wins. Use 0 to use gamemode/server default." required="false"/>
-	<setting name="countdownduration" friendlyname"Countdown Duration" type="integer" default="3" description="How long the countdown of the race lasts. Countdown ticks above 3 are silent and invisible." required="false"/>
+	<setting name="countdownduration" friendlyname="Countdown Duration" type="integer" default="3" description="How long the countdown of the race lasts. Countdown ticks above 3 are silent and invisible." required="false"/>
 
 	<element name="spawnpoint" friendlyname="Spawnpoint" icon="edf/spawnpoint.png" shortcut="model">
 		<data name="position" type="coord3d" default="0,0,0" />
