@@ -150,7 +150,7 @@ function OverrideClient.updateVars( element )
 			elseif (t and not o) then
 				-- a car pushed out of its spawn area or shared car
 				if (allowOnFoot) then
-					setElementAlpha (element, ghostModeOff and 255 or 180)
+					setElementAlpha (element, ghostModeOff and cg and 255 or 180)
 				end
 				for _,other in ipairs( otherPlayers ) do
 					setElementCollidableWith ( element, other, ghostModeOff )	

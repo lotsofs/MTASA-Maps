@@ -1,4 +1,5 @@
 g_IVArrows = {}
+g_IVBlips = {}
 
 addEvent("onEnterAlternativeVehicle", true)
 addEventHandler("onEnterAlternativeVehicle", resourceRoot, function()
@@ -13,22 +14,34 @@ addEventHandler( "onClientElementStreamIn", root,
     end
 );
 
-addEventHandler("onClientVehicleExit", resourceRoot, function(thePlayer, seat)
-    if (thePlayer == localPlayer) then
-        if getElementData(source, "raceiv.owner") ~= localPlayer then
+function markVehicle(thePlayer, seat)
+	if (thePlayer == localPlayer) then
+		if getElementData(source, "raceiv.owner") ~= localPlayer then
             return
         end
         local _,_,_,_,_,_,_,_,_,r,g,b = getVehicleColor(source, true)
         local x,y,z = getElementPosition(source)
         g_IVArrows[source] = createMarker(x, y, z + 4, "arrow", 2, r, g, b, 128)
+        g_IVBlips[source] = createBlipAttachedTo(source, 0, 2, r, g, b, 255)
     end
+end
+
+addEvent("markVehicle", true)
+addEventHandler("markVehicle", resourceRoot, function(thePlayer, seat)
+	ignoreNextCleanup = true
+	markVehicle(thePlayer, seat)
 end)
+addEventHandler("onClientVehicleExit", resourceRoot, markVehicle)
 
 addEventHandler("onClientVehicleEnter", resourceRoot, function(thePlayer, seat)
     if (thePlayer == localPlayer) then
         if g_IVArrows[source] then
             destroyElement(g_IVArrows[source])
             g_IVArrows[source] = nil
+        end
+        if g_IVBlips[source] then
+            destroyElement(g_IVBlips[source])
+            g_IVBlips[source] = nil
         end
     end
 end)
@@ -43,10 +56,11 @@ end)
 
 setTimer(function()
     for i, v in pairs(g_IVArrows) do
-        if (not isElement(i)) then
+		if (not isElement(i)) then
             destroyElement(v)
             g_IVArrows[i] = nil
         else
+            -- Attaching the object to the car causes the camera to malfunction upon entering the vehicle. So we do it like this.
             local x,y,z = getElementPosition(i)
             setElementPosition(v, x, y, z + 4)
         end
@@ -54,8 +68,17 @@ setTimer(function()
 end, 15, 0)
 
 addEventHandler("onClientMapStopping", resourceRoot, function()
-    for i, v in pairs(g_IVArrows) do
+	if (ignoreNextCleanup) then
+		-- This gets called at the start of a map too. Ignore it.
+		ignoreNextCleanup = false
+		return
+	end
+	for i, v in pairs(g_IVArrows) do
+        destroyElement(v)
+    end
+    for i, v in pairs(g_IVBlips) do
         destroyElement(v)
     end
     g_IVArrows = { }
+    g_IVBlips = { }
 end)

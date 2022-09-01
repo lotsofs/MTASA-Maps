@@ -547,8 +547,7 @@ function joinHandlerBoth(player)
                     end
                     if not vehicleColorFixed then
 						setVehicleColorToRandomHSV(vehicle)
-						-- note: the below would always set the tertiary color of cement truck, squalo & camper to black. when choosing to revert it, perhaps fix that.
-						-- setVehicleColor(vehicle, math.random(0, 126), math.random(0, 126), 0, 0)
+						-- setVehicleColor(vehicle, math.random(0, 126), math.random(0, 126), math.random(0, 126), math.random(0, 126))
                     end
                 end
             end
@@ -567,6 +566,7 @@ function joinHandlerBoth(player)
 			if onfootspawn then
 				setElementPosition(player, unpack(onfootspawn.position))
 				setElementRotation(player, unpack(onfootspawn.rotation))
+				triggerClientEvent(player, "markVehicle", vehicle, player, 0)
 			else
 				warpPedIntoVehicle(player, vehicle)
 			end
