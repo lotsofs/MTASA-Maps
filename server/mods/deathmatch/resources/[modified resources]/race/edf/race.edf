@@ -6,10 +6,13 @@
 	<setting name="skins" friendlyname="Driver skins" type="selection:cj,random" description="What kind of skins players will spawn as.  CJ means that players will spawn as CJ, with varying motor clothes on.  Random means that random ped skins will be used." default="cj" required="true"/>
 	<setting name="respawntime" friendlyname="Respawn delay" type="natural" description="Time from death to respawn in seconds. Default is 5." default="5" required="true"/>
 	<setting name="allowonfoot" friendlyname="Allow on foot" type="selection:true,false" description="Whether players are supposed or allowed to leave their vehicles" default="false" required="false"/>
-	<setting name="falloffbike" friendlyname="Fall Off Bike" type="selection:true,false" description="Enable falling off bike for on foot enabled races" default="false" required="false"/>
-	<setting name="spectatevehiclespersist" friendlyname="Spectator Vehicles Persist" type="selection:true,false" description="If a player goes into spectate mode (eg. when Finished), their vehicle remains in the world" default="false" required="false"/>
-	<setting name="timeafterfirstfinish" friendlyname="Time After Finish" type="integer" default="0" description="The number of seconds the race continues for after someone wins. Use 0 to use gamemode/server default." required="false"/>
-	<setting name="countdownduration" friendlyname="Countdown Duration" type="integer" default="3" description="How long the countdown of the race lasts. Countdown ticks above 3 are silent and invisible." required="false"/>
+	<setting name="falloffbike" friendlyname="Fall off Bike" type="selection:true,false" description="Enable falling off bike for on foot enabled races" default="false" required="false"/>
+	<setting name="spectatevehiclespersist" friendlyname="Spectator vehicles persist" type="selection:true,false" description="If a player goes into spectate mode (eg. when Finished), their vehicle remains in the world" default="false" required="false"/>
+	<setting name="timeafterfirstfinish" friendlyname="Time after finish" type="integer" default="0" description="The number of seconds the race continues for after someone wins. Use 0 to use gamemode/server default." required="false"/>
+	<setting name="countdownduration" friendlyname="Countdown duration" type="integer" default="3" description="How long the countdown of the race lasts. Countdown ticks above 3 are silent and invisible." required="false"/>
+	<setting name="hunterminigun" friendlyname="Hunter minigun enable" type="selection:true,false" description="Whether players are allowed to use the Hunter's minigun" default="false" required="false"/>
+	<setting name="rustlermachinegun" friendlyname="Rustler machinegun enable" type="selection:true,false" description="Whether players are allowed to use the Rustler's machine guns" default="true" required="false"/>
+	<setting name="fistfights" friendlyname="Fist fighting enable" type="selection:true,false" description="Whether players are allowed to attack other players with their fists" default="true" required="false"/>
 
 	<element name="spawnpoint" friendlyname="Spawnpoint" icon="edf/spawnpoint.png" shortcut="model">
 		<data name="position" type="coord3d" default="0,0,0" />

@@ -158,6 +158,8 @@ function cacheMapOptions(map)
 	g_MapOptions.firewater					= map.firewater == 'true'
 	g_MapOptions.classicchangez				= map.classicchangez == 'true'
 	g_MapOptions.hunterminigun				= map.hunterminigun == 'true'
+	g_MapOptions.rustlermachinegun			= map.rustlermachinegun ~= 'false' -- Backwards compatibility. Always true in old race maps.
+	g_MapOptions.fistfights					= map.fistfights == 'true'
 	g_MapOptions.allowonfoot				= map.allowonfoot == 'true'
 	g_MapOptions.falloffbike	 			= map.falloffbike == 'true'
 	g_MapOptions.spectatevehiclespersist	= map.spectatevehiclespersist == 'true'
@@ -256,6 +258,8 @@ function loadMap(res)
 	g_SavedMapSettings.classicchangez			= map.classicchangez
 	g_SavedMapSettings.firewater				= map.firewater
 	g_SavedMapSettings.hunterminigun			= map.hunterminigun
+	g_SavedMapSettings.rustlermachinegun		= map.rustlermachinegun
+	g_SavedMapSettings.fistfights				= map.fistfights
 	g_SavedMapSettings.allowonfoot				= map.allowonfoot
 	g_SavedMapSettings.falloffbike				= map.falloffbike
 	g_SavedMapSettings.spectatevehiclespersist 	= map.spectatevehiclespersist

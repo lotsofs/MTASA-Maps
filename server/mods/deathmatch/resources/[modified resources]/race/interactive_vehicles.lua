@@ -130,6 +130,9 @@ end, 500, 0)
 
 addEventHandler("onPlayerVehicleExit", root, function(theVehicle, seat, jacked)
 	markInteractiveVehicleForDespawn(theVehicle)
+	if (g_Vehicles[source] == theVehicle) then
+		setVehicleDamageProof(theVehicle, true)
+	end
 end)
 
 addEventHandler("onPlayerVehicleEnter", root, function(theVehicle, seat, jacked)
@@ -137,6 +140,9 @@ addEventHandler("onPlayerVehicleEnter", root, function(theVehicle, seat, jacked)
 	if (despawnTimer) then
 		killTimer(despawnTimer)
 		g_IVDespawnTimers[theVehicle] = nil
+	end
+	if (g_Vehicles[source] == theVehicle) then
+		setVehicleDamageProof(theVehicle, false)
 	end
 end)
 

@@ -1,7 +1,7 @@
 g_Root = getRootElement()
 g_ResRoot = getResourceRootElement(getThisResource())
 g_Me = getLocalPlayer()
-g_ArmedVehicleIDs = table.create({ 425, 447, 520, 430, 464, 432 }, true)
+g_ArmedVehicleIDs = table.create({ 425, 447, 520, 430, 464, 432 }, true) -- hunter, seasparrow, hydra, predator, rcbaron, rhino
 g_WaterCraftIDs = table.create({ 539, 460, 417, 447, 472, 473, 493, 595, 484, 430, 453, 452, 446, 454 }, true)
 g_ModelForPickupType = { nitro = 2221, repair = 2222, vehiclechange = 2223 }
 g_HunterID = 425
@@ -593,13 +593,26 @@ function vehicleChanging( changez, newModel )
 end
 
 function updateVehicleWeapons()
-	if g_Vehicle then
-		local weapons = not g_ArmedVehicleIDs[getElementModel(g_Vehicle)] or g_MapOptions.vehicleweapons
+	if (not g_MapOptions) then
+		return
+	end
+	local vehicle = getPedOccupiedVehicle(g_Me)
+	if vehicle then
+		-- LotsOfS: Patch to allow disabling rustler weapons as well as fist fights for feetrace
+		weapons = true
+		if (g_ArmedVehicleIDs[getElementModel(vehicle)]) then
+			weapons = g_MapOptions.vehicleweapons
+		elseif (getElementModel(vehicle) == 476) then
+			weapons = g_MapOptions.rustlermachinegun
+		end
 		toggleControl('vehicle_fire', weapons)
-		if getElementModel(g_Vehicle) == g_HunterID and not g_MapOptions.hunterminigun then
+
+		if getElementModel(vehicle) == g_HunterID and not g_MapOptions.hunterminigun then
 			weapons = false
 		end
 		toggleControl('vehicle_secondary_fire', weapons)
+	else
+		toggleControl('fire', g_MapOptions.fistfights)
 	end
 end
 

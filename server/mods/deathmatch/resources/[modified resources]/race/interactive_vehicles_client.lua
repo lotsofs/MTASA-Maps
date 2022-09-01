@@ -31,7 +31,10 @@ addEventHandler("markVehicle", resourceRoot, function(thePlayer, seat)
 	ignoreNextCleanup = true
 	markVehicle(thePlayer, seat)
 end)
-addEventHandler("onClientVehicleExit", resourceRoot, markVehicle)
+addEventHandler("onClientVehicleExit", resourceRoot, function(thePlayer, seat)
+	markVehicle(thePlayer, seat)
+	updateVehicleWeapons()
+end)
 
 addEventHandler("onClientVehicleEnter", resourceRoot, function(thePlayer, seat)
     if (thePlayer == localPlayer) then
@@ -44,6 +47,7 @@ addEventHandler("onClientVehicleEnter", resourceRoot, function(thePlayer, seat)
             g_IVBlips[source] = nil
         end
     end
+	updateVehicleWeapons()
 end)
 
 addEventHandler("onClientVehicleStartEnter", resourceRoot, function(thePlayer, seat, door)
