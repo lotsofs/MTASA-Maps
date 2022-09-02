@@ -613,6 +613,7 @@ function updateVehicleWeapons()
 		toggleControl('vehicle_secondary_fire', weapons)
 	else
 		toggleControl('fire', g_MapOptions.fistfights)
+		toggleControl('aim_weapon', g_MapOptions.fistfights)
 	end
 end
 
@@ -1582,7 +1583,7 @@ function kill()
 		end
 	elseif (g_MapOptions.allowonfoot) then
 		-- LotsOfS: Kill is the same button as enter/exit vehicle. Add an additional restriction to allow vehicle enter/exit
-		if (getPedControlState(localPlayer, "action") or getPedControlState(localPlayer, "vehicle_secondary_fire")) then
+		if (getPedControlState(localPlayer, "action") or getPedControlState(localPlayer, "sub_mission")) then
 			Spectate.blockManual = true
 			triggerServerEvent('onRequestKillPlayer', g_Me)
 			Spectate.blockManualTimer = setTimer(function() Spectate.blockManual = false end, 3000, 1)

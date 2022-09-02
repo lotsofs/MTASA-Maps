@@ -12,7 +12,7 @@ end
 
 function destroyInteractiveVehicles()
 	for i, t in pairs(g_IVDespawnTimers) do
-		if (t) then
+		if (t and isElement(t)) then
 			killTimer(t)
 		end
 	end
@@ -143,6 +143,8 @@ addEventHandler("onPlayerVehicleEnter", root, function(theVehicle, seat, jacked)
 	end
 	if (g_Vehicles[source] == theVehicle) then
 		setVehicleDamageProof(theVehicle, false)
+	else
+		setVehicleFrozen(theVehicle, false)
 	end
 end)
 
@@ -210,6 +212,9 @@ end)
 
 addEvent("onClientStreamInVehicle", true)
 addEventHandler("onClientStreamInVehicle", resourceRoot, function(theVehicle)
+	if (getVehicleOccupant(theVehicle, 0)) then
+		return
+	end
 	setElementPosition(theVehicle, getElementPosition(theVehicle))
 	setElementRotation(theVehicle, getElementRotation(theVehicle))
 	setElementVelocity(theVehicle, getElementVelocity(theVehicle))
