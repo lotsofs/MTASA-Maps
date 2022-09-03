@@ -250,7 +250,8 @@ function initRace(vehicle, checkpoints, objects, pickups, mapoptions, ranked, du
 	OverrideClient.updateVars(g_Vehicle)
 	
 	--local x, y, z = getElementPosition(g_Vehicle)
-	setCameraBehindVehicle(vehicle)
+	-- setCameraBehindVehicle(vehicle)
+	setCameraBehindPlayer(g_Me) -- LotsOfS on foot support
 	--alignVehicleToGround(vehicle)
 	updateVehicleWeapons()
 	setCloudsEnabled(g_GameOptions.cloudsenable)
@@ -334,17 +335,17 @@ function initRace(vehicle, checkpoints, objects, pickups, mapoptions, ranked, du
 
     -- Delay readyness until after title
     TitleScreen.bringForwardFadeout(3000)
-    delay = 0
-	-- delay = delay + math.max( 0, TitleScreen.getTicksRemaining() - 1500 )
+    -- delay = 0
+	delay = delay + math.max( 0, TitleScreen.getTicksRemaining() - 1500 )
 
     -- Do fadeup and then tell server client is ready
-	fadeCamera(true, 2)
+	-- fadeCamera(true, 2)
     -- setTimer(fadeCamera, delay + 750, 1, true, 10.0)
-    -- setTimer(fadeCamera, delay + 1500, 1, true, 2.0)
+    setTimer(fadeCamera, delay + 1500, 1, true, 2.0)
 
     setTimer( function() triggerServerEvent('onNotifyPlayerReady', g_Me) end, delay + 3500, 1 )
     outputDebug( 'MISC', 'initRace end' )
-    setTimer( function() setCameraBehindVehicle( g_Vehicle ) end, delay + 300, 1 )
+    setTimer( function() setCameraBehindPlayer( g_Me ) end, delay + 300, 1 )
 end
 
 -- Called from the server when settings are changed
@@ -614,9 +615,19 @@ function updateVehicleWeapons()
 		toggleControl('vehicle_secondary_fire', weapons)
 	else
 		toggleControl('fire', g_MapOptions.fistfights)
-		toggleControl('aim_weapon', g_MapOptions.fistfights)
+		toggleControl('action', g_MapOptions.fistfights) -- You can fire while aiming with this button, and it's not used for anything
 	end
 end
+
+addEventHandler('onClientPlayerWeaponSwitch', g_Root,
+	function(prev, new)
+		if (source ~= localPlayer) then return end
+		-- Attack is still possible by pressing enter/exit while aiming with a melee weapon. Disable aiming for fist weapons.
+		toggleControl('aim_weapon', g_MapOptions.fistfights or (new ~= 0 and new ~= 1 and new ~= 10 and new ~= 11)) -- melee weapons & gifts
+		toggleControl('fire', g_MapOptions.fistfights or new == 11 or new == 12) -- goggles, parachute, detonator
+	end
+)
+
 
 function vehicleUnloading()
 	g_Vehicle = nil
@@ -1329,7 +1340,7 @@ end
 function remoteSoonFadeIn( bNoCameraMove )
     setTimer(fadeCamera,250+500,1,true,1.0)		-- And up
 	if not bNoCameraMove then
-		setTimer( function() setCameraBehindVehicle( g_Vehicle ) end ,250+500-150,1 )
+		setTimer( function() setCameraBehindPlayer( g_Me ) end ,250+500-150,1 )
 	end
 	setTimer(checkVehicleIsHelicopter,250+500,1)
 end
@@ -1675,10 +1686,22 @@ addEventHandler('onNextMapSet', g_Root,
 local checkpointData = {}
 
 local function saveNosLevel(checkpointNum)
+	local vehicle2 = getPedOccupiedVehicle(localPlayer)
+	local nosLevel2
+	local nosCount2
+	local nosActivated2
+	if (vehicle2) then
+		nosLevel2 = getVehicleNitroLevel(vehicle2)
+		nosCount2 = getVehicleNitroCount(vehicle2)
+		nosActivated2 = isVehicleNitroActivated(vehicle2)		
+	end
 	checkpointData[checkpointNum] = {
-		nosLevel = getVehicleNitroLevel(getPedOccupiedVehicle(localPlayer)),
-		nosCount = getVehicleNitroCount(getPedOccupiedVehicle(localPlayer)),
-		nosActivated = isVehicleNitroActivated(getPedOccupiedVehicle(localPlayer))
+		nosLevel = getVehicleNitroLevel(g_Vehicle),
+		nosCount = getVehicleNitroCount(g_Vehicle),
+		nosActivated = isVehicleNitroActivated(g_Vehicle),
+		nosLevel2 = nosLevel2,
+		nosCount2 = nosCount2,
+		nosActivated2 = nosActivated2
 	};
 end
 addEvent('race:saveNosLevel', true)
@@ -1688,11 +1711,18 @@ local function recallNosLevel(checkpointNum)
 	local data = checkpointData[checkpointNum]
 	if data then
 		if data.nosCount then
-			setVehicleNitroCount(getPedOccupiedVehicle(localPlayer), data.nosCount)
+			setVehicleNitroCount(g_Vehicle, data.nosCount)
+		end
+		if data.nosLevel then
+			setVehicleNitroLevel(g_Vehicle, data.nosLevel)
 		end
 
-		if data.nosLevel then
-			setVehicleNitroLevel(getPedOccupiedVehicle(localPlayer), data.nosLevel)
+		local vehicle2 = getPedOccupiedVehicle(localPlayer)
+		if (vehicle2 and data.nosCount2) then
+			setVehicleNitroCount(vehicle2, data.nosCount2)
+		end
+		if (vehicle2 and data.nosLevel2) then
+			setVehicleNitroLevel(vehicle2, data.nosLevel2)
 		end
 	end
 end
@@ -1703,13 +1733,21 @@ local function startNosAgain(checkpointNum)
 	local data = checkpointData[checkpointNum]
 	if data then
 		if data.nosCount then
-			setVehicleNitroCount(getPedOccupiedVehicle(localPlayer), data.nosCount)
+			setVehicleNitroCount(g_Vehicle, data.nosCount)
 		end
-		
 		if data.nosLevel then
-			setVehicleNitroLevel(getPedOccupiedVehicle(localPlayer), data.nosLevel)
+			setVehicleNitroLevel(g_Vehicle, data.nosLevel)
 		end
-		setVehicleNitroActivated(getPedOccupiedVehicle(localPlayer), data.nosActivated)
+		setVehicleNitroActivated(g_Vehicle, data.nosActivated)
+
+		local vehicle2 = getPedOccupiedVehicle(localPlayer)
+		if (vehicle2 and data.nosCount2) then
+			setVehicleNitroCount(vehicle2, data.nosCount2)
+		end
+		if (vehicle2 and data.nosLevel2) then
+			setVehicleNitroLevel(vehicle2, data.nosLevel2)
+		end
+		setVehicleNitroActivated(vehicle2, data.nosActivated2)
 	end
 end
 addEvent('race:startNosAgain', true)

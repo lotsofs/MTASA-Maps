@@ -131,6 +131,21 @@ function setCameraBehindVehicle(vehicle)
 	setTimer(setCameraTarget, 150, 1, getLocalPlayer())
 end
 
+function setCameraBehindPlayer(player)
+	-- LotsOfS function for onfoot support
+	if player then
+		local vehicle = getPedOccupiedVehicle(player)
+		if (vehicle) then
+			setCameraBehindVehicle(vehicle)
+			return
+		end
+		local x, y, z = getElementPosition(player)
+		local rx, ry, rz = getElementRotation(player)
+		setCameraMatrix(x - 4*math.cos(math.rad(rz  + 180)), y - 4*math.sin(math.rad(rz + 180)), z + 1, x, y, z + 1)
+	end
+	setTimer(setCameraTarget, 150, 1, getLocalPlayer())
+end
+
 function alignVehicleToGround(vehicle)
 	if not g_AlignToGroundTimer then
 		g_AlignToGroundTimer = setTimer(alignVehicleToGround, 200, 0, vehicle)
