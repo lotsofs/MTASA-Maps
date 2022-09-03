@@ -12,12 +12,12 @@ end
 
 function destroyInteractiveVehicles()
 	for i, t in pairs(g_IVDespawnTimers) do
-		if (t and isElement(t)) then
+		if (t and isTimer(t)) then
 			killTimer(t)
 		end
 	end
 	for i, t in pairs(g_IVRespawnTimers) do
-		if (t and isElement(t)) then
+		if (t and isTimer(t)) then
 			killTimer(t)
 		end
 	end
@@ -154,7 +154,8 @@ function findFreeVehicle(player)
 	local px,py,pz = getElementPosition(player)
 	for _,v in pairs(getElementsWithinRange(px,py,pz,10,"vehicle")) do
 		local owner = getElementData(v, "raceiv.owner")
-		if ((not owner or owner == player) and not isVehicleBlown(v)) then
+		local interactable = getElementData(v, "raceiv.interactable")
+		if ((not owner or owner == player) and not isVehicleBlown(v) and (interactable or g_Vehicles[player] == v)) then
 			local vx,vy,vz = getElementPosition(v)
 			local dis = getDistanceBetweenPoints3D(px,py,pz,vx,vy,vz)
 			if dis < lastMinDis then 
@@ -182,6 +183,14 @@ addEventHandler("onVehicleStartEnter", root, function(player, seat, jacked)
 			end
 		end
 	end
+	-- Ignore vehicles not created by race
+	if (not getElementData(source, "raceiv.interactable") and g_Vehicles[player] ~= source) then
+		cancelEvent()
+		local alternative = findFreeVehicle(player)
+		if (alternative) then triggerClientEvent(player, "onEnterAlternativeVehicle", alternative) end
+		return
+	end
+	
 	-- If this vehicle is claimed by another player
 	local owner = getElementData(source, "raceiv.owner")
 	if (owner and owner ~= player) then

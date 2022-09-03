@@ -22,7 +22,7 @@ function markVehicle(thePlayer, seat)
         local _,_,_,_,_,_,_,_,_,r,g,b = getVehicleColor(source, true)
         local x,y,z = getElementPosition(source)
         g_IVArrows[source] = createMarker(x, y, z + 4, "arrow", 2, r, g, b, 255)
-        if (source == g_Vehicle) then
+        if (source == g_Vehicle or not g_Vehicle) then
             g_IVBlips[source] = createBlipAttachedTo(source, 0, 3, r, g, b, 255)
         end
     end
