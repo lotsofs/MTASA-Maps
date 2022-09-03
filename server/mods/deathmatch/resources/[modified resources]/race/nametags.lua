@@ -49,9 +49,14 @@ addEventHandler ( "onClientRender", g_Root,
 		local x,y,z = getCameraMatrix()
 		for player in pairs(nametags) do 
 			while true do
-				if not isPedInVehicle(player) or isPedDead(player) or not getPedOccupiedVehicle(player) then break end
+				if isPedDead(player) then break end
 				local vehicle = getPedOccupiedVehicle(player)
-				local px,py,pz = getElementPosition ( vehicle )
+				local px,py,pz
+				if (vehicle) then
+					px,py,pz = getElementPosition ( vehicle )
+				else
+					px,py,pz = getElementPosition ( player )
+				end
 				local pdistance = getDistanceBetweenPoints3D ( x,y,z,px,py,pz )
 				if pdistance <= NAMETAG_DISTANCE then
 					--Get screenposition
@@ -79,8 +84,14 @@ addEventHandler ( "onClientRender", g_Root,
 					local width,height =  NAMETAG_WIDTH*scale, NAMETAG_HEIGHT*scale
 					dxDrawRectangle ( drawX, drawY, width, height, tocolor(0,0,0,alpha) )
 					--Next the inner background 
-					local health = getElementHealth(vehicle)
-					health = math.max(health - 250, 0)/750
+					local health
+					if (vehicle) then
+						health = getElementHealth(vehicle)
+						health = math.max(health - 250, 0)/750
+					else
+						health = getElementHealth(player)
+						health = math.max(health, 0)/100
+					end
 					local p = -510*(health^2)
 					local r,g = math.max(math.min(p + 255*health + 255, 255), 0), math.max(math.min(p + 765*health, 255), 0)
 					dxDrawRectangle ( 	drawX + outlineThickness, 
