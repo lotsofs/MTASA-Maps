@@ -236,7 +236,11 @@ end
 
 function RaceMode:onPlayerJoin(player, spawnpoint)
 	self.checkpointBackups[player] = {}
-	self.checkpointBackups[player][0] = { onfoot = false, borrowed = false, vehicle = spawnpoint.vehicle, position = spawnpoint.position, rotation = spawnpoint.rotation, velocity = {0, 0, 0}, turnvelocity = {0, 0, 0}, geardown = true }
+	self.checkpointBackups[player][0] = { 
+		onfoot = false, borrowed = false, 
+		vehicle = spawnpoint.vehicle, position = spawnpoint.position, rotation = spawnpoint.rotation, velocity = {0, 0, 0}, turnvelocity = {0, 0, 0}, geardown = true, 
+		vehicle2 = spawnpoint.vehicle, position2 = spawnpoint.position, rotation2 = spawnpoint.rotation, geardown2 = true, velocity2 = {0, 0, 0}, turnvelocity2 = {0, 0, 0}
+	}
 end
 
 function RaceMode:onPlayerReachCheckpoint(player, checkpointNum)
@@ -393,7 +397,7 @@ end
 
 function isValidPlayerVehicle(player,vehicle)
 	if isValidPlayer(player) then
-		if vehicle and g_Vehicles[player] == vehicle then
+		if vehicle and (g_Vehicles[player] == vehicle or getElementData(vehicle, "raceiv.owner") == player) then
 			return true
 		end
 	end
@@ -508,26 +512,46 @@ function restorePlayer(id, player, bNoFade, bDontFix)
 		setPlayerCurrentCheckpoint(player, checkpoint)
 	end
 	self.checkpointBackups[player].goingback = true
+
+	local vehicle = RaceMode.getPlayerVehicle(player)
+	local vehicle2 = vehicle
+
 	local bkp = self.checkpointBackups[player][checkpoint - 1]
 	if not RaceMode.checkpointsExist() or checkpoint==1 then
 		local spawnpoint = self:pickFreeSpawnpoint(player)
-		bkp.position = spawnpoint.position
-		bkp.rotation = spawnpoint.rotation
-		bkp.geardown = true                 -- Fix landing gear state
-		bkp.vehicle = spawnpoint.vehicle    -- Fix spawn'n'blow
-		--setVehicleID(RaceMode.getPlayerVehicle(player), spawnpoint.vehicle)
+
+		if (spawnpoint.onfootspawn) then
+			local onfootspawn = false
+			for i, v in ipairs(g_OnfootSpawnpoints) do
+				if v.id == spawnpoint.onfootspawn then
+					onfootspawn = v
+					break
+				end
+			end
+						
+			bkp.onfoot = true
+			bkp.position = onfootspawn.position
+			bkp.rotation = onfootspawn.rotation
+			
+			bkp.position2 = spawnpoint.position
+			bkp.rotation2 = spawnpoint.rotation
+			bkp.geardown2 = true                 -- Fix landing gear state
+			bkp.vehicle2 = spawnpoint.vehicle    -- Fix spawn'n'blow
+		else
+			bkp.position = spawnpoint.position
+			bkp.rotation = spawnpoint.rotation
+			bkp.geardown = true                 -- Fix landing gear state
+			bkp.vehicle = spawnpoint.vehicle    -- Fix spawn'n'blow
+		end
 	end
 	-- Validate some bkp variables
 	if type(bkp.rotation) ~= "table" or #bkp.rotation < 3 then
 		bkp.rotation = {0, 0, 0}
 	end
 
-	local vehicle = RaceMode.getPlayerVehicle(player)
-	local vehicle2 = vehicle
-
-
 	local rx, ry, rz = unpack(bkp.rotation)
 	local x, y, z = unpack(bkp.position)
+	
 	spawnPlayer(player, x, y, z, rz or 0, getElementModel(player))
 	if (bkp.borrowed) then 
 		-- LotsOfS: Create our own vehicle if we hit the checkpoint with a vehicle that isn't the 'main'
@@ -573,11 +597,7 @@ function restorePlayer(id, player, bNoFade, bDontFix)
 			setVehicleID(vehicle, bkp.vehicle)
 		end
 
-		if (not bkp.borrowed) then 
-			warpPedIntoVehicle(player, vehicle)	
-		else
-			warpPlayerIntoVehicle(player, vehicle)-- LotsOfS: This is deprecated, but warpPedIntoVehicle doesn't work for some reason with my own created vehicle, not even with a timer or in the other script.
-		end
+		warpPedIntoVehicle(player, vehicle)	
 		setVehicleLandingGearDown(vehicle,bkp.geardown)		
 
 		RaceMode.playerFreeze(player, true, bDontFix, bkp.onfoot)
