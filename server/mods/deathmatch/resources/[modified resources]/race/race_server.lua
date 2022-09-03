@@ -148,8 +148,8 @@ function cacheMapOptions(map)
 	g_MapOptions.respawntime			= g_MapOptions.respawn == 'timelimit' and (map.respawntime and map.respawntime*1000 or g_GameOptions.defaultrespawntime)
 	g_MapOptions.time					= map.time or '12:00'
 	g_MapOptions.weather				= map.weather or 0
-	g_MapOptions.timeafterfirstfinish	= map.timeafterfirstfinish and tonumber(map.timeafterfirstfinish) > 0 and map.timeafterfirstfinish*1000 or g_GameOptions.timeafterfirstfinish
-	g_MapOptions.countdownduration		= map.countdownduration and tonumber(map.countdownduration) > 0 and map.countdownduration or g_GameOptions.countdownduration
+	g_MapOptions.timeafterfirstfinish	= map.timeafterfirstfinish and tonumber(map.timeafterfirstfinish) >= 0 and map.timeafterfirstfinish*1000 or g_GameOptions.timeafterfirstfinish
+	g_MapOptions.countdownduration		= map.countdownduration and tonumber(map.countdownduration) >= 0 and map.countdownduration or g_GameOptions.countdownduration
 	
 	g_MapOptions.skins						= map.skins or 'cj'
 	g_MapOptions.vehicleweapons 			= map.vehicleweapons == 'true'

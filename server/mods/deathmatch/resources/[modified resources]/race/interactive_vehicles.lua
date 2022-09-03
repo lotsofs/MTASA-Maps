@@ -171,6 +171,10 @@ addEventHandler("onVehicleStartEnter", root, function(player, seat, jacked)
 	if (getElementType(player) ~= "player") then
 		return
 	end
+	if seat ~= 0 then
+		cancelEvent()
+		return
+	end
 	
 	-- Prevent stealing main race vehicles
 	for p, v in pairs(g_Vehicles) do
