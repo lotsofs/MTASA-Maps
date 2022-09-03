@@ -858,6 +858,10 @@ function checkpointReached(elem)
 	if elem ~= g_Vehicle and elem ~= g_Me then
 		return
 	end
+	if (elem == g_Me and getPedOccupiedVehicle(g_Me) == g_Vehicle) then
+		return
+	end
+	
 	if g_Checkpoints[g_CurrentCheckpoint].vehicle and g_Checkpoints[g_CurrentCheckpoint].vehicle ~= getElementModel(g_Vehicle) then
 		g_PrevVehicleHeight = getElementDistanceFromCentreOfMassToBaseOfModel(g_Vehicle)
 		local health = nil
@@ -872,6 +876,7 @@ function checkpointReached(elem)
 		end
 		vehicleChanging(g_MapOptions.classicchangez, g_Checkpoints[g_CurrentCheckpoint].vehicle)
 	end
+	
 	triggerServerEvent('onPlayerReachCheckpointInternal', g_Me, g_CurrentCheckpoint)
 	playSoundFrontEnd(43)
 	if g_CurrentCheckpoint < #g_Checkpoints then
@@ -1439,8 +1444,10 @@ function makeCheckpointCurrent(i,bOtherPlayer)
 			setBlipSize(checkpoint.blip, 2)
 		end
 	end	
-	if not checkpoint.type or checkpoint.type == 'checkpoint' then
+	if not checkpoint.type or checkpoint.type == 'checkpoint' or checkpoint.type == 'arrow' then
 		checkpoint.colshape = createColCircle(pos[1], pos[2], checkpoint.size + (checkpoint.extrasize or 4))
+	elseif checkpoint.type == 'cylinder' then
+		checkpoint.colshape = createColTube(pos[1], pos[2], pos[3], checkpoint.size, checkpoint.size)
 	else
 		checkpoint.colshape = createColSphere(pos[1], pos[2], pos[3], checkpoint.size + (checkpoint.extrasize or 4))
 	end
