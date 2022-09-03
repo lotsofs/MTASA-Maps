@@ -81,6 +81,7 @@ addEventHandler('onClientResourceStart', g_ResRoot,
 			timeleftbg = guiCreateStaticImage(screenWidth/2-108/2, 15, 108, 24, 'img/timeleft.png', false, nil),
 			timeleft = guiCreateLabel(screenWidth/2-108/2, 19, 108, 30, '', false),
 			healthbar = FancyProgress.create(250, 1000, 'img/progress_health_bg.png', -65, 60, 123, 30, 'img/progress_health.png', 8, 8, 108, 15),
+			suicidebar = FancyProgress.create(250, 1000, 'img/progress_suicide_bg.png', -65, 60, 123, 30, 'img/progress_suicide.png', 8, 8, 108, 15),
 			speedbar = FancyProgress.create(0, 1.5, 'img/progress_speed_bg.png', -65, 90, 123, 30, 'img/progress_speed.png', 8, 8, 108, 15),
 		}
 		guiSetFont(g_GUI.timeleft, 'default-bold-small')
@@ -635,6 +636,14 @@ function updateBars()
 		g_GUI.healthbar:setProgress(getElementHealth(veh))
 		local vx, vy, vz = getElementVelocity(veh)
 		g_GUI.speedbar:setProgress(math.sqrt(vx*vx + vy*vy + vz*vz))
+	end
+	
+	if (suicideTimer and isTimer(suicideTimer)) then
+		g_GUI.suicidebar:show()
+		local timeRemaining, _, timeInterval = getTimerDetails(suicideTimer)
+		g_GUI.suicidebar:setProgress(1000 - (timeRemaining / timeInterval * 750))
+	else
+		g_GUI.suicidebar:hide()
 	end
 end
 
@@ -1575,28 +1584,59 @@ setTimer(
 --
 ---------------------------------------------------------------------------
 
-
 function kill()
 	if Spectate.active then
 		if Spectate.savePos then
 			triggerServerEvent('onClientRequestSpectate', g_Me, false )
 		end
-	elseif (g_MapOptions.allowonfoot) then
-		-- LotsOfS: Kill is the same button as enter/exit vehicle. Add an additional restriction to allow vehicle enter/exit
-		if (getPedControlState(localPlayer, "action") or getPedControlState(localPlayer, "sub_mission")) then
-			Spectate.blockManual = true
-			triggerServerEvent('onRequestKillPlayer', g_Me)
-			Spectate.blockManualTimer = setTimer(function() Spectate.blockManual = false end, 3000, 1)
-		end
-    elseif (not g_MapOptions.allowonfoot) then
+	else
 		Spectate.blockManual = true
 		triggerServerEvent('onRequestKillPlayer', g_Me)
 		Spectate.blockManualTimer = setTimer(function() Spectate.blockManual = false end, 3000, 1)
 	end
 end
-addCommandHandler('kill',kill)
-addCommandHandler('Commit suicide',kill)
+
+function startKill()
+	if (g_MapOptions.allowonfoot) then
+		suicideTimer = setTimer(kill, 1000, 1)
+	else
+		kill()
+	end
+end
+
+function cancelKill()
+	if (suicideTimer and isTimer(suicideTimer)) then
+		killTimer(suicideTimer)
+	end
+end
+
+addCommandHandler('kill',startKill)
+addCommandHandler('Commit suicide',startKill)
+addCommandHandler('cancelkill',cancelKill)
 bindKey ( next(getBoundKeys"enter_exit"), "down", "Commit suicide" )
+bindKey ( next(getBoundKeys"enter_exit"), "up", "cancelkill" )
+
+-- function kill()
+	-- if Spectate.active then
+		-- if Spectate.savePos then
+			-- triggerServerEvent('onClientRequestSpectate', g_Me, false )
+		-- end
+	-- elseif (g_MapOptions.allowonfoot) then
+		-- -- LotsOfS: Kill is the same button as enter/exit vehicle. Add an additional restriction to allow vehicle enter/exit
+		-- if (getPedControlState(localPlayer, "action") or getPedControlState(localPlayer, "sub_mission")) then
+			-- Spectate.blockManual = true
+			-- triggerServerEvent('onRequestKillPlayer', g_Me)
+			-- Spectate.blockManualTimer = setTimer(function() Spectate.blockManual = false end, 3000, 1)
+		-- end
+    -- elseif (not g_MapOptions.allowonfoot) then
+		-- Spectate.blockManual = true
+		-- triggerServerEvent('onRequestKillPlayer', g_Me)
+		-- Spectate.blockManualTimer = setTimer(function() Spectate.blockManual = false end, 3000, 1)
+	-- end
+-- end
+-- addCommandHandler('kill',kill)
+-- addCommandHandler('Commit suicide',kill)
+-- bindKey ( next(getBoundKeys"enter_exit"), "down", "Commit suicide" )
 
 
 function spectate()
