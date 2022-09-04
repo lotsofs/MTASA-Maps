@@ -528,7 +528,7 @@ function restorePlayer(id, player, bNoFade, bDontFix)
 					break
 				end
 			end
-						
+			
 			bkp.onfoot = true
 			bkp.position = onfootspawn.position
 			bkp.rotation = onfootspawn.rotation
@@ -538,6 +538,7 @@ function restorePlayer(id, player, bNoFade, bDontFix)
 			bkp.geardown2 = true                 -- Fix landing gear state
 			bkp.vehicle2 = spawnpoint.vehicle    -- Fix spawn'n'blow
 		else
+			bkp.onfoot = false
 			bkp.position = spawnpoint.position
 			bkp.rotation = spawnpoint.rotation
 			bkp.geardown = true                 -- Fix landing gear state

@@ -144,7 +144,7 @@ addEventHandler("onPlayerVehicleEnter", root, function(theVehicle, seat, jacked)
 	if (g_Vehicles[source] == theVehicle) then
 		setVehicleDamageProof(theVehicle, false)
 	else
-		setVehicleFrozen(theVehicle, false)
+		setElementFrozen(theVehicle, false)
 	end
 end)
 
