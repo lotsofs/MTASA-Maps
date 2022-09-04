@@ -1543,6 +1543,7 @@ end
 
 addEvent('moveUnoccupiedVehicleForSpectate', true)
 addEventHandler('moveUnoccupiedVehicleForSpectate', resourceRoot, function(x, y, z, r)
+	if (getVehicleOccupants(source)[0]) then return end
 	fixVehicle( source)
 	setElementFrozen ( source, true )
 	setElementPosition( source, x, y, z )

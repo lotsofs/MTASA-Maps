@@ -109,16 +109,14 @@ function OverrideClient.updateVars( element )
 				if (vo and o ~= vo) then
 					o = vo
 				end
-				if (allowOnFoot) then
-					if (o == g_Me) then
-						if (cg) then
-							setElementAlpha (element, 255)
-						else
-							setElementAlpha (element, 180)
-						end
+				if (o == g_Me) then
+					if (cg) then
+						setElementAlpha (element, 255)
 					else
-						setElementAlpha (element, ghostModeOff and 255 or 180)
+						setElementAlpha (element, 180)
 					end
+				else
+					setElementAlpha (element, ghostModeOff and 255 or 180)
 				end
 				for _,other in ipairs( otherPlayers ) do
 					if (other == o) then
@@ -149,9 +147,7 @@ function OverrideClient.updateVars( element )
 				end
 			elseif (t and not o) then
 				-- a car pushed out of its spawn area or shared car
-				if (allowOnFoot) then
-					setElementAlpha (element, ghostModeOff and cg and 255 or 180)
-				end
+				setElementAlpha (element, ghostModeOff and 255 or 180)
 				for _,other in ipairs( otherPlayers ) do
 					setElementCollidableWith ( element, other, ghostModeOff )	
 				end
@@ -174,12 +170,10 @@ function OverrideClient.updateVars( element )
 				end
 			elseif (not t) then
 				-- parked cars
-				if (allowOnFoot) then
-					if (ugv) then
-						setElementAlpha (element, 255)
-					else
-						setElementAlpha (element, 210)
-					end
+				if (ugv) then
+					setElementAlpha (element, 255)
+				else
+					setElementAlpha (element, 180)
 				end
 				for _,other in ipairs( otherPlayers ) do
 					setElementCollidableWith ( element, other, ugp )	
