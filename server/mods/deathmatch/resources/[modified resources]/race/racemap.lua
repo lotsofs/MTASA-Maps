@@ -1,10 +1,11 @@
 ﻿g_MapObjAttrs = {
 	spawnpoint = { 'position', 'rotation', 'vehicle', 'paintjob', 'upgrades', 'onfootspawn' },
-	checkpoint = { 'id', 'nextid', 'position', 'size', 'color', 'type', 'vehicle', 'paintjob', 'upgrades', 'extrasize', 'hideradarblip' },
+	checkpoint = { 'id', 'nextid', 'position', 'size', 'color', 'type', 'vehicle', 'paintjob', 'upgrades', 'extrasize', 'hideradarblip', 'trigger' },
 	object = { 'position', 'rotation', 'model' },
 	pickup = { 'position', 'type', 'vehicle', 'paintjob', 'upgrades', 'respawn' },
 	vehicle_interactive = { 'model', 'position', 'rotation', 'colora', 'colorb', 'colorc', 'colord', 'paintjob', 'plate', 'sirens', 'locked', 'shared', 'maxmovedistance', 'despawntime', 'respawntime', 'upgrades', 'unclaimedcollidewithvehicles', 'unclaimedcollidewithplayers', 'claimedcollisions' },
-	spawnpoint_onfoot = { 'position', 'rotation' }
+	spawnpoint_onfoot = { 'position', 'rotation' },
+	trigger = { 'action', 'boola' }
 }
 g_MapSettingNames = table.create(
 	{'time', 'weather', 'respawn', 'respawntime', 'duration', 'skins', 'bikehats', 'bikehatchance', 'carhats', 'carhatchance',

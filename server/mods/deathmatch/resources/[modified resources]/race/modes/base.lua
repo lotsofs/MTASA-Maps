@@ -378,6 +378,9 @@ function RaceMode:onPlayerReachCheckpoint(player, checkpointNum)
 				50, 1 )
 		end
 	end
+	if (g_Checkpoints[checkpointNum].trigger) then
+		callTrigger(g_Checkpoints[checkpointNum].trigger, player)
+	end
 	return rank, time
 end
 

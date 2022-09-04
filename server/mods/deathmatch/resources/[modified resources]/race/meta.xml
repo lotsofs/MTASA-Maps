@@ -28,6 +28,8 @@
     
     <script src="interactive_vehicles.lua" type="server" />
     <script src="interactive_vehicles_client.lua" type="client" />
+    <script src="triggers.lua" type="server" />
+    <script src="triggers_client.lua" type="client" />
     
     <script src="_common.lua" type="client" />
     <script src="_joiner_client.lua" type="client" />
@@ -79,6 +81,7 @@
     <file src="edf/pickup.png" />
     <file src="edf/spawnpoint.png" />
     <file src="edf/vehicle.png" />
+	<file src="edf/trigger.png" />
 	<file src="edf/ped.png" />
     
     <export function="getTimePassed" type="server" />

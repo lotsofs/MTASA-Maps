@@ -294,8 +294,9 @@ function loadMap(res)
 	-- read checkpoints
 	g_Checkpoints = map:getAll('checkpoint')
 	
-	-- LotsOfS: Process Interactive Vehicles
+	-- LotsOfS: Process Custom Stuff
 	processInteractiveVehicles(map:getAll('vehicle_interactive'))
+	processTriggers(map:getAll('trigger'))
 	
 	-- if map isn't made in the new editor or map is an old race map multiplicate the checkpointsize with 4
 	local madeInNewEditor = map.def and ( map.def:find("editor_main") or map.def:find("race") )

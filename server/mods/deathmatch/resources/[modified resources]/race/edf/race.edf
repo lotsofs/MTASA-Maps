@@ -35,6 +35,7 @@
 		<data name="vehicle" type="vehicleID" required="false"/>
 		<data name="extrasize" type="integer" default="4" description="How much bigger the checkpoint's hitbox is compared to its visual appearance" required="false"/>
 		<data name="hideradarblip" type="selection:true,false" default="false" description="Whether to hide this CP's blip on the radar" required="false"/>
+		<data name="trigger" type="element:trigger" description="Trigger this action upon hitting the checkpoint" required="false" default="" />
 		<marker color="!color!" type="!type!" size="!size!"/>
 	</element>
 	<element name="racepickup" friendlyname="Race pickup" icon="edf/pickup.png">
@@ -68,7 +69,14 @@
 		<data name="claimedcollisions" type="selection:false,true" default="true" required="false" description="Does this vehicle have collisions with other vehicles owned by the player after it has been taken?" />
 		<vehicle model="!model!" rotation="!rotation!" color="!color!" editorOnly="true"/>
 	</element>
-	
+	<element name="trigger" friendlyname="Trigger Action" icon="edf/trigger.png">
+		<data name="position" type="coord3d" default="0,0,0" description="XYZ position of the editor representation of this trigger"/>
+		<data name="action" type="selection:Jetpack (boola),Exit Vehicle (boola forced)" description="The action to perform when this trigger is activated"/>
+		<data name="boola" type="selection:true,false,nil,toggle" description="boolean argument a"/>
+		<marker color="#ffffffff" size="1" editorOnly="true" />
+		<marker color="#000000ff" size="0.5" editorOnly="true" />
+	</element>
+
 	<script src="edf/edf.lua" />
 	<script src="edf/edf_client.lua" type="client" />
 	<script src="edf/edf_client_cp_lines.lua" type="client" />
