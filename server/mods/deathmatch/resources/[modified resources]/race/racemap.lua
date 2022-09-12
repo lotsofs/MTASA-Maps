@@ -1,11 +1,13 @@
 ﻿g_MapObjAttrs = {
-	spawnpoint = { 'position', 'rotation', 'vehicle', 'paintjob', 'upgrades', 'onfootspawn' },
-	checkpoint = { 'id', 'nextid', 'position', 'size', 'color', 'type', 'vehicle', 'paintjob', 'upgrades', 'extrasize', 'hideradarblip', 'trigger' },
-	object = { 'position', 'rotation', 'model' },
-	pickup = { 'position', 'type', 'vehicle', 'paintjob', 'upgrades', 'respawn' },
-	vehicle_interactive = { 'model', 'position', 'rotation', 'colora', 'colorb', 'colorc', 'colord', 'paintjob', 'plate', 'sirens', 'locked', 'shared', 'maxmovedistance', 'despawntime', 'respawntime', 'upgrades', 'unclaimedcollidewithvehicles', 'unclaimedcollidewithplayers', 'claimedcollisions' },
-	spawnpoint_onfoot = { 'position', 'rotation' },
-	trigger = { 'action', 'boola' }
+	spawnpoint = { 'position', 'rotation', 'interior', 'vehicle', 'paintjob', 'upgrades', 'trigger' },
+	checkpoint = { 'id', 'nextid', 'position', 'size', 'interior', 'color', 'type', 'vehicle', 'paintjob', 'upgrades', 'extrasize', 'hideradarblip', 'trigger', 'restrictions' },
+	object = { 'position', 'rotation', 'interior', 'model' },
+	pickup = { 'position', 'interior', 'type', 'vehicle', 'paintjob', 'upgrades', 'respawn', 'trigger', 'vehicletoaffect' },
+	vehicle_interactive = { 'model', 'position', 'interior', 'rotation', 'health', 'colora', 'colorb', 'colorc', 'colord', 'paintjob', 'plate', 'sirens', 'locked', 'cantenter', 'shared', 'maxmovedistance', 'despawntime', 'respawntime', 'upgrades', 'unclaimedcollidewithvehicles', 'unclaimedcollidewithplayers', 'claimedcollisions', 'spawnimmediately' },
+	spawnpoint_onfoot = { 'position', 'rotation', 'interior', 'health', 'skin', 'jetpack' },
+	trigger = { 'vehicletrigger', 'foottrigger', 'actiona', 'arga', 'actionb', 'argb', 'actionc', 'argc', 'actiond', 'argd', 'nexttrigger' },
+	trigger_vehicle = { 'template', 'vehicletoaffect', 'change', 'sethealth', 'teleport', 'tpretainrotation', 'tpretainvelocity' },
+	trigger_foot = { 'template', 'multitemplate', 'changeskin', 'sethealth', 'teleport', 'tpretainrotation', 'tpretainvelocity', 'forceoutofvehicle' }
 }
 g_MapSettingNames = table.create(
 	{'time', 'weather', 'respawn', 'respawntime', 'duration', 'skins', 'bikehats', 'bikehatchance', 'carhats', 'carhatchance',

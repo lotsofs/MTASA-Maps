@@ -43,6 +43,8 @@
 		<data name="type" type="selection:nitro,repair,vehiclechange" description="The type of pickup.  Can repair the vehicle, add a Nitro, or change the player's vehicle" default="nitro" />
 		<data name="respawn" type="integer" default="0" description="The respawn time in miliseconds" />
 		<data name="vehicle" type="vehicleID" default="522" description="The vehicle model, if a vehiclechange pickup" required="false" />
+		<data name="vehicletoaffect" type="selection:current,main" required="false" default="main" description="Main: Change the player's main race car. Current: Change their current car (only relevant for on-foot races)." />
+		<data name="trigger" type="element:trigger" description="Trigger this action upon hitting the checkpoint" required="false" default="" />
 		<object model="2221" position="0,0,0" />
 		<object model="1234" position="0,0,0" editorOnly="true" alpha="0"/>
 		<marker position="0,0,0" type="corona" color="#00000000" editorOnly="true"/>
@@ -69,12 +71,43 @@
 		<data name="claimedcollisions" type="selection:false,true" default="true" required="false" description="Does this vehicle have collisions with other vehicles owned by the player after it has been taken?" />
 		<vehicle model="!model!" rotation="!rotation!" color="!color!" editorOnly="true"/>
 	</element>
-	<element name="trigger" friendlyname="Trigger Action" icon="edf/trigger.png">
+	<element name="trigger" friendlyname="Trigger" icon="edf/trigger.png">
 		<data name="position" type="coord3d" default="0,0,0" description="XYZ position of the editor representation of this trigger"/>
-		<data name="action" type="selection:Jetpack (boola),Exit Vehicle (boola forced)" description="The action to perform when this trigger is activated"/>
-		<data name="boola" type="selection:true,false,nil,toggle" description="boolean argument a"/>
+		<data name="interior" type="integer" required="false" />
+		<data name="vehicletrigger" type="element:trigger_vehicle" default="" required="false" description="Perform this trigger related to a vehicle template"/>
+		<data name="foottrigger" type="element:trigger_foot" default="" required="false" description="Perform this trigger related to a pedestrian template"/>
+		<data name="actiona" type="selection:None,Can Fall Off Bike (Bool),Exit Vehicle (),Vehicle Marker Visibility (Bool),Warp to Vehicle ()" description="The action to perform when this trigger is activated"/>
+		<data name="arga" type="selection:true,false,nil,toggle" default="nil" description="boolean argument for above action"/>
+		<data name="nexttrigger" type="element:trigger" default="" required="false" description="Also trigger this"/>
 		<marker color="#ffffffff" size="1" editorOnly="true" />
 		<marker color="#000000ff" size="0.5" editorOnly="true" />
+	</element>
+	<element name="trigger_vehicle" friendlyname="Trigger Vehicle Data" icon="edf/trigger_vehicle.png">
+		<data name="position" type="coord3d" description="XYZ position" default="0,0,0" />
+		<data name="interior" type="integer" required="false" />
+		<data name="template" type="element:vehicle_interactive" required="false" description="template vehicle to use for this trigger" default="" />
+		<data name="vehicletoaffect" type="selection:current,main,duplicate,new" required="false" default="current" description="Main: Change the player's main race car. Current: Change their current car. Duplicate: Create a new car in the location of the main car. New: Create a new car in their current position even if on-foot. Only applicable for races that allow on-foot." />
+		<data name="change" type="selection:false,true" required="false" default="false" description="Change vehicle the template vehicle." />
+		<data name="sethealth" type="selection:false,true" required="false" default="false" description="Set health" />
+		<data name="teleport" type="selection:false,true" required="false" default="false" description="Teleport to the template vehicle's location upon hitting this trigger" />
+		<data name="tpretainrotation" type="selection:false,true" required="false" default="false" description="Retain orientation upon teleport?" />
+		<data name="tpretainvelocity" type="selection:false,true" required="false" default="false" description="Retain speed upon teleport?" />
+		<marker color="#000000ff" size="1" editorOnly="true" />
+		<marker color="#ffffffff" size="0.5" editorOnly="true" />
+	</element>
+	<element name="trigger_foot" friendlyname="Trigger Ped Data" icon="edf/trigger_ped.png">
+		<data name="position" type="coord3d" description="XYZ position" default="0,0,0" />
+		<data name="interior" type="integer" required="false" />
+		<data name="template" type="element:spawnpoint_onfoot" required="false" description="template ped to use for this trigger" default="" />
+		<data name="multitemplate" type="string" required="false" default="" description="Pick any random template from all whose IDs start with this." />
+		<data name="changeskin" type="selection:false,true" required="false" default="false" description="Change skin to the template skin." />
+		<data name="sethealth" type="selection:false,true" required="false" default="false" description="Set health" />
+		<data name="teleport" type="selection:false,true" required="false" default="false" description="Teleport to the template ped's location upon hitting this trigger" />
+		<data name="tpretainrotation" type="selection:false,true" required="false" default="false" description="Retain orientation upon teleport?" />
+		<data name="tpretainvelocity" type="selection:false,true" required="false" default="false" description="Retain speed upon teleport?" />
+		<data name="forceoutofvehicle" type="selection:false,true" required="false" default="false" description="Force out of vehicle" />
+		<marker color="#000000ff" size="1" editorOnly="true" />
+		<marker color="#7f7f7fff" size="0.5" editorOnly="true" />
 	</element>
 
 	<script src="edf/edf.lua" />
