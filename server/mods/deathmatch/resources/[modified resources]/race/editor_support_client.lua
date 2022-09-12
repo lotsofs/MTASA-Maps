@@ -66,6 +66,12 @@ if isEditor() then
 		if getElementData(g_Me, 'race.editor.hidehelp' ) then
 			editorHideHelp()
 		end
+
+		setTimer(function()
+			for i, v in pairs(getElementsByType("vehicle")) do
+				OverrideClient.updateVars(v)
+			end
+		end, 0, 0)
 	end
 
 	-- Help text
@@ -112,7 +118,7 @@ if isEditor() then
 				local x,y,z = getElementPosition(g_Me)
 				local distance = getDistanceBetweenPoints3D(x, y, z, getElementPosition(vehicle))
 				-- Is nearby, not mine and has no driver?
-				if distance < 5 and vehicle ~= g_Vehicle and not getVehicleController(vehicle) then
+				if distance < 5 and vehicle ~= g_Vehicle and not getVehicleController(vehicle) and g_MapOptions and not g_MapOptions.allowonfoot then
 					triggerServerEvent( "onEditorSelectCustomVehicle", resourceRoot, g_Me, vehicle )
 				end
 			end

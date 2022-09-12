@@ -8,34 +8,83 @@ end)
 
 addEventHandler( "onClientElementStreamIn", root,
     function ( )
-        if (getElementType( source ) == "vehicle" and getElementData(source, "raceiv.interactable")) or (getElementData(source, "raceiv.owner") and getVehicleOccupant(source, 0)) then
+        if (getElementType( source ) == "vehicle" and getElementData(source, "raceiv.interactable")) or (getElementData(source, "raceiv.owner") and getVehicleController(source)) then
             triggerServerEvent("onClientStreamInVehicle", resourceRoot, source)
         end
     end
 );
 
-function markVehicle(thePlayer, seat)
-	if (thePlayer == localPlayer) then
-		if getElementData(source, "raceiv.owner") ~= localPlayer then
-            return
-        end
-        local _,_,_,_,_,_,_,_,_,r,g,b = getVehicleColor(source, true)
-        local x,y,z = getElementPosition(source)
-        g_IVArrows[source] = createMarker(x, y, z + 4, "arrow", 2, r, g, b, 255)
-        if (source == g_Vehicle or not g_Vehicle) then
-            g_IVBlips[source] = createBlipAttachedTo(source, 0, 3, r, g, b, 255)
-        end
+function getMostColorfulColor(r1,g1,b1,r2,g2,b2,r3,g3,b3,r4,g4,b4)
+    local brightestCol = 1
+    local biggestDiff = math.max(r1, g1, b1) - math.min(r1, g1, b1)
+    local currentDiff = math.max(r2, g2, b2) - math.min(r2, g2, b2)
+    if (currentDiff >= biggestDiff) then
+        brightestCol = 2
+        biggestDiff = currentDiff
+    end
+    currentDiff = math.max(r3, g3, b3) - math.min(r3, g3, b3)
+    if (currentDiff >= biggestDiff) then
+        brightestCol = 3
+        biggestDiff = currentDiff
+    end
+    currentDiff = math.max(r4, g4, b4) - math.min(r4, g4, b4)
+    if (currentDiff >= biggestDiff) then
+        brightestCol = 4
+    end
+    if brightestCol == 1 then return r1,g1,b1
+    elseif brightestCol == 2 then return r2,g2,b2
+    elseif brightestCol == 3 then return r3,g3,b3
+    else return r4,g4,b4 end
+end
+
+function setVehicleBlip(theVehicle, enabled)
+    if (not theVehicle) then return end
+    if enabled == "toggle" then
+        if g_IVBlips[theVehicle] then enabled = false
+        else enabled = true end
+    end
+    if (not enabled and g_IVBlips[theVehicle]) then
+        destroyElement(g_IVBlips[theVehicle])
+        g_IVBlips[theVehicle] = nil
+    elseif (enabled and not g_IVBlips[theVehicle]) then
+        local r,g,b = getMostColorfulColor(getVehicleColor(theVehicle, true))
+        local x,y,z = getElementPosition(theVehicle)
+        g_IVBlips[theVehicle] = createBlipAttachedTo(theVehicle, 0, 3, r, g, b, 255)
     end
 end
 
-addEvent("markVehicle", true)
-addEventHandler("markVehicle", resourceRoot, function(thePlayer, seat)
-	ignoreNextCleanup = true
-	markVehicle(thePlayer, seat)
-end)
+function setVehicleMarker(theVehicle, enabled)
+    if (not theVehicle) then return end
+    if enabled == "toggle" then
+        if g_IVArrows[theVehicle] then enabled = false
+        else enabled = true end
+    end
+    if (not enabled and g_IVArrows[theVehicle]) then
+        destroyElement(g_IVArrows[theVehicle])
+        g_IVArrows[theVehicle] = nil
+    elseif (enabled and not g_IVArrows[theVehicle]) then
+        local r,g,b = getMostColorfulColor(getVehicleColor(theVehicle, true))
+        local x,y,z = getElementPosition(theVehicle)
+        g_IVArrows[theVehicle] = createMarker(x, y, z + 4, "arrow", 2, r, g, b, 255)
+        setElementInterior(g_IVArrows[theVehicle], getElementInterior(theVehicle))
+    end
+end
+
+-- addEvent("markVehicle", true)
+-- addEventHandler("markVehicle", resourceRoot, function(thePlayer, enabled, ignoreCleanup)
+-- 	ignoreNextCleanup = ignoreCleanup -- Because end-of-race cleanup gets called at the start of a race as well for some reason so this would immediately get erased again
+-- 	markVehicle(thePlayer, enabled)
+-- end)
+
 addEventHandler("onClientVehicleExit", resourceRoot, function(thePlayer, seat)
-	markVehicle(thePlayer, seat)
+    if (thePlayer ~= localPlayer) then return end
+    if getElementData(source, "raceiv.owner") ~= localPlayer then return end
+
+    setVehicleMarker(source, true)
 	updateVehicleWeapons()
+    if (source == g_Vehicle or not g_Vehicle) then
+        setVehicleBlip(source, true)
+    end
 end)
 
 addEventHandler("onClientVehicleEnter", resourceRoot, function(thePlayer, seat)
@@ -73,10 +122,9 @@ setTimer(function()
     end
 end, 15, 0)
 
-addEventHandler("onClientMapStopping", resourceRoot, function()
-	if (ignoreNextCleanup) then
+addEventHandler("onClientMapStopping", resourceRoot, function(preRace)
+    if (preRace) then
 		-- This gets called at the start of a map too. Ignore it.
-		ignoreNextCleanup = false
 		return
 	end
 	for i, v in pairs(g_IVArrows) do

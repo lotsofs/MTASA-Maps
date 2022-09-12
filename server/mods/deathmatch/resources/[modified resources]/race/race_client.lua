@@ -225,7 +225,7 @@ end
 -- Called from server
 function initRace(vehicle, checkpoints, objects, pickups, mapoptions, ranked, duration, gameoptions, mapinfo, playerInfo)
     outputDebug( 'MISC', 'initRace start' )
-	unloadAll()
+	unloadAll(true)
 	
 	math.randomseed(mapName)
 	cpColorRandom = { math.random(0,255), math.random(0,255), math.random(0,255) } 
@@ -272,6 +272,7 @@ function initRace(vehicle, checkpoints, objects, pickups, mapoptions, ranked, du
 	for i,pickup in pairs(pickups) do
 		pos = pickup.position
 		object = createObject(g_ModelForPickupType[pickup.type], pos[1], pos[2], pos[3])
+		setElementInterior(object, pickup.interior or 0)
 		setElementCollisionsEnabled(object, false)
 		colshape = createColSphere(pos[1], pos[2], pos[3], 3.5)
 		g_Pickups[colshape] = { object = object }
@@ -505,45 +506,56 @@ setTimer(updateFPSAndPing, 1000, 0)
 addEventHandler('onClientColShapeHit', g_Root,
 	function(elem)
 		local pickup = g_Pickups[source]
-		-- outputDebug( 'CHECKPOINT', 'onClientColShapeHit'
-		-- 				.. ' elem:' .. tostring(elem)
-		-- 				.. ' g_Vehicle:' .. tostring(g_Vehicle)
-		-- 				.. ' isVehicleBlown(g_Vehicle):' .. tostring(isVehicleBlown(g_Vehicle))
-		-- 				.. ' g_Me:' .. tostring(g_Me)
-		-- 				.. ' getElementHealth(g_Me):' .. tostring(getElementHealth(g_Me))
-		-- 				.. ' source:' .. tostring(source)
-		-- 				.. ' pickup:' .. tostring(pickup)
-		-- 				)
-		if elem ~= g_Vehicle or not pickup or isVehicleBlown(g_Vehicle) or getElementHealth(g_Me) == 0 then
+		iprint(pickup)
+		if (not pickup) then
+			return
+		end
+		local vehicle
+		if (pickup.vehicletoaffect == 'current') then
+			vehicle = getPedOccupiedVehicle(g_Me)
+			if (not vehicle) then
+				return
+			end
+		else
+			vehicle = g_Vehicle
+		end
+		iprint(elem, vehicle)
+		if elem ~= vehicle or isVehicleBlown(vehicle) or getElementHealth(g_Me) == 0 then
 			return
 		end
 		if pickup.load then
-			handleHitPickup(pickup)
+			handleHitPickup(pickup, vehicle)
 		end
 	end
 )
 
-function handleHitPickup(pickup)
+function handleHitPickup(pickup, vehicle)
+	iprint("A", vehicle)
+	if (not vehicle) then
+		vehicle = g_Vehicle
+	end
+	iprint("B", vehicle, vehicle)
+	if (not vehicle) then return end
 	if pickup.type == 'vehiclechange' then
-		if pickup.vehicle == getElementModel(g_Vehicle) then
+		if pickup.vehicle == getElementModel(vehicle) then
 			return
 		end
 		local health = nil
-		g_PrevVehicleHeight = getElementDistanceFromCentreOfMassToBaseOfModel(g_Vehicle)
-		alignVehicleWithUp()
+		g_PrevVehicleHeight = getElementDistanceFromCentreOfMassToBaseOfModel(vehicle)
+		alignVehicleWithUp(vehicle)
 		if checkModelIsAirplane(pickup.vehicle) then -- Hack fix for Issue #4104
-			health = getElementHealth(g_Vehicle)
+			health = getElementHealth(vehicle)
 		end
-		setElementModel(g_Vehicle, pickup.vehicle)
+		setElementModel(vehicle, pickup.vehicle)
 		if health then
-			fixVehicle(g_Vehicle)
-			setElementHealth(g_Vehicle, health)
+			fixVehicle(vehicle)
+			setElementHealth(vehicle, health)
 		end
-		vehicleChanging(g_MapOptions.classicchangez, pickup.vehicle)
+		vehicleChanging(g_MapOptions.classicchangez, pickup.vehicle, vehicle)
 	elseif pickup.type == 'nitro' then
-		addVehicleUpgrade(g_Vehicle, 1010)
+		addVehicleUpgrade(vehicle, 1010)
 	elseif pickup.type == 'repair' then
-		fixVehicle(g_Vehicle)
+		fixVehicle(vehicle)
 	end
 	triggerServerEvent('onPlayerPickUpRacePickupInternal', g_Me, pickup.id, pickup.respawn)
 	playSoundFrontEnd(46)
@@ -576,19 +588,20 @@ function loadPickup(pickupID)
 	end
 end
 
-function vehicleChanging( changez, newModel )
-	if getElementModel(g_Vehicle) ~= newModel then
-		outputConsole( "Vehicle change model mismatch (" .. tostring(getElementModel(g_Vehicle)) .. "/" .. tostring(newModel) .. ")" )
+function vehicleChanging( changez, newModel, vehicle )
+	if (not vehicle) then vehicle = g_Vehicle end
+	if getElementModel(vehicle) ~= newModel then
+		outputConsole( "Vehicle change model mismatch (" .. tostring(getElementModel(vehicle)) .. "/" .. tostring(newModel) .. ")" )
 	end
-	local newVehicleHeight = getElementDistanceFromCentreOfMassToBaseOfModel(g_Vehicle)
-	local x, y, z = getElementPosition(g_Vehicle)
+	local newVehicleHeight = getElementDistanceFromCentreOfMassToBaseOfModel(vehicle)
+	local x, y, z = getElementPosition(vehicle)
 	if g_PrevVehicleHeight and newVehicleHeight > g_PrevVehicleHeight then
 		z = z - g_PrevVehicleHeight + newVehicleHeight
 	end
 	if changez then
 		z = z + 1
 	end
-	setElementPosition(g_Vehicle, x, y, z)
+	setElementPosition(vehicle, x, y, z)
 	g_PrevVehicleHeight = nil
 	updateVehicleWeapons()
 	checkVehicleIsHelicopter()
@@ -852,16 +865,26 @@ function checkpointReached(elem)
 	if (Spectate.active or getElementHealth(g_Me) == 0 or isVehicleBlown(g_Vehicle)) then
 		return
 	end
-	if (elem == g_Vehicle and not getVehicleOccupant(g_Vehicle, 0)) then
+	if (elem == g_Vehicle and not getVehicleController(g_Vehicle)) then
 		return
 	end
 	if elem ~= g_Vehicle and elem ~= g_Me then
 		return
 	end
-	if (elem == g_Me and getPedOccupiedVehicle(g_Me) == g_Vehicle) then
+	local vehicle = getPedOccupiedVehicle(g_Me)
+	if (elem == g_Me and vehicle == g_Vehicle) then
 		return
 	end
-	
+	if (vehicle and getElementData(vehicle, "raceiv.blocked")) then
+		return
+	end
+	if (g_Checkpoints[g_CurrentCheckpoint].restrictions == 'onfoot' and getPedOccupiedVehicle(g_Me)) then
+		return
+	end
+	if (g_Checkpoints[g_CurrentCheckpoint].restrictions == 'invehicle' and not getPedOccupiedVehicle(g_Me)) then
+		return
+	end
+
 	if g_Checkpoints[g_CurrentCheckpoint].vehicle and g_Checkpoints[g_CurrentCheckpoint].vehicle ~= getElementModel(g_Vehicle) then
 		g_PrevVehicleHeight = getElementDistanceFromCentreOfMassToBaseOfModel(g_Vehicle)
 		local health = nil
@@ -1366,8 +1389,8 @@ function raceTimeout()
 	toggleAllControls(false, true, false)
 end
 
-function unloadAll()
-    triggerEvent('onClientMapStopping', g_Me)
+function unloadAll(preRace)
+    triggerEvent('onClientMapStopping', g_Me, preRace)
 	for i=1,#g_Checkpoints do
 		destroyCheckpoint(i)
 	end
@@ -1558,8 +1581,8 @@ function directionToRotation2D( x, y )
 	return rem( math.atan2( y, x ) * (360/6.28) - 90, 360 )
 end
 
-function alignVehicleWithUp()
-	local vehicle = g_Vehicle
+function alignVehicleWithUp(vehicle)
+	if not vehicle then vehicle = g_Vehicle end
 	if not vehicle then return end
 
 	local matrix = getElementMatrix( vehicle )
@@ -1754,7 +1777,9 @@ local function startNosAgain(checkpointNum)
 		if (vehicle2 and data.nosLevel2) then
 			setVehicleNitroLevel(vehicle2, data.nosLevel2)
 		end
-		setVehicleNitroActivated(vehicle2, data.nosActivated2)
+		if (vehicle2) then
+			setVehicleNitroActivated(vehicle2, data.nosActivated2)
+		end
 	end
 end
 addEvent('race:startNosAgain', true)

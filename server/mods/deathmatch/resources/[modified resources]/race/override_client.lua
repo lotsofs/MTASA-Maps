@@ -103,7 +103,8 @@ function OverrideClient.updateVars( element )
 			local cg = getElementData(element, "raceiv.claimedcollisions")
 			local t = getElementData(element, "raceiv.taken")
 			local o = getElementData(element, "raceiv.owner")
-			local vo = getVehicleOccupant(element, 0)
+			if getElementData(element, "raceiv.blocked") then o = nil end
+			local vo = getVehicleController(element)
 			if (t and (o or vo)) then
 				-- someone's car
 				if (vo and o ~= vo) then
@@ -116,7 +117,7 @@ function OverrideClient.updateVars( element )
 						setElementAlpha (element, 180)
 					end
 				else
-					setElementAlpha (element, ghostModeOff and 255 or 180)
+					setElementAlpha (element, (cg and ghostModeOff) and 255 or 180)
 				end
 				for _,other in ipairs( otherPlayers ) do
 					if (other == o) then
@@ -130,10 +131,11 @@ function OverrideClient.updateVars( element )
 					local cg2 = getElementData(other, "raceiv.claimedcollisions")
 					local t2 = getElementData(other, "raceiv.taken")
 					local o2 = getElementData(other, "raceiv.owner")
-					local vo2 = getVehicleOccupant(other, 0)
-					if ((t2 and cg2 and o2 == o) or (not t2 and o2 == o)) then
+					if getElementData(other, "raceiv.blocked") then o2 = nil end
+					local vo2 = getVehicleController(other)
+					if ((t2 and o2 == o) or (not t2 and o2 == o)) then
 						-- enable collisions with their own vehicles
-						setElementCollidableWith(element, other, cg)
+						setElementCollidableWith(element, other, cg and cg2)
 					elseif (t2) then
 						-- enable cols with other players based on ghost mode setting
 						setElementCollidableWith ( element, other, cg2 and ghostModeOff )	
@@ -156,7 +158,8 @@ function OverrideClient.updateVars( element )
 					local cg2 = getElementData(other, "raceiv.claimedcollisions")
 					local t2 = getElementData(other, "raceiv.taken")
 					local o2 = getElementData(other, "raceiv.owner")
-					local vo2 = getVehicleOccupant(other, 0)
+					if getElementData(other, "raceiv.blocked") then o2 = nil end
+					local vo2 = getVehicleController(other)
 					if (t2) then
 						-- enable cols with other players based on ghost mode setting
 						setElementCollidableWith ( element, other, cg2 and ghostModeOff )	
@@ -202,10 +205,11 @@ function OverrideClient.updateVars( element )
 				local cg2 = getElementData(other, "raceiv.claimedcollisions")
 				local t2 = getElementData(other, "raceiv.taken")
 				local o2 = getElementData(other, "raceiv.owner")
-				local vo2 = getVehicleOccupant(other, 0)
-				if ((t2 and cg2 and o2 == o) or (not t2 and o2 == o)) then
+				if getElementData(other, "raceiv.blocked") then o2 = nil end
+				local vo2 = getVehicleController(other)
+				if ((t2 and o2 == o) or (not t2 and o2 == o)) then
 					-- enable collisions with their own vehicles
-					setElementCollidableWith(element, other, true)
+					setElementCollidableWith(element, other, cg2)
 				elseif (t2) then
 					-- enable cols with other players based on ghost mode setting
 					setElementCollidableWith ( element, other, cg2 and ghostModeOff )	
@@ -235,10 +239,11 @@ function OverrideClient.updateVars( element )
 				local cg2 = getElementData(other, "raceiv.claimedcollisions")
 				local t2 = getElementData(other, "raceiv.taken")
 				local o2 = getElementData(other, "raceiv.owner")
-				local vo2 = getVehicleOccupant(other, 0)
-				if ((t2 and cg2 and o2 == o) or (not t2 and o2 == o)) then
+				if getElementData(other, "raceiv.blocked") then o2 = nil end
+				local vo2 = getVehicleController(other)
+				if ((t2 and o2 == o) or (not t2 and o2 == o)) then
 					-- enable collisions with their own vehicles
-					setElementCollidableWith(element, other, true)
+					setElementCollidableWith(element, other, cg2)
 				elseif (t2) then
 					-- enable cols with other players based on ghost mode setting
 					setElementCollidableWith ( element, other, cg2 and ghostModeOff )	

@@ -6,7 +6,9 @@ g_IVRespawnTimers = {}
 function processInteractiveVehicles(intVehs)
 	g_IVSpawners = intVehs
 	for i, v in ipairs(g_IVSpawners) do
-		spawnInteractiveVehicle(v)
+		if (v.spawnimmediately == 'true') then
+			spawnInteractiveVehicle(v)
+		end
 	end
 end
 
@@ -30,6 +32,14 @@ function destroyInteractiveVehicles()
 	g_IVRespawnTimers = {}
 end
 
+function findInteractiveVehicle(id)
+	for i, v in ipairs(g_IVSpawners) do
+		if (v.id == id) then
+			return v
+		end
+	end
+end
+
 function spawnInteractiveVehicle(stats)
 	local x, y, z = unpack(stats.position)
 	local rx, ry, rz = unpack(stats.rotation)
@@ -38,9 +48,18 @@ function spawnInteractiveVehicle(stats)
 	if (stats.paintjob and stats.paintjob ~= "false" and stats.paintjob ~= "nil") then setVehiclePaintjob(veh, tonumber(stats.paintjob)) end
 	setVehicleSirensOn(veh, stats.sirens == 'true')
 	setVehicleLocked(veh, stats.locked == 'true')
-	if (stats.upgrades and type(stats.upgrades) == "table") then
-		for _, u in ipairs(stats.upgrades) do
-			addVehicleUpgrade(veh, u)
+	setElementHealth(veh, stats.health)
+	setElementInterior(veh, stats.interior)
+	if (stats.cantenter == 'true') then
+		setElementData(veh, "raceiv.blocked", true)
+	end
+	if (stats.upgrades) then
+		if (type(stats.upgrades) == "table") then
+			for _, u in ipairs(stats.upgrades) do
+				addVehicleUpgrade(veh, u)
+			end
+		elseif (type(stats.upgrades) == "number") then
+			addVehicleUpgrade(veh, stats.upgrades)
 		end
 	end
 	-- Set colors. There has to be a better way of doing this
@@ -93,7 +112,7 @@ end
 
 setTimer(function()
 	for p, v in pairs(g_Vehicles) do
-		if (not getVehicleOccupant(v, 0)) then
+		if (not getVehicleController(v)) then
 			setElementPosition(v, getElementPosition(v))
 			setElementRotation(v, getElementRotation(v))
 			setElementVelocity(v, getElementVelocity(v))
@@ -115,8 +134,7 @@ setTimer(function()
 			end
 			setElementData(vehicle, "raceiv.taken", true)
 		end
-		local occupants = getVehicleOccupants(vehicle)
-		if (not occupants[0] and #occupants == 0) then
+		if (not getVehicleController(vehicle)) then
 			if (getElementData(vehicle, "raceiv.taken")) then
 				-- Driver died or left the game without calling OnVehicleExit.
 				local despawnTimer = g_IVDespawnTimers[vehicle]
@@ -155,7 +173,8 @@ function findFreeVehicle(player)
 	for _,v in pairs(getElementsWithinRange(px,py,pz,10,"vehicle")) do
 		local owner = getElementData(v, "raceiv.owner")
 		local interactable = getElementData(v, "raceiv.interactable")
-		if ((not owner or owner == player) and not isVehicleBlown(v) and (interactable or g_Vehicles[player] == v)) then
+		local blocked = getElementData(v, "raceiv.blocked")
+		if (not blocked and (not owner or owner == player) and not isVehicleBlown(v) and (interactable or g_Vehicles[player] == v)) then
 			local vx,vy,vz = getElementPosition(v)
 			local dis = getDistanceBetweenPoints3D(px,py,pz,vx,vy,vz)
 			if dis < lastMinDis then 
@@ -175,7 +194,14 @@ addEventHandler("onVehicleStartEnter", root, function(player, seat, jacked)
 		cancelEvent()
 		return
 	end
-	
+
+	if (getElementData(source, "raceiv.blocked")) then
+		cancelEvent()
+		local alternative = findFreeVehicle(player)
+		if (alternative) then triggerClientEvent(player, "onEnterAlternativeVehicle", alternative) end
+		return
+	end
+
 	-- Prevent stealing main race vehicles
 	for p, v in pairs(g_Vehicles) do
 		if (p ~= player) then
@@ -225,7 +251,7 @@ end)
 
 addEvent("onClientStreamInVehicle", true)
 addEventHandler("onClientStreamInVehicle", resourceRoot, function(theVehicle)
-	if (getVehicleOccupant(theVehicle, 0)) then
+	if (getVehicleController(theVehicle)) then
 		return
 	end
 	setElementPosition(theVehicle, getElementPosition(theVehicle))
@@ -246,7 +272,7 @@ end)
 
 addEventHandler("onElementStartSync", resourceRoot, function()
 	if (getElementType(source) == "vehicle" and getElementData(source, "raceiv.interactable")) or g_Vehicles[source] then
-		if (getVehicleOccupant(source, 0)) then
+		if (getVehicleController(source)) then
 			return
 		end
 		setElementFrozen(source, false)

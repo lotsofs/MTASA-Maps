@@ -296,7 +296,7 @@ function loadMap(res)
 	
 	-- LotsOfS: Process Custom Stuff
 	processInteractiveVehicles(map:getAll('vehicle_interactive'))
-	processTriggers(map:getAll('trigger'))
+	processTriggers(map)
 	
 	-- if map isn't made in the new editor or map is an old race map multiplicate the checkpointsize with 4
 	local madeInNewEditor = map.def and ( map.def:find("editor_main") or map.def:find("race") )
@@ -476,7 +476,7 @@ function joinHandlerBoth(player)
         setRandomSeedForMap('clothes')
 
         if g_MapOptions.skins == 'cj' then
-            spawnPlayer(player, x + 4, y, z, 0, 0)
+            spawnPlayer(player, x + 4, y, z, 0, 0, (spawnpoint.interior or 0))
             
             local clothes = { [16] = math.random(12, 13), [17] = 7 }    -- 16=Hats(12:helmet 13:moto) 17=Extra(7:garageleg)
             for vehicles,vehicleclothes in pairs(g_VehicleClothes) do
@@ -492,15 +492,15 @@ function joinHandlerBoth(player)
                 addPedClothes(player, texture, model, type)
             end
         elseif g_MapOptions.skins == 'random' then
-            repeat until spawnPlayer(player, x + 4, y, z, 0, math.random(9, 288))
+            repeat until spawnPlayer(player, x + 4, y, z, 0, math.random(9, 288), (spawnpoint.interior or 0))
         else
             local ok
             for i=1,20 do
-                ok = spawnPlayer(player, x + 4, y, z, 0, getRandomFromRangeList(g_MapOptions.skins))
+                ok = spawnPlayer(player, x + 4, y, z, 0, getRandomFromRangeList(g_MapOptions.skins), spawnpoint.interior)
                 if ok then break end
             end
             if not ok then
-                spawnPlayer(player, x + 4, y, z, 0, 264)
+                spawnPlayer(player, x + 4, y, z, 0, 264, (spawnpoint.interior or 0))
             end
         end
 
@@ -515,6 +515,9 @@ function joinHandlerBoth(player)
 			-- Replace groups of unprintable characters with a space, and then remove any leading space
 			local plate = getPlayerName(player):gsub( '[^%a%d]+', ' ' ):gsub( '^ ', '' )
 			vehicle = createVehicle(spawnpoint.vehicle, x, y, z, rx, ry, rz, plate:sub(1, 8))
+			iprint((spawnpoint.interior or 0))
+			setElementInterior(player, (spawnpoint.interior or 0))
+			setElementInterior(vehicle, (spawnpoint.interior or 0))
 			if setElementSyncer and not g_MapOptions.allowonfoot then
 				setElementSyncer( vehicle, false )
 			end
@@ -557,29 +560,18 @@ function joinHandlerBoth(player)
                 end
             end
     
-			-- LotsOfS: On-foot spawnpoint support
-			local onfootspawn = false
-			if (spawnpoint.onfootspawn) then
-				for i, v in ipairs(g_OnfootSpawnpoints) do
-					if v.id == spawnpoint.onfootspawn then
-						onfootspawn = v
-						break
-					end
-				end
-			end
-							
-			if onfootspawn then
-				setElementPosition(player, unpack(onfootspawn.position))
-				setElementRotation(player, unpack(onfootspawn.rotation))
-				triggerClientEvent(player, "markVehicle", vehicle, player, 0)
-			else
-				warpPedIntoVehicle(player, vehicle)
-			end
+			warpPedIntoVehicle(player, vehicle)
         end
-        
+
 		destroyBlipsAttachedTo(player)
         createBlipAttachedTo(player, 0, 1, 200, 200, 200)
+
         g_CurrentRaceMode:onPlayerJoin(player, spawnpoint)
+
+		-- LotsOfS: On-foot spawnpoint support
+		if (spawnpoint.trigger) then
+			callTrigger(spawnpoint.trigger, player)
+		end
     end
 
     -- Send client all info
@@ -761,6 +753,10 @@ addEventHandler('onPlayerPickUpRacePickupInternal', g_Root,
 			end
 		end
 		triggerEvent('onPlayerPickUpRacePickup', source, pickupID, pickup.type, pickup.vehicle)
+		-- LotsOfS: On-foot spawnpoint support
+		if (pickup.trigger) then
+			callTrigger(pickup.trigger, source)
+		end
 	end
 )
 
@@ -774,7 +770,7 @@ addEventHandler('onPlayerWasted', g_Root,
 		if g_CurrentRaceMode then
 			if not g_CurrentRaceMode.startTick then
 				local x, y, z = getElementPosition(source)
-				spawnPlayer(source, x, y, z, 0, getElementModel(source))
+				spawnPlayer(source, x, y, z, 0, getElementModel(source), getElementInterior(source))
 				if g_Vehicles[source] then
 					warpPedIntoVehicle(source, g_Vehicles[source])	
 				end
@@ -1544,7 +1540,7 @@ end
 
 addEvent('moveUnoccupiedVehicleForSpectate', true)
 addEventHandler('moveUnoccupiedVehicleForSpectate', resourceRoot, function(x, y, z, r)
-	if (getVehicleOccupants(source)[0]) then return end
+	if (getVehicleController(source)) then return end
 	fixVehicle( source)
 	setElementFrozen ( source, true )
 	setElementPosition( source, x, y, z )

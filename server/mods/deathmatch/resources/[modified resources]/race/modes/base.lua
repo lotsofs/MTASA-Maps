@@ -237,7 +237,7 @@ end
 function RaceMode:onPlayerJoin(player, spawnpoint)
 	self.checkpointBackups[player] = {}
 	self.checkpointBackups[player][0] = { 
-		onfoot = false, borrowed = false, 
+		onfoot = false, borrowed = false,
 		vehicle = spawnpoint.vehicle, position = spawnpoint.position, rotation = spawnpoint.rotation, velocity = {0, 0, 0}, turnvelocity = {0, 0, 0}, geardown = true, 
 		vehicle2 = spawnpoint.vehicle, position2 = spawnpoint.position, rotation2 = spawnpoint.rotation, geardown2 = true, velocity2 = {0, 0, 0}, turnvelocity2 = {0, 0, 0}
 	}
@@ -252,6 +252,7 @@ function RaceMode:onPlayerReachCheckpoint(player, checkpointNum)
 		local vehicle2 = RaceMode.getPlayerVehicle(player) -- LotsOfS: We can have multiple vehicles now
 		if (not vehicle) then
 			self.checkpointBackups[player][checkpointNum] = {
+				skin = getElementModel(player),
 				onfoot = true ,
 				borrowed = nil,
 				vehicle = nil,
@@ -267,6 +268,7 @@ function RaceMode:onPlayerReachCheckpoint(player, checkpointNum)
 				turnvelocity = {
 					0,0,0
 				},
+				interior = getElementInterior(player),
 				geardown = false,
 				hasNitro = false,
 				jetpack = isPedWearingJetpack(player),
@@ -275,11 +277,13 @@ function RaceMode:onPlayerReachCheckpoint(player, checkpointNum)
 				rotation2 = {getElementRotation(vehicle2)},
 				velocity2 = {getElementVelocity(vehicle2)},
 				turnvelocity2 = {getElementAngularVelocity(vehicle2)},
+				interior2 = getElementInterior(vehicle2),
 				geardown2 = getVehicleLandingGearDown(vehicle2) or false,
 				hasNitro2 = getVehicleUpgradeOnSlot(vehicle2, 8) > 0
 			}
 		elseif (vehicle == vehicle2) then
 			self.checkpointBackups[player][checkpointNum] = {
+				skin = getElementModel(player),
 				onfoot = false ,
 				borrowed = g_IVSpawns[vehicle],
 				vehicle = getElementModel(vehicle),
@@ -295,12 +299,14 @@ function RaceMode:onPlayerReachCheckpoint(player, checkpointNum)
 				turnvelocity = {
 					getElementAngularVelocity(vehicle)
 				},
+				interior = getElementInterior(vehicle),
 				geardown = getVehicleLandingGearDown(vehicle) or false,
 				hasNitro = getVehicleUpgradeOnSlot(vehicle, 8) > 0,
 			}
 			triggerClientEvent(player, 'race:saveNosLevel', resourceRoot, checkpointNum)
 		else
 			self.checkpointBackups[player][checkpointNum] = {
+				skin = getElementModel(player),
 				onfoot = false ,
 				borrowed = g_IVSpawns[vehicle],
 				original = vehicle,
@@ -317,6 +323,7 @@ function RaceMode:onPlayerReachCheckpoint(player, checkpointNum)
 				turnvelocity = {
 					getElementAngularVelocity(vehicle)
 				},
+				interior = getElementInterior(vehicle),
 				geardown = getVehicleLandingGearDown(vehicle) or false,
 				hasNitro = getVehicleUpgradeOnSlot(vehicle, 8) > 0,
 				
@@ -325,6 +332,7 @@ function RaceMode:onPlayerReachCheckpoint(player, checkpointNum)
 				rotation2 = {getElementRotation(vehicle2)},
 				velocity2 = {getElementVelocity(vehicle2)},
 				turnvelocity2 = {getElementAngularVelocity(vehicle2)},
+				interior2 = getElementInterior(vehicle2),
 				geardown2 = getVehicleLandingGearDown(vehicle2) or false,
 				hasNitro2 = getVehicleUpgradeOnSlot(vehicle2, 8) > 0
 			}
@@ -400,7 +408,7 @@ end
 
 function isValidPlayerVehicle(player,vehicle)
 	if isValidPlayer(player) then
-		if vehicle and (g_Vehicles[player] == vehicle or getElementData(vehicle, "raceiv.owner") == player) then
+		if vehicle and (g_Vehicles[player] == vehicle or getElementData(vehicle, "raceiv.owner") == player or not getElementData(vehicle, "raceiv.owner")) then
 			return true
 		end
 	end
@@ -500,6 +508,7 @@ function freeSpawnpoint(i)
 	end
 end
 
+-- Respawn Player
 function restorePlayer(id, player, bNoFade, bDontFix)
 	if not isValidPlayer(player) then
 		return
@@ -520,34 +529,18 @@ function restorePlayer(id, player, bNoFade, bDontFix)
 	local vehicle2 = vehicle
 
 	local bkp = self.checkpointBackups[player][checkpoint - 1]
+	local spawnpoint
 	if not RaceMode.checkpointsExist() or checkpoint==1 then
-		local spawnpoint = self:pickFreeSpawnpoint(player)
+		spawnpoint = self:pickFreeSpawnpoint(player)
 
-		if (spawnpoint.onfootspawn) then
-			local onfootspawn = false
-			for i, v in ipairs(g_OnfootSpawnpoints) do
-				if v.id == spawnpoint.onfootspawn then
-					onfootspawn = v
-					break
-				end
-			end
-			
-			bkp.onfoot = true
-			bkp.position = onfootspawn.position
-			bkp.rotation = onfootspawn.rotation
-			
-			bkp.position2 = spawnpoint.position
-			bkp.rotation2 = spawnpoint.rotation
-			bkp.geardown2 = true                 -- Fix landing gear state
-			bkp.vehicle2 = spawnpoint.vehicle    -- Fix spawn'n'blow
-		else
-			bkp.onfoot = false
-			bkp.position = spawnpoint.position
-			bkp.rotation = spawnpoint.rotation
-			bkp.geardown = true                 -- Fix landing gear state
-			bkp.vehicle = spawnpoint.vehicle    -- Fix spawn'n'blow
-		end
+		bkp.onfoot = false
+		bkp.position = spawnpoint.position
+		bkp.rotation = spawnpoint.rotation
+		bkp.geardown = true                 -- Fix landing gear state
+		bkp.vehicle = spawnpoint.vehicle    -- Fix spawn'n'blow
+		bkp.interior = spawnpoint.interior
 	end
+	iprint(spawnpoint, checkpoint)
 	-- Validate some bkp variables
 	if type(bkp.rotation) ~= "table" or #bkp.rotation < 3 then
 		bkp.rotation = {0, 0, 0}
@@ -556,10 +549,13 @@ function restorePlayer(id, player, bNoFade, bDontFix)
 	local rx, ry, rz = unpack(bkp.rotation)
 	local x, y, z = unpack(bkp.position)
 	
-	spawnPlayer(player, x, y, z, rz or 0, getElementModel(player))
+	spawnPlayer(player, x, y, z, rz or 0, getElementModel(player), bkp.interior)
+	if (bkp.skin) then
+		setElementModel(player, bkp.skin)
+	end
 	if (bkp.borrowed) then 
 		-- LotsOfS: Create our own vehicle if we hit the checkpoint with a vehicle that isn't the 'main'
-		if (isElement(bkp.original) and not getVehicleOccupant(bkp.original, 0)) then
+		if (isElement(bkp.original) and not getVehicleController(bkp.original)) then
 			vehicle = bkp.original
 		else
 			vehicle = spawnInteractiveVehicle(bkp.borrowed)
@@ -573,6 +569,7 @@ function restorePlayer(id, player, bNoFade, bDontFix)
 		local rx2, ry2, rz2 = unpack(bkp.rotation2)
 		local x2, y2, z2 = unpack(bkp.position2)
 		setElementPosition(vehicle2, x2, y2, z2)
+		setElementInterior(vehicle2, bkp.interior2)
 		setElementRotation(vehicle2, rx2 or 0, ry2 or 0, rz2 or 0)
 		if not bDontFix then
 			fixVehicle(vehicle2)
@@ -591,6 +588,7 @@ function restorePlayer(id, player, bNoFade, bDontFix)
 	if vehicle and not bkp.onfoot then
         setElementVelocity( vehicle, 0,0,0 )
         setElementAngularVelocity( vehicle, 0,0,0 )
+		setElementInterior(vehicle, bkp.interior)
 		setElementPosition(vehicle, x, y, z)
 		setElementRotation(vehicle, rx or 0, ry or 0, rz or 0)
 		if not bDontFix then
@@ -629,6 +627,16 @@ function restorePlayer(id, player, bNoFade, bDontFix)
 	end
     setCameraTarget(player)
 	setPlayerStatus( player, "alive", "" )
+	
+	iprint(spawnpoint, checkpoint)
+	if (checkpoint > 1) then
+		if g_Checkpoints[checkpoint - 1].trigger then
+			callTrigger(g_Checkpoints[checkpoint - 1].trigger, player)
+		end
+	elseif (spawnpoint.trigger) then
+		callTrigger(spawnpoint.trigger, player)
+	end
+
 	clientCall(player, 'remoteSoonFadeIn', bNoFade )
 end
 
