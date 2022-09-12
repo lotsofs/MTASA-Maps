@@ -23,6 +23,11 @@ addEventHandler ( "onMapOpened", root,
 			end
 			setVehicleColor(vehicle, col1, col2, col3, col4, col5, col6, col7, col8, col9, col10, col11, col12)			
 		end
+		for i,p in ipairs(getElementsByType("spawnpoint_onfoot")) do
+			local ped = getRepresentation(p, "ped")
+			local skin = exports.edf:edfGetElementProperty(p, "skin")
+			setElementModel(ped, skin)
+		end
 		for i,pickup in ipairs(getElementsByType"racepickup") do
 			local pickupType = exports.edf:edfGetElementProperty ( pickup, "type" )
 			local object = getRepresentation(pickup, "object")
@@ -104,6 +109,10 @@ addEventHandler ( "onElementPropertyChanged", root,
 			elseif (propertyName == "paintjob") then
 				setVehiclePaintjob(vehicle, tonumber(exports.edf:edfGetElementProperty(source, "paintjob")))
 			end
+		elseif (getElementType(source) == "spawnpoint_onfoot") then
+			local ped = getRepresentation(source, "ped")
+			local skin = exports.edf:edfGetElementProperty(source, "skin")
+			setElementModel(ped, skin)
 		elseif getElementType(source) == "racepickup" and propertyName == "type" then
 			local pickupType = exports.edf:edfGetElementProperty ( source, "type" )
 			local object = getRepresentation(source, "object")
