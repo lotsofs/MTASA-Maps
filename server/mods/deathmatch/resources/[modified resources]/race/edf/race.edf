@@ -17,17 +17,23 @@
 	<element name="spawnpoint" friendlyname="Spawnpoint" icon="edf/spawnpoint.png" shortcut="model">
 		<data name="position" type="coord3d" default="0,0,0" />
 		<data name="rotation" type="coord3d" default="0,0,0" />
+		<data name="interior" type="integer" required="false" />
 		<data name="vehicle" type="vehicleID" default="522" />
-		<data name="onfootspawn" type="element:spawnpoint_onfoot" description="A car must always be present for racemode to work. After spawning, teleport the player on foot to this onfoot spawn." required="false" default="" />
+		<data name="trigger" type="element:trigger" description="Trigger this action upon spawn" required="false" default="" />
 		<vehicle model="!vehicle!" rotation="!rotation!"/>
 	</element>
-	<element name="spawnpoint_onfoot" friendlyname="On Foot Spawnpoint" icon="edf/ped.png">
+	<element name="spawnpoint_onfoot" friendlyname="On Foot Spawnpoint / Pedestrian Data" icon="edf/ped.png">
 		<data name="position" type="coord3d" default="0,0,0" />
 		<data name="rotation" type="coord3d" default="0,0,0" />
+		<data name="interior" type="integer" required="false" />
+		<data name="health" type="number" description="How much health 0-100 or 0-200." default="200" required="true" />
+		<data name="skin" type="skinID" default="0" />
+		<data name="jetpack" type="selection:remove,give,keep,toggle" description="Equip jetpack?" default="keep" />
 		<ped model="0" rotation="!rotation!" editorOnly="true"/>
 	</element>
 	<element name="checkpoint" friendlyname="Checkpoint" icon="edf/checkpoint.png">
 		<data name="position" type="coord3d" default="0,0,0" />
+		<data name="interior" type="integer" required="false" />
 		<data name="type" type="selection:checkpoint,ring,corona,arrow,cylinder" default="checkpoint" />
 		<data name="color" type="color" description="color (#RRGGBBAA hex string)" default="#00F9" />
 		<data name="size" type="number" description="marker size" default="2.25" />
@@ -36,10 +42,12 @@
 		<data name="extrasize" type="integer" default="4" description="How much bigger the checkpoint's hitbox is compared to its visual appearance" required="false"/>
 		<data name="hideradarblip" type="selection:true,false" default="false" description="Whether to hide this CP's blip on the radar" required="false"/>
 		<data name="trigger" type="element:trigger" description="Trigger this action upon hitting the checkpoint" required="false" default="" />
+		<data name="restrictions" type="selection:none,onfoot,invehicle" default="none" description="Restrictions to impose on this checkpoint" />
 		<marker color="!color!" type="!type!" size="!size!"/>
 	</element>
 	<element name="racepickup" friendlyname="Race pickup" icon="edf/pickup.png">
 		<data name="position" type="coord3d" default="0,0,0" />
+		<data name="interior" type="integer" required="false" />
 		<data name="type" type="selection:nitro,repair,vehiclechange" description="The type of pickup.  Can repair the vehicle, add a Nitro, or change the player's vehicle" default="nitro" />
 		<data name="respawn" type="integer" default="0" description="The respawn time in miliseconds" />
 		<data name="vehicle" type="vehicleID" default="522" description="The vehicle model, if a vehiclechange pickup" required="false" />
@@ -49,19 +57,23 @@
 		<object model="1234" position="0,0,0" editorOnly="true" alpha="0"/>
 		<marker position="0,0,0" type="corona" color="#00000000" editorOnly="true"/>
 	</element>
-	<element name="vehicle_interactive" friendlyname="Interactive Vehicle" icon="edf/vehicle.png">
+	<element name="vehicle_interactive" friendlyname="Vehicle (Interactive)" icon="edf/vehicle.png">
+		<data name="spawnimmediately" type="selection:false,true" description="Spawn this vehicle at the start of the race" default="true" />
 		<data name="model" type="vehicleID" description="vehicle model" default="400" />
 		<data name="position" type="coord3d" description="XYZ position" default="0,0,0" />
 		<data name="rotation" type="coord3d" description="XYZ rotation" default="0,0,0" />
+		<data name="interior" type="integer" required="false" />
 		<data name="colora" type="color" description="RGB vehicle color 1" required="false" />
 		<data name="colorb" type="color" description="RGB vehicle color 2" required="false" />
 		<data name="colorc" type="color" description="RGB vehicle color 3" required="false" />
-		<data name="colord" type="color" description="RGB vehicle color 4. This color is used for the marker appearing above cars" required="false" />
+		<data name="colord" type="color" description="RGB vehicle color 4" required="false" />
 		<data name="paintjob" type="selection:0,1,2,3" description="vehicle paintjob" required="false" />
 		<data name="upgrades" type="string" description="installed vehicle upgrades" required="false" />
 		<data name="plate" type="plate" description="number plate" required="false" />
+		<data name="health" type="number" description="How much health the car has. 0-1000." default="1000" required="true" />
 		<data name="sirens" type="selection:false,true" description="Vehicle sirens" required="false" default="false"/>
 		<data name="locked" type="selection:false,true" description="Locked doors" required="false" default="false"/>
+		<data name="cantenter" type="selection:false,true" description="Mark this car as unable to enter" required="false" default="false"/>
 		<data name="maxmovedistance" type="integer" default="10" description="Mark the vehicle as taken if it moves this far away from its spawnpoint without a driver." required="true"/>
 		<data name="shared" type="selection:false,true" description="If set to false, once this vehicle is entered by a player it becomes claimed and cannot be entered by anyone else anymore. If set to true, anyone can enter after, including jacking the car." required="false" default="false"/>
 		<data name="despawntime" type="integer" default="-1" description="Time in ms before it despawns when abandoned. -1 for never." required="false" />
@@ -108,6 +120,15 @@
 		<data name="forceoutofvehicle" type="selection:false,true" required="false" default="false" description="Force out of vehicle" />
 		<marker color="#000000ff" size="1" editorOnly="true" />
 		<marker color="#7f7f7fff" size="0.5" editorOnly="true" />
+	</element>
+	<element name="footpickup" friendlyname="Normal pickup except it isn't shit" icon="edf/pickup2.png">
+		<data name="position" type="coord3d" description="XYZ position" default="0,0,0" />
+		<data name="type" type="pickupType" description="pickup type" default="health" />
+		<data name="amount" type="number" description="hp points, armor points or weapon ammo" default="100" />
+		<data name="respawn" type="integer" description="respawn time in miliseconds" default="30000" />
+		<data name="interior" type="integer" description="GTA interior world" default="0" />
+		<data name="dimension" type="integer" description="MTA dimension" default="0" />
+		<pickup type="!type!" posZ="0.8" />
 	</element>
 
 	<script src="edf/edf.lua" />
