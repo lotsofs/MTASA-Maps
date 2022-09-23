@@ -540,7 +540,6 @@ function restorePlayer(id, player, bNoFade, bDontFix)
 		bkp.vehicle = spawnpoint.vehicle    -- Fix spawn'n'blow
 		bkp.interior = spawnpoint.interior
 	end
-	iprint(spawnpoint, checkpoint)
 	-- Validate some bkp variables
 	if type(bkp.rotation) ~= "table" or #bkp.rotation < 3 then
 		bkp.rotation = {0, 0, 0}
@@ -628,7 +627,6 @@ function restorePlayer(id, player, bNoFade, bDontFix)
     setCameraTarget(player)
 	setPlayerStatus( player, "alive", "" )
 	
-	iprint(spawnpoint, checkpoint)
 	if (checkpoint > 1) then
 		if g_Checkpoints[checkpoint - 1].trigger then
 			callTrigger(g_Checkpoints[checkpoint - 1].trigger, player)

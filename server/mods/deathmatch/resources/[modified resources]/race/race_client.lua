@@ -286,7 +286,7 @@ function initRace(vehicle, checkpoints, objects, pickups, mapoptions, ranked, du
 			g_Pickups[colshape].label:type("shadow",2)
         end
 	end
-	
+
 	-- objects
 	g_Objects = {}
 	local pos, rot
@@ -506,7 +506,6 @@ setTimer(updateFPSAndPing, 1000, 0)
 addEventHandler('onClientColShapeHit', g_Root,
 	function(elem)
 		local pickup = g_Pickups[source]
-		iprint(pickup)
 		if (not pickup) then
 			return
 		end
@@ -519,7 +518,6 @@ addEventHandler('onClientColShapeHit', g_Root,
 		else
 			vehicle = g_Vehicle
 		end
-		iprint(elem, vehicle)
 		if elem ~= vehicle or isVehicleBlown(vehicle) or getElementHealth(g_Me) == 0 then
 			return
 		end
@@ -530,11 +528,9 @@ addEventHandler('onClientColShapeHit', g_Root,
 )
 
 function handleHitPickup(pickup, vehicle)
-	iprint("A", vehicle)
 	if (not vehicle) then
 		vehicle = g_Vehicle
 	end
-	iprint("B", vehicle, vehicle)
 	if (not vehicle) then return end
 	if pickup.type == 'vehiclechange' then
 		if pickup.vehicle == getElementModel(vehicle) then

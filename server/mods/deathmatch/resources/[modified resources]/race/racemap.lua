@@ -7,7 +7,7 @@
 	spawnpoint_onfoot = { 'position', 'rotation', 'interior', 'health', 'skin', 'jetpack' },
 	trigger = { 'vehicletrigger', 'foottrigger', 'actiona', 'arga', 'actionb', 'argb', 'actionc', 'argc', 'actiond', 'argd', 'nexttrigger' },
 	trigger_vehicle = { 'template', 'vehicletoaffect', 'change', 'sethealth', 'teleport', 'tpretainrotation', 'tpretainvelocity' },
-	trigger_foot = { 'template', 'multitemplate', 'changeskin', 'sethealth', 'teleport', 'tpretainrotation', 'tpretainvelocity', 'forceoutofvehicle' }
+	trigger_foot = { 'template', 'multitemplate', 'changeskin', 'sethealth', 'teleport', 'tpretainrotation', 'tpretainvelocity', 'forceoutofvehicle' },
 }
 g_MapSettingNames = table.create(
 	{'time', 'weather', 'respawn', 'respawntime', 'duration', 'skins', 'bikehats', 'bikehatchance', 'carhats', 'carhatchance',
@@ -282,11 +282,12 @@ end
 
 function RaceElementMap:getAll(name, type)
 	local result = {}
+	iprint(name, type)
 	-- Block out specific stuff
 	if name == "object" then 
 		return {} 
-	elseif name == "pickup" then
-		return self:getAll("racepickup",name)
+	elseif name == "rpickup" then
+		return self:getAll("racepickup","pickup")
 	end
 	local resourceRoot = getResourceRootElement(self.res)
 	for i,element in ipairs(getElementsByType(name, resourceRoot)) do

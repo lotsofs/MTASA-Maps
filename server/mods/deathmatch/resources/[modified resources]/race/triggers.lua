@@ -272,7 +272,6 @@ function performVehicleTrigger(trigger, vehicle, player, template, new)
 			local rx, ry, rz = unpack(template.rotation)
 			setElementRotation(vehicle, rx, ry, rz)
 		end
-		iprint(getElementVelocity(vehicle))
 		if (trigger.tpretainvelocity ~= 'true') then
 			setElementVelocity(vehicle, 0, 0, 0)
 			setElementAngularVelocity(vehicle, 0, 0, 0)

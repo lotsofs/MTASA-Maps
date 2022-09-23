@@ -12,7 +12,6 @@ end)
 
 function triggerSetFallOffBike(arg)
 	local state
-	iprint(canPedBeKnockedOffBike(g_Me), "!!!", arg, true, arg == "true")
 	if (arg == "keep") then
 		return
 	elseif (arg == "true") then
@@ -23,5 +22,4 @@ function triggerSetFallOffBike(arg)
 		state = false
 	end
 	setPedCanBeKnockedOffBike(g_Me, state)
-	iprint(canPedBeKnockedOffBike(g_Me), "!!!")
 end

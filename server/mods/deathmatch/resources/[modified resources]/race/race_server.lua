@@ -351,8 +351,8 @@ function loadMap(res)
 	g_Objects = map:getAll('object')
 	
 	-- read pickups
-	g_Pickups = map:getAll('pickup')
-	
+	g_Pickups = map:getAll('rpickup')
+
 	-- unload map xml
 	map:unload()
 	return true
@@ -371,7 +371,6 @@ function startRace()
 		TimerManager.createTimerFor("map","rank"):setTimer(updateRank, 1000, 0)
 	end
 end
-
 
 -- Called from:
 --      g_RaceStartCountdown
@@ -515,7 +514,6 @@ function joinHandlerBoth(player)
 			-- Replace groups of unprintable characters with a space, and then remove any leading space
 			local plate = getPlayerName(player):gsub( '[^%a%d]+', ' ' ):gsub( '^ ', '' )
 			vehicle = createVehicle(spawnpoint.vehicle, x, y, z, rx, ry, rz, plate:sub(1, 8))
-			iprint((spawnpoint.interior or 0))
 			setElementInterior(player, (spawnpoint.interior or 0))
 			setElementInterior(vehicle, (spawnpoint.interior or 0))
 			if setElementSyncer and not g_MapOptions.allowonfoot then

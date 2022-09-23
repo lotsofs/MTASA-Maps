@@ -121,15 +121,6 @@
 		<marker color="#000000ff" size="1" editorOnly="true" />
 		<marker color="#7f7f7fff" size="0.5" editorOnly="true" />
 	</element>
-	<element name="footpickup" friendlyname="Normal pickup except it isn't shit" icon="edf/pickup2.png">
-		<data name="position" type="coord3d" description="XYZ position" default="0,0,0" />
-		<data name="type" type="pickupType" description="pickup type" default="health" />
-		<data name="amount" type="number" description="hp points, armor points or weapon ammo" default="100" />
-		<data name="respawn" type="integer" description="respawn time in miliseconds" default="30000" />
-		<data name="interior" type="integer" description="GTA interior world" default="0" />
-		<data name="dimension" type="integer" description="MTA dimension" default="0" />
-		<pickup type="!type!" posZ="0.8" />
-	</element>
 
 	<script src="edf/edf.lua" />
 	<script src="edf/edf_client.lua" type="client" />
