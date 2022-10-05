@@ -78,9 +78,7 @@
 		<data name="shared" type="selection:false,true" description="If set to false, once this vehicle is entered by a player it becomes claimed and cannot be entered by anyone else anymore. If set to true, anyone can enter after, including jacking the car." required="false" default="false"/>
 		<data name="despawntime" type="integer" default="-1" description="Time in ms before it despawns when abandoned. -1 for never." required="false" />
 		<data name="respawntime" type="integer" default="-1" description="Time in ms before it respawns when one is taken. -1 for never." required="false" />
-		<data name="unclaimedcollidewithvehicles" type="selection:false,true" default="true" required="false" description="Does this vehicle have collisions with other vehicles before any players took it?" />
-		<data name="unclaimedcollidewithplayers" type="selection:false,true" default="true" required="false" description="Does this vehicle have collisions with on-foot players before any players took it?" />
-		<data name="claimedcollisions" type="selection:false,true" default="true" required="false" description="Does this vehicle have collisions with other vehicles owned by the player after it has been taken?" />
+		<data name="collisions" type="selection:never,upon start enter,upon entered,upon drive away,always" default="never" description="When to enable collisions for this vehicle." required="true" />
 		<vehicle model="!model!" rotation="!rotation!" color="!color!" editorOnly="true"/>
 	</element>
 	<element name="trigger" friendlyname="Trigger" icon="edf/trigger.png">

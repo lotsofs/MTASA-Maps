@@ -98,6 +98,10 @@ addEventHandler("onClientVehicleEnter", resourceRoot, function(thePlayer, seat)
             g_IVBlips[source] = nil
         end
     end
+    if (getElementData(source, "raceiv.collisions") == "upon entered") then
+        setElementData(source, "raceiv.collide", true)
+		setElementData(source, "raceiv.collisions", nil)
+    end 
 	updateVehicleWeapons()
 end)
 
@@ -106,8 +110,13 @@ addEventHandler("onClientVehicleStartEnter", resourceRoot, function(thePlayer, s
         if (source == g_Vehicle) then
             setElementPosition(source, getElementPosition(source))
         end
+	    if (getElementData(source, "raceiv.collisions") == "upon start enter") then
+	        setElementData(source, "raceiv.collide", true)
+			setElementData(source, "raceiv.collisions", nil)
+        end 
     end
 end)
+
 
 setTimer(function()
     for i, v in pairs(g_IVArrows) do

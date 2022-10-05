@@ -3,7 +3,7 @@
 	checkpoint = { 'id', 'nextid', 'position', 'size', 'interior', 'color', 'type', 'vehicle', 'paintjob', 'upgrades', 'extrasize', 'hideradarblip', 'trigger', 'restrictions' },
 	object = { 'position', 'rotation', 'interior', 'model' },
 	pickup = { 'position', 'interior', 'type', 'vehicle', 'paintjob', 'upgrades', 'respawn', 'trigger', 'vehicletoaffect' },
-	vehicle_interactive = { 'model', 'position', 'interior', 'rotation', 'health', 'colora', 'colorb', 'colorc', 'colord', 'paintjob', 'plate', 'sirens', 'locked', 'cantenter', 'shared', 'maxmovedistance', 'despawntime', 'respawntime', 'upgrades', 'unclaimedcollidewithvehicles', 'unclaimedcollidewithplayers', 'claimedcollisions', 'spawnimmediately' },
+	vehicle_interactive = { 'model', 'position', 'interior', 'rotation', 'health', 'colora', 'colorb', 'colorc', 'colord', 'paintjob', 'plate', 'sirens', 'locked', 'cantenter', 'shared', 'maxmovedistance', 'despawntime', 'respawntime', 'upgrades', 'collisions', 'spawnimmediately' },
 	spawnpoint_onfoot = { 'position', 'rotation', 'interior', 'health', 'skin', 'jetpack' },
 	trigger = { 'vehicletrigger', 'foottrigger', 'actiona', 'arga', 'actionb', 'argb', 'actionc', 'argc', 'actiond', 'argd', 'nexttrigger' },
 	trigger_vehicle = { 'template', 'vehicletoaffect', 'change', 'sethealth', 'teleport', 'tpretainrotation', 'tpretainvelocity' },
@@ -282,7 +282,6 @@ end
 
 function RaceElementMap:getAll(name, type)
 	local result = {}
-	iprint(name, type)
 	-- Block out specific stuff
 	if name == "object" then 
 		return {} 

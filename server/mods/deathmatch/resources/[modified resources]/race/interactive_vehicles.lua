@@ -81,9 +81,11 @@ function spawnInteractiveVehicle(stats)
 	setElementData(veh, "raceiv.taken", false)
 	setElementData(veh, "raceiv.interactable", true)
 
-	setElementData(veh, "raceiv.unclaimedcollidewithvehicles", stats.unclaimedcollidewithvehicles == 'true')
-	setElementData(veh, "raceiv.unclaimedcollidewithplayers", stats.unclaimedcollidewithplayers == 'true')
-	setElementData(veh, "raceiv.claimedcollisions", stats.claimedcollisions == 'true')
+	setElementData(veh, "raceiv.collisions", stats.collisions)
+	setElementData(veh, "raceiv.collide", stats.collisions == "always")
+	-- setElementData(veh, "raceiv.unclaimedcollidewithvehicles", stats.unclaimedcollidewithvehicles == 'true')
+	-- setElementData(veh, "raceiv.unclaimedcollidewithplayers", stats.unclaimedcollidewithplayers == 'true')
+	-- setElementData(veh, "raceiv.claimedcollisions", stats.claimedcollisions == 'true')
 
 	g_IVSpawns[veh] = stats
 	return veh
@@ -126,14 +128,20 @@ setTimer(function()
 		local x1, y1, z1 = unpack(data.position)
 		local x2, y2, z2 = getElementPosition(vehicle)
 		local distance = getDistanceBetweenPoints3D (x1, y1, z1, x2, y2, z2)
-		if ((distance > data.maxmovedistance or isVehicleBlown(vehicle)) and not getElementData(vehicle, "raceiv.taken")) then
-			-- Car is pushed too far outside of its spawn area or destroyed.
-			local respawnTime = data.respawntime
-			if (respawnTime >= 0) then
-				table.insert(g_IVRespawnTimers, setTimer(spawnInteractiveVehicle, respawnTime, 1, data))
+		if (distance > data.maxmovedistance or isVehicleBlown(vehicle)) then
+			if (not getElementData(vehicle, "raceiv.taken")) then
+				-- Car is pushed too far outside of its spawn area or destroyed.
+				local respawnTime = data.respawntime
+				if (respawnTime >= 0) then
+					table.insert(g_IVRespawnTimers, setTimer(spawnInteractiveVehicle, respawnTime, 1, data))
+				end
+				setElementData(vehicle, "raceiv.taken", true)
 			end
-			setElementData(vehicle, "raceiv.taken", true)
 		end
+		if (distance > data.maxmovedistance and getElementData(vehicle, "raceiv.collisions") == "upon drive away") then
+			setElementData(vehicle, "raceiv.collide", true)
+			setElementData(vehicle, "raceiv.collisions", nil)
+		end 
 		if (not getVehicleController(vehicle)) then
 			if (getElementData(vehicle, "raceiv.taken")) then
 				-- Driver died or left the game without calling OnVehicleExit.
@@ -144,7 +152,7 @@ setTimer(function()
 			end
 		end
 	end
-end, 500, 0)
+end, 15, 0)
 
 addEventHandler("onPlayerVehicleExit", root, function(theVehicle, seat, jacked)
 	markInteractiveVehicleForDespawn(theVehicle)

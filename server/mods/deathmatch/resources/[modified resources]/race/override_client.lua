@@ -42,6 +42,12 @@ addEventHandler('onClientVehicleStartEnter', g_Root,
 	end
 )
 
+addEventHandler('onClientVehicleEnter', g_Root, 
+	function(player, seat, door)
+		OverrideClient.updateVars( source )
+	end
+)
+
 addEventHandler('onClientMapStarting', g_Root,
 	function(mapInfo)
 		for i, v in pairs(getElementsByType("vehicle")) do
@@ -73,13 +79,16 @@ function OverrideClient.updateVars( element )
 			setElementCollisionsEnabled ( g_Vehicle, collideworld )
 		end
 	else
+		local i = getElementData(element, "raceiv.interactable") 
 		-- 1.0.2
 		-- Collide others
 		local collideothers = isCollideOthers ( element )
 		local otherVehicles = getElementsByType( "vehicle" )
-		for _,other in ipairs( otherVehicles ) do
-			local docollide = collideothers and isCollideOthers ( other )
-			setElementCollidableWith ( element, other, docollide )
+		if (not i) then
+			for _,other in ipairs( otherVehicles ) do
+				local docollide = collideothers and isCollideOthers ( other )
+				setElementCollidableWith ( element, other, docollide )
+			end
 		end
 		-- Collide world
 		local collideworld = isCollideWorld ( element )
@@ -87,8 +96,7 @@ function OverrideClient.updateVars( element )
 		-- LotsOfS: Code to handle interactive cars, primarily for foot races, though the cars can be used for normal races as well
 		if (alpha == 120) then 
 			return 
-		end -- Ignore if respawn effect
-		-- First off, we need to handle the players too, not just their vehicles
+		end -- Don't do anything if respawn effect (120 alpha)
 		local otherPlayers = getElementsByType( "player" )
 		local ghostModeOff = false
 		local allowOnFoot = false
@@ -97,162 +105,124 @@ function OverrideClient.updateVars( element )
 			allowOnFoot = g_MapOptions.allowonfoot or false
 		end
 
-		if (getElementData(element, "raceiv.interactable")) then
-			local ugv = getElementData(element, "raceiv.unclaimedcollidewithvehicles")
-			local ugp = getElementData(element, "raceiv.unclaimedcollidewithplayers")
-			local cg = getElementData(element, "raceiv.claimedcollisions")
+		if (i) then
+			-- All interactable vehicles need to have their stuff set.
+			local c = getElementData(element, "raceiv.collide") 
 			local t = getElementData(element, "raceiv.taken")
 			local o = getElementData(element, "raceiv.owner")
-			if getElementData(element, "raceiv.blocked") then o = nil end
 			local vo = getVehicleController(element)
-			if (t and (o or vo)) then
-				-- someone's car
-				if (vo and o ~= vo) then
-					o = vo
-				end
-				if (o == g_Me) then
-					if (cg) then
-						setElementAlpha (element, 255)
-					else
-						setElementAlpha (element, 180)
-					end
-				else
-					setElementAlpha (element, (cg and ghostModeOff) and 255 or 180)
-				end
+			if getElementData(element, "raceiv.blocked") then o = nil end
+			if (vo and o ~= vo) then o = vo end
+
+			if (not c) then -- This car has no cols
+				setElementAlpha(element, 180) 
+				-- Set collisions
 				for _,other in ipairs( otherPlayers ) do
-					if (other == o) then
-						setElementCollidableWith ( element, other, cg )	
-					else
-						setElementCollidableWith ( element, other, ghostModeOff )	
-					end
+					setElementCollidableWith( element, other, false )
 				end
 				for _,other in ipairs( otherVehicles ) do
-					local ugv2 = getElementData(other, "raceiv.unclaimedcollidewithvehicles")
-					local cg2 = getElementData(other, "raceiv.claimedcollisions")
+					setElementCollidableWith( element, other, false )
+				end
+			elseif (o) then -- This car has cols and an owner
+				setElementAlpha (element, o == g_Me and 255 or ghostModeOff and 255 or 180)
+				for _,other in ipairs( otherPlayers ) do
+					setElementCollidableWith( element, other, other == o or ghostModeOff )
+				end
+				for _,other in ipairs( otherVehicles ) do
+					local c2 = getElementData(other, "raceiv.collide") 
 					local t2 = getElementData(other, "raceiv.taken")
 					local o2 = getElementData(other, "raceiv.owner")
-					if getElementData(other, "raceiv.blocked") then o2 = nil end
+					local i2 = getElementData(other, "raceiv.interactable")
 					local vo2 = getVehicleController(other)
-					if ((t2 and o2 == o) or (not t2 and o2 == o)) then
-						-- enable collisions with their own vehicles
-						setElementCollidableWith(element, other, cg and cg2)
+					if getElementData(other, "raceiv.blocked") then o2 = nil end
+					if (vo2 and o2 ~= vo2) then o2 = vo2 end
+					if (not i2) then
+						setElementCollidableWith( element, other, o2 == o or isCollideOthers ( other ))
+					elseif (not c2) then
+						setElementCollidableWith( element, other, false )
+					elseif (o2) then
+						setElementCollidableWith( element, other, o2 == o or ghostModeOff )
 					elseif (t2) then
-						-- enable cols with other players based on ghost mode setting
-						setElementCollidableWith ( element, other, cg2 and ghostModeOff )	
-					elseif (not t2 and getElementData(other, "raceiv.interactable")) then
-						-- disable cols with parked cars
-						setElementCollidableWith ( element, other, ugv2 )
-					else	
-						-- non interactive vehicles
-						setElementCollidableWith ( element, other, isCollideOthers ( other ) )	
+						setElementCollidableWith( element, other, ghostModeOff )
+					else
+						setElementCollidableWith( element, other, true )
 					end
 				end
-			elseif (t and not o) then
-				-- a car pushed out of its spawn area or shared car
-				setElementAlpha (element, ghostModeOff and 255 or 180)
+			elseif (t) then -- This car is claimed, but has no owner
+				setElementAlpha(element, ghostModeOff and 255 or 180) 
+				-- Set collisions
 				for _,other in ipairs( otherPlayers ) do
-					setElementCollidableWith ( element, other, ghostModeOff )	
+					setElementCollidableWith( element, other, ghostModeOff )
 				end
 				for _,other in ipairs( otherVehicles ) do
-					local ugv2 = getElementData(other, "raceiv.unclaimedcollidewithvehicles")
-					local cg2 = getElementData(other, "raceiv.claimedcollisions")
-					local t2 = getElementData(other, "raceiv.taken")
-					local o2 = getElementData(other, "raceiv.owner")
-					if getElementData(other, "raceiv.blocked") then o2 = nil end
-					local vo2 = getVehicleController(other)
-					if (t2) then
-						-- enable cols with other players based on ghost mode setting
-						setElementCollidableWith ( element, other, cg2 and ghostModeOff )	
-					elseif (not t2 and getElementData(other, "raceiv.interactable")) then
-						-- disable cols with parked cars
-						setElementCollidableWith ( element, other, ugv2 )
-					else	
-						-- non interactive vehicles
-						setElementCollidableWith ( element, other, isCollideOthers ( other ) )	
-					end
+					local c2 = getElementData(other, "raceiv.collide") 
+					setElementCollidableWith( element, other, c2 and ghostModeOff )
 				end
-			elseif (not t) then
-				-- parked cars
-				if (ugv) then
-					setElementAlpha (element, 255)
-				else
-					setElementAlpha (element, 180)
-				end
+			else -- This car is parked and not claimed
+				setElementAlpha(element, 255) 
+				-- Set collisions
 				for _,other in ipairs( otherPlayers ) do
-					setElementCollidableWith ( element, other, ugp )	
+					setElementCollidableWith( element, other, true )
 				end
 				for _,other in ipairs( otherVehicles ) do
-					setElementCollidableWith ( element, other, ugv )	
+					local c2 = getElementData(other, "raceiv.collide") 
+					setElementCollidableWith( element, other, c2 )
 				end
 			end
 		elseif (getElementData(element, "raceiv.owner")) then
 			-- This is the main starter vehicle and it needs to be interacted with as well
 			local o = getElementData(element, "raceiv.owner")
-			if (allowOnFoot) then
-				if (o == g_Me) then
-					setElementAlpha (element, 255)
-				end
-			end
+			if (allowOnFoot) then setElementAlpha (element, o == g_Me and 255 or ghostModeOff and 255 or 180) end
 			for _,other in ipairs( otherPlayers ) do
-				if (other == o) then
-					setElementCollidableWith ( element, other, true )	
-				else
-					setElementCollidableWith ( element, other, ghostModeOff )	
-				end
-			end
+				setElementCollidableWith( element, other, other == o or ghostModeOff )
+			end	
 			for _,other in ipairs( otherVehicles ) do
-				local ugv2 = getElementData(other, "raceiv.unclaimedcollidewithvehicles")
-				local cg2 = getElementData(other, "raceiv.claimedcollisions")
+				local c2 = getElementData(other, "raceiv.collide") 
 				local t2 = getElementData(other, "raceiv.taken")
 				local o2 = getElementData(other, "raceiv.owner")
-				if getElementData(other, "raceiv.blocked") then o2 = nil end
+				local i2 = getElementData(other, "raceiv.interactable")
 				local vo2 = getVehicleController(other)
-				if ((t2 and o2 == o) or (not t2 and o2 == o)) then
-					-- enable collisions with their own vehicles
-					setElementCollidableWith(element, other, cg2)
+				if getElementData(other, "raceiv.blocked") then o2 = nil end
+				if (vo2 and o2 ~= vo2) then o2 = vo2 end
+				if (not i2) then
+					setElementCollidableWith( element, other, o2 == o or isCollideOthers ( other ))
+				elseif (not c2) then
+					setElementCollidableWith( element, other, false )
+				elseif (o2) then
+					setElementCollidableWith( element, other, o2 == o or ghostModeOff )
 				elseif (t2) then
-					-- enable cols with other players based on ghost mode setting
-					setElementCollidableWith ( element, other, cg2 and ghostModeOff )	
-				elseif (not t2 and getElementData(other, "raceiv.interactable")) then
-					-- disable cols with parked cars
-					setElementCollidableWith ( element, other, ugv2 )
-				else	
-					-- non interactive vehicles
-					setElementCollidableWith ( element, other, isCollideOthers ( other ) )	
+					setElementCollidableWith( element, other, ghostModeOff )
+				else
+					setElementCollidableWith( element, other, true )
 				end
 			end
 		elseif (getElementType(element) == "player") then
-			-- Lastly, take care of players themselves
+			-- This is the main starter vehicle and it needs to be interacted with as well
 			local o = element
-			if (allowOnFoot) then
-				if (o == g_Me) then
-					setElementAlpha (element, 255)
-				end
-			end
+			if (allowOnFoot) then setElementAlpha (element, o == g_Me and 255 or ghostModeOff and 255 or 180) end
 			for _,other in ipairs( otherPlayers ) do
 				if (other ~= o) then
-					setElementCollidableWith ( element, other, ghostModeOff )	
+					setElementCollidableWith( element, other, ghostModeOff )
 				end
-			end
+			end	
 			for _,other in ipairs( otherVehicles ) do
-				local ugp2 = getElementData(other, "raceiv.unclaimedcollidewithplayers")
-				local cg2 = getElementData(other, "raceiv.claimedcollisions")
+				local c2 = getElementData(other, "raceiv.collide") 
 				local t2 = getElementData(other, "raceiv.taken")
 				local o2 = getElementData(other, "raceiv.owner")
-				if getElementData(other, "raceiv.blocked") then o2 = nil end
+				local i2 = getElementData(other, "raceiv.interactable")
 				local vo2 = getVehicleController(other)
-				if ((t2 and o2 == o) or (not t2 and o2 == o)) then
-					-- enable collisions with their own vehicles
-					setElementCollidableWith(element, other, cg2)
+				if getElementData(other, "raceiv.blocked") then o2 = nil end
+				if (vo2 and o2 ~= vo2) then o2 = vo2 end
+				if (not i2) then
+					setElementCollidableWith( element, other, isCollideOthers ( other ))
+				elseif (not c2) then
+					setElementCollidableWith( element, other, false )
+				elseif (o2) then
+					setElementCollidableWith( element, other, o2 == o or ghostModeOff )
 				elseif (t2) then
-					-- enable cols with other players based on ghost mode setting
-					setElementCollidableWith ( element, other, cg2 and ghostModeOff )	
-				elseif (not t2 and getElementData(other, "raceiv.interactable")) then
-					-- disable cols with parked cars
-					setElementCollidableWith ( element, other, ugp2 )
-				else	
-					-- non interactive vehicles
-					setElementCollidableWith ( element, other, isCollideOthers ( other ) )	
+					setElementCollidableWith( element, other, ghostModeOff )
+				else
+					setElementCollidableWith( element, other, true )
 				end
 			end
 		end
