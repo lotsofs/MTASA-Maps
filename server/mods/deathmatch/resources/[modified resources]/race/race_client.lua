@@ -715,7 +715,6 @@ function setRankDisplay( rank )
 end
 addCommandHandler("rank", function(command,rank) setRankDisplay(tonumber(rank)) end)
 
-
 addEventHandler('onClientElementDataChange', g_Root,
 	function(dataName)
 		if dataName == 'race.finished' then
@@ -846,6 +845,15 @@ function getWatchedPlayer()
 	return g_Me
 end
 -------------------------------------------------------------------------------
+
+function checkIfInsideCheckpoint()
+	if (not g_CurrentCheckpoint) then return end
+	if (isElementWithinColShape(source, g_Checkpoints[g_CurrentCheckpoint].colshape)) then
+		checkpointReached(source)
+	end
+end
+addEventHandler ( "onClientPlayerVehicleExit", g_Me, checkIfInsideCheckpoint )
+addEventHandler ( "onClientPlayerVehicleEnter", g_Me, checkIfInsideCheckpoint )
 
 function checkpointReached(elem)
 	outputDebug( 'CP', 'checkpointReached'
