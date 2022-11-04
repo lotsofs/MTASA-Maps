@@ -160,6 +160,7 @@ function cacheMapOptions(map)
 	g_MapOptions.hunterminigun				= map.hunterminigun == 'true'
 	g_MapOptions.rustlermachinegun			= map.rustlermachinegun ~= 'false' -- Backwards compatibility. Always true in old race maps.
 	g_MapOptions.fistfights					= map.fistfights == 'true'
+	g_MapOptions.movementglitches			= map.movementglitches	== 'true'
 	g_MapOptions.allowonfoot				= map.allowonfoot == 'true'
 	g_MapOptions.falloffbike	 			= map.falloffbike == 'true'
 	g_MapOptions.spectatevehiclespersist	= map.spectatevehiclespersist == 'true'
@@ -260,6 +261,7 @@ function loadMap(res)
 	g_SavedMapSettings.hunterminigun			= map.hunterminigun
 	g_SavedMapSettings.rustlermachinegun		= map.rustlermachinegun
 	g_SavedMapSettings.fistfights				= map.fistfights
+	g_SavedMapSettings.movementglitches			= map.movementglitches
 	g_SavedMapSettings.allowonfoot				= map.allowonfoot
 	g_SavedMapSettings.falloffbike				= map.falloffbike
 	g_SavedMapSettings.spectatevehiclespersist 	= map.spectatevehiclespersist
@@ -477,7 +479,7 @@ function joinHandlerBoth(player)
         if g_MapOptions.skins == 'cj' then
             spawnPlayer(player, x + 4, y, z, 0, 0, (spawnpoint.interior or 0))
             
-            local clothes = { [16] = math.random(12, 13), [17] = 7 }    -- 16=Hats(12:helmet 13:moto) 17=Extra(7:garageleg)
+			local clothes = { [16] = math.random(12, 13), [17] = 7 }    -- 16=Hats(12:helmet 13:moto) 17=Extra(7:garageleg)
             for vehicles,vehicleclothes in pairs(g_VehicleClothes) do
                 if table.find(vehicles, spawnpoint.vehicle) then
                     for type,index in pairs(vehicleclothes) do
@@ -485,6 +487,9 @@ function joinHandlerBoth(player)
                     end
                 end
             end
+			if (g_MapOptions.allowonfoot) then
+				clothes = { [0] = math.random(1, 2), [2] = math.random(11,15), [3] = math.random(10,18) }
+			end
             local texture, model
             for type,index in pairs(clothes) do
                 texture, model = getClothesByTypeIndex(type, index)
@@ -508,6 +513,12 @@ function joinHandlerBoth(player)
         setPedStat(player, 160, 1000)
         setPedStat(player, 229, 1000)
         setPedStat(player, 230, 1000)
+		setGlitchEnabled("quickreload", g_MapOptions.movementglitches)
+		setGlitchEnabled("fastmove", g_MapOptions.movementglitches)
+		setGlitchEnabled("fastfire", g_MapOptions.movementglitches)
+		setGlitchEnabled("crouchbug", g_MapOptions.movementglitches)
+		setGlitchEnabled("fastsprint", g_MapOptions.movementglitches)
+		setGlitchEnabled("quickstand", g_MapOptions.movementglitches)
         
         if spawnpoint.vehicle then
             setRandomSeedForMap('vehiclecolors')

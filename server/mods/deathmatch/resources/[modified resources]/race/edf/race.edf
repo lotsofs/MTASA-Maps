@@ -13,6 +13,7 @@
 	<setting name="hunterminigun" friendlyname="Hunter minigun enable" type="selection:true,false" description="Whether players are allowed to use the Hunter's minigun" default="false" required="false"/>
 	<setting name="rustlermachinegun" friendlyname="Rustler machinegun enable" type="selection:true,false" description="Whether players are allowed to use the Rustler's machine guns" default="true" required="false"/>
 	<setting name="fistfights" friendlyname="Fist fighting enable" type="selection:true,false" description="Whether players are allowed to attack other players with their fists" default="false" required="false"/>
+	<setting name="movementglitches" friendlyname="Enable Movement Glitches" type="selection:true,false" description="Whether players are allowed to use on-foot glitches such as sliding and fast sprinting" default="false" required="false"/>
 
 	<element name="spawnpoint" friendlyname="Spawnpoint" icon="edf/spawnpoint.png" shortcut="model">
 		<data name="position" type="coord3d" default="0,0,0" />

@@ -94,7 +94,7 @@ addEventHandler('onClientResourceStart', g_ResRoot,
 		-- set update handlers
 		g_PickupStartTick = getTickCount()
 		addEventHandler('onClientRender', g_Root, updateBars)
-		g_WaterCheckTimer = setTimer(checkWater, 1000, 0)
+		g_WaterCheckTimer = setTimer(checkWater, 1, 0)
 		
 		-- load pickup models and textures
 		for name,id in pairs(g_ModelForPickupType) do
@@ -623,17 +623,17 @@ function updateVehicleWeapons()
 		end
 		toggleControl('vehicle_secondary_fire', weapons)
 	else
-		toggleControl('fire', g_MapOptions.fistfights)
+		toggleControl('fire', g_MapOptions.fistfights or isElementInWater(source))
 		toggleControl('action', g_MapOptions.fistfights) -- You can fire while aiming with this button, and it's not used for anything
 	end
 end
 
 addEventHandler('onClientPlayerWeaponSwitch', g_Root,
 	function(prev, new)
-		if (source ~= localPlayer) then return end
+		if (source ~= g_Me) then return end
 		-- Attack is still possible by pressing enter/exit while aiming with a melee weapon. Disable aiming for fist weapons.
 		toggleControl('aim_weapon', g_MapOptions.fistfights or (new ~= 0 and new ~= 1 and new ~= 10 and new ~= 11)) -- melee weapons & gifts
-		toggleControl('fire', g_MapOptions.fistfights or new == 11 or new == 12) -- goggles, parachute, detonator
+		toggleControl('fire', g_MapOptions.fistfights or new == 11 or new == 12 or isElementInWater(source)) -- goggles, parachute, detonator
 	end
 )
 
@@ -735,7 +735,9 @@ addEventHandler('onClientElementDataChange', g_Root,
 function checkWater()
     if g_Vehicle then
 		if (g_MapOptions.allowonfoot) then
-			return --LotsOfS: Allow swimming and tossing cars in the drink
+			local weapon = getPedWeaponSlot(g_Me)
+			toggleControl('fire', g_MapOptions.fistfights or isElementInWater(g_Me) or weapon == 11 or weapon == 12) -- goggles, parachute, detonator
+			return --LotsOfS: Allow swimming and tossing cars in the drink if allowonfoot is true
 		end
         if not g_WaterCraftIDs[getElementModel(g_Vehicle)] then
             local x, y, z = getElementPosition(g_Me)
