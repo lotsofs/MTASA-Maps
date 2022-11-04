@@ -8,7 +8,7 @@
     <spawnpoint id="spawnpoint (RC Tiger) (127)" interior="0" vehicle="532" alpha="255" onfootspawn="spawnpoint_onfoot (1)" posX="20" posY="-176.3" posZ="-9.7" rotX="0" rotY="0" rotZ="0" trigger="trigger (1)"></spawnpoint>
     <object id="object (CE_farmland02) (1)" breakable="true" interior="0" collisions="true" alpha="255" model="13050" doublesided="true" scale="1" dimension="0" posX="-2.2002" posY="-25.90039" posZ="-11.4" rotX="0" rotY="0" rotZ="247.709"></object>
     <trigger_foot id="trigger_foot (1)" tpretainrotation="false" teleport="true" interior="0" multitemplate="" forceoutofvehicle="true" changeskin="false" tpretainvelocity="false" sethealth="false" posX="-20.90039" posY="0.2998" posZ="-10.2" rotX="0" rotY="0" rotZ="0" template="spawnpoint_onfoot (1)"></trigger_foot>
-    <trigger id="trigger (1)" interior="0" arga="true" actiona="None" foottrigger="trigger_foot (1)" posX="-21.7998" posY="-4.2998" posZ="-10.4" rotX="0" rotY="0" rotZ="0"></trigger>
+    <trigger id="trigger (1)" interior="0" arga="true" actiona="None" foottrigger="trigger_foot (1)" posX="-21.7998" posY="-4.2998" posZ="-10.4" rotX="0" rotY="0" rotZ="0" trigger_foot="trigger_foot (1)"></trigger>
     <spawnpoint id="spawnpoint (Combine Harvester) (1)" interior="0" vehicle="532" alpha="255" onfootspawn="spawnpoint_onfoot (1)" posX="9.5" posY="-175.2" posZ="-9.8" rotX="0" rotY="0" rotZ="0" trigger="trigger (1)"></spawnpoint>
     <spawnpoint id="spawnpoint (Combine Harvester) (2)" interior="0" vehicle="532" alpha="255" onfootspawn="spawnpoint_onfoot (1)" posX="17" posY="-162.5" posZ="-9.9" rotX="0" rotY="0" rotZ="0" trigger="trigger (1)"></spawnpoint>
     <spawnpoint id="spawnpoint (Combine Harvester) (3)" interior="0" vehicle="532" alpha="255" onfootspawn="spawnpoint_onfoot (1)" posX="6.6" posY="-162.10001" posZ="-10.1" rotX="0" rotY="0" rotZ="0" trigger="trigger (1)"></spawnpoint>
@@ -135,6 +135,6 @@
     <spawnpoint id="spawnpoint (Combine Harvester) (124)" interior="0" vehicle="532" alpha="255" onfootspawn="spawnpoint_onfoot (1)" posX="-53.1" posY="-19.2" posZ="-8.2" rotX="0" rotY="0" rotZ="0" trigger="trigger (1)"></spawnpoint>
     <spawnpoint id="spawnpoint (Combine Harvester) (125)" interior="0" vehicle="532" alpha="255" onfootspawn="spawnpoint_onfoot (1)" posX="-44.6" posY="-9.7" posZ="-8.2" rotX="0" rotY="0" rotZ="0" trigger="trigger (1)"></spawnpoint>
     <spawnpoint id="spawnpoint (Combine Harvester) (126)" interior="0" vehicle="532" alpha="255" onfootspawn="spawnpoint_onfoot (1)" posX="-34.1" posY="-2.1" posZ="-8.2" rotX="0" rotY="0" rotZ="0" trigger="trigger (1)"></spawnpoint>
-    <spawnpoint id="spawnpoint (Combine Harvester) (127)" interior="0" vehicle="532" alpha="255" onfootspawn="spawnpoint_onfoot (1)" posX="-32.6" posY="-14.8" posZ="-8.2" rotX="0" rotY="0" rotZ="0" trigger="trigger (1)"></spawnpoint>
+    <spawnpoint id="spawnpoint (Combine Harvester) (127)" interior="0" vehicle="532" alpha="255" onfootspawn="spawnpoint_onfoot (1)" posX="-32.59961" posY="-14.7998" posZ="-8.2" rotX="0" rotY="0" rotZ="0" trigger="trigger (1)"></spawnpoint>
     <spawnpoint id="spawnpoint (Combine Harvester) (128)" interior="0" vehicle="532" alpha="255" onfootspawn="spawnpoint_onfoot (1)" posX="-16.8" posY="-12.4" posZ="-9" rotX="0" rotY="0" rotZ="0" trigger="trigger (1)"></spawnpoint>
 </map>
