@@ -5,7 +5,7 @@
 	pickup = { 'position', 'interior', 'type', 'vehicle', 'paintjob', 'upgrades', 'respawn', 'trigger', 'vehicletoaffect' },
 	vehicle_interactive = { 'model', 'position', 'interior', 'rotation', 'health', 'colora', 'colorb', 'colorc', 'colord', 'paintjob', 'plate', 'sirens', 'locked', 'cantenter', 'shared', 'maxmovedistance', 'despawntime', 'respawntime', 'upgrades', 'collisions', 'spawnimmediately' },
 	spawnpoint_onfoot = { 'position', 'rotation', 'interior', 'health', 'skin', 'jetpack' },
-	trigger = { 'vehicletrigger', 'foottrigger', 'actiona', 'arga', 'actionb', 'argb', 'actionc', 'argc', 'actiond', 'argd', 'nexttrigger' },
+	trigger = { 'trigger_vehicle', 'trigger_foot', 'actiona', 'arga', 'actionb', 'argb', 'actionc', 'argc', 'actiond', 'argd', 'nexttrigger' },
 	trigger_vehicle = { 'template', 'vehicletoaffect', 'change', 'sethealth', 'teleport', 'tpretainrotation', 'tpretainvelocity' },
 	trigger_foot = { 'template', 'multitemplate', 'changeskin', 'sethealth', 'teleport', 'tpretainrotation', 'tpretainvelocity', 'forceoutofvehicle' },
 }
@@ -14,7 +14,7 @@ g_MapSettingNames = table.create(
 	 'hairstyles', 'glasses', 'glasseschance', 'shirts', 'trousers', 'shoes',
 	 'ghostmode', 'vehicleweapons', 'autopimp', 'firewater', 'classicchangez', 'hunterminigun', 
 	 'allowonfoot', 'falloffbike', 'spectatevehiclespersist', 'timeafterfirstfinish', 'countdownduration',
-	 'rustlermachinegun', 'fistfights'},
+	 'rustlermachinegun', 'fistfights', 'movementglitches'},
 	true
 )
 

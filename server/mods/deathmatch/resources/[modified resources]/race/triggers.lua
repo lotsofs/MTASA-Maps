@@ -95,11 +95,11 @@ function callTrigger(theTrigger, player)
 	if (not trig) then
 		return
 	end
-	if (trig.vehicletrigger) then
-		callVehicleTrigger(trig.vehicletrigger, player)
+	if (trig.trigger_vehicle) then
+		callVehicleTrigger(trig.trigger_vehicle, player)
 	end
-	if (trig.foottrigger) then
-		callFootTrigger(trig.foottrigger, player)
+	if (trig.trigger_foot) then
+		callFootTrigger(trig.trigger_foot, player)
 	end
 
 	if (trig.actiona == "None") then
@@ -195,15 +195,19 @@ function callVehicleTrigger(theTrigger, player)
 		end
 	elseif (vTrig.vehicletoaffect == "duplicate") then
 		vehicle = spawnInteractiveVehicle(template)
-		setElementData(vehicle, "raceiv.taken", true)
-		setElementData(vehicle, "raceiv.owner", player)
+		if (template.shared ~= "true") then
+			setElementData(vehicle, "raceiv.taken", true)
+			setElementData(vehicle, "raceiv.owner", player)
+		end
 		performVehicleTrigger(vTrig, vehicle, player, template, true)
 	elseif (vTrig.vehicletoaffect == "new") then
 		if (getPedOccupiedVehicle(player) or vTrig.change == 'true') then
 			-- dont spawn vehicle if we need to change but there's nothing to change.
 			local vehicle = spawnInteractiveVehicle(template)
-			setElementData(vehicle, "raceiv.taken", true)
-			setElementData(vehicle, "raceiv.owner", player)
+			if (template.shared ~= "true") then
+				setElementData(vehicle, "raceiv.taken", true)
+				setElementData(vehicle, "raceiv.owner", player)
+			end
 			performVehicleTrigger(vTrig, vehicle, player, template, true)
 		end
 	end
@@ -317,7 +321,7 @@ function performVehicleTrigger(trigger, vehicle, player, template, new)
 		setElementHealth(vehicle, template.health)
 	end
 
-	if (trigger.vehicletoaffect == "new") then
+	if (trigger.vehicletoaffect == "new" or trigger.vehicletoaffect == "duplicate" and g_Vehicles[player] == getPedOccupiedVehicle(player)) then
 		-- put us inside the new car. 
 		setElementData(vehicle, "raceiv.blocked", false)
 		warpPedIntoVehicle(player, vehicle)

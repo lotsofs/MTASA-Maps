@@ -48,7 +48,7 @@ function spawnInteractiveVehicle(stats)
 	if (stats.paintjob and stats.paintjob ~= "false" and stats.paintjob ~= "nil") then setVehiclePaintjob(veh, tonumber(stats.paintjob)) end
 	setVehicleSirensOn(veh, stats.sirens == 'true')
 	setVehicleLocked(veh, stats.locked == 'true')
-	setElementHealth(veh, stats.health)
+	setElementHealth(veh, stats.health or 1000)
 	setElementInterior(veh, stats.interior)
 	if (stats.cantenter == 'true') then
 		setElementData(veh, "raceiv.blocked", true)
@@ -125,6 +125,11 @@ end, 5000, 0)
 
 setTimer(function()
 	for vehicle, data in pairs(g_IVSpawns) do
+		if (not isElement(vehicle)) then
+			-- vehicle has been forcefully destroyed
+			g_IVSpawns[vehicle] = nil
+			return
+		end
 		local x1, y1, z1 = unpack(data.position)
 		local x2, y2, z2 = getElementPosition(vehicle)
 		local distance = getDistanceBetweenPoints3D (x1, y1, z1, x2, y2, z2)

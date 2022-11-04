@@ -548,7 +548,7 @@ function restorePlayer(id, player, bNoFade, bDontFix)
 	local rx, ry, rz = unpack(bkp.rotation)
 	local x, y, z = unpack(bkp.position)
 	
-	spawnPlayer(player, x, y, z, rz or 0, getElementModel(player), bkp.interior)
+	spawnPlayer(player, x, y, z, rz or 0, getElementModel(player), bkp.interior or 0)
 	if (bkp.skin) then
 		setElementModel(player, bkp.skin)
 	end
@@ -587,7 +587,7 @@ function restorePlayer(id, player, bNoFade, bDontFix)
 	if vehicle and not bkp.onfoot then
         setElementVelocity( vehicle, 0,0,0 )
         setElementAngularVelocity( vehicle, 0,0,0 )
-		setElementInterior(vehicle, bkp.interior)
+		setElementInterior(vehicle, bkp.interior or 0)
 		setElementPosition(vehicle, x, y, z)
 		setElementRotation(vehicle, rx or 0, ry or 0, rz or 0)
 		if not bDontFix then
