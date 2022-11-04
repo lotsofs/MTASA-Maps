@@ -861,10 +861,10 @@ function checkpointReached(elem)
 	if (Spectate.active or getElementHealth(g_Me) == 0 or isVehicleBlown(g_Vehicle)) then
 		return
 	end
-	if (elem == g_Vehicle and not getVehicleController(g_Vehicle)) then
-		return
-	end
-	if elem ~= g_Vehicle and elem ~= g_Me then
+	-- if (elem == g_Vehicle and not getVehicleController(g_Vehicle)) then
+	-- 	return
+	-- end
+	if elem ~= g_Vehicle and elem ~= g_Me and elem ~= getPedOccupiedVehicle(g_Me) then
 		return
 	end
 	local vehicle = getPedOccupiedVehicle(g_Me)
@@ -878,6 +878,9 @@ function checkpointReached(elem)
 		return
 	end
 	if (g_Checkpoints[g_CurrentCheckpoint].restrictions == 'invehicle' and not getPedOccupiedVehicle(g_Me)) then
+		return
+	end
+	if (g_Checkpoints[g_CurrentCheckpoint].restrictions == 'mainvehicleonly' and elem ~= g_Vehicle) then
 		return
 	end
 

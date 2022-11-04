@@ -42,7 +42,7 @@
 		<data name="extrasize" type="integer" default="4" description="How much bigger the checkpoint's hitbox is compared to its visual appearance" required="false"/>
 		<data name="hideradarblip" type="selection:true,false" default="false" description="Whether to hide this CP's blip on the radar" required="false"/>
 		<data name="trigger" type="element:trigger" description="Trigger this action upon hitting the checkpoint" required="false" default="" />
-		<data name="restrictions" type="selection:none,onfoot,invehicle" default="none" description="Restrictions to impose on this checkpoint" />
+		<data name="restrictions" type="selection:none,onfoot,invehicle,mainvehicleonly" default="none" description="Restrictions to impose on this checkpoint" />
 		<marker color="!color!" type="!type!" size="!size!"/>
 	</element>
 	<element name="racepickup" friendlyname="Race pickup" icon="edf/pickup.png">
