@@ -1,4 +1,3 @@
-g_Root = getRootElement()
 
 addEvent"onMapStarting"
 
@@ -13,29 +12,29 @@ function GhostPlayback:create( map )
 		recording = {},
 		hasGhost = false,
 		ped = nil,
-		vehicle = nil,
-		blip = nil
+		vehicle = nil
+		-- blip = nil
 	}
 	return setmetatable( result, self )
 end
 
 function GhostPlayback:destroy()
 	if self.hasGhost then
-		triggerClientEvent( "clearMapGhost", g_Root )
+		triggerClientEvent( "clearMapGhost", root )
 	end
-	if isElement( self.ped ) then
-		destroyElement( self.ped )
-		outputDebug( "Destroyed ped." )
-	end
-	if isElement( self.vehicle ) then
-		destroyElement( self.vehicle )
-		outputDebug( "Destroyed vehicle." )
-	end
-	if isElement( self.blip ) then
-		destroyElement( self.blip )
-		outputDebug( "Destroyed blip." )
-	end
-	self = nil
+	self.ped = nil
+	self.vehicle = nil
+end
+
+function GhostPlayback:deleteGhost()
+	local mapName = getResourceName( self.map )
+	-- if fileExists( "ghosts/" .. mapName .. ".ghost" ) then
+	-- 	fileDelete( "ghosts/" .. mapName .. ".ghost" )
+	-- 	self:destroy()
+	-- 	playback = nil
+	-- 	return true
+	-- end
+	return false
 end
 
 function GhostPlayback:loadGhost(which)
@@ -44,14 +43,14 @@ function GhostPlayback:loadGhost(which)
 	end
 
 	-- Load the old ghost if there is one
-	-- LotsOfS: We must now first retrieve the name of the ghost
+	-- We must first retrieve the name of this ghost
 	local mapName = getResourceName( self.map )
 	local ghostResourceName
 
-	local toc = xmlLoadFile( "ghosts/" .. mapName .. ".toc")
-	
+	local toc = xmlLoadFile("ghosts/" .. mapName .. ".toc")
+
 	if not toc then
-		-- Find old file (backwards compatibility)
+		-- Look for old file (backwards compatibility)
 		local fileName = "ghosts/" .. mapName .. ".ghost"
 		local old = xmlLoadFile( fileName )
 		if not old then
@@ -60,7 +59,7 @@ function GhostPlayback:loadGhost(which)
 			local old = xmlLoadFile( fileName )
 		end
 		if old then
-			-- Found old file, write it to the table of contents
+			-- Found old file, write it to a new table of contents
 			xmlUnloadFile( old )
 			ghostResourceName = fileName
 
@@ -85,7 +84,7 @@ function GhostPlayback:loadGhost(which)
 	if not ghostResourceName then return end
 
 	local ghost = xmlLoadFile( ghostResourceName )
-	
+
 	if ghost then
 		-- Retrieve info about the ghost maker
 		local info = xmlFindChild( ghost, "i", 0 )
@@ -93,16 +92,17 @@ function GhostPlayback:loadGhost(which)
 			self.racer = xmlNodeGetAttribute( info, "r" ) or "unknown"
 			self.bestTime = tonumber( xmlNodeGetAttribute( info, "t" ) ) or math.huge
 		end
-		
+
 		-- Construct a table
 		local index = 0
 		local node = xmlFindChild( ghost, "n", index )
+		self.recording = {}
 		while (node) do
 			if type( node ) ~= "userdata" then
 				outputDebugString( "race_ghost - playback_server.lua: Invalid node data while loading ghost: " .. type( node ) .. ":" .. tostring( node ), 1 )
 				break
 			end
-			
+
 			local attributes = xmlNodeGetAttributes( node )
 			local row = {}
 			for k, v in pairs( attributes ) do
@@ -113,33 +113,71 @@ function GhostPlayback:loadGhost(which)
 			node = xmlFindChild( ghost, "n", index )
 		end
 		xmlUnloadFile( ghost )
-			
+
+		-- Validate
+		local bValidForMap = isBesttimeValidForMap( self.map, self.bestTime )
+		local bValidForRecording = isBesttimeValidForRecording( self.recording, self.bestTime )
+		if not bValidForMap or not bValidForRecording then
+
+			-- TODO: Erase the time from the toc
+
+			-- -- Use backup file if it exists
+			-- local backup = xmlLoadFile( "ghosts/" .. mapName .. ".backup" )
+			-- if backup then
+			-- 	xmlUnloadFile( backup )
+			-- 	copyFile( "ghosts/" .. mapName .. ".ghost", "ghosts/" .. mapName .. ".invalid" )
+			-- 	copyFile( "ghosts/" .. mapName .. ".backup", "ghosts/" .. mapName .. ".ghost" )
+			-- 	fileDelete( "ghosts/" .. mapName .. ".backup" )
+			-- 	outputDebugServer( "Trying backup as found an invalid ghost file", mapName, nil, " (Besttime not valid for recording. Error: " .. getRecordingBesttimeError( self.recording, self.bestTime ) .. ")" )
+			-- 	self.recording = {}
+			-- 	return self:loadGhost()
+			-- end
+			if not bValidForMap then
+				outputDebugServer( "Found an invalid ghost file", mapName, nil, " (Besttime not valid for map. Error: " .. getMapBesttimeError( self.map, self.bestTime ) .. ")" )
+			end
+			if not bValidForRecording then
+				outputDebugServer( "Found an invalid ghost file", mapName, nil, " (Besttime not valid for recording. Error: " .. getRecordingBesttimeError( self.recording, self.bestTime ) .. ")" )
+			end
+			return false
+		end
+
 		-- Create the ped & vehicle
 		for _, v in ipairs( self.recording ) do
 			if v.ty == "st" then
-				self.ped = createPed( v.p, v.x, v.y, v.z )
-				self.vehicle = createVehicle( v.m, v.x, v.y, v.z, v.rX, v.rY, v.rZ )
-				self.blip = createBlipAttachedTo( self.ped, 0, 1, 150, 150, 150, 50 )
-				setElementParent( self.blip, self.ped )
-				warpPedIntoVehicle( self.ped, self.vehicle )
-				
-				outputDebugString( "Found a valid ghost file for " .. mapName )
+				-- Check start is near a spawnpoint
+				local bestDist = math.huge
+				for _,spawnpoint in ipairs(getElementsByType("spawnpoint")) do
+					bestDist = math.min( bestDist, getDistanceBetweenPoints3D( v.x, v.y, v.z, getElementPosition(spawnpoint) ) )
+				end
+				if bestDist > 5 then
+					outputDebugServer( "Found an invalid ghost file", mapName, nil, " (Spawn point too far away - " .. bestDist .. ")" )
+					return false
+				end
+				self.ped = { p = v.p, x = v.x, y = v.y, z = v.z }
+				self.vehicle = { m = v.m, x = v.x, y = v.y, z = v.z, rx = v.rX, ry = v.rY, rz = v.rZ }
+				-- self.blip = createBlipAttachedTo( self.ped, 0, 1, 150, 150, 150, 50 )
+				-- setElementParent( self.blip, self.ped )
+				-- warpPedIntoVehicle( self.ped, self.vehicle )
+                -- Disable client to server syncing to fix the ghost car jumping about
+				-- setElementSyncer( self.ped, false )
+				-- setElementSyncer( self.vehicle, false )
+				outputDebugServer( "Found a valid ghost", mapName, nil, " (Besttime dif: " .. getRecordingBesttimeError( self.recording, self.bestTime ) .. ")" )
 				self.hasGhost = true
 				return true
 			end
 		end
-		return true
 	end
+	outputDebugServer( "No ghost file", mapName, nil )
 	return false
 end
 
 function GhostPlayback:sendGhostData( target, playbackID )
 	if self.hasGhost then
-		triggerClientEvent( target or g_Root, "onClientGhostDataReceive", g_Root, self.recording, self.bestTime, self.racer, self.ped, self.vehicle, playbackID )
+		triggerClientEvent( target or root, "onClientGhostDataReceive", root, self.recording, self.bestTime, self.racer, self.ped, self.vehicle, playbackID )
 	end
 end
 
-addEventHandler( "onMapStarting", g_Root,
+addEventHandler( "onMapStarting", root,
 	function()
 		if topPlayback then
 			topPlayback:destroy()
@@ -147,28 +185,31 @@ addEventHandler( "onMapStarting", g_Root,
 		if personalPlayback then
 			personalPlayback:destroy()
 		end
-		
+
 		local mapName = exports.mapmanager:getRunningGamemodeMap()
 		topPlayback = GhostPlayback:create( mapName )
 		topPlayback:loadGhost()
 		topPlayback:sendGhostData()
 		personalPlayback = GhostPlayback:create( mapName )
 		for i, v in pairs(getElementsByType("player")) do
+			-- if (i > 1) then break end
 			vName = removeColorCoding((getPlayerName(v)))
-			personalPlayback:loadGhost("user_" .. vName:gsub('[%p%c%s]', ''))
+			personalPlayback:loadGhost("pb_" .. vName:gsub('[%p%c%s]', ''))
 			personalPlayback:sendGhostData(v, "pb")   
 		end
 	end
 )
 
-function removeColorCoding ( name )
-	return type(name)=='string' and string.gsub ( name, '#%x%x%x%x%x%x', '' ) or name
-end
-
-addEventHandler( "onPlayerJoin", g_Root,
+addEventHandler( "onPlayerJoin", root,
 	function()
+		triggerClientEvent( source, "race_ghost.updateOptions", resourceRoot, g_GameOptions ); -- We need to send server settings first or it's going to throw errors
 		if topPlayback then
 			topPlayback:sendGhostData( source )
+		end
+		if personalPlayback then
+			vName = removeColorCoding((getPlayerName(source)))
+			personalPlayback:loadGhost("pb_" .. vName:gsub('[%p%c%s]', ''))
+			personalPlayback:sendGhostData(source, "pb")   
 		end
 	end
 )

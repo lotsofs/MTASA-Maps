@@ -1,40 +1,31 @@
 addEvent( "onGhostDataReceive", true )
 
-addEventHandler( "onGhostDataReceive", g_Root,
+addEventHandler( "onGhostDataReceive", root,
 	function( recording, bestTime, racer, mapName, top, pb )
-		-- May be inaccurate, if recording is still being sent when map changes
-		--[[local currentMap = exports.mapmanager:getRunningGamemodeMap()
-		local mapName = getResourceName( currentMap )--]]
-		
-		-- Create a backup in case of a cheater run -- LotsOfS: Now that we're storing everything, we no longer need to make dedicated backups
-		-- local ghost = xmlLoadFile( "ghosts/" .. mapName .. ".ghost" )
-		-- if ghost then
-		-- 	local info = xmlFindChild( ghost, "i", 0 )
-		-- 	local currentBestTime = math.huge
-		-- 	if info then
-		-- 		currentBestTime = tonumber( xmlNodeGetAttribute( info, "t" ) ) or math.huge
-		-- 	end
-		
-		-- 	if currentBestTime ~= math.huge and currentBestTime - bestTime >= SUSPECT_CHEATER_LIMIT then -- Cheater?
-		-- 		outputDebug( "Creating a backup file for " .. mapName .. ".backup" )
-		-- 		copyFile( "ghosts/" .. mapName .. ".ghost", "ghosts/" .. mapName .. ".backup" )
-		-- 	end
-		-- 	xmlUnloadFile( ghost )
-		-- end
-		
-		local filename = "ghosts/" .. mapName .. "_" .. racer:gsub('[%p%c%s]', '') .. "_" .. tostring( bestTime ) .. ".ghost"
-		local ghost = xmlCreateFile( filename, "ghost" )
+		if not isBesttimeValidForRecording( recording, bestTime ) then
+			outputDebugServer( "Received an invalid ghost recording", mapName, racer, " (Besttime not valid for recording. Error: " .. getRecordingBesttimeError( recording, bestTime ) .. ")" )
+			return
+		end
+
+		outputDebugServer( "Saving ghost file", mapName, racer, " (Besttime dif: " .. getRecordingBesttimeError( recording, bestTime ) .. ")" )
+
+		local fileName = "ghosts/" .. mapName .. "_" .. racer:gsub('[%p%c%s]', '') .. "_" .. tostring( bestTime ) .. ".ghost"
+		ghost = xmlCreateFile( fileName, "ghost" )
 		if ghost then
 			local info = xmlCreateChild( ghost, "i" )
 			if info then
 				xmlNodeSetAttribute( info, "r", tostring( racer ) )
 				xmlNodeSetAttribute( info, "t", tostring( bestTime ) )
 			end
-		
-			for _, info in ipairs( recording ) do
+
+			for _, info2 in ipairs( recording ) do
 				local node = xmlCreateChild( ghost, "n" )
-				for k, v in pairs( info ) do
-					xmlNodeSetAttribute( node, tostring( k ), tostring( v ) )
+				for k, v in pairs( info2 ) do
+					if type(v) == "number" then
+						xmlNodeSetAttribute( node, tostring( k ), math.floor(v * 10000 + 0.5) / 10000 )
+					else
+						xmlNodeSetAttribute( node, tostring( k ), tostring( v ) )
+					end
 				end
 			end
 			xmlSaveFile( ghost )
@@ -57,16 +48,16 @@ addEventHandler( "onGhostDataReceive", g_Root,
 					topNode = xmlCreateChild( toc, "top" )
 				end
 				if (topNode) then
-					xmlNodeSetAttribute( topNode, "f", tostring( filename ))
+					xmlNodeSetAttribute( topNode, "f", tostring( fileName ))
 				end
 			end
 			if pb then
-				local pbNode = xmlFindChild( toc, "user_" .. racer:gsub('[%p%c%s]', ''), 0 )
+				local pbNode = xmlFindChild( toc, "pb_" .. racer:gsub('[%p%c%s]', ''), 0 )
 				if not pbNode then
-					pbNode = xmlCreateChild( toc, "user_" .. racer:gsub('[%p%c%s]', '') )
+					pbNode = xmlCreateChild( toc, "pb_" .. racer:gsub('[%p%c%s]', '') )
 				end
 				if (pbNode) then
-					xmlNodeSetAttribute( pbNode, "f", tostring( filename ))
+					xmlNodeSetAttribute( pbNode, "f", tostring( fileName ))
 				end
 			end
 			xmlSaveFile(toc)
