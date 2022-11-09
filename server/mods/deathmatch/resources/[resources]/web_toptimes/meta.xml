@@ -1,0 +1,9 @@
+<meta>
+	<info author="MegasXLR" name="Web Toptimes" type="script" version="1.2"/>
+	<script src="server.lua" type="server"/>
+	<export function="getMapToptimesInfo" type="server" http="true"/>
+	<export function="getAllToptimesInfo" type="server" http="true"/>
+	<html src="index.htm" default="true"/>
+	<html src="client.js" raw="true"/>
+	<html src="style.css" raw="true"/>
+</meta>

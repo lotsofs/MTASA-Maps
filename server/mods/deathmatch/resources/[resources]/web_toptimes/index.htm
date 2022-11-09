@@ -1,0 +1,117 @@
+<!-- https://www.w3schools.com/tags/att_input_list.asp -->
+<!-- https://stackoverflow.com/questions/6290442/html-input-type-text-onchange-event-not-working -->
+<!-- https://www.w3schools.com/tags/tag_label.asp -->
+<!-- https://www.w3schools.com/cssref/pr_class_display.asp -->
+<!-- https://stackoverflow.com/questions/7220193/applying-css-style-to-table-cell-when-hovered-over -->
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+	<head>
+		<* = call ( getResourceFromName("ajax"), "start", getResourceName(getThisResource()) ) *>
+		<script src="client.js" type="text/javascript"></script>
+		<link  href="style.css" rel="stylesheet" type="text/css"/>
+	</head>
+	<body onload="updateInfo()">
+		<div id="container" style="display: none;">
+			<input id="mapInput" list="mapList" onchange="getMapInfo();">
+			<datalist id="mapList"></datalist><input type="button" id="clearButton" value="X" onclick="clearInputField();">
+			<br><br>
+			<label id="mapCountLabel"></label>
+			<p>Please select a map from the list or start typing its name</p>
+			<label id="mapAuthorLabel"></label>
+			<br>
+			<label id="totalTopsLabel"></label>
+			<br><br>
+			<table id="mapInfoTable" class="hover">
+			  <tr>
+				<th id="position">Position</th>
+				<!-- <th id="country">Country</th> -->
+				<th id="name">Player Name</th>
+				<th id="time">Toptime</th>
+				<th id="difference">Difference</th>
+				<th id="date">Date</th>
+			  </tr>
+			  <tr>
+				<td id="firstPos"></td>
+				<!-- <td id="firstCountry"></td> -->
+				<td id="firstName"></td>
+				<td id="firstTime"></td>
+				<td id="firstDiff"></td>
+				<td id="firstDate"></td>
+			  </tr>
+			  <tr>
+				<td id="secondPos"></td>
+				<!-- <td id="secondCountry"></td> -->
+				<td id="secondName"></td>
+				<td id="secondTime"></td>
+				<td id="secondDiff"></td>
+				<td id="secondDate"></td>
+			  </tr>
+			  <tr>
+				<td id="thirdPos"></td>
+				<!-- <td id="thirdCountry"></td> -->
+				<td id="thirdName"></td>
+				<td id="thirdTime"></td>
+				<td id="thirdDiff"></td>
+				<td id="thirdDate"></td>
+			  </tr>
+			  <tr>
+				<td id="fourthPos"></td>
+				<!-- <td id="fourthCountry"></td> -->
+				<td id="fourthName"></td>
+				<td id="fourthTime"></td>
+				<td id="fourthDiff"></td>
+				<td id="fourthDate"></td>
+			  </tr>
+			  <tr>
+				<td id="fifthPos"></td>
+				<!-- <td id="fifthCountry"></td> -->
+				<td id="fifthName"></td>
+				<td id="fifthTime"></td>
+				<td id="fifthDiff"></td>
+				<td id="fifthDate"></td>
+			  </tr>
+			  <tr>
+				<td id="sixthPos"></td>
+				<!-- <td id="sixthCountry"></td> -->
+				<td id="sixthName"></td>
+				<td id="sixthTime"></td>
+				<td id="sixthDiff"></td>
+				<td id="sixthDate"></td>
+			  </tr>
+			  <tr>
+				<td id="seventhPos"></td>
+				<!-- <td id="seventhCountry"></td> -->
+				<td id="seventhName"></td>
+				<td id="seventhTime"></td>
+				<td id="seventhDiff"></td>
+				<td id="seventhDate"></td>
+			  </tr>
+			  <tr>
+				<td id="eighthPos"></td>
+				<!-- <td id="eighthCountry"></td> -->
+				<td id="eighthName"></td>
+				<td id="eighthTime"></td>
+				<td id="eighthDiff"></td>
+				<td id="eighthDate"></td>
+			  </tr>
+			  <tr>
+				<td id="ninthPos"></td>
+				<!-- <td id="ninthCountry"></td> -->
+				<td id="ninthName"></td>
+				<td id="ninthTime"></td>
+				<td id="ninthDiff"></td>
+				<td id="ninthDate"></td>
+			  </tr>
+			  <tr>
+				<td id="tenthPos"></td>
+				<!-- <td id="tenthCountry"></td> -->
+				<td id="tenthName"></td>
+				<td id="tenthTime"></td>
+				<td id="tenthDiff"></td>
+				<td id="tenthDate"></td>
+			  </tr>
+			</table>
+		</div>
+	</body>
+</html>
