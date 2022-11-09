@@ -151,7 +151,6 @@ end
 function GhostRecord:saveGhost( rank, time )
 	local newTop = time < globalInfo.bestTime and rank == 1
 	local newPB = time < globalInfo.personalBest
-	iprint(newPB, newTop, globalInfo.bestTime, globalInfo.personalBest, rank)
 	if (not newTop and not newPB) then return end -- Don't store if this isn't a PB or WR
 	if (not newTop and not g_GameOptions.recordpersonalbests) then return end -- Don't store if recording PBs is disabled
 	outputDebug( "Improved ghost time." )

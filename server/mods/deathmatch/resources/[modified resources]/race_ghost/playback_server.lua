@@ -155,12 +155,6 @@ function GhostPlayback:loadGhost(which)
 				end
 				self.ped = { p = v.p, x = v.x, y = v.y, z = v.z }
 				self.vehicle = { m = v.m, x = v.x, y = v.y, z = v.z, rx = v.rX, ry = v.rY, rz = v.rZ }
-				-- self.blip = createBlipAttachedTo( self.ped, 0, 1, 150, 150, 150, 50 )
-				-- setElementParent( self.blip, self.ped )
-				-- warpPedIntoVehicle( self.ped, self.vehicle )
-                -- Disable client to server syncing to fix the ghost car jumping about
-				-- setElementSyncer( self.ped, false )
-				-- setElementSyncer( self.vehicle, false )
 				outputDebugServer( "Found a valid ghost", mapName, nil, " (Besttime dif: " .. getRecordingBesttimeError( self.recording, self.bestTime ) .. ")" )
 				self.hasGhost = true
 				return true

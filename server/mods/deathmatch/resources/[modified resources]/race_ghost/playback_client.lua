@@ -19,14 +19,12 @@ function GhostPlayback:create( recording, ped, vehicle, racer, time, playbackID 
 		playbackID = playbackID
 	}
 
+	-- Move this client side so the server doesn't create unused ghost drivers for every player for every player
 	result.ped = createPed( ped.p, ped.x, ped.y, ped.z )
 	result.vehicle = createVehicle( vehicle.m, vehicle.x, vehicle.y, vehicle.z, vehicle.rX, vehicle.rY, vehicle.rZ )
 	result.blip = createBlipAttachedTo( result.ped, 0, 1, 150, 150, 150, 50 )
 	setElementParent( result.blip, result.ped )
 	warpPedIntoVehicle( result.ped, result.vehicle )
-	-- Disable client to server syncing to fix the ghost car jumping about
-	-- setElementSyncer( self.ped, false )
-	-- setElementSyncer( self.vehicle, false )
 
 	setElementCollisionsEnabled( result.ped, false )
 	setElementCollisionsEnabled( result.vehicle, false )
@@ -223,7 +221,6 @@ end
 
 addEventHandler( "onClientGhostDataReceive", root,
 	function( recording, time, racer, ped, vehicle, playbackID )
-		iprint("Received ", time, racer, playbackID)
 		if not playbackID then playbackID = "top" end
 
 		if not playbacks then playbacks = {} end
