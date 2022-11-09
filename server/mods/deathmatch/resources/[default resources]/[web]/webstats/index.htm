@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+	<head>
+		<meta charset="utf-8">
+
+		<link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
+
+		<title>Statistics</title>
+
+		<*= call(getResourceFromName("ajax"), "start", getResourceName(getThisResource())) *>
+
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.css" integrity="sha384-q9MZ/PQCC1nIFQdrr9yNOFXeSaXjv/yPOJOdBd32aODh8+EM6udfo91a6mRbEDih" crossorigin="anonymous">
+		<script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.bundle.min.js" integrity="sha384-mZ3q69BYmd4GxHp59G3RrsaFdWDxVSoqd7oVYuWRm2qiXrduT63lQtlhdD9lKbm3" crossorigin="anonymous"></script>
+
+		<link rel="stylesheet" href="css.css">
+		<script src="script.js"></script>
+	</head>
+	<body onLoad="init()">
+		<div id="topbar">
+			<select id="chart-type" onchange="updateChart()" onkeyup="updateChart()">
+				<option value="line" selected>Line chart</option>
+				<option value="bar">Bar chart</option>
+				<option value="bar" data-stacked>Stacked bar chart</option>
+				<option value="pie" data-now>Pie chart (now)</option>
+				<option value="doughnut" data-now>Doughnut chart (now)</option>
+				<option value="polarArea" data-now>Polar area chart (now)</option>
+			</select>
+			<input type="button" value="refresh" onclick="updateChart()">
+			<label>
+				<input type="checkbox" id="auto-refresh" value="1">
+				Auto-refresh
+			</label>
+			<input type="button" value="hide datasets" onclick="toggleDatasets()" id="toggleButton">
+		</div>
+
+		<div id="wrapper">
+			<div id="chart-container">
+				<canvas id="chart">Canvas is not supported on this browser.</canvas>
+			</div>
+
+			<div id="datasets">
+				<*
+				local resourceStats = call(resource, "getStatListByResource")
+				for p, q in pairs(resourceStats) do
+					local resname = getResourceInfo(p, "name")
+					if (resname == false) then
+						resname = getResourceName(p)
+					end
+					*>
+					<details<*= p == resource and " open" or "" *>>
+						<summary>
+							<*= resname *>
+						</summary>
+						<* for k, v in pairs(q) do *>
+							<label title="<*= v.description *>">
+								<input type="checkbox" value="<*= k *>" title="<*= v.description *>" onchange="updateChart()">
+								<*= v.name *>
+							</label>
+						<* end *>
+					</details>
+				<* end *>
+			</div>
+		</div>
+	</body>
+</html>

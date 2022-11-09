@@ -1,0 +1,38 @@
+#topbar {
+	background: #555;
+	color: #fff;
+	font-weight: bold;
+	height: 23px;
+	left: 0;
+	padding: 7px;
+	position: absolute;
+	right: 0;
+	top: 0;
+}
+
+body {
+	background: #00789d;
+	font: bold 1em "Trebuchet MS", Arial, sans-serif;
+	padding: 0;
+}
+
+#map {
+	height: 100%;
+	width: 100%;
+}
+
+#popup {
+	background: #555;
+	border: 3px solid #000;
+	color: #fff;
+	padding: 5px;
+	position: relative;
+}
+
+#mainarea {
+	bottom: 0;
+	left: 0;
+	position: absolute;
+	right: 5px;
+	top: 37px;
+}
