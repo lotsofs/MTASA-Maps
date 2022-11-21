@@ -47,7 +47,11 @@ addEventHandler('onGamemodeMapStart', g_Root,
             setPlayerNotReady(player)
         end
         -- tell clients new map is loading
-        clientCall(g_Root, 'notifyLoadingMap', getResourceInfo(mapres, "name") or getResourceName(mapres), g_GameOptions.showauthorname and getResourceInfo( mapres , "author") )
+		clientCall(g_Root, 'notifyLoadingMap', 
+			getResourceInfo(mapres, "name") or getResourceName(mapres), 
+			g_GameOptions.showauthorname and getResourceInfo( mapres , "author"), 
+			g_GameOptions.showmapinfo and getResourceInfo( mapres, "description") 
+		)
 
 		if g_CurrentRaceMode then
 			outputDebugString('Unloading previous map')
@@ -63,6 +67,18 @@ function doLoadMap(mapres)
         -- Select another map on load error
         problemChangingMap()
 		return
+	end
+	if g_GameOptions.showmapinfo then
+		clientCall(g_Root, 'notifyLoadingMapDetails', 
+			g_MapOptions.ghostmode,
+			g_MapOptions.vehicleweapons,
+			g_MapOptions.respawn,
+			g_MapOptions.allowonfoot,
+			g_MapOptions.falloffbike,
+			g_MapOptions.movementglitches,
+			g_MapOptions.spectatevehiclespersist,
+			g_MapOptions.fistfights
+		)
 	end
 	g_CurrentRaceMode = RaceMode.getApplicableMode():create()
 	g_MapInfo.modename  = g_CurrentRaceMode:getName()
@@ -119,14 +135,15 @@ function cacheGameOptions()
 	g_GameOptions.racerespawn			= getBool('race.racerespawn',true)
 	g_GameOptions.joinrandomvote		= getBool('race.joinrandomvote',true)
 	g_GameOptions.showauthorname		= getBool('race.showauthorname',true)
+	g_GameOptions.showmapinfo			= getBool('race.showmapinfo',true)
 	g_GameOptions.ghostmode_map_can_override		= getBool('race.ghostmode_map_can_override',true)
 	g_GameOptions.skins_map_can_override			= getBool('race.skins_map_can_override',true)
 	g_GameOptions.vehicleweapons_map_can_override   = getBool('race.vehicleweapons_map_can_override',true)
 	g_GameOptions.autopimp_map_can_override			= getBool('race.autopimp_map_can_override',true)
 	g_GameOptions.firewater_map_can_override		= getBool('race.firewater_map_can_override',true)
 	g_GameOptions.classicchangez_map_can_override	= getBool('race.classicchangez_map_can_override',true)
-	g_GameOptions.ghostmode_warning_if_map_override			= getBool('race.ghostmode_warning_if_map_override',true)
-	g_GameOptions.vehicleweapons_warning_if_map_override	= getBool('race.vehicleweapons_warning_if_map_override',true)
+	-- g_GameOptions.ghostmode_war/ning_if_map_override			= getBool('race.ghostmode_war/ning_if_map_override',true)
+	-- g_GameOptions.vehicleweapons_war/ning_if_map_override	= getBool('race.vehicleweapons_war/ning_if_map_override',true)
 	g_GameOptions.hunterminigun_map_can_override	= getBool('race.hunterminigun_map_can_override',true)
 	if g_GameOptions.statskey ~= 'name' and g_GameOptions.statskey ~= 'serial' then
 		outputWarning( "statskey is not set to 'name' or 'serial'" )
@@ -177,18 +194,18 @@ function cacheMapOptions(map)
 	-- Set ghostmode from g_GameOptions if not defined in the map, or map override not allowed
 	if not map.ghostmode or not g_GameOptions.ghostmode_map_can_override then
 		g_MapOptions.ghostmode = g_GameOptions.ghostmode
-	elseif g_GameOptions.ghostmode_warning_if_map_override and g_MapOptions.ghostmode ~= g_GameOptions.ghostmode then
-		if g_MapOptions.ghostmode then
-			outputChatBox( 'Notice: Collisions are turned off for this map' )
-		else
-			outputChatBox( 'Notice: Collisions are turned on for this map' )
-		end
+	-- elseif g_GameOptions.ghostmode_war/ning_if_map_override and g_MapOptions.ghostmode ~= g_GameOptions.ghostmode then
+	-- 	if g_MapOptions.ghostmode then
+	-- 		outputChatBox( 'No/tice: Collisions are turned off for this map' )
+	-- 	else
+	-- 		outputChatBox( 'No/tice: Collisions are turned on for this map' )
+	-- 	end
 	end
 	
 
-	if g_MapOptions.allowonfoot then
-		outputChatBox( 'Notice: Vehicle entering/exiting is turned on for this map' )
-	end
+	-- if g_MapOptions.allowonfoot then
+	-- 	outputChatBox( 'No/tice: Vehicle entering/exiting is turned on for this map' )
+	-- end
 
 	-- Set skins from g_GameOptions if not defined in the map, or map override not allowed
 	if not map.skins or not g_GameOptions.skins_map_can_override then
@@ -198,12 +215,12 @@ function cacheMapOptions(map)
 	-- Set vehicleweapons from g_GameOptions if not defined in the map, or map override not allowed
 	if not map.vehicleweapons or not g_GameOptions.vehicleweapons_map_can_override then
 		g_MapOptions.vehicleweapons = g_GameOptions.vehicleweapons
-	elseif g_GameOptions.vehicleweapons_warning_if_map_override and g_MapOptions.vehicleweapons ~= g_GameOptions.vehicleweapons then
-		if g_MapOptions.vehicleweapons then
-			outputChatBox( 'Notice: Vehicle weapons are turned on for this map' )
-		else
-			outputChatBox( 'Notice: Vehicle weapons are turned off for this map' )
-		end
+	-- elseif g_GameOptions.vehicleweapons_war/ning_if_map_override and g_MapOptions.vehicleweapons ~= g_GameOptions.vehicleweapons then
+	-- 	if g_MapOptions.vehicleweapons then
+	-- 		outputChatBox( 'No/tice: Vehicle weapons are turned on for this map' )
+	-- 	else
+	-- 		outputChatBox( 'No/tice: Vehicle weapons are turned off for this map' )
+	-- 	end
 	end
 
 	-- Set autopimp from g_GameOptions if not defined in the map, or map override not allowed
@@ -273,9 +290,9 @@ function loadMap(res)
 	-- If no checkpoints and ghostmode no defined in the map, turn ghostmode off for this map
 	if #map:getAll('checkpoint') == 0 and not map.ghostmode and g_MapOptions.ghostmode then
 		g_MapOptions.ghostmode = false
-		if g_GameOptions.ghostmode_warning_if_map_override then
-			outputChatBox( 'Notice: Collisions are turned on for this map' )
-		end
+		-- if g_GameOptions.ghostmode_war/ning_if_map_override then
+		-- 	outputChatBox( 'Notice: Collisions are turned on for this map' )
+		-- end
 	end
 
 	-- Check race can start ok

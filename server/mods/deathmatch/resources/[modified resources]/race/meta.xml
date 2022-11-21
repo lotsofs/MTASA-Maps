@@ -168,6 +168,8 @@
         
         <setting name="*showauthorname" value="true" friendlyname="Show author name" group="Display" accept="false,true" desc="Set to true to show the map author name on the travelling screen." />
         
+        <setting name="*showmapinfo" value="true" friendlyname="Show map info" group="Display" accept="false,true" desc="Set to true to show information about the map on the travelling screen." />
+
         <setting name="*ghostmode_map_can_override" friendlyname="Ghost mode map override" group="Gameplay" value="true" accept="false,true" desc="Set to true to allow the map to override this setting" />
         <setting name="*skins_map_can_override" friendlyname="Driver skin map override" group="Graphics" value="true" accept="false,true" desc="Set to true to allow the map to override this setting" />
         <setting name="*vehicleweapons_map_can_override" friendlyname="Vehicle weapons map override" group="Gameplay" value="true" accept="false,true" desc="Set to true to allow the map to override this setting" />
@@ -176,8 +178,8 @@
         <setting name="*classicchangez_map_can_override" friendlyname="Classic change Z map override" group="_Advanced" value="true" accept="false,true" desc="Set to true to allow the map to override this setting" />
         <setting name="*hunterminigun_map_can_override" friendlyname="Hunter minigun map override" group="Gameplay" value="true" accept="false,true" desc="Set to true to allow the map to override this setting" />
         
-        <setting name="*ghostmode_warning_if_map_override" friendlyname="Ghost mode override warning" group="Gameplay" value="false" accept="false,true" desc="Set to true to issue a warning to players in the chatbox, if the map overrides this setting" />
-        <setting name="*vehicleweapons_warning_if_map_override" friendlyname="Vehicle weapons override warning" group="Gameplay" value="false" accept="false,true" desc="Set to true to issue a warning to players in the chatbox, if the map overrides this setting" />
+        <!-- <setting name="*ghostmode_war/ning_if_map_override" friendlyname="Ghost mode override warning" group="Gameplay" value="false" accept="false,true" desc="Set to true to issue a warning to players in the chatbox, if the map overrides this setting" /> -->
+        <!-- <setting name="*vehicleweapons_war/ning_if_map_override" friendlyname="Vehicle weapons override warning" group="Gameplay" value="false" accept="false,true" desc="Set to true to issue a warning to players in the chatbox, if the map overrides this setting" /> -->
     </settings>
     
     

@@ -27,11 +27,11 @@ addEventHandler('onClientResourceStart', g_ResRoot,
 			FileDisplay = dxText:create('File:', 4, screenHeight - 10, false, 'default-bold', 1.2, 'left'),
 			FileDisplayName = dxText:create('FILENAME', 45, screenHeight - 10, false, 'default-bold', 1.2, 'left'),
 			
-			mapdisplay = dxText:create('Map:', 4, screenHeight - 30, false, 'default-bold', 1.2, 'left'),
-			mapdisplayName = dxText:create('MAPNAME', 45, screenHeight - 30, false, 'default-bold', 1.2, 'left'),
+			authordisplay = dxText:create('By:', 4, screenHeight - 30, false, 'default-bold', 1.2, 'left'),
+            authordisplayName = dxText:create('AUTHOR', 45, screenHeight - 30, false, 'default-bold', 1.2, 'left'),
 
-			authordisplay = dxText:create('By:', 4, screenHeight - 50, false, 'default-bold', 1.2, 'left'),
-            authordisplayName = dxText:create('AUTHOR', 45, screenHeight - 50, false, 'default-bold', 1.2, 'left'),
+			mapdisplay = dxText:create('Map:', 4, screenHeight - 50, false, 'default-bold', 1.2, 'left'),
+			mapdisplayName = dxText:create('MAPNAME', 45, screenHeight - 50, false, 'default-bold', 1.2, 'left'),
 			
 			nextdisplay = dxText:create('Next:', 4, screenHeight - 70, false, 'default-bold', 1.2, 'left'),
 			nextdisplayName = dxText:create('NEXT', 45, screenHeight - 70, false, 'default-bold', 1.2, 'left'),
@@ -189,24 +189,50 @@ TravelScreen.startTime = 0
 
 function TravelScreen.init()
     local screenWidth, screenHeight = guiGetScreenSize()
-    g_GUI['travelImage']   = guiCreateStaticImage(screenWidth/2-256, screenHeight/2-90, 512, 256, 'img/travelling.png', false, nil)
-	g_dxGUI['travelText1'] = dxText:create('Travelling to', screenWidth/2, screenHeight/2-130, false, 'bankgothic', 0.60, 'center' )
-	g_dxGUI['travelText2'] = dxText:create('', screenWidth/2, screenHeight/2-100, false, 'bankgothic', 0.70, 'center' )
-	g_dxGUI['travelText3'] = dxText:create('', screenWidth/2, screenHeight/2-70, false, 'bankgothic', 0.70, 'center' )
+    g_GUI['travelImage']   = guiCreateStaticImage(screenWidth/2-256, screenHeight/2+90, 512, 256, 'img/travelling.png', false, nil)
+	g_dxGUI['travelText1'] = dxText:create('Travelling to', screenWidth/2, screenHeight/2-200, false, 'bankgothic', 0.60, 'center' )
+	g_dxGUI['travelText2'] = dxText:create('', screenWidth/2, screenHeight/2-170, false, 'bankgothic', 0.70, 'center' )
+	g_dxGUI['travelText3'] = dxText:create('', screenWidth/2, screenHeight/2-140, false, 'bankgothic', 0.70, 'center' )
+	g_dxGUI['travelText5'] = dxText:create('', screenWidth*0.3, screenHeight/2-60, false, 'bankgothic', 0.70, 'left' )
+	g_dxGUI['travelText6'] = dxText:create('', screenWidth*0.52, screenHeight/2-60, false, 'bankgothic', 0.70, 'left' )
     g_dxGUI['travelText1']:color(240,240,240)
+
+	g_dxGUI['travelText4'] = dxText:create('', screenWidth/2, screenHeight/2-140, false, 'bankgothic', 0.70, 'center' )
+	g_dxGUI['travelText4']:boundingBox(0.2,0.1,0.8,1,true)
+	g_dxGUI['travelText4']:wordWrap(true)
     hideGUIComponents('travelImage', 'travelText1', 'travelText2', 'travelText3')
 end
 
-function TravelScreen.show( mapName, authorName )
+function TravelScreen.show( mapName, authorName, description )
     TravelScreen.startTime = getTickCount()
     g_dxGUI['travelText2']:text(mapName) 
 	g_dxGUI['travelText3']:text(authorName and "Author: " .. authorName or "")
-    showGUIComponents('travelImage', 'travelText1', 'travelText2', 'travelText3')
+	g_dxGUI['travelText4']:text(description or "TEXT")
+    showGUIComponents('travelImage', 'travelText1', 'travelText2', 'travelText3', 'travelText4')
+	guiMoveToBack(g_GUI['travelImage'])
+end
+
+function TravelScreen.showDetails( ghostmode, vehicleweapons, respawn, allowonfoot, falloffbike, movementglitches, spectatevehiclespersist, fistfights )
+	local text5 = ""
+	text5 = text5 .. (ghostmode and "◼ Ghost mode\n" or "◻ Ghost mode\n")
+	text5 = text5 .. (vehicleweapons and "◼ Vehicle weapons\n" or "◻ Vehicle weapons\n")
+	text5 = text5 .. (respawn == 'timelimit' and "◼ Respawn\n" or "◻ Respawn\n")
+	text5 = text5 .. (allowonfoot and "◼ Exiting vehicles\n" or "◻ exiting vehicles\n")
+	local text6 = ""
+	if (allowonfoot) then
+		text6 = text6 .. (falloffbike and "◼ Fall off bikes\n" or "◻ Fall off bikes\n")
+		text6 = text6 .. (movementglitches and "◼ Super sprint\n" or "◻ Super sprint\n")
+		text6 = text6 .. (fistfights and "◼ Fighting\n" or "◻ Fighting\n")
+		text6 = text6 .. " \n"
+	end
+	g_dxGUI['travelText5']:text(text5)
+	g_dxGUI['travelText6']:text(text6)
+    showGUIComponents('travelText5', 'travelText6')
 	guiMoveToBack(g_GUI['travelImage'])
 end
 
 function TravelScreen.hide()
-    hideGUIComponents('travelImage', 'travelText1', 'travelText2', 'travelText3')
+    hideGUIComponents('travelImage', 'travelText1', 'travelText2', 'travelText3', 'travelText4', 'travelText5', 'travelText6')
 end
 
 function TravelScreen.getTicksRemaining()
@@ -216,11 +242,16 @@ end
 
 
 -- Called from server
-function notifyLoadingMap( mapName, authorName )
+function notifyLoadingMap( mapName, authorName, description )
     fadeCamera( false, 0.0, 0,0,0 ) -- fadeout, instant, black
-    TravelScreen.show( mapName, authorName )
+    TravelScreen.show( mapName, authorName, description )
 end
 
+-- Called from server
+function notifyLoadingMapDetails( ghostmode, vehicleweapons, respawn, allowonfoot, falloffbike, movementglitches, spectatevehiclespersist, fistfights ) 
+    fadeCamera( false, 0.0, 0,0,0 ) -- fadeout, instant, black
+    TravelScreen.showDetails( ghostmode, vehicleweapons, respawn, allowonfoot, falloffbike, movementglitches, spectatevehiclespersist, fistfights )
+end
 
 -- Called from server
 function initRace(vehicle, checkpoints, objects, pickups, mapoptions, ranked, duration, gameoptions, mapinfo, playerInfo)
@@ -257,7 +288,20 @@ function initRace(vehicle, checkpoints, objects, pickups, mapoptions, ranked, du
 	setCloudsEnabled(g_GameOptions.cloudsenable)
 	setBlurLevel(g_GameOptions.blurlevel)
 	setPedCanBeKnockedOffBike(g_Me, g_MapOptions.allowonfoot and g_MapOptions.falloffbike)
+
 	g_dxGUI.mapdisplay:visible(g_GameOptions.showmapname)
+	g_dxGUI.mapdisplayName:visible(g_GameOptions.showmapname)
+	g_dxGUI.authordisplay:visible(g_GameOptions.showmapname)
+	g_dxGUI.authordisplayName:visible(g_GameOptions.showmapname)
+	g_dxGUI.nextdisplay:visible(g_GameOptions.showmapname)
+	g_dxGUI.nextdisplayName:visible(g_GameOptions.showmapname)
+	g_dxGUI.FPSDisplay:visible(g_GameOptions.showmapname)
+	g_dxGUI.FPSDisplayCount:visible(g_GameOptions.showmapname)
+	g_dxGUI.PingDisplay:visible(g_GameOptions.showmapname)
+	g_dxGUI.PingDisplayCount:visible(g_GameOptions.showmapname)
+	g_dxGUI.FileDisplay:visible(g_GameOptions.showmapname)
+	g_dxGUI.FileDisplayName:visible(g_GameOptions.showmapname)
+
 	if engineSetAsynchronousLoading then
 		engineSetAsynchronousLoading( g_GameOptions.asyncloading )
 	end
@@ -331,9 +375,9 @@ function initRace(vehicle, checkpoints, objects, pickups, mapoptions, ranked, du
 
     -- Min 3 seconds on travel message
     local delay = TravelScreen.getTicksRemaining()
-    delay = math.max(50,delay)
-    setTimer(TravelScreen.hide,delay,1)
-
+    delay = math.max(3000,delay)
+    setTimer(TravelScreen.hide,delay+1000,1)
+	
     -- Delay readyness until after title
     TitleScreen.bringForwardFadeout(3000)
     -- delay = 0
@@ -359,7 +403,20 @@ function updateOptions ( gameoptions, mapoptions )
 	updateVehicleWeapons()
 	setCloudsEnabled(g_GameOptions.cloudsenable)
 	setBlurLevel(g_GameOptions.blurlevel)
+
 	g_dxGUI.mapdisplay:visible(g_GameOptions.showmapname)
+	g_dxGUI.mapdisplayName:visible(g_GameOptions.showmapname)
+	g_dxGUI.authordisplay:visible(g_GameOptions.showmapname)
+	g_dxGUI.authordisplayName:visible(g_GameOptions.showmapname)
+	g_dxGUI.nextdisplay:visible(g_GameOptions.showmapname)
+	g_dxGUI.nextdisplayName:visible(g_GameOptions.showmapname)
+	g_dxGUI.FPSDisplay:visible(g_GameOptions.showmapname)
+	g_dxGUI.FPSDisplayCount:visible(g_GameOptions.showmapname)
+	g_dxGUI.PingDisplay:visible(g_GameOptions.showmapname)
+	g_dxGUI.PingDisplayCount:visible(g_GameOptions.showmapname)
+	g_dxGUI.FileDisplay:visible(g_GameOptions.showmapname)
+	g_dxGUI.FileDisplayName:visible(g_GameOptions.showmapname)
+
 	if engineSetAsynchronousLoading then
 		engineSetAsynchronousLoading( g_GameOptions.asyncloading )
 	end
@@ -625,6 +682,7 @@ function updateVehicleWeapons()
 	else
 		toggleControl('fire', g_MapOptions.fistfights or isElementInWater(source))
 		toggleControl('action', g_MapOptions.fistfights) -- You can fire while aiming with this button, and it's not used for anything
+		toggleControl('aim_weapon', g_MapOptions.fistfights) -- You can fire by pressing enter/exit while aiming too, so just disable aiming
 	end
 end
 
@@ -848,7 +906,7 @@ end
 
 function checkIfInsideCheckpoint()
 	if (not g_CurrentCheckpoint) then return end
-	if (isElementWithinColShape(source, g_Checkpoints[g_CurrentCheckpoint].colshape)) then
+	if (g_Checkpoints[g_CurrentCheckpoint].colshape and isElementWithinColShape(source, g_Checkpoints[g_CurrentCheckpoint].colshape)) then
 		checkpointReached(source)
 	end
 end
