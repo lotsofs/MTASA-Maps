@@ -89,6 +89,7 @@ addEventHandler ( "onClientResourceStart",getResourceRootElement(getThisResource
 
 addEventHandler( "onClientPlayerSpawn", localPlayer,
 	function()
+		if (getElementData(localPlayer, "race.checkpoint") and getElementData(localPlayer, "race.checkpoint") > 1) then return end
 		setTimer(function()
 			r = 20
 			angle = math.random(133, 308) --random angle between 0 and 359.99
