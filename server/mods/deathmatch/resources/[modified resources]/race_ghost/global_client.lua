@@ -4,11 +4,13 @@ _DEGUG = false
 
 keyNames = 	{ 	"vehicle_fire", "vehicle_secondary_fire", "vehicle_left", "vehicle_right", "steer_forward", "steer_back", "accelerate",
 				"brake_reverse", "horn", "sub_mission", "handbrake", "vehicle_look_left", "vehicle_look_right", "special_control_left",
-				"special_control_right", "special_control_down", "special_control_up"
+				"special_control_right", "special_control_down", "special_control_up", 
+				"aim_weapon", "forwards", "backwards", "left", "right", "jump", "sprint", "crouch", "walk", "enter_exit"
 			}
 analogNames = {
 	vehicle_left = true, vehicle_right = true, steer_forward = true, steer_back = true, accelerate = true, brake_reverse = true,
-	special_control_left = true, special_control_right = true, special_control_up = true, special_control_down = true
+	special_control_left = true, special_control_right = true, special_control_up = true, special_control_down = true,
+	forwards = true, backwards = true, left = true, right = true
 }
 globalInfo = {
 	bestTime = math.huge,

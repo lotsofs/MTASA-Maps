@@ -104,10 +104,10 @@ end
 --
 ---------------------------------------------------------------------------
 
--- Check the best time is after the last recorded item time, but not too far afterwards
+-- Check the best time roughly matches the last recorded item time
 function isBesttimeValidForRecording( recording, bestTime )
 	local terror = getRecordingBesttimeError( recording, bestTime )
-	return terror >= 0 and terror < 2000
+	return terror > -2000 and terror < 2000
 end
 
 function getRecordingBesttimeError( recording, bestTime )

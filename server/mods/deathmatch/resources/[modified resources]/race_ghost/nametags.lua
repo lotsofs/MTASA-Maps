@@ -31,7 +31,7 @@ function GhostPlayback:drawGhostNametag( info )
 		return
 	end
 	local x,y,z = getCameraMatrix()
-	local px,py,pz = getElementPosition ( self.vehicle )
+	local px,py,pz = getElementPosition ( self.ped )
 	local pdistance = getDistanceBetweenPoints3D ( x,y,z,px,py,pz )
 	if pdistance <= NAMETAG_DISTANCE then
 		--Get screenposition

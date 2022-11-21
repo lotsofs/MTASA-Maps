@@ -21,16 +21,20 @@ function GhostPlayback:create( recording, ped, vehicle, racer, time, playbackID 
 
 	-- Move this client side so the server doesn't create unused ghost drivers for every player for every player
 	result.ped = createPed( ped.p, ped.x, ped.y, ped.z )
-	result.vehicle = createVehicle( vehicle.m, vehicle.x, vehicle.y, vehicle.z, vehicle.rX, vehicle.rY, vehicle.rZ )
-	result.blip = createBlipAttachedTo( result.ped, 0, 1, 150, 150, 150, 50 )
-	setElementParent( result.blip, result.ped )
-	warpPedIntoVehicle( result.ped, result.vehicle )
-
+	result.vehicle = createVehicle( vehicle.m or 400, vehicle.x, vehicle.y, vehicle.z, vehicle.rx, vehicle.ry, vehicle.rz )
 	setElementCollisionsEnabled( result.ped, false )
 	setElementCollisionsEnabled( result.vehicle, false )
+	if (vehicle.m) then
+		warpPedIntoVehicle( result.ped, result.vehicle )
+		setElementAlpha( result.vehicle, g_GameOptions.alphavalue or 100 )
+	else
+		setElementAlpha( result.vehicle, 187 )
+	end
+	result.blip = createBlipAttachedTo( result.ped, 0, 1, 150, 150, 150, 50 )
+	setElementParent( result.blip, result.ped )
+	
 	setElementFrozen( result.vehicle, true )
 	setElementAlpha( result.ped, g_GameOptions.alphavalue or 100 )
-	setElementAlpha( result.vehicle, g_GameOptions.alphavalue or 100 )
 	setHeliBladeCollisionsEnabled( result.vehicle, false)
 	return setmetatable( result, self )
 end
@@ -56,7 +60,7 @@ end
 
 function GhostPlayback:createNametag()
 	self.nametagInfo = {
-		name = "Ghost (" .. removeColorCoding(self.racer) .. ")",
+		name = "Ghost - " .. self.playbackID .. " (" .. removeColorCoding(self.racer) .. ")",
 		time = msToTimeStr( self.time )
 	}
 	self.drawGhostNametag_HANDLER = function() self:drawGhostNametag( self.nametagInfo ) end
@@ -96,6 +100,16 @@ function GhostPlayback:checkForCountdownEnd()
 		-- 		end
 		-- 	end
 		-- end
+	else
+		local frozen = isElementFrozen( localPlayer ) or getElementData(localPlayer, "race rank") == ""
+		if not frozen then
+			outputDebug( "Playback started." )
+			setElementFrozen( self.vehicle, false )
+			if self.checkForCountdownEnd_HANDLER then removeEventHandler( "onClientRender", root, self.checkForCountdownEnd_HANDLER ) self.checkForCountdownEnd_HANDLER = nil end
+			self:startPlayback()
+			setElementAlpha( self.vehicle, 187 )
+			setElementAlpha( self.ped, g_GameOptions.alphavalue )
+		end
 	end
 end
 
@@ -137,7 +151,7 @@ end
 
 function GhostPlayback:updateGhostState()
 	if not self.currentIndex then
-		Interpolator.Reset(self.playbackID)
+		Interpolator.Reset(self)
 	end
 	self.currentIndex = self.currentIndex or 1
 	local ticks = getTickCount() - self.startTick
@@ -163,9 +177,9 @@ function GhostPlayback:updateGhostState()
 				vX = math.lerp( vX, other.vX, alpha )
 				vY = math.lerp( vY, other.vY, alpha )
 				vZ = math.lerp( vZ, other.vZ, alpha )
-				Interpolator.SetPoints( self.playbackID, self.recording[self.currentIndex], other )
+				Interpolator.SetPoints( self, self.recording[self.currentIndex], other )
 			else
-				Interpolator.Reset(self.playbackID)
+				Interpolator.Reset(self)
 			end
 			local lg = self.recording[self.currentIndex].lg
 			local health = self.recording[self.currentIndex].h or 1000
@@ -174,11 +188,18 @@ function GhostPlayback:updateGhostState()
 				self.lastData.vZ = vZ
 				self.lastData.time = getTickCount()
 			end
-			ErrorCompensator.handleNewPosition( self.playbackID, self.vehicle, x, y, z, period )
-			setElementRotation( self.vehicle, rX, rY, rZ )
-			setElementVelocity( self.vehicle, vX, vY, vZ )
-			setElementHealth( self.vehicle, health )
-			if lg then setVehicleLandingGearDown( self.vehicle, lg ) end
+			if (getPedOccupiedVehicle(self.ped)) then
+				ErrorCompensator.handleNewPosition( self, self.vehicle, x, y, z, period )
+				setElementRotation( self.vehicle, rX, rY, rZ )
+				setElementVelocity( self.vehicle, vX, vY, vZ )
+				setElementHealth( self.vehicle, health )
+				if lg then setVehicleLandingGearDown( self.vehicle, lg ) end
+			else
+				-- ErrorCompensator.handleNewPosition( self, self.ped, x, y, z, period )
+				setElementRotation( self.ped, rX, rY, rZ )
+				setElementVelocity( self.ped, vX, vY, vZ )
+				setElementHealth( self.ped, health )
+			end
 		elseif theType == "k" then
 			local control = self.recording[self.currentIndex].k
 			local state = self.recording[self.currentIndex].s
@@ -198,7 +219,15 @@ function GhostPlayback:updateGhostState()
 			end
 		elseif theType == "v" then
 			local vehicleType = self.recording[self.currentIndex].m
-			setElementModel( self.vehicle, vehicleType )
+			if vehicleType then
+				setElementAlpha( self.vehicle, g_GameOptions.alphavalue )
+				setElementModel( self.vehicle, vehicleType )
+				if (not getPedOccupiedVehicle(self.ped)) then
+					warpPedIntoVehicle( self.ped, self.vehicle )
+				end
+			else
+				removePedFromVehicle( self.ped )
+			end
 		end
 		self.currentIndex = self.currentIndex + 1
 
@@ -207,8 +236,10 @@ function GhostPlayback:updateGhostState()
 			self.fadeoutStart = getTickCount()
 		end
 	end
-	ErrorCompensator.updatePosition( self.playbackID, self.vehicle )
-	Interpolator.Update( self.playbackID, ticks, self.vehicle )
+	if (getPedOccupiedVehicle(self.ped)) then
+		ErrorCompensator.updatePosition( self, self.vehicle )
+	end
+	Interpolator.Update( self, ticks, self.vehicle )
 end
 
 function GhostPlayback:resetKeyStates()
@@ -273,30 +304,39 @@ end
 Interpolator = {}
 last = {}
 
-function Interpolator.Reset(playbackID)
-	if not last[playbackID] then last[playbackID] = { } end
-	last[playbackID].from = nil
-	last[playbackID].to = nil
+function Interpolator.Reset(playback)
+	if not last[playback] then last[playback] = { } end
+	last[playback].from = nil
+	last[playback].to = nil
 end
 
-function Interpolator.SetPoints( playbackID, from, to )
-	if not last[playbackID] then last[playbackID] = { } end
-	last[playbackID].from = from
-	last[playbackID].to = to
+function Interpolator.SetPoints( playback, from, to )
+	-- if not getPedOccupiedVehicle(playback.ped) then return end
+	if not last[playback] then last[playback] = { } end
+	last[playback].from = from
+	last[playback].to = to
 end
 
-function Interpolator.Update( playbackID, ticks, vehicle )
-	if not last[playbackID] then last[playbackID] = { } end
-	if not last[playbackID].from or not last[playbackID].to then return end
+function Interpolator.Update( playback, ticks, vehicle )
+	if not last[playback] then last[playback] = { } end
+	if not last[playback].from or not last[playback].to then return end
 	local z,rX,rY,rZ
-	local alpha = math.unlerp( last[playbackID].from.t, last[playbackID].to.t, ticks )
-	z = math.lerp( last[playbackID].from.z, last[playbackID].to.z, alpha )
-	rX = math.lerprot( last[playbackID].from.rX, last[playbackID].to.rX, alpha )
-	rY = math.lerprot( last[playbackID].from.rY, last[playbackID].to.rY, alpha )
-	rZ = math.lerprot( last[playbackID].from.rZ, last[playbackID].to.rZ, alpha )
-	local ox,oy,oz = getElementPosition( vehicle )
-	setElementPosition( vehicle, ox, oy, math.max( oz, z ) )
-	setElementRotation( vehicle, rX, rY, rZ )
+	local alpha = math.unlerp( last[playback].from.t, last[playback].to.t, ticks )
+	x = math.lerp( last[playback].from.x, last[playback].to.x, alpha )
+	y = math.lerp( last[playback].from.y, last[playback].to.y, alpha )
+	z = math.lerp( last[playback].from.z, last[playback].to.z, alpha )
+	rX = math.lerprot( last[playback].from.rX, last[playback].to.rX, alpha )
+	rY = math.lerprot( last[playback].from.rY, last[playback].to.rY, alpha )
+	rZ = math.lerprot( last[playback].from.rZ, last[playback].to.rZ, alpha )
+	if getPedOccupiedVehicle(playback.ped) then 
+		local ox,oy,oz = getElementPosition( vehicle )
+		setElementPosition( vehicle, ox, oy, math.max( oz, z ) )
+		setElementRotation( vehicle, rX, rY, rZ )
+	else
+		local ox,oy,oz = getElementPosition( playback.ped )
+		setElementPosition( playback.ped, x, y, z )
+		setElementRotation( playback.ped, rX, rY, rZ )
+	end
 end
 
 --------------------------------------------------------------------------
@@ -306,8 +346,8 @@ ErrorCompensator = {}
 -- error2 = { timeEnd = 0 }
 error2 = {}
 
-function ErrorCompensator.handleNewPosition( playbackID, vehicle, x, y, z, period )
-	if not error2[playbackID] then error2[playbackID] = { timeEnd = 0 } end
+function ErrorCompensator.handleNewPosition( playback, vehicle, x, y, z, period )
+	if not error2[playback] then error2[playback] = { timeEnd = 0 } end
 
 	local vx, vy, vz = getElementPosition( vehicle )
 	-- Check if the distance to interpolate is too far.
@@ -315,52 +355,53 @@ function ErrorCompensator.handleNewPosition( playbackID, vehicle, x, y, z, perio
 	if dist > 5 or not period then
 		-- Just do move if too far to interpolate or period is not valid
 		setElementPosition( vehicle, x, y, z )
-		error2[playbackID].x = 0
-		error2[playbackID].y = 0
-		error2[playbackID].z = 0
-		error2[playbackID].timeStart = 0
-		error2[playbackID].timeEnd = 0
-		error2[playbackID].fLastAlpha = 0
+		error2[playback].x = 0
+		error2[playback].y = 0
+		error2[playback].z = 0
+		error2[playback].timeStart = 0
+		error2[playback].timeEnd = 0
+		error2[playback].fLastAlpha = 0
 	else
 		-- Set error correction to apply over the next few frames
-		error2[playbackID].x = x - vx
-		error2[playbackID].y = y - vy
-		error2[playbackID].z = z - vz
-		error2[playbackID].timeStart = getTickCount()
-		error2[playbackID].timeEnd = error2[playbackID].timeStart + period * 1.0
-		error2[playbackID].fLastAlpha = 0
+		error2[playback].x = x - vx
+		error2[playback].y = y - vy
+		error2[playback].z = z - vz
+		error2[playback].timeStart = getTickCount()
+		error2[playback].timeEnd = error2[playback].timeStart + period * 1.0
+		error2[playback].fLastAlpha = 0
 	end
 end
 
 
 -- Apply a portion of the error
-function ErrorCompensator.updatePosition( playbackID, vehicle )
-	if not error2[playbackID] then error2[playbackID] = { timeEnd = 0 } end
+function ErrorCompensator.updatePosition( playback, vehicle )
 	
-	if error2[playbackID].timeEnd == 0 then return end
+	if not error2[playback] then error2[playback] = { timeEnd = 0 } end
+	
+	if error2[playback].timeEnd == 0 then return end
 
 	-- Grab the current game position
 	local vx, vy, vz = getElementPosition( vehicle )
 
 	-- Get the factor of time spent from the interpolation start to the current time.
-	local fAlpha = math.unlerp ( error2[playbackID].timeStart, error2[playbackID].timeEnd, getTickCount() )
+	local fAlpha = math.unlerp ( error2[playback].timeStart, error2[playback].timeEnd, getTickCount() )
 
 	-- Don't let it overcompensate the error too much
 	fAlpha = math.clamp ( 0.0, fAlpha, 1.5 )
 
 	if fAlpha == 1.5 then
-		error2[playbackID].timeEnd = 0
+		error2[playback].timeEnd = 0
 		return
 	end
 
 	-- Get the current error portion to compensate
-	local fCurrentAlpha = fAlpha - error2[playbackID].fLastAlpha
-	error2[playbackID].fLastAlpha = fAlpha
+	local fCurrentAlpha = fAlpha - error2[playback].fLastAlpha
+	error2[playback].fLastAlpha = fAlpha
 
 	-- Apply
-	local nx = vx + error2[playbackID].x * fCurrentAlpha
-	local ny = vy + error2[playbackID].y * fCurrentAlpha
-	local nz = vz + error2[playbackID].z * fCurrentAlpha
+	local nx = vx + error2[playback].x * fCurrentAlpha
+	local ny = vy + error2[playback].y * fCurrentAlpha
+	local nz = vz + error2[playback].z * fCurrentAlpha
 	setElementPosition( vehicle, nx, ny, nz )
 end
 
@@ -381,8 +422,12 @@ end
 --------------------------------------------------------------------------
 addEventHandler('onClientPreRender', root,
 	function()
-		if playback and playback.fadeoutStart and isElement( playback.vehicle ) and isElement( playback.ped ) then
-			playback:updateFadeout()
+		
+		if (not playbacks) then return end
+		for i, playback in pairs(playbacks) do
+			if playback and playback.fadeoutStart and isElement( playback.vehicle ) and isElement( playback.ped ) then
+				playback:updateFadeout()
+			end
 		end
 	end
 )
@@ -402,8 +447,12 @@ end
 --------------------------------------------------------------------------
 addEventHandler('onClientPreRender', root,
 	function()
-		if playback and playback.disableCollision and isElement( playback.vehicle ) and isElement( playback.ped ) then
-			playback:disabledCollisionTick()
+
+		if (not playbacks) then return end
+		for i, playback in pairs(playbacks) do
+			if playback and playback.disableCollision and isElement( playback.vehicle ) and isElement( playback.ped ) then
+				playback:disabledCollisionTick()
+			end
 		end
 	end
 )
@@ -415,7 +464,9 @@ function GhostPlayback:disabledCollisionTick()
 	setVehicleDamageProof( self.vehicle, true ) -- we don't want the vehicle to explode
 	setElementCollisionsEnabled( self.ped, false )
 	setElementCollisionsEnabled( self.vehicle, false  )
-
+	
+	if not getPedOccupiedVehicle(self.ped) then return end
+	
 	-- Slow down everything when its been more than 200ms since the last position change
 	local timeSincePos = getTickCount() - ( self.lastData.time or 0 )
 	local damp = math.evalCurve( dampCurve, timeSincePos )

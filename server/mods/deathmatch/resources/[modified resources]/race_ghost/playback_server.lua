@@ -150,6 +150,11 @@ function GhostPlayback:loadGhost(which)
 					bestDist = math.min( bestDist, getDistanceBetweenPoints3D( v.x, v.y, v.z, getElementPosition(spawnpoint) ) )
 				end
 				if bestDist > 5 then
+					for _,spawnpoint in ipairs(getElementsByType("spawnpoint_onfoot")) do
+						bestDist = math.min( bestDist, getDistanceBetweenPoints3D( v.x, v.y, v.z, getElementPosition(spawnpoint) ) )
+					end
+				end
+				if bestDist > 5 then
 					outputDebugServer( "Found an invalid ghost file", mapName, nil, " (Spawn point too far away - " .. bestDist .. ")" )
 					return false
 				end
@@ -188,8 +193,10 @@ addEventHandler( "onMapStarting", root,
 		for i, v in pairs(getElementsByType("player")) do
 			-- if (i > 1) then break end
 			vName = removeColorCoding((getPlayerName(v)))
-			personalPlayback:loadGhost("pb_" .. vName:gsub('[%p%c%s]', ''))
-			personalPlayback:sendGhostData(v, "pb")   
+			hasPB = personalPlayback:loadGhost("pb_" .. vName:gsub('[%p%c%s]', ''))
+			if (hasPB) then
+				personalPlayback:sendGhostData(v, "pb")   
+			end
 		end
 	end
 )
@@ -202,8 +209,10 @@ addEventHandler( "onPlayerJoin", root,
 		end
 		if personalPlayback then
 			vName = removeColorCoding((getPlayerName(source)))
-			personalPlayback:loadGhost("pb_" .. vName:gsub('[%p%c%s]', ''))
-			personalPlayback:sendGhostData(source, "pb")   
+			local hasPB = personalPlayback:loadGhost("pb_" .. vName:gsub('[%p%c%s]', ''))
+			if (hasPB) then
+				personalPlayback:sendGhostData(source, "pb")   
+			end
 		end
 	end
 )
