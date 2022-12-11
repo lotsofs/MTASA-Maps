@@ -171,7 +171,7 @@ function RaceRaceMap:__index(k)
 		return result
 	end
 	if g_MapSettingNames[k] then
-		local result = get(self.resname .. '.' .. k)
+		result = get(self.resname .. '.' .. k)
 		if result then
 			return result
 		end
@@ -288,8 +288,8 @@ function RaceElementMap:getAll(name, type)
 	elseif name == "rpickup" then
 		return self:getAll("racepickup","pickup")
 	end
-	local resourceRoot = getResourceRootElement(self.res)
-	for i,element in ipairs(getElementsByType(name, resourceRoot)) do
+	local resRoot = getResourceRootElement(self.res)
+	for i,element in ipairs(getElementsByType(name, resRoot)) do
 		result[i] = {}
 		result[i].id = getElementID(element) or i
 		attrs =	g_MapObjAttrs[type or name]

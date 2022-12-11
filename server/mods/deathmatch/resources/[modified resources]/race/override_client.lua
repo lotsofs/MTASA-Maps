@@ -72,6 +72,7 @@ function OverrideClient.updateVars( element )
 				if other ~= g_Vehicle then
 					local docollide = collideothers and isCollideOthers ( other )
 					setElementCollisionsEnabled ( other, docollide )
+					setHeliBladeCollisionsEnabled ( other, g_GameOptions.helibladecollisionsdisabled )
 				end
 			end
 			-- Collide world
@@ -88,12 +89,13 @@ function OverrideClient.updateVars( element )
 			for _,other in ipairs( otherVehicles ) do
 				local docollide = collideothers and isCollideOthers ( other )
 				setElementCollidableWith ( element, other, docollide )
+				setHeliBladeCollisionsEnabled ( other, g_GameOptions.helibladecollisionsdisabled )
 			end
 		end
 		-- Collide world
 		local collideworld = isCollideWorld ( element )
 		setElementCollisionsEnabled ( element, collideworld )
-		-- LotsOfS: Code to handle interactive cars, primarily for foot races, though the cars can be used for normal races as well
+		-- Handle interactive cars, primarily for foot races, though the cars can be used for normal races as well
 		if (alpha == 120) then 
 			return 
 		end -- Don't do anything if respawn effect (120 alpha)
@@ -252,6 +254,7 @@ addEventHandler('onClientPreRender', root,
 				if vehicle ~= g_Vehicle then
 					local docollide = collideothers and isCollideOthers ( vehicle )
 					setElementCollisionsEnabled ( vehicle, docollide )
+					setHeliBladeCollisionsEnabled ( vehicle, g_GameOptions.helibladecollisionsdisabled )
 				end
 			end
 			-- Collide world

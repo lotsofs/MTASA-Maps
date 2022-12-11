@@ -18,9 +18,6 @@ g_OnfootSpawnpoints = {}
 g_Players = {}				-- { i = player }
 g_Vehicles = {}				-- { player = vehicle }
 
-local unloadedPickups = {}
-
-
 addEventHandler('onPlayerJoin', root,
 	function()
 		outputConsole ( 'Race version ' .. getBuildString(), source, 255, 127, 0 )
@@ -100,40 +97,42 @@ addEventHandler('onSettingChange', resourceRoot,
 
 function cacheGameOptions()
 	g_GameOptions = {}
-	g_GameOptions.timeafterfirstfinish  = getNumber('race.timeafterfirstfinish',30) * 1000
-	g_GameOptions.percentagetimeafterfirstfinish  = getNumber('race.percentagetimeafterfirstfinish',25)
-	g_GameOptions.hurrytime				= getNumber('race.hurrytime',15) * 1000
-	g_GameOptions.defaultrespawnmode	= getString('race.respawnmode','none')
-	g_GameOptions.defaultrespawntime	= getNumber('race.respawntime',5) * 1000
-	g_GameOptions.defaultduration		= getNumber('race.duration',6000) * 1000
-	g_GameOptions.ghostmode				= getBool('race.ghostmode',false)
-	g_GameOptions.ghostalpha			= getBool('race.ghostalpha',false)
-	g_GameOptions.randommaps			= getBool('race.randommaps',false)
-	g_GameOptions.statskey				= getString('race.statskey','name')
-	g_GameOptions.vehiclecolors			= getString('race.vehiclecolors','file')
-	g_GameOptions.skins					= getString('race.skins','cj')
-	g_GameOptions.autopimp				= getBool('race.autopimp',true)
-	g_GameOptions.vehicleweapons		= getBool('race.vehicleweapons',true)
-	g_GameOptions.firewater				= getBool('race.firewater',false)
-	g_GameOptions.classicchangez		= getBool('race.classicchangez',false)
-	g_GameOptions.admingroup			= getString('race.admingroup','Admin')
-	g_GameOptions.blurlevel				= getNumber('race.blur',36)
-	g_GameOptions.cloudsenable			= getBool('race.clouds',true)
-	g_GameOptions.joinspectating		= getBool('race.joinspectating',true)
-	g_GameOptions.stealthspectate		= getBool('race.stealthspectate',true)
-	g_GameOptions.countdownduration		= getNumber('race.countdownduration', 3)
-	g_GameOptions.countdowneffect		= getBool('race.countdowneffect',true)
-	g_GameOptions.showmapname			= getBool('race.showmapname',true)
-	g_GameOptions.hunterminigun			= getBool('race.hunterminigun',true)
-	g_GameOptions.allowonfoot			= getBool('race.allowonfoot',false)
-	g_GameOptions.falloffbike			= getBool('race.falloffbike',false)
-	g_GameOptions.securitylevel			= getNumber('race.securitylevel',2)
-	g_GameOptions.anyonecanspec			= getBool('race.anyonecanspec',true)
-	g_GameOptions.norsadminspectate		= getBool('race.norsadminspectate',false)
-	g_GameOptions.racerespawn			= getBool('race.racerespawn',true)
-	g_GameOptions.joinrandomvote		= getBool('race.joinrandomvote',true)
-	g_GameOptions.showauthorname		= getBool('race.showauthorname',true)
-	g_GameOptions.showmapinfo			= getBool('race.showmapinfo',true)
+	g_GameOptions.timeafterfirstfinish  			= getNumber('race.timeafterfirstfinish',30) * 1000
+	g_GameOptions.percentagetimeafterfirstfinish  	= getNumber('race.percentagetimeafterfirstfinish',25)
+	g_GameOptions.hurrytime							= getNumber('race.hurrytime',15) * 1000
+	g_GameOptions.defaultrespawnmode				= getString('race.respawnmode','none')
+	g_GameOptions.defaultrespawntime				= getNumber('race.respawntime',5) * 1000
+	g_GameOptions.defaultduration					= getNumber('race.duration',6000) * 1000
+	g_GameOptions.ghostmode							= getBool('race.ghostmode',false)
+	g_GameOptions.helibladecollisionsdisabled 		= getBool('race.helibladecollisionsdisabled',false)
+	g_GameOptions.ghostalpha						= getBool('race.ghostalpha',false)
+	g_GameOptions.ghostalphalevel					= getNumber('race.ghostalphalevel',180)
+	g_GameOptions.randommaps						= getBool('race.randommaps',false)
+	g_GameOptions.statskey							= getString('race.statskey','name')
+	g_GameOptions.vehiclecolors						= getString('race.vehiclecolors','file')
+	g_GameOptions.skins								= getString('race.skins','cj')
+	g_GameOptions.autopimp							= getBool('race.autopimp',true)
+	g_GameOptions.vehicleweapons					= getBool('race.vehicleweapons',true)
+	g_GameOptions.firewater							= getBool('race.firewater',false)
+	g_GameOptions.classicchangez					= getBool('race.classicchangez',false)
+	g_GameOptions.admingroup						= getString('race.admingroup','Admin')
+	g_GameOptions.blurlevel							= getNumber('race.blur',36)
+	g_GameOptions.cloudsenable						= getBool('race.clouds',true)
+	g_GameOptions.joinspectating					= getBool('race.joinspectating',true)
+	g_GameOptions.stealthspectate					= getBool('race.stealthspectate',true)
+	g_GameOptions.countdownduration					= getNumber('race.countdownduration', 3)
+	g_GameOptions.countdowneffect					= getBool('race.countdowneffect',true)
+	g_GameOptions.showmapname						= getBool('race.showmapname',true)
+	g_GameOptions.hunterminigun						= getBool('race.hunterminigun',true)
+	g_GameOptions.allowonfoot						= getBool('race.allowonfoot',false)
+	g_GameOptions.falloffbike						= getBool('race.falloffbike',false)
+	g_GameOptions.securitylevel						= getNumber('race.securitylevel',2)
+	g_GameOptions.anyonecanspec						= getBool('race.anyonecanspec',true)
+	g_GameOptions.norsadminspectate					= getBool('race.norsadminspectate',false)
+	g_GameOptions.racerespawn						= getBool('race.racerespawn',true)
+	g_GameOptions.joinrandomvote					= getBool('race.joinrandomvote',true)
+	g_GameOptions.showauthorname					= getBool('race.showauthorname',true)
+	g_GameOptions.showmapinfo						= getBool('race.showmapinfo',true)
 	g_GameOptions.ghostmode_map_can_override		= getBool('race.ghostmode_map_can_override',true)
 	g_GameOptions.skins_map_can_override			= getBool('race.skins_map_can_override',true)
 	g_GameOptions.vehicleweapons_map_can_override   = getBool('race.vehicleweapons_map_can_override',true)
@@ -143,6 +142,7 @@ function cacheGameOptions()
 	-- g_GameOptions.ghostmode_war/ning_if_map_override			= getBool('race.ghostmode_war/ning_if_map_override',true)
 	-- g_GameOptions.vehicleweapons_war/ning_if_map_override	= getBool('race.vehicleweapons_war/ning_if_map_override',true)
 	g_GameOptions.hunterminigun_map_can_override	= getBool('race.hunterminigun_map_can_override',true)
+	g_GameOptions.endmapwhenonlyspectators			= getBool('race.endmapwhenonlyspectators', true)
 	if g_GameOptions.statskey ~= 'name' and g_GameOptions.statskey ~= 'serial' then
 		outputWarning( "statskey is not set to 'name' or 'serial'" )
 		g_GameOptions.statskey = 'name'
@@ -619,7 +619,9 @@ function joinHandlerBoth(player)
 	else
 		if bPlayerJoined and g_CurrentRaceMode.running then
 			-- Joining after start
-			addActivePlayer(player)
+			if not g_GameOptions.endmapwhenonlyspectators then
+				addActivePlayer(player)
+			end
 			if g_GameOptions.joinspectating then
 				clientCall(player, "Spectate.start", 'manual' )
 				setPlayerStatus( player, nil, "spectating")
@@ -629,42 +631,6 @@ function joinHandlerBoth(player)
 	end
 end
 addEventHandler('onPlayerJoin', root, joinHandlerByEvent)
-
--- function added by S. to diversify the vehicle colors but avoid having many cars be super bright colors
--- this code is duplicate in util_server.lua , idk how to call stuff from other scripts in lua.
-function setVehicleColorToRandomHSV(vehicle)
-	colors = {}
-	for i = 1, 4, 1 do
-		-- since MTA wants colors in RGB, we won't bother calculating hue. Instead, we pretend S & V are both 100% to calculate a RGB values and apply SV on them later.
-		-- When both S and V are 100%, the color in RGB will always have one component of 255, one of 0, and one in between.
-		components = {}
-		components[1] = 255
-		components[2] = 0
-		components[3] = math.random(0, 255)
-		saturation = math.random(0, 75) / 100	-- change 75 to 100 to allow for superbright colors. (don't forget to do so in the other script as well)
-		value = math.random(0, 100) / 100
-
-		-- this block of code determines which RGB component will be min, which max, and which the other by shuffling them.
-		indices = {1, 2, 3}
-		shuffledIndices = {}
-		for i = #indices, 1, -1 do
-			random = math.random(1,i)
-			shuffledIndices[i] = indices[random]
-			table.remove(indices, random)
-		end
-
-		-- now we take the min/maxed RGB components and do the saturation & value calculations on them based on the shuffled indices
-		for j,w in pairs(shuffledIndices) do
-			c = components[w]		
-			c = c + ((255 - c) * (1 - saturation)) 
-			c = c * value			
-			c = c - (c % 1)			
-			colors[j + (i - 1) * 3] = c	
-		end
-	end
-	-- apply our 4 generated colors the vehicle
-	setVehicleColor(vehicle, colors[1], colors[2], colors[3], colors[4], colors[5], colors[6], colors[7], colors[8], colors[9], colors[10], colors[11], colors[12])
-end
 
 -- Called from:
 --      joinHandler
@@ -760,8 +726,8 @@ addEventHandler('onPlayerPickUpRacePickupInternal', root,
 		local pickup = g_Pickups[table.find(g_Pickups, 'id', pickupID)]
 		local vehicle = g_Vehicles[source]
 		if not pickup or not vehicle then return end
-		if respawntime and tonumber(respawntime) >= 50 then
-			table.insert(unloadedPickups, pickupID)
+		if respawntime and tonumber(respawntime) >= 50 and not pickup.isRespawning then
+			pickup.isRespawning = true
 			clientCall(root, 'unloadPickup', pickupID)
 			TimerManager.createTimerFor("map"):setTimer(ServerLoadPickup, tonumber(respawntime), 1, pickupID)
 		end
@@ -777,7 +743,7 @@ addEventHandler('onPlayerPickUpRacePickupInternal', root,
 			end
 		end
 		triggerEvent('onPlayerPickUpRacePickup', source, pickupID, pickup.type, pickup.vehicle)
-		-- LotsOfS: On-foot spawnpoint support
+		-- On-foot spawnpoint support
 		if (pickup.trigger) then
 			callTrigger(pickup.trigger, source)
 		end
@@ -785,7 +751,8 @@ addEventHandler('onPlayerPickUpRacePickupInternal', root,
 )
 
 function ServerLoadPickup(pickupID)
-	table.removevalue(unloadedPickups, pickupID)
+	local pickup = g_Pickups[table.find(g_Pickups, 'id', pickupID)]
+	pickup.isRespawning = nil
 	clientCall(root, 'loadPickup', pickupID)
 end
 
@@ -850,7 +817,6 @@ function unloadAll()
 	g_Checkpoints = {}
 	g_Objects = {}
 	g_Pickups = {}
-	unloadedPickups = {}
 	destroyInteractiveVehicles()
 	if g_CurrentRaceMode then
 		g_CurrentRaceMode:destroy()
@@ -1022,7 +988,7 @@ function updateGhostmode()
 		local vehicle = RaceMode.getPlayerVehicle(player)
 		if vehicle then
 			Override.setCollideOthers( "ForGhostCollisions", vehicle, g_MapOptions.ghostmode and 0 or nil )
-			Override.setAlpha( "ForGhostAlpha", {player, vehicle}, g_MapOptions.ghostmode and g_GameOptions.ghostalpha and 180 or nil )
+			Override.setAlpha( "ForGhostAlpha", {player, vehicle}, g_MapOptions.ghostmode and g_GameOptions.ghostalpha and g_GameOptions.ghostalphalevel or nil )
 		end
 	end
 end
@@ -1049,6 +1015,8 @@ addEventHandler('onClientRequestSpectate', root,
 					end
 				end
 			end
+		else
+			if not stateAllowsManualSpectate() then return false end
 		end
 		if isPlayerSpectating(player) ~= enable then
 			if enable then
@@ -1061,21 +1029,19 @@ addEventHandler('onClientRequestSpectate', root,
 				g_SavedVelocity[player].velocity = {getElementVelocity(g_Vehicles[player])}
 				g_SavedVelocity[player].turnvelocity = {getElementAngularVelocity(g_Vehicles[player])}
 				
-				-- JOSHIMUZ EDIT 
-				removeActivePlayer(player)
-				if getActivePlayerCount() < 1 then
-					TimerManager.createTimerFor("map"):setTimer(
-						function()
-							if getActivePlayerCount() < 1 then
-								gotoState('EveryoneFinished')
-								--RaceMode.setTimeLeft( 0 )
-								RaceMode.endMap()
-							end
-						end,
+				if g_GameOptions.endmapwhenonlyspectators then
+					removeActivePlayer(player)
+					if getActivePlayerCount() == 0 then
+						TimerManager.createTimerFor("map"):setTimer(
+							function()
+								-- Timer to check again, so that people using spectate for respawning don't instantly end the map
+								if getActivePlayerCount() == 0 then
+									RaceMode.endMap()
+								end
+							end,
 						500, 1 )
+					end
 				end
-				--outputChatBox(tostring(getActivePlayerCount()))
-				-- END JOSHIMUZ EDIT
 			else
 				clientCall(player, "Spectate.stop", 'manual' )
 				setPlayerStatus( player, nil, "")
@@ -1089,10 +1055,9 @@ addEventHandler('onClientRequestSpectate', root,
 					TimerManager.createTimerFor("map",player):setTimer(afterSpectatePlayerUnfreeze, 2000, 1, player, true)
 				end
 
-				-- JOSHIMUZ EDIT
-				addActivePlayer(player)
-				--outputChatBox(tostring(getActivePlayerCount()))
-				-- END JOSHIMUZ EDIT
+				if g_GameOptions.endmapwhenonlyspectators then
+					addActivePlayer(player)
+				end
 			end
 		end
 	end
@@ -1131,10 +1096,6 @@ addEventHandler('onNotifyPlayerReady', root,
 	function()
 		if checkClient( false, source, 'onNotifyPlayerReady' ) then return end
 		setPlayerReady( source )
-		for i, pickupID in ipairs(unloadedPickups) do
-			-- outputDebugString(getPlayerName(source).." unload "..tostring(pickupID))
-			clientCall(source, "unloadPickup", pickupID )
-		end
 	end
 )
 

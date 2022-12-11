@@ -18,7 +18,7 @@ function displayHilariarseMessage( player )
         lastVoteStarterName = ''
     else
         local playerName = getPlayerName(player)
-        local msg = ''
+        local msg
         if playerName == lastVoteStarterName then
             lastVoteStarterCount = lastVoteStarterCount + 1
             if lastVoteStarterCount == 5 then
@@ -73,8 +73,8 @@ function startMidMapVoteForRandomMap(player)
  
     -- Actual vote started here
     local pollDidStart = exports.votemanager:startPoll {
-            title='Some stupid poll to change to a random map:',
-            percentage=81,
+            title='Do you want to change to a random map?',
+            percentage=51,
             timeout=15,
             allowchange=true,
             visibleTo=root,
@@ -227,7 +227,7 @@ function startNextMapVote()
     end
        
     local poll = {
-        title="Blah blah blah:",
+        title="Choose the next map:",
         visibleTo=root,
         percentage=51,
         timeout=8,
@@ -332,8 +332,8 @@ function startMidMapVoteForRestartMap(player)
  
     -- Actual vote started here
     local pollDidStart = exports.votemanager:startPoll {
-            title='Restart map? Vote:',
-            percentage=81,
+            title='Do you want to restart the current map?',
+            percentage=51,
             timeout=15,
             allowchange=true,
             visibleTo=root,

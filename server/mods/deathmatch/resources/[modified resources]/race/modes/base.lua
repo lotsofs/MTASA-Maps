@@ -249,7 +249,7 @@ function RaceMode:onPlayerReachCheckpoint(player, checkpointNum)
 	if checkpointNum < RaceMode.getNumberOfCheckpoints() then
 		-- Regular checkpoint
 		local vehicle = getPedOccupiedVehicle(player)
-		local vehicle2 = RaceMode.getPlayerVehicle(player) -- LotsOfS: We can have multiple vehicles now
+		local vehicle2 = RaceMode.getPlayerVehicle(player) -- We can have multiple vehicles now
 		if (not vehicle) then
 			self.checkpointBackups[player][checkpointNum] = {
 				skin = getElementModel(player),
@@ -355,11 +355,7 @@ function RaceMode:onPlayerReachCheckpoint(player, checkpointNum)
 			end
 			self.rankingBoard = RankingBoard:create()
 			if g_MapOptions.duration then
-				if (g_GameOptions.percentagetimeafterfirstfinish > 0) then
-					self:setTimeLeft( math.max(g_GameOptions.percentagetimeafterfirstfinish * self:getTimePassed() / 100, g_MapOptions.timeafterfirstfinish ))
-				else
-					self:setTimeLeft( g_MapOptions.timeafterfirstfinish )
-				end
+				self:setTimeLeft( math.max(g_GameOptions.percentagetimeafterfirstfinish * self:getTimePassed() / 100, g_MapOptions.timeafterfirstfinish ))
 			end
 		else
 			showMessage('You finished ' .. rank .. ( (rank < 10 or rank > 20) and ({ [1] = 'st', [2] = 'nd', [3] = 'rd' })[rank % 10] or 'th' ) .. '!', 0, 255, 0, player)
@@ -553,7 +549,7 @@ function restorePlayer(id, player, bNoFade, bDontFix)
 		setElementModel(player, bkp.skin)
 	end
 	if (bkp.borrowed) then 
-		-- LotsOfS: Create our own vehicle if we hit the checkpoint with a vehicle that isn't the 'main'
+		-- Create our own vehicle if we hit the checkpoint with a vehicle that isn't the 'main'
 		if (isElement(bkp.original) and not getVehicleController(bkp.original)) then
 			vehicle = bkp.original
 		else
@@ -562,7 +558,7 @@ function restorePlayer(id, player, bNoFade, bDontFix)
 		end
 	end
 	if (bkp.borrowed or bkp.onfoot) then
-		-- LotsOfS: Move our main vehicle back to where it was in case you drove off with it, then died, and respawned next to where it was but now it's gone
+		-- Move our main vehicle back to where it was in case you drove off with it, then died, and respawned next to where it was but now it's gone
         setElementVelocity( vehicle2, 0,0,0 )
         setElementAngularVelocity( vehicle2, 0,0,0 )
 		local rx2, ry2, rz2 = unpack(bkp.rotation2)
@@ -672,7 +668,7 @@ function RaceMode.playerFreeze(player, bRespawn, bDontFix, bOnFoot)
 	clientCall( player, "updateVehicleWeapons" )
 	local vehicle = getPedOccupiedVehicle(player)
 	local vehicle2 = RaceMode.getPlayerVehicle(player)
-	-- LotsOfS: We can have multiple vehicles now, but not always.
+	-- We can have multiple vehicles now, but not always.
 	if (not vehicle) then
 		vehicle = vehicle2
 	end
@@ -689,7 +685,7 @@ function RaceMode.playerFreeze(player, bRespawn, bDontFix, bOnFoot)
 
 	-- Setup ghost mode for this vehicle
 	Override.setCollideOthers( "ForGhostCollisions", {vehicle, vehicle2}, g_MapOptions.ghostmode and 0 or nil )
-	Override.setAlpha( "ForGhostAlpha", {player, vehicle, vehicle2}, g_MapOptions.ghostmode and g_GameOptions.ghostalpha and 180 or nil )
+	Override.setAlpha( "ForGhostAlpha", {player, vehicle, vehicle2}, g_MapOptions.ghostmode and g_GameOptions.ghostalpha and g_GameOptions.ghostalphalevel or nil )
 
 	-- Show non-ghost vehicles as semi-transparent while respawning
 	Override.setAlpha( "ForRespawnEffect", {player, vehicle, vehicle2}, bRespawn and not g_MapOptions.ghostmode and 120 or nil )
@@ -719,7 +715,7 @@ function RaceMode.playerUnfreeze(player, bDontFix)
 	clientCall( player, "updateVehicleWeapons" )
 	local vehicle = getPedOccupiedVehicle(player)
 	local vehicle2 = RaceMode.getPlayerVehicle(player)
-	-- LotsOfS: We can have multiple vehicles now, but not always.
+	-- We can have multiple vehicles now, but not always.
 	if (not vehicle) then
 		vehicle = vehicle2
 	end

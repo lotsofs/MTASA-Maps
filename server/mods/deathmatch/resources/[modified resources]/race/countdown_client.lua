@@ -48,7 +48,7 @@ function Countdown:update()
 		self:destroy()
 		return
 	end
-	if self.images and self.value <= 3 then
+	if self.images and self.value <= 3 then -- Images only exist for countdown values of 3 and below. Prevent warnings.
 		if self.countelems and self.countelems[1] then
 			table.each( self.countelems, destroyElement )
 		end
@@ -113,7 +113,7 @@ function zoomFades(elems, val, info)
 	local width = info.width
 	local height = info.height
 
-	local val = 1-((1-val) * (1-val))
+	val = 1-((1-val) * (1-val))
 	local slope = val * 0.95
 	local alphas = { valinv, (valinv-0.35) * 0.20, (valinv-0.5) * 0.125 }
 

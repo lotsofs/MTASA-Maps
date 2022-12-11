@@ -33,39 +33,39 @@ addEventHandler('onClientResourceStart', resourceRoot,
 			nextdisplay = dxText:create('Next:', 4, screenHeight - 70, false, 'default-bold', 1.2, 'left'),
 			nextdisplayName = dxText:create('NEXT', 45, screenHeight - 70, false, 'default-bold', 1.2, 'left'),
 			
-			PingDisplay = dxText:create('Ping:', 4, screenHeight - 90, false, 'default-bold', 1.2, 'left'),
-			PingDisplayCount = dxText:create('0', 45, screenHeight - 90, false, 'default-bold', 1.2, 'left'),
+			-- PingDisplay = dxText:create('Ping:', 4, screenHeight - 90, false, 'default-bold', 1.2, 'left'),
+			-- PingDisplayCount = dxText:create('0', 45, screenHeight - 90, false, 'default-bold', 1.2, 'left'),
 			
-			FPSDisplay = dxText:create('FPS:', 4, screenHeight - 110, false, 'default-bold', 1.2, 'left'),
-			FPSDisplayCount = dxText:create('0', 45, screenHeight - 110, false, 'default-bold', 1.2, 'left'),
+			-- FPSDisplay = dxText:create('FPS:', 4, screenHeight - 110, false, 'default-bold', 1.2, 'left'),
+			-- FPSDisplayCount = dxText:create('0', 45, screenHeight - 110, false, 'default-bold', 1.2, 'left'),
 		}
 		
-		g_dxGUI.mapdisplay:color(255, 100, 200, 255)
+		g_dxGUI.mapdisplay:color(150, 150, 150, 255)
 		g_dxGUI.mapdisplay:type('stroke', 1.5)
 		g_dxGUI.mapdisplayName:color(255, 255, 255, 255)
 		g_dxGUI.mapdisplayName:type('stroke', 1.5)
 
-		g_dxGUI.authordisplay:color(255, 100, 200, 255)
+		g_dxGUI.authordisplay:color(150, 150, 150, 255)
 		g_dxGUI.authordisplay:type('stroke', 1.5)
 		g_dxGUI.authordisplayName:color(255, 255, 255, 255)
 		g_dxGUI.authordisplayName:type('stroke', 1.5)
 
-		g_dxGUI.nextdisplay:color(255, 100, 200, 255)
+		g_dxGUI.nextdisplay:color(150, 150, 150, 255)
 		g_dxGUI.nextdisplay:type('stroke', 1.5)
 		g_dxGUI.nextdisplayName:color(255, 255, 255, 255)
 		g_dxGUI.nextdisplayName:type('stroke', 1.5)
 
-		g_dxGUI.FPSDisplay:color(255, 100, 200, 255)
-		g_dxGUI.FPSDisplay:type('stroke', 1.5)
-		g_dxGUI.FPSDisplayCount:color(255, 255, 255, 255)
-		g_dxGUI.FPSDisplayCount:type('stroke', 1.5)
+		-- g_dxGUI.FPSDisplay:color(150, 150, 150, 255)
+		-- g_dxGUI.FPSDisplay:type('stroke', 1.5)
+		-- g_dxGUI.FPSDisplayCount:color(255, 255, 255, 255)
+		-- g_dxGUI.FPSDisplayCount:type('stroke', 1.5)
 
-		g_dxGUI.PingDisplay:color(255, 100, 200, 255)
-		g_dxGUI.PingDisplay:type('stroke', 1.5)
-		g_dxGUI.PingDisplayCount:color(255, 255, 255, 255)
-		g_dxGUI.PingDisplayCount:type('stroke', 1.5)
+		-- g_dxGUI.PingDisplay:color(150, 150, 150, 255)
+		-- g_dxGUI.PingDisplay:type('stroke', 1.5)
+		-- g_dxGUI.PingDisplayCount:color(255, 255, 255, 255)
+		-- g_dxGUI.PingDisplayCount:type('stroke', 1.5)
 		
-		g_dxGUI.FileDisplay:color(255, 100, 200, 255)
+		g_dxGUI.FileDisplay:color(150, 150, 150, 255)
 		g_dxGUI.FileDisplay:type('stroke', 1.5)
 		g_dxGUI.FileDisplayName:color(255, 255, 255, 255)
 		g_dxGUI.FileDisplayName:type('stroke', 1.5)
@@ -255,9 +255,6 @@ function initRace(vehicle, checkpoints, objects, pickups, mapoptions, ranked, du
     outputDebug( 'MISC', 'initRace start' )
 	unloadAll(true)
 	
-	math.randomseed(mapName)
-	cpColorRandom = { math.random(0,255), math.random(0,255), math.random(0,255) } 
-	
 	g_Players = getElementsByType('player')
 	g_MapOptions = mapoptions
 	g_GameOptions = gameoptions
@@ -269,7 +266,7 @@ function initRace(vehicle, checkpoints, objects, pickups, mapoptions, ranked, du
 	g_dxGUI.mapdisplayName:text(g_MapInfo.name or "<none>")
 	g_dxGUI.FileDisplayName:text(g_MapInfo.resname or "<none>")
 	g_dxGUI.nextdisplayName:text("<none>")
-
+	
 	fadeCamera(true)
 	showHUD(false)
 	
@@ -290,20 +287,23 @@ function initRace(vehicle, checkpoints, objects, pickups, mapoptions, ranked, du
 	g_dxGUI.mapdisplayName:visible(g_GameOptions.showmapname)
 	g_dxGUI.authordisplay:visible(g_GameOptions.showmapname)
 	g_dxGUI.authordisplayName:visible(g_GameOptions.showmapname)
-	g_dxGUI.nextdisplay:visible(g_GameOptions.showmapname)
-	g_dxGUI.nextdisplayName:visible(g_GameOptions.showmapname)
-	g_dxGUI.FPSDisplay:visible(g_GameOptions.showmapname)
-	g_dxGUI.FPSDisplayCount:visible(g_GameOptions.showmapname)
-	g_dxGUI.PingDisplay:visible(g_GameOptions.showmapname)
-	g_dxGUI.PingDisplayCount:visible(g_GameOptions.showmapname)
+	g_dxGUI.nextdisplay:visible(false)
+	g_dxGUI.nextdisplayName:visible(false)
+	-- g_dxGUI.FPSDisplay:visible(g_GameOptions.showmapname)
+	-- g_dxGUI.FPSDisplayCount:visible(g_GameOptions.showmapname)
+	-- g_dxGUI.PingDisplay:visible(g_GameOptions.showmapname)
+	-- g_dxGUI.PingDisplayCount:visible(g_GameOptions.showmapname)
 	g_dxGUI.FileDisplay:visible(g_GameOptions.showmapname)
 	g_dxGUI.FileDisplayName:visible(g_GameOptions.showmapname)
 
-	if engineSetAsynchronousLoading then
-		engineSetAsynchronousLoading( g_GameOptions.asyncloading )
-	end
-
 	-- checkpoints
+	local colorSeed = 10
+	for i,char in ipairs( { string.byte(g_MapInfo.name,1,g_MapInfo.name:len()) } ) do
+        colorSeed = math.mod( colorSeed * 11 + char, 216943)
+    end
+    math.randomseed(colorSeed)   
+	cpColorRandom = { math.random(0,255), math.random(0,255), math.random(0,255) } 
+
 	g_Checkpoints = checkpoints
 
 	-- pickups
@@ -320,7 +320,8 @@ function initRace(vehicle, checkpoints, objects, pickups, mapoptions, ranked, du
 		for k,v in pairs(pickup) do
 			g_Pickups[colshape][k] = v
 		end
-        g_Pickups[colshape].load = true
+		local isLoaded = not pickup.isRespawning
+        g_Pickups[colshape].load = isLoaded
 		if g_Pickups[colshape].type == 'vehiclechange' then
 			g_Pickups[colshape].label = dxText:create(getVehicleNameFromModel(g_Pickups[colshape].vehicle), 0.5, 0.5)
 			g_Pickups[colshape].label:color(255, 255, 255, 0)
@@ -330,11 +331,10 @@ function initRace(vehicle, checkpoints, objects, pickups, mapoptions, ranked, du
 
 	-- objects
 	g_Objects = {}
-	local pos, rot
-	for i,object in ipairs(objects) do
-		pos = object.position
-		rot = object.rotation
-		g_Objects[i] = createObject(object.model, pos[1], pos[2], pos[3], rot[1], rot[2], rot[3])
+	for i,object2 in ipairs(objects) do
+		local pos2 = object2.position
+		local rot = object2.rotation
+		g_Objects[i] = createObject(object2.model, pos2[1], pos2[2], pos2[3], rot[1], rot[2], rot[3])
 	end
 
 	if #g_Checkpoints > 0 then
@@ -407,16 +407,12 @@ function updateOptions ( gameoptions, mapoptions )
 	g_dxGUI.authordisplayName:visible(g_GameOptions.showmapname)
 	g_dxGUI.nextdisplay:visible(g_GameOptions.showmapname)
 	g_dxGUI.nextdisplayName:visible(g_GameOptions.showmapname)
-	g_dxGUI.FPSDisplay:visible(g_GameOptions.showmapname)
-	g_dxGUI.FPSDisplayCount:visible(g_GameOptions.showmapname)
-	g_dxGUI.PingDisplay:visible(g_GameOptions.showmapname)
-	g_dxGUI.PingDisplayCount:visible(g_GameOptions.showmapname)
+	-- g_dxGUI.FPSDisplay:visible(g_GameOptions.showmapname)
+	-- g_dxGUI.FPSDisplayCount:visible(g_GameOptions.showmapname)
+	-- g_dxGUI.PingDisplay:visible(g_GameOptions.showmapname)
+	-- g_dxGUI.PingDisplayCount:visible(g_GameOptions.showmapname)
 	g_dxGUI.FileDisplay:visible(g_GameOptions.showmapname)
 	g_dxGUI.FileDisplayName:visible(g_GameOptions.showmapname)
-
-	if engineSetAsynchronousLoading then
-		engineSetAsynchronousLoading( g_GameOptions.asyncloading )
-	end
 end
 
 function launchRace(duration)
@@ -432,7 +428,6 @@ function launchRace(duration)
 	setVehicleDamageProof(g_Vehicle, false)
 
 	g_StartTick = getTickCount()
-	triggerEvent('onClientElementDataChange', localPlayer, 'race rank') -- Refresh at start of race since init is too early
 end
 
 
@@ -544,18 +539,18 @@ function updatePickups()
 end
 addEventHandler('onClientRender', root, updatePickups)
 
-local fps = 0
-addEventHandler("onClientPreRender", root,
-	function (msSinceLastFrame)
-		fps = (1 / msSinceLastFrame) * 1000
-	end
-)
+-- local fps = 0
+-- addEventHandler("onClientPreRender", root,
+-- 	function (msSinceLastFrame)
+-- 		fps = (1 / msSinceLastFrame) * 1000
+-- 	end
+-- )
 
-function updateFPSAndPing()
-	g_dxGUI.FPSDisplayCount:text(tostring(math.floor(fps + 0.5)))
-	g_dxGUI.PingDisplayCount:text(tostring(getPlayerPing(localPlayer)))
-end
-setTimer(updateFPSAndPing, 1000, 0)
+-- function updateFPSAndPing()
+-- 	g_dxGUI.FPSDisplayCount:text(tostring(math.floor(fps + 0.5)))
+-- 	g_dxGUI.PingDisplayCount:text(tostring(getPlayerPing(localPlayer)))
+-- end
+-- setTimer(updateFPSAndPing, 1000, 0)
 	
 addEventHandler('onClientColShapeHit', root,
 	function(elem)
@@ -1243,10 +1238,10 @@ function Spectate.setTarget( player )
 		end
 		guiSetText(g_GUI.speclabel, 'Currently spectating:\n' .. getPlayerName(Spectate.target))
 	else
-		local x,y,z = getElementPosition(localPlayer)
+		local x,y = getElementPosition(localPlayer)
 		x = x - ( x % 32 )
 		y = y - ( y % 32 )
-		z = getGroundPosition ( x, y, 5000 ) or 40
+		local z = getGroundPosition ( x, y, 5000 ) or 40
 		setCameraTarget( localPlayer )
 		setCameraMatrix( x,y,z+10,x,y+50,z+60)
 		guiSetText(g_GUI.speclabel, 'Currently spectating:\n No one to spectate')
@@ -1635,6 +1630,8 @@ addEvent('onNextMapSet', true)
 addEventHandler('onNextMapSet', root,
 	function(mapName)
 		g_dxGUI.nextdisplayName:text(mapName)
+		g_dxGUI.nextdisplay:visible(g_GameOptions.showmapname)
+		g_dxGUI.nextdisplayName:visible(g_GameOptions.showmapname)
 	end
 )
 
@@ -1773,10 +1770,12 @@ addEventHandler('onNextMapSet', root,
 	function(mapName)
 		g_dxGUI.nextdisplayName:text(g_NextMapWhatsSet)
 		g_dxGUI.nextdisplayName:color(255, 255, 255, 255)
+		g_dxGUI.nextdisplay:visible(g_GameOptions.showmapname)
+		g_dxGUI.nextdisplayName:visible(g_GameOptions.showmapname)
 	end
 )
 
--- Custom features --
+-- Save NOS between checkpoints --
 local checkpointData = {}
 
 local function saveNosLevel(checkpointNum)
