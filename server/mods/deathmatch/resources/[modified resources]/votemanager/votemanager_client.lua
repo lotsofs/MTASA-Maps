@@ -272,7 +272,7 @@ addEventHandler("doShowPoll", root,
 		isVoteActive = true
 
 		finishTime = getTickCount() + pollTime
-		addEventHandler("onClientRender", rootElement, updateTime)
+		addEventHandler("onClientRender", root, updateTime)
 		
 		drawPoll = true
 		
@@ -514,7 +514,7 @@ function updateBars(voteCount, maxVoters)
     end 
 	--outputChatBox("client after for loop")
 end
-addEventHandler("updateBars", rootElement, updateBars)
+addEventHandler("updateBars", root, updateBars)
 
 function draw()
 	if drawPoll then

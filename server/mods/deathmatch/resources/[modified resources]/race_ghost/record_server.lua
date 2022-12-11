@@ -44,6 +44,12 @@ addEventHandler( "onGhostDataReceive", root,
 		if toc then
 			if top then
 				local topNode = xmlFindChild( toc, "top", 0 )
+				if (topNode) then
+					backupNode = xmlCreateChild (toc, "backup")
+					if (backupNode) then
+						xmlNodeSetAttribute ( backupNode, "f", xmlNodeGetAttribute( topNode, "f"))
+					end
+				end
 				if not topNode then
 					topNode = xmlCreateChild( toc, "top" )
 				end

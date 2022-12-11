@@ -63,6 +63,17 @@ function GhostRecord:checkForCountdownEnd()
 			if self.checkForCountdownEnd_HANDLER then removeEventHandler( "onClientRender", root, self.checkForCountdownEnd_HANDLER ) self.checkForCountdownEnd_HANDLER = nil end
 			self:startRecording()
 		end
+	else
+		local frozen = isElementFrozen( localPlayer ) or getElementData(localPlayer, "race rank") == ""
+		if not frozen then
+			self.currentVehicleType = false
+			local pedModel = getElementModel( localPlayer )
+			local x, y, z = getElementPosition( localPlayer )
+			local rX, rY, rZ = getElementRotation( localPlayer )
+			table.insert( self.recording, { ty = "st", m = self.currentVehicleType, p = pedModel, x = x, y = y, z = z, rX = rX, rY = rY, rZ = rZ, t = 0 } )
+			if self.checkForCountdownEnd_HANDLER then removeEventHandler( "onClientRender", root, self.checkForCountdownEnd_HANDLER ) self.checkForCountdownEnd_HANDLER = nil end
+			self:startRecording()
+		end
 	end
 end
 
@@ -170,12 +181,12 @@ function GhostRecord:checkStateChanges()
 		if state ~= self.keyStates[v] then
 			local ticks = getTickCount() - self.startTick
 			if (state and ticks - (self.lastPressed[v] or 0) >= KEYSPAM_LIMIT) or not state then
-				-- Don't record shooting for hydra/hunter/seasparrow/rhino
+				-- Don't record shooting for hydra/hunter/seasparrow/rhino & rcbaron/predator/rustler
 				local vehicle = getPedOccupiedVehicle( localPlayer )
 				local donotrecord = false
 				if isElement( vehicle ) then
 					local model = getElementModel( vehicle )
-					if (model == 520 or model == 425 or model == 447 or model == 432) and (v == "vehicle_fire" or v == "vehicle_secondary_fire") and state then
+					if (model == 520 or model == 425 or model == 447 or model == 432 or model == 464 or model == 430 or model == 476) and (v == "vehicle_fire" or v == "vehicle_secondary_fire") and state then
 						donotrecord = true
 					end
 				end
@@ -194,14 +205,17 @@ function GhostRecord:checkStateChanges()
 
 	-- Vehicle change
 	local vehicle = getPedOccupiedVehicle( localPlayer )
+	local vehicleType = self.currentVehicleType
 	if vehicle then
-		local vehicleType = getElementModel( vehicle )
-		if self.currentVehicleType ~= vehicleType then
-			local ticks = getTickCount() - self.startTick
-			table.insert( self.recording, { ty = "v", m = vehicleType, t = ticks } )
-			outputDebug( "Vehicle change: " .. self.currentVehicleType .. " -> " .. vehicleType )
-			self.currentVehicleType = vehicleType
-		end
+		vehicleType = getElementModel( vehicle )
+	else
+		vehicleType = false
+	end
+	if self.currentVehicleType ~= vehicleType then
+		local ticks = getTickCount() - self.startTick
+		table.insert( self.recording, { ty = "v", m = vehicleType, t = ticks } )
+		outputDebug( "Vehicle change: " .. (self.currentVehicleType or "none") .. " -> " .. (vehicleType or "none"))
+		self.currentVehicleType = vehicleType
 	end
 end
 
@@ -222,6 +236,21 @@ function GhostRecord:updateExactPosition()
 		table.insert( self.recording, { ty = "po", x = x, y = y, z = z, rX = rX, rY = rY, rZ = rZ, vX = vX, vY = vY, vZ = vZ, lg = lg, h = health, t = ticks } )
 		self.last = { x = x, y = y, z = z }
 		outputDebug( "Pos update." )
+	elseif not vehicle then
+		local x, y, z = getElementPosition( localPlayer )
+		if self.last.x then
+			if math.abs( self.last.x - x ) < 0.1 and math.abs( self.last.y - y ) < 0.1 and math.abs( self.last.z - z ) < 0.1 then
+				return
+			end
+		end
+		local rX, rY, rZ = getElementRotation( localPlayer )
+		local vX, vY, vZ = getElementVelocity( localPlayer )
+		local lg = false
+		local health = getElementHealth( localPlayer )
+		local ticks = getTickCount() - self.startTick
+		table.insert( self.recording, { ty = "po", x = x, y = y, z = z, rX = rX, rY = rY, rZ = rZ, vX = vX, vY = vY, vZ = vZ, lg = lg, h = health, t = ticks } )
+		self.last = { x = x, y = y, z = z }
+		outputDebug( "Pos update (on foot)." )
 	end
 end
 

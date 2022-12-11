@@ -14,7 +14,7 @@ function aSynchCoroutineFunc( type, data, typeOfTag, banSearchTag )
 	if checkClient( false, source, 'aSync', type ) then return end
 	local cor = aSyncCoroutine
 	local tableOut = {}
-	local theSource = _root
+	local theSource = root
 	if client and not hasObjectPermissionTo ( client, "general.adminpanel" ) then
 		type = "loggedout"
 	elseif ( type == "player" ) then
@@ -23,13 +23,12 @@ function aSynchCoroutineFunc( type, data, typeOfTag, banSearchTag )
 		tableOut["mute"] = isPlayerMuted ( data )
 		tableOut["freeze"] = isPlayerFrozen ( data )
 		tableOut["money"] = getPlayerMoney ( data )
-		tableOut["username"] = getPlayerUserName ( data ) or "N/A"
 		tableOut["version"] = aPlayers[data]["version"]
 		tableOut["accountname"] = getPlayerAccountName ( data ) or "N/A"
 		tableOut["groups"] = "None"
 		tableOut["acdetected"] = getPlayerACDetectedList( data )
 		tableOut["d3d9dll"] = getPlayerD3D9DLLHash( data )
-		tableOut["imgmodsnum"] = getPlayerImgModsCount( data )
+		tableOut["imgmodsnum"] = getPlayerModCount( data )
 		local account = getPlayerAccount ( data )
 		if ( isGuestAccount ( account ) ) then
 			tableOut["groups"] = "Not logged in"
@@ -44,11 +43,10 @@ function aSynchCoroutineFunc( type, data, typeOfTag, banSearchTag )
 		theSource = data
 	elseif ( type == "players" ) then
 		for id, player in ipairs(getElementsByType("player")) do
-			if aPlayers[player] then
+			if isElement(player) and aPlayers[player] then
 				tableOut[player] = {}
 				tableOut[player]["name"] = getPlayerName ( player )
-				tableOut[player]["IP"] = "<hidden>"
-				tableOut[player]["username"] = getPlayerUserName ( player ) or "N/A"
+				tableOut[player]["IP"] = getPlayerIP ( player )
 				tableOut[player]["version"] = aPlayers[player]["version"]
 				tableOut[player]["accountname"] = getPlayerAccountName ( player ) or "N/A"
 				tableOut[player]["serial"] = getPlayerSerial ( player )
@@ -56,7 +54,7 @@ function aSynchCoroutineFunc( type, data, typeOfTag, banSearchTag )
 				tableOut[player]["admin"] = hasObjectPermissionTo ( player, "general.adminpanel" )
 				tableOut[player]["acdetected"] = getPlayerACDetectedList( player )
 				tableOut[player]["d3d9dll"] = getPlayerD3D9DLLHash( player )
-				tableOut[player]["imgmodsnum"] = getPlayerImgModsCount( player )
+				tableOut[player]["imgmodsnum"] = getPlayerModCount( player )
 			end
 		end
 	elseif ( type == "resources" ) then
@@ -66,13 +64,13 @@ function aSynchCoroutineFunc( type, data, typeOfTag, banSearchTag )
 		for id, resource in ipairs(resourceTable) do
 			local name = getResourceName ( resource )
 			local state = getResourceState ( resource )
-			local type = getResourceInfo ( resource, "type" )
+			local type2 = getResourceInfo ( resource, "type" )
 			local _,numsettings = aGetResourceSettings(name,true)
 			tableOut[id] = {}
 			tableOut[id]["name"] = name
 			tableOut[id]["numsettings"] = numsettings
 			tableOut[id]["state"] = state
-			tableOut[id]["type"] = type
+			tableOut[id]["type"] = type2
 			tableOut[id]["fullName"] = getResourceInfo(resource, "name") or "Unknown"
 			tableOut[id]["author"] = getResourceInfo(resource, "author") or "Unknown"
 			tableOut[id]["version"] = getResourceInfo(resource, "version") or "Unknown"
@@ -97,7 +95,7 @@ function aSynchCoroutineFunc( type, data, typeOfTag, banSearchTag )
 		end
 	elseif ( type == "admins" ) then
 		for id, player in ipairs(getElementsByType("player")) do
-			if aPlayers[player] then
+			if isElement(player) and aPlayers[player] then
 				tableOut[player] = {}
 				tableOut[player]["admin"] = hasObjectPermissionTo ( player, "general.adminpanel" )
 				if ( tableOut[player]["admin"] ) then
@@ -124,20 +122,6 @@ function aSynchCoroutineFunc( type, data, typeOfTag, banSearchTag )
 		tableOut["map"] = getMapName()
 		tableOut["password"] = getServerPassword()
 		tableOut["fps"] = getFPSLimit()
-	elseif ( type == "rights" ) then
-		for gi, group in ipairs ( aclListGroups() ) do
-			for oi, object in ipairs ( aclGroupListObjects ( group ) ) do
-				if ( ( object == data ) or ( object == "user.*" ) ) then
-					for ai, acl in ipairs ( aclGroupListACL ( group ) ) do
-						for ri, right in ipairs ( aclListRights ( acl ) ) do
-							local access = aclGetRight ( acl, string )
-							if ( access ) then table.insert ( tableOut, right ) end
-						end
-					end
-					break
-				end
-			end
-		end
 	elseif ( type == "bansdirty" ) then
 		tableOut = nil
 		g_Bans = nil
@@ -207,12 +191,11 @@ function aSynchCoroutineFunc( type, data, typeOfTag, banSearchTag )
 				if getNeededTagType (data[1],ban) and string.match (string.lower(tType),string.lower(data[2])) then
 					if (isElement(source)) then -- In case the source has quit during coroutine loading
 						if cnt <= maxBanCount then
-						cnt = cnt + 1
-						triggerClientEvent ( source, "aClientSync", theSource, type, tableOut,data )
+							cnt = cnt + 1
+							triggerClientEvent ( source, "aClientSync", theSource, type, tableOut,data )
 						else
-						triggerClientEvent ( source, "aClientSync", theSource, "message", false,{"error","Be more specific in your search query! (keyword returns more than 100 matches) search not completed due to server load, it's limited to displaying the first 100 results now."} )
-						cnt = nil
-						return
+							triggerClientEvent ( source, "aClientSync", theSource, "message", false,{"error","Be more specific in your search query! (keyword returns more than 100 matches) search not completed due to server load, it's limited to displaying the first 100 results now."} )
+							return
 						end
 					end
 				end
@@ -237,7 +220,7 @@ return false
 end
 
 addEvent("aSync", true)
-addEventHandler("aSync", _root, function(typed, data)
+addEventHandler("aSync", root, function(typed, data)
 	aSyncCoroutine = coroutine.create(aSynchCoroutineFunc)
 	coroutine.resume(aSyncCoroutine, typed, data)
 
@@ -245,10 +228,10 @@ addEventHandler("aSync", _root, function(typed, data)
 end )
 
 addEvent ( "onPlayerMoneyChange", false )
-addEventHandler ( "onResourceStart", getResourceRootElement ( getThisResource () ), function()
+addEventHandler ( "onResourceStart", resourceRoot, function()
 	setTimer ( function()
 		for id, player in ipairs ( getElementsByType ( "player" ) ) do
-			if aPlayers[player] then
+			if isElement(player) and aPlayers[player] then
 				local money = getPlayerMoney ( player )
 				local prev = aPlayers[player]["money"]
 				if ( money ~= prev ) then
@@ -260,40 +243,40 @@ addEventHandler ( "onResourceStart", getResourceRootElement ( getThisResource ()
 	end, 1500, 0 )
 end )
 
-addEventHandler ( "onPlayerMoneyChange", _root, function ( prev, new )
+addEventHandler ( "onPlayerMoneyChange", root, function ( prev, new )
 	for player, sync in pairs ( aPlayers ) do
-		if ( sync["sync"] == source ) then
+		if ( isElement(player) and sync["sync"] == source ) then
 			triggerClientEvent ( player, "aClientSync", source, "player", { ["money"] = new } )
 		end
 	end
 end )
 
-addEventHandler ( "onPlayerMute", _root, function()
+addEventHandler ( "onPlayerMute", root, function()
 	for player, sync in pairs ( aPlayers ) do
-		if ( sync["sync"] == source ) then
+		if ( isElement(player) and sync["sync"] == source ) then
 			triggerClientEvent ( player, "aClientSync", source, "player", { ["mute"] = true } )
 		end
 	end
 end )
 
-addEventHandler ( "onPlayerUnmute", _root, function()
+addEventHandler ( "onPlayerUnmute", root, function()
 	for player, sync in pairs ( aPlayers ) do
-		if ( sync["sync"] == source ) then
+		if ( isElement(player) and sync["sync"] == source ) then
 			triggerClientEvent ( player, "aClientSync", source, "player", { ["mute"] = false } )
 		end
 	end
 end )
 
-addEventHandler ( "onPlayerFreeze", _root, function ( state )
+addEventHandler ( "onPlayerFreeze", root, function ( state )
 	for player, sync in pairs ( aPlayers ) do
-		if ( sync["sync"] == source ) then
+		if ( isElement(player) and sync["sync"] == source ) then
 			triggerClientEvent ( player, "aClientSync", source, "player", { ["freeze"] = state } )
 		end
 	end
 end )
 
 addEvent ( "aPermissions", true )
-addEventHandler ( "aPermissions", _root, function()
+addEventHandler ( "aPermissions", root, function()
 	if checkClient( false, source, 'aPermissions' ) then return end
 	if ( hasObjectPermissionTo ( source, "general.adminpanel" ) ) then
 		local tableOut = {}
@@ -314,15 +297,15 @@ addEventHandler ( "aPermissions", _root, function()
 	end
 end )
 
-addEventHandler ( "onBan", _root,
+addEventHandler ( "onBan", root,
 	function()
-		setTimer( triggerEvent, 200, 1, "aSync", _root, "bansdirty" )
+		setTimer( triggerEvent, 200, 1, "aSync", root, "bansdirty" )
 	end
 )
 
-addEventHandler ( "onUnban", _root,
+addEventHandler ( "onUnban", root,
 	function()
-		setTimer( triggerEvent, 200, 1, "aSync", _root, "bansdirty" )
+		setTimer( triggerEvent, 200, 1, "aSync", root, "bansdirty" )
 	end
 )
 
@@ -388,55 +371,57 @@ function getPlayerD3D9DLLHash( player )
 	return getPlayerACInfo( player ).d3d9MD5
 end
 
-function getPlayerImgModsCount( player )
-	return #getPlayerModInfoStore( player ).list
-end
-
-function getPlayerImgModsList( player )
-	return getPlayerModInfoStore( player ).list
+function getPlayerModCount( player )
+	local modCount = 0
+	for fileName, mods in pairs(getPlayerModInfo(player)) do
+		modCount = modCount + #mods
+	end
+	return modCount
 end
 
 ----------------------------------------
--- Save mod info info
+-- Player mod info
 ----------------------------------------
-addEventHandler( "onPlayerModInfo", root,
-	function ( filename, modList )
-		local store = getPlayerModInfoStore( source )
-		for _,mod in ipairs(modList) do			-- Check each modified item
-			if not store.dic[mod.name] then
-				store.dic[mod.name] = true
-				table.insert( store.list, mod )
+-- Returns a dictionary of modded filenames and the modifications detected in each.
+_playerModInfo = {}
+function getPlayerModInfo(player)
+	return _playerModInfo[player]
+end
+
+addEventHandler("onPlayerModInfo", root,
+	function(fileName, modList)
+		-- Update player's stored mod info
+		if not _playerModInfo[source][fileName] then
+			_playerModInfo[source][fileName] = modList
+			return
+		else
+			for _, mod in ipairs(modList) do
+				table.insert(_playerModInfo[source][fileName], mod)
 			end
 		end
 	end
 )
 
-addEventHandler( "onResourceStart", resourceRoot,
+addEventHandler("onResourceStart", resourceRoot,
 	function()
-		for _,player in ipairs( getElementsByType("player") ) do
+		-- Resend all player mod info
+		for _, player in ipairs(getElementsByType("player")) do
+			_playerModInfo[ player ] = {}
 			resendPlayerModInfo( player )
 		end
 	end
 )
 
-addEventHandler( "onPlayerQuit", root,
+addEventHandler( "onPlayerJoin", root,
 	function()
-		modInfoStore[ source ] = nil
+		_playerModInfo[source] = {}
 	end
 )
-
-----------------------------------------
--- Place to save mod info about each player
-----------------------------------------
-modInfoStore = {}
-function getPlayerModInfoStore( player )
-	if not modInfoStore[ player ] then
-		modInfoStore[ player ] = {}
-		modInfoStore[ player ].dic = {}
-		modInfoStore[ player ].list = {}
+addEventHandler( "onPlayerQuit", root,
+	function()
+		_playerModInfo[source] = nil
 	end
-	return modInfoStore[ player ]
-end
+)
 
 ----------------------------------------
 -- Backwards compat version of getPlayerACInfo

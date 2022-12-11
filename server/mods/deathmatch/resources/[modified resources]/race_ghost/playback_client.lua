@@ -16,7 +16,9 @@ function GhostPlayback:create( recording, ped, vehicle, racer, time, playbackID 
 		startTick = nil,
 		disableCollision = true,
 		lastData = {},
-		playbackID = playbackID
+		playbackID = playbackID,
+		last = nil,
+		error2 = nil,
 	}
 
 	-- Move this client side so the server doesn't create unused ghost drivers for every player for every player
@@ -85,7 +87,7 @@ function GhostPlayback:checkForCountdownEnd()
 		end
 
         -- -- If at the start and ghost is very close to a player vehicle, make it invisible
-		-- -- This is nonsense. The ghost already is a ghost
+		-- -- This is nonsense. The ghost already is a ghost and making it invisible defeats the purpose of a ghost
 		-- if frozen and not self.isPlaying then
 		-- 	local x, y, z = getElementPosition(self.vehicle)
 		-- 	for _,player in ipairs(getElementsByType('player')) do
@@ -217,6 +219,7 @@ function GhostPlayback:updateGhostState()
 			for _, v in ipairs( keyNames ) do
 				setPedControlState( self.ped, v, false )
 			end
+			setPedAnimation( self.ped )
 		elseif theType == "v" then
 			local vehicleType = self.recording[self.currentIndex].m
 			if vehicleType then
@@ -305,29 +308,29 @@ Interpolator = {}
 last = {}
 
 function Interpolator.Reset(playback)
-	if not last[playback] then last[playback] = { } end
-	last[playback].from = nil
-	last[playback].to = nil
+	if not playback.last then playback.last = { } end
+	playback.last.from = nil
+	playback.last.to = nil
 end
 
 function Interpolator.SetPoints( playback, from, to )
 	-- if not getPedOccupiedVehicle(playback.ped) then return end
-	if not last[playback] then last[playback] = { } end
-	last[playback].from = from
-	last[playback].to = to
+	if not playback.last then playback.last = { } end
+	playback.last.from = from
+	playback.last.to = to
 end
 
 function Interpolator.Update( playback, ticks, vehicle )
-	if not last[playback] then last[playback] = { } end
-	if not last[playback].from or not last[playback].to then return end
+	if not playback.last then playback.last = { } end
+	if not playback.last.from or not playback.last.to then return end
 	local z,rX,rY,rZ
-	local alpha = math.unlerp( last[playback].from.t, last[playback].to.t, ticks )
-	x = math.lerp( last[playback].from.x, last[playback].to.x, alpha )
-	y = math.lerp( last[playback].from.y, last[playback].to.y, alpha )
-	z = math.lerp( last[playback].from.z, last[playback].to.z, alpha )
-	rX = math.lerprot( last[playback].from.rX, last[playback].to.rX, alpha )
-	rY = math.lerprot( last[playback].from.rY, last[playback].to.rY, alpha )
-	rZ = math.lerprot( last[playback].from.rZ, last[playback].to.rZ, alpha )
+	local alpha = math.unlerp( playback.last.from.t, playback.last.to.t, ticks )
+	x = math.lerp( playback.last.from.x, playback.last.to.x, alpha )
+	y = math.lerp( playback.last.from.y, playback.last.to.y, alpha )
+	z = math.lerp( playback.last.from.z, playback.last.to.z, alpha )
+	rX = math.lerprot( playback.last.from.rX, playback.last.to.rX, alpha )
+	rY = math.lerprot( playback.last.from.rY, playback.last.to.rY, alpha )
+	rZ = math.lerprot( playback.last.from.rZ, playback.last.to.rZ, alpha )
 	if getPedOccupiedVehicle(playback.ped) then 
 		local ox,oy,oz = getElementPosition( vehicle )
 		setElementPosition( vehicle, ox, oy, math.max( oz, z ) )
@@ -347,7 +350,7 @@ ErrorCompensator = {}
 error2 = {}
 
 function ErrorCompensator.handleNewPosition( playback, vehicle, x, y, z, period )
-	if not error2[playback] then error2[playback] = { timeEnd = 0 } end
+	if not playback.error then playback.error = { timeEnd = 0 } end
 
 	local vx, vy, vz = getElementPosition( vehicle )
 	-- Check if the distance to interpolate is too far.
@@ -355,20 +358,20 @@ function ErrorCompensator.handleNewPosition( playback, vehicle, x, y, z, period 
 	if dist > 5 or not period then
 		-- Just do move if too far to interpolate or period is not valid
 		setElementPosition( vehicle, x, y, z )
-		error2[playback].x = 0
-		error2[playback].y = 0
-		error2[playback].z = 0
-		error2[playback].timeStart = 0
-		error2[playback].timeEnd = 0
-		error2[playback].fLastAlpha = 0
+		playback.error.x = 0
+		playback.error.y = 0
+		playback.error.z = 0
+		playback.error.timeStart = 0
+		playback.error.timeEnd = 0
+		playback.error.fLastAlpha = 0
 	else
 		-- Set error correction to apply over the next few frames
-		error2[playback].x = x - vx
-		error2[playback].y = y - vy
-		error2[playback].z = z - vz
-		error2[playback].timeStart = getTickCount()
-		error2[playback].timeEnd = error2[playback].timeStart + period * 1.0
-		error2[playback].fLastAlpha = 0
+		playback.error.x = x - vx
+		playback.error.y = y - vy
+		playback.error.z = z - vz
+		playback.error.timeStart = getTickCount()
+		playback.error.timeEnd = playback.error.timeStart + period * 1.0
+		playback.error.fLastAlpha = 0
 	end
 end
 
@@ -376,32 +379,32 @@ end
 -- Apply a portion of the error
 function ErrorCompensator.updatePosition( playback, vehicle )
 	
-	if not error2[playback] then error2[playback] = { timeEnd = 0 } end
+	if not playback.error then playback.error = { timeEnd = 0 } end
 	
-	if error2[playback].timeEnd == 0 then return end
+	if playback.error.timeEnd == 0 then return end
 
 	-- Grab the current game position
 	local vx, vy, vz = getElementPosition( vehicle )
 
 	-- Get the factor of time spent from the interpolation start to the current time.
-	local fAlpha = math.unlerp ( error2[playback].timeStart, error2[playback].timeEnd, getTickCount() )
+	local fAlpha = math.unlerp ( playback.error.timeStart, playback.error.timeEnd, getTickCount() )
 
 	-- Don't let it overcompensate the error too much
 	fAlpha = math.clamp ( 0.0, fAlpha, 1.5 )
 
 	if fAlpha == 1.5 then
-		error2[playback].timeEnd = 0
+		playback.error.timeEnd = 0
 		return
 	end
 
 	-- Get the current error portion to compensate
-	local fCurrentAlpha = fAlpha - error2[playback].fLastAlpha
-	error2[playback].fLastAlpha = fAlpha
+	local fCurrentAlpha = fAlpha - playback.error.fLastAlpha
+	playback.error.fLastAlpha = fAlpha
 
 	-- Apply
-	local nx = vx + error2[playback].x * fCurrentAlpha
-	local ny = vy + error2[playback].y * fCurrentAlpha
-	local nz = vz + error2[playback].z * fCurrentAlpha
+	local nx = vx + playback.error.x * fCurrentAlpha
+	local ny = vy + playback.error.y * fCurrentAlpha
+	local nz = vz + playback.error.z * fCurrentAlpha
 	setElementPosition( vehicle, nx, ny, nz )
 end
 

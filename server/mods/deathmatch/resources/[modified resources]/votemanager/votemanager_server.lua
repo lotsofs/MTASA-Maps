@@ -394,7 +394,7 @@ addEventHandler("onClientSendVote", root,
 			table.insert(voteCount,activePoll[_].votes)
 		end
 		
-		if triggerClientEvent ( rootElement, "updateBars", rootElement, voteCount, activePoll.maxVoters ) then
+		if triggerClientEvent ( root, "updateBars", root, voteCount, activePoll.maxVoters ) then
 			--outputChatBox("if statement true")
 		end
 		
