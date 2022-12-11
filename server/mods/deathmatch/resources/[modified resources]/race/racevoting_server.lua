@@ -77,9 +77,9 @@ function startMidMapVoteForRandomMap(player)
             percentage=81,
             timeout=15,
             allowchange=true,
-            visibleTo=getRootElement(),
-            [1]={'Yes', 'midMapVoteResult', getRootElement(), true},
-            [2]={'No', 'midMapVoteResult', getRootElement(), false;default=true},
+            visibleTo=root,
+            [1]={'Yes', 'midMapVoteResult', root, true},
+            [2]={'No', 'midMapVoteResult', root, false;default=true},
     }
  
     -- Change state if vote did start
@@ -97,7 +97,7 @@ addCommandHandler('new',startMidMapVoteForRandomMap)
 -- Called from the votemanager when the poll has completed
 ----------------------------------------------------------------------------
 addEvent('midMapVoteResult')
-addEventHandler('midMapVoteResult', getRootElement(),
+addEventHandler('midMapVoteResult', root,
     function( votedYes )
         -- Change state back
         if stateAllowsRandomMapVoteResult() then
@@ -145,7 +145,7 @@ end
 -- Race color is defined in the settings
 ----------------------------------------------------------------------------
 function outputRace(message, toElement)
-    toElement = toElement or g_Root
+    toElement = toElement or root
     local r, g, b = getColorFromString(string.upper(get("color")))
     if getElementType(toElement) == 'console' then
         outputServerLog(message)
@@ -228,7 +228,7 @@ function startNextMapVote()
        
     local poll = {
         title="Blah blah blah:",
-        visibleTo=getRootElement(),
+        visibleTo=root,
         percentage=51,
         timeout=8,
         allowchange=true;
@@ -236,7 +236,7 @@ function startNextMapVote()
        
     for index, map in ipairs(compatibleMaps) do
         local mapName = getResourceInfo(map, "name") or getResourceName(map)
-        table.insert(poll, {mapName, 'nextMapVoteResult', getRootElement(), map})
+        table.insert(poll, {mapName, 'nextMapVoteResult', root, map})
     end
        
     if not g_playAgainCount then
@@ -247,13 +247,13 @@ function startNextMapVote()
     if g_currentMap then
         -- Modify this to change play again limit. Obviously 2 PlayAgains = 3 plays of the map total
         if g_playAgainCount < 99 then
-            table.insert(poll, {"Play again (" .. g_playAgainCount + 1 .. "/99)", 'nextMapVoteResult', getRootElement(), g_currentMap})
+            table.insert(poll, {"Play again (" .. g_playAgainCount + 1 .. "/99)", 'nextMapVoteResult', root, g_currentMap})
         end
     end
  
     -- Allow addons to modify the poll
     g_Poll = poll
-    triggerEvent('onPollStarting', g_Root, poll )
+    triggerEvent('onPollStarting', root, poll )
     poll = g_Poll
     g_Poll = nil
  
@@ -261,7 +261,7 @@ function startNextMapVote()
  
     if pollDidStart then
         gotoState('NextMapVote')
-        addEventHandler("onPollEnd", getRootElement(), chooseRandomMap)
+        addEventHandler("onPollEnd", root, chooseRandomMap)
     end
  
     return pollDidStart
@@ -270,7 +270,7 @@ end
  
 -- Used by addons in response to onPollStarting
 addEvent('onPollModified')
-addEventHandler('onPollModified', getRootElement(),
+addEventHandler('onPollModified', root,
     function( poll )
         g_Poll = poll
     end
@@ -283,7 +283,7 @@ function chooseRandomMap (chosen)
         math.randomseed(getTickCount())
         exports.votemanager:finishPoll(1)
     end
-    removeEventHandler("onPollEnd", getRootElement(), chooseRandomMap)
+    removeEventHandler("onPollEnd", root, chooseRandomMap)
 end
  
  
@@ -294,7 +294,7 @@ end
 -- Called from the votemanager when the poll has completed
 ----------------------------------------------------------------------------
 addEvent('nextMapVoteResult')
-addEventHandler('nextMapVoteResult', getRootElement(),
+addEventHandler('nextMapVoteResult', root,
     function( map )
         if map == g_currentMap then
             g_playAgainCount = g_playAgainCount + 1
@@ -336,9 +336,9 @@ function startMidMapVoteForRestartMap(player)
             percentage=81,
             timeout=15,
             allowchange=true,
-            visibleTo=getRootElement(),
-            [1]={'Yes', 'midMapRestartVoteResult', getRootElement(), true},
-            [2]={'No', 'midMapRestartVoteResult', getRootElement(), false;default=true},
+            visibleTo=root,
+            [1]={'Yes', 'midMapRestartVoteResult', root, true},
+            [2]={'No', 'midMapRestartVoteResult', root, false;default=true},
     }
  
     -- Change state if vote did start
@@ -356,7 +356,7 @@ addCommandHandler('voteredo',startMidMapVoteForRestartMap)
 -- Called from the votemanager when the poll has completed
 ----------------------------------------------------------------------------
 addEvent('midMapRestartVoteResult')
-addEventHandler('midMapRestartVoteResult', getRootElement(),
+addEventHandler('midMapRestartVoteResult', root,
     function( votedYes )
         -- Change state back
         if stateAllowsRandomMapVoteResult() then
@@ -377,7 +377,7 @@ addCommandHandler('redo',
         if isPlayerInACLGroup(player, g_GameOptions.admingroup) then
             local currentMap = exports.mapmanager:getRunningGamemodeMap()
             if currentMap then
-                outputChatBox('Map restarted by ' .. getPlayerName(player), g_Root, 0, 240, 0)
+                outputChatBox('Map restarted by ' .. getPlayerName(player), root, 0, 240, 0)
                 if not exports.mapmanager:changeGamemodeMap (currentMap, nil, true) then
                     problemChangingMap()
                 end
@@ -398,7 +398,7 @@ addCommandHandler('random',
                 outputRace( "Random command only works during a race and when no polls are running.", player )
             else
                 local choice = {'curtailed', 'cut short', 'terminated', 'given the heave ho', 'dropkicked', 'expunged', 'put out of our misery', 'got rid of'}
-                outputChatBox('Current map ' .. choice[math.random( 1, #choice )] .. ' by ' .. getPlayerName(player), g_Root, 0, 240, 0)
+                outputChatBox('Current map ' .. choice[math.random( 1, #choice )] .. ' by ' .. getPlayerName(player), root, 0, 240, 0)
                 startRandomMap()
             end
         end
@@ -450,7 +450,7 @@ addCommandHandler('forcevote',
 --
 ---------------------------------------------------------------------------
  
-addEventHandler('onResourceStart', getRootElement(),
+addEventHandler('onResourceStart', root,
     function( res )
         if exports.mapmanager:isMap( res ) then
             setMapLastTimePlayed( res )
@@ -712,13 +712,13 @@ addCommandHandler('nextmap',
             return
         end
         g_ForcedNextMap = map
-        outputChatBox('Next map set to ' .. getMapName( g_ForcedNextMap ) .. ' by ' .. getPlayerName( player ), g_Root, 0, 240, 0)
+        outputChatBox('Next map set to ' .. getMapName( g_ForcedNextMap ) .. ' by ' .. getPlayerName( player ), root, 0, 240, 0)
         triggerClientEvent('onNextMapSet', resourceRoot, getMapName(g_ForcedNextMap))
     end
 )
 
 addEvent('onPlayerJoined', true)
-addEventHandler('onPlayerJoined', getRootElement(),
+addEventHandler('onPlayerJoined', root,
     function()
         if g_ForcedNextMap ~= nil then
             triggerClientEvent(source, 'onNextMapSet', resourceRoot, getMapName(g_ForcedNextMap))
@@ -787,6 +787,6 @@ end
 -- by S.:
 function setNextMap( map )
     g_ForcedNextMap = map
-    outputChatBox('Next map set to ' .. getMapName( g_ForcedNextMap ), g_Root, 0, 240, 0)
+    outputChatBox('Next map set to ' .. getMapName( g_ForcedNextMap ), root, 0, 240, 0)
     triggerClientEvent('onNextMapSet', resourceRoot, getMapName(g_ForcedNextMap))
 end

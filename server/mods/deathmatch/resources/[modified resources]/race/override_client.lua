@@ -13,7 +13,7 @@ OverrideClient = {}
 OverrideClient.method = "fast"
 OverrideClient.debug = false
 
-addEventHandler('onClientElementStreamIn', g_Root,
+addEventHandler('onClientElementStreamIn', root,
 	function()
 		if getElementType( source ) == "vehicle" or getElementType( source ) == "player" then
 			OverrideClient.updateVars( source )
@@ -21,7 +21,7 @@ addEventHandler('onClientElementStreamIn', g_Root,
 	end
 )
 
-addEventHandler('onClientElementDataChange', g_Root,
+addEventHandler('onClientElementDataChange', root,
 	function(dataName)
 		if dataName == "race.collideothers" or dataName == "race.collideworld" or dataName == "race.alpha" or string.sub(dataName, 1, 7) == "raceiv." then
 			OverrideClient.updateVars( source )
@@ -29,26 +29,26 @@ addEventHandler('onClientElementDataChange', g_Root,
 	end
 )
 
-addEventHandler('onClientVehicleExit', g_Root, 
+addEventHandler('onClientVehicleExit', root, 
 	function(thePlayer, seat)
 		OverrideClient.updateVars( source )
 		OverrideClient.updateVars( thePlayer )
 	end
 )
 
-addEventHandler('onClientVehicleStartEnter', g_Root, 
+addEventHandler('onClientVehicleStartEnter', root, 
 	function(player, seat, door)
 		OverrideClient.updateVars( source )
 	end
 )
 
-addEventHandler('onClientVehicleEnter', g_Root, 
+addEventHandler('onClientVehicleEnter', root, 
 	function(player, seat, door)
 		OverrideClient.updateVars( source )
 	end
 )
 
-addEventHandler('onClientMapStarting', g_Root,
+addEventHandler('onClientMapStarting', root,
 	function(mapInfo)
 		for i, v in pairs(getElementsByType("vehicle")) do
 			OverrideClient.updateVars( v )
@@ -124,7 +124,7 @@ function OverrideClient.updateVars( element )
 					setElementCollidableWith( element, other, false )
 				end
 			elseif (o) then -- This car has cols and an owner
-				setElementAlpha (element, o == g_Me and 255 or ghostModeOff and 255 or 180)
+				setElementAlpha (element, o == localPlayer and 255 or ghostModeOff and 255 or 180)
 				for _,other in ipairs( otherPlayers ) do
 					setElementCollidableWith( element, other, other == o or ghostModeOff )
 				end
@@ -172,7 +172,7 @@ function OverrideClient.updateVars( element )
 		elseif (getElementData(element, "raceiv.owner")) then
 			-- This is the main starter vehicle and it needs to be interacted with as well
 			local o = getElementData(element, "raceiv.owner")
-			if (allowOnFoot) then setElementAlpha (element, o == g_Me and 255 or ghostModeOff and 255 or 180) end
+			if (allowOnFoot) then setElementAlpha (element, o == localPlayer and 255 or ghostModeOff and 255 or 180) end
 			for _,other in ipairs( otherPlayers ) do
 				setElementCollidableWith( element, other, other == o or ghostModeOff )
 			end	
@@ -199,7 +199,7 @@ function OverrideClient.updateVars( element )
 		elseif (getElementType(element) == "player") then
 			-- This is the main starter vehicle and it needs to be interacted with as well
 			local o = element
-			if (allowOnFoot) then setElementAlpha (element, o == g_Me and 255 or ghostModeOff and 255 or 180) end
+			if (allowOnFoot) then setElementAlpha (element, o == localPlayer and 255 or ghostModeOff and 255 or 180) end
 			for _,other in ipairs( otherPlayers ) do
 				if (other ~= o) then
 					setElementCollidableWith( element, other, ghostModeOff )
@@ -242,7 +242,7 @@ end
 --
 -- Emergency backup method - Works, but is slower and doesn't look as nice
 --
-addEventHandler('onClientPreRender', g_Root,
+addEventHandler('onClientPreRender', root,
 	function()
 		if OverrideClient.method ~= "slow" then return end
 		if g_Vehicle then
@@ -264,7 +264,7 @@ addEventHandler('onClientPreRender', g_Root,
 -----------------------------------------------
 -- Debug output
 if OverrideClient.debug then
-	addEventHandler('onClientRender', g_Root,
+	addEventHandler('onClientRender', root,
 		function()
 			local sx = { 30, 200, 280, 360, 420, 500 }
 			local sy = 200

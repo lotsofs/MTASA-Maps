@@ -1,6 +1,3 @@
-g_Root = getRootElement()
-g_ResRoot = getResourceRootElement(getThisResource())
-g_Me = getLocalPlayer()
 g_ArmedVehicleIDs = table.create({ 425, 447, 520, 430, 464, 432 }, true) -- hunter, seasparrow, hydra, predator, rcbaron, rhino
 g_WaterCraftIDs = table.create({ 539, 460, 417, 447, 472, 473, 493, 595, 484, 430, 453, 452, 446, 454 }, true)
 g_ModelForPickupType = { nitro = 2221, repair = 2222, vehiclechange = 2223 }
@@ -11,7 +8,7 @@ g_Pickups = {}
 g_VisiblePickups = {}
 g_Objects = {}
 
-addEventHandler('onClientResourceStart', g_ResRoot,
+addEventHandler('onClientResourceStart', resourceRoot,
 	function()
 		g_Players = getElementsByType('player')
 		
@@ -93,7 +90,7 @@ addEventHandler('onClientResourceStart', g_ResRoot,
 		
 		-- set update handlers
 		g_PickupStartTick = getTickCount()
-		addEventHandler('onClientRender', g_Root, updateBars)
+		addEventHandler('onClientRender', root, updateBars)
 		g_WaterCheckTimer = setTimer(checkWater, 1, 0)
 		
 		-- load pickup models and textures
@@ -116,7 +113,7 @@ addEventHandler('onClientResourceStart', g_ResRoot,
         -- Show title screen now
         TitleScreen.show()
 
-		setPedCanBeKnockedOffBike(g_Me, false)
+		setPedCanBeKnockedOffBike(localPlayer, false)
 	end
 )
 
@@ -149,7 +146,7 @@ function TitleScreen.show()
 	guiMoveToBack(g_GUI['titleImage'])
     TitleScreen.startTime = getTickCount()
     TitleScreen.bringForward = 0
-    addEventHandler('onClientRender', g_Root, TitleScreen.update)
+    addEventHandler('onClientRender', root, TitleScreen.update)
 end
 
 function TitleScreen.update()
@@ -160,7 +157,7 @@ function TitleScreen.update()
     g_dxGUI['titleText2']:color(220,220,220,255*alpha)
     if alpha == 0 then
         hideGUIComponents('titleImage','titleText1','titleText2')
-        removeEventHandler('onClientRender', g_Root, TitleScreen.update)
+        removeEventHandler('onClientRender', root, TitleScreen.update)
 	end
 end
 
@@ -266,7 +263,7 @@ function initRace(vehicle, checkpoints, objects, pickups, mapoptions, ranked, du
 	g_GameOptions = gameoptions
 	g_MapInfo = mapinfo
     g_PlayerInfo = playerInfo
-    triggerEvent('onClientMapStarting', g_Me, mapinfo )
+    triggerEvent('onClientMapStarting', localPlayer, mapinfo )
 	
 	g_dxGUI.authordisplayName:text(g_MapInfo.author or "<none>")
 	g_dxGUI.mapdisplayName:text(g_MapInfo.name or "<none>")
@@ -282,12 +279,12 @@ function initRace(vehicle, checkpoints, objects, pickups, mapoptions, ranked, du
 	
 	--local x, y, z = getElementPosition(g_Vehicle)
 	-- setCameraBehindVehicle(vehicle)
-	setCameraBehindPlayer(g_Me) -- LotsOfS on foot support
+	setCameraBehindPlayer(localPlayer) -- LotsOfS on foot support
 	--alignVehicleToGround(vehicle)
 	updateVehicleWeapons()
 	setCloudsEnabled(g_GameOptions.cloudsenable)
 	setBlurLevel(g_GameOptions.blurlevel)
-	setPedCanBeKnockedOffBike(g_Me, g_MapOptions.allowonfoot and g_MapOptions.falloffbike)
+	setPedCanBeKnockedOffBike(localPlayer, g_MapOptions.allowonfoot and g_MapOptions.falloffbike)
 
 	g_dxGUI.mapdisplay:visible(g_GameOptions.showmapname)
 	g_dxGUI.mapdisplayName:visible(g_GameOptions.showmapname)
@@ -388,9 +385,9 @@ function initRace(vehicle, checkpoints, objects, pickups, mapoptions, ranked, du
     -- setTimer(fadeCamera, delay + 750, 1, true, 10.0)
     setTimer(fadeCamera, delay + 1500, 1, true, 2.0)
 
-    setTimer( function() triggerServerEvent('onNotifyPlayerReady', g_Me) end, delay + 3500, 1 )
+    setTimer( function() triggerServerEvent('onNotifyPlayerReady', localPlayer) end, delay + 3500, 1 )
     outputDebug( 'MISC', 'initRace end' )
-    setTimer( function() setCameraBehindPlayer( g_Me ) end, delay + 300, 1 )
+    setTimer( function() setCameraBehindPlayer( localPlayer ) end, delay + 300, 1 )
 end
 
 -- Called from the server when settings are changed
@@ -429,17 +426,17 @@ function launchRace(duration)
 		showGUIComponents('timeleftbg', 'timeleft')
 		guiLabelSetColor(g_GUI.timeleft, 255, 255, 255)
 		g_Duration = duration
-		addEventHandler('onClientRender', g_Root, updateTime)
+		addEventHandler('onClientRender', root, updateTime)
 	end
 	
 	setVehicleDamageProof(g_Vehicle, false)
 
 	g_StartTick = getTickCount()
-	triggerEvent('onClientElementDataChange', g_Me, 'race rank') -- Refresh at start of race since init is too early
+	triggerEvent('onClientElementDataChange', localPlayer, 'race rank') -- Refresh at start of race since init is too early
 end
 
 
-addEventHandler('onClientElementStreamIn', g_Root,
+addEventHandler('onClientElementStreamIn', root,
 	function()
 		local colshape = table.find(g_Pickups, 'object', source)
 		if colshape then
@@ -454,7 +451,7 @@ addEventHandler('onClientElementStreamIn', g_Root,
 	end
 )
 
-addEventHandler('onClientElementStreamOut', g_Root,
+addEventHandler('onClientElementStreamOut', root,
 	function()
 		local colshape = table.find(g_VisiblePickups, source)
 		if colshape then
@@ -545,10 +542,10 @@ function updatePickups()
 		end
 	end
 end
-addEventHandler('onClientRender', g_Root, updatePickups)
+addEventHandler('onClientRender', root, updatePickups)
 
 local fps = 0
-addEventHandler("onClientPreRender", g_Root,
+addEventHandler("onClientPreRender", root,
 	function (msSinceLastFrame)
 		fps = (1 / msSinceLastFrame) * 1000
 	end
@@ -560,7 +557,7 @@ function updateFPSAndPing()
 end
 setTimer(updateFPSAndPing, 1000, 0)
 	
-addEventHandler('onClientColShapeHit', g_Root,
+addEventHandler('onClientColShapeHit', root,
 	function(elem)
 		local pickup = g_Pickups[source]
 		if (not pickup) then
@@ -568,14 +565,14 @@ addEventHandler('onClientColShapeHit', g_Root,
 		end
 		local vehicle
 		if (pickup.vehicletoaffect == 'current') then
-			vehicle = getPedOccupiedVehicle(g_Me)
+			vehicle = getPedOccupiedVehicle(localPlayer)
 			if (not vehicle) then
 				return
 			end
 		else
 			vehicle = g_Vehicle
 		end
-		if elem ~= vehicle or isVehicleBlown(vehicle) or getElementHealth(g_Me) == 0 then
+		if elem ~= vehicle or isVehicleBlown(vehicle) or getElementHealth(localPlayer) == 0 then
 			return
 		end
 		if pickup.load then
@@ -610,7 +607,7 @@ function handleHitPickup(pickup, vehicle)
 	elseif pickup.type == 'repair' then
 		fixVehicle(vehicle)
 	end
-	triggerServerEvent('onPlayerPickUpRacePickupInternal', g_Me, pickup.id, pickup.respawn)
+	triggerServerEvent('onPlayerPickUpRacePickupInternal', localPlayer, pickup.id, pickup.respawn)
 	playSoundFrontEnd(46)
 end
 
@@ -664,7 +661,7 @@ function updateVehicleWeapons()
 	if (not g_MapOptions) then
 		return
 	end
-	local vehicle = getPedOccupiedVehicle(g_Me)
+	local vehicle = getPedOccupiedVehicle(localPlayer)
 	if vehicle then
 		-- LotsOfS: Patch to allow disabling rustler weapons as well as fist fights for feetrace
 		weapons = true
@@ -686,9 +683,9 @@ function updateVehicleWeapons()
 	end
 end
 
-addEventHandler('onClientPlayerWeaponSwitch', g_Root,
+addEventHandler('onClientPlayerWeaponSwitch', root,
 	function(prev, new)
-		if (source ~= g_Me) then return end
+		if (source ~= localPlayer) then return end
 		-- Attack is still possible by pressing enter/exit while aiming with a melee weapon. Disable aiming for fist weapons.
 		toggleControl('aim_weapon', g_MapOptions.fistfights or (new ~= 0 and new ~= 1 and new ~= 10 and new ~= 11)) -- melee weapons & gifts
 		toggleControl('fire', g_MapOptions.fistfights or new == 11 or new == 12 or isElementInWater(source)) -- goggles, parachute, detonator
@@ -728,7 +725,7 @@ end
 function updateTime()
 	local tick = getTickCount()
 	local msPassed = tick - g_StartTick
-	if not isPlayerFinished(g_Me) then
+	if not isPlayerFinished(localPlayer) then
 		g_dxGUI.timepassed:text(msToTimeStr(msPassed))
 	end
 	local timeLeft = g_Duration - msPassed
@@ -738,10 +735,10 @@ function updateTime()
 	end
 end
 
-addEventHandler('onClientElementDataChange', g_Me,
+addEventHandler('onClientElementDataChange', localPlayer,
 	function(dataName)
 		if dataName == 'race rank' and not Spectate.active then
-			setRankDisplay( getElementData(g_Me, 'race rank') )
+			setRankDisplay( getElementData(localPlayer, 'race rank') )
 		end
 	end,
 	false
@@ -773,7 +770,7 @@ function setRankDisplay( rank )
 end
 addCommandHandler("rank", function(command,rank) setRankDisplay(tonumber(rank)) end)
 
-addEventHandler('onClientElementDataChange', g_Root,
+addEventHandler('onClientElementDataChange', root,
 	function(dataName)
 		if dataName == 'race.finished' then
 			if isPlayerFinished(source) then
@@ -792,19 +789,19 @@ addEventHandler('onClientElementDataChange', g_Root,
 function checkWater()
     if g_Vehicle then
 		if (g_MapOptions.allowonfoot) then
-			local weapon = getPedWeaponSlot(g_Me)
-			toggleControl('fire', g_MapOptions.fistfights or isElementInWater(g_Me) or weapon == 11 or weapon == 12) -- goggles, parachute, detonator
+			local weapon = getPedWeaponSlot(localPlayer)
+			toggleControl('fire', g_MapOptions.fistfights or isElementInWater(localPlayer) or weapon == 11 or weapon == 12) -- goggles, parachute, detonator
 			return --LotsOfS: Allow swimming and tossing cars in the drink if allowonfoot is true
 		end
         if not g_WaterCraftIDs[getElementModel(g_Vehicle)] then
-            local x, y, z = getElementPosition(g_Me)
+            local x, y, z = getElementPosition(localPlayer)
             local waterZ = getWaterLevel(x, y, z)
-            if waterZ and z < waterZ - 0.5 and not isPlayerRaceDead(g_Me) and not isPlayerFinished(g_Me) and g_MapOptions then
+            if waterZ and z < waterZ - 0.5 and not isPlayerRaceDead(localPlayer) and not isPlayerFinished(localPlayer) and g_MapOptions then
                 if g_MapOptions.firewater then
                     blowVehicle ( g_Vehicle, true )
                 else
-                    setElementHealth(g_Me,0)
-                    triggerServerEvent('onRequestKillPlayer',g_Me)
+                    setElementHealth(localPlayer,0)
+                    triggerServerEvent('onRequestKillPlayer',localPlayer)
                 end
             end
         end
@@ -813,9 +810,9 @@ function checkWater()
 			setVehicleEngineState( g_Vehicle, true )
 		end
 		-- Check dead vehicle
-		if getElementHealth( g_Vehicle ) == 0 and not isPlayerRaceDead(g_Me) and not isPlayerFinished(g_Me)then
-			setElementHealth(g_Me,0)
-			triggerServerEvent('onRequestKillPlayer',g_Me)
+		if getElementHealth( g_Vehicle ) == 0 and not isPlayerRaceDead(localPlayer) and not isPlayerFinished(localPlayer)then
+			setElementHealth(localPlayer,0)
+			triggerServerEvent('onRequestKillPlayer',localPlayer)
 		end
 	end
 end
@@ -837,7 +834,7 @@ function showNextCheckpoint(bOtherPlayer)
 		setMarkerTarget(curCheckpoint.marker, unpack(nextCheckpoint.position))
 	end
 	if not Spectate.active then
-		setElementData(g_Me, 'race.checkpoint', i)
+		setElementData(localPlayer, 'race.checkpoint', i)
 	end
 end
 
@@ -872,7 +869,7 @@ function updateSpectatingCheckpointsAndRank()
 			if cpValue > 0 and cpValue <= #g_Checkpoints then
 				if cpValue ~= cpValuePrev then
 					cpValuePrev = cpValue
-					setCurrentCheckpoint( cpValue, Spectate.active and watchedPlayer ~= g_Me )
+					setCurrentCheckpoint( cpValue, Spectate.active and watchedPlayer ~= localPlayer )
 				end
 			end
 		end
@@ -897,10 +894,10 @@ function getWhichDataSourceToUse()
 end
 
 function getWatchedPlayer()
-	if not Spectate.active			then	return g_Me				end
+	if not Spectate.active			then	return localPlayer				end
 	if Spectate.target				then	return Spectate.target	end
 	if Spectate.hasDroppedCamera()	then	return nil				end
-	return g_Me
+	return localPlayer
 end
 -------------------------------------------------------------------------------
 
@@ -910,8 +907,8 @@ function checkIfInsideCheckpoint()
 		checkpointReached(source)
 	end
 end
-addEventHandler ( "onClientPlayerVehicleExit", g_Me, checkIfInsideCheckpoint )
-addEventHandler ( "onClientPlayerVehicleEnter", g_Me, checkIfInsideCheckpoint )
+addEventHandler ( "onClientPlayerVehicleExit", localPlayer, checkIfInsideCheckpoint )
+addEventHandler ( "onClientPlayerVehicleEnter", localPlayer, checkIfInsideCheckpoint )
 
 function checkpointReached(elem)
 	outputDebug( 'CP', 'checkpointReached'
@@ -919,33 +916,33 @@ function checkpointReached(elem)
 					.. ' elem:' .. tostring(elem)
 					.. ' g_Vehicle:' .. tostring(g_Vehicle)
 					.. ' isVehicleBlown(g_Vehicle):' .. tostring(isVehicleBlown(g_Vehicle))
-					.. ' g_Me:' .. tostring(g_Me)
-					.. ' getElementHealth(g_Me):' .. tostring(getElementHealth(g_Me))
+					.. ' localPlayer:' .. tostring(localPlayer)
+					.. ' getElementHealth(localPlayer):' .. tostring(getElementHealth(localPlayer))
 					)
 	-- LotsOfS: Added extra checks for when the player is on foot in on foot races
 	if (not g_MapOptions.allowonfoot and elem ~= g_Vehicle) then
 		return
 	end
-	if (Spectate.active or getElementHealth(g_Me) == 0 or isVehicleBlown(g_Vehicle)) then
+	if (Spectate.active or getElementHealth(localPlayer) == 0 or isVehicleBlown(g_Vehicle)) then
 		return
 	end
 	-- if (elem == g_Vehicle and not getVehicleController(g_Vehicle)) then
 	-- 	return
 	-- end
-	if elem ~= g_Vehicle and elem ~= g_Me and elem ~= getPedOccupiedVehicle(g_Me) then
+	if elem ~= g_Vehicle and elem ~= localPlayer and elem ~= getPedOccupiedVehicle(localPlayer) then
 		return
 	end
-	local vehicle = getPedOccupiedVehicle(g_Me)
-	if (elem == g_Me and vehicle == g_Vehicle) then
+	local vehicle = getPedOccupiedVehicle(localPlayer)
+	if (elem == localPlayer and vehicle == g_Vehicle) then
 		return
 	end
 	if (vehicle and getElementData(vehicle, "raceiv.blocked")) then
 		return
 	end
-	if (g_Checkpoints[g_CurrentCheckpoint].restrictions == 'onfoot' and getPedOccupiedVehicle(g_Me)) then
+	if (g_Checkpoints[g_CurrentCheckpoint].restrictions == 'onfoot' and getPedOccupiedVehicle(localPlayer)) then
 		return
 	end
-	if (g_Checkpoints[g_CurrentCheckpoint].restrictions == 'invehicle' and not getPedOccupiedVehicle(g_Me)) then
+	if (g_Checkpoints[g_CurrentCheckpoint].restrictions == 'invehicle' and not getPedOccupiedVehicle(localPlayer)) then
 		return
 	end
 	if (g_Checkpoints[g_CurrentCheckpoint].restrictions == 'mainvehicleonly' and elem ~= g_Vehicle) then
@@ -967,7 +964,7 @@ function checkpointReached(elem)
 		vehicleChanging(g_MapOptions.classicchangez, g_Checkpoints[g_CurrentCheckpoint].vehicle)
 	end
 	
-	triggerServerEvent('onPlayerReachCheckpointInternal', g_Me, g_CurrentCheckpoint)
+	triggerServerEvent('onPlayerReachCheckpointInternal', localPlayer, g_CurrentCheckpoint)
 	playSoundFrontEnd(43)
 	if g_CurrentCheckpoint < #g_Checkpoints then
 		showNextCheckpoint()
@@ -975,7 +972,7 @@ function checkpointReached(elem)
 		g_dxGUI.checkpoint:text(#g_Checkpoints .. ' / ' .. #g_Checkpoints)
 		local rc = getRadioChannel()
 		setRadioChannel(0)
-		addEventHandler("onClientPlayerRadioSwitch", g_Root, onChange)
+		addEventHandler("onClientPlayerRadioSwitch", root, onChange)
 		playSound("audio/mission_accomplished.mp3")
 		setTimer(changeRadioStation, 8000, 1, rc)
 		if g_GUI.hurry then
@@ -983,7 +980,7 @@ function checkpointReached(elem)
 			g_GUI.hurry = false
 		end
 		destroyCheckpoint(#g_Checkpoints)
-        triggerEvent('onClientPlayerFinish', g_Me)
+        triggerEvent('onClientPlayerFinish', localPlayer)
 		toggleAllControls(false, true, false)
 	end
 end
@@ -993,12 +990,12 @@ function onChange()
 end
 
 function changeRadioStation(rc)
-	removeEventHandler("onClientPlayerRadioSwitch", g_Root, onChange)
+	removeEventHandler("onClientPlayerRadioSwitch", root, onChange)
 	setRadioChannel(tonumber(rc))
 end
 
 function startHurry()
-	if not isPlayerFinished(g_Me) then
+	if not isPlayerFinished(localPlayer) then
 		local screenWidth, screenHeight = guiGetScreenSize()
 		local w, h = resAdjust(370), resAdjust(112)
 		g_GUI.hurry = guiCreateStaticImage(screenWidth/2 - w/2, screenHeight - h - 40, w, h, 'img/hurry.png', false, nil)
@@ -1063,7 +1060,7 @@ end
 
 function Spectate._start()
 	outputDebug( 'SPECTATE', 'Spectate._start ' )
-	triggerServerEvent('onClientNotifySpectate', g_Me, true )
+	triggerServerEvent('onClientNotifySpectate', localPlayer, true )
 	assert(not Spectate.active, "Spectate._start - not Spectate.active")
 	local screenWidth, screenHeight = guiGetScreenSize()
 	g_GUI.specprev = guiCreateStaticImage(screenWidth/2 - 100 - 58, screenHeight - 123, 58, 82, 'img/specprev.png', false, nil)
@@ -1077,7 +1074,7 @@ function Spectate._start()
 	if Spectate.savePos then
 		savePosition()
 	end
-	Spectate.setTarget( Spectate.findNewTarget(g_Me,1) )
+	Spectate.setTarget( Spectate.findNewTarget(localPlayer,1) )
 	MovePlayerAway.start()
 	Spectate.setTarget( Spectate.target )
     Spectate.validateTarget(Spectate.target)
@@ -1091,7 +1088,7 @@ end
 function Spectate._stop()
 	Spectate.cancelDropCamera()
 	Spectate.tickTimer:killTimer()
-	triggerServerEvent('onClientNotifySpectate', g_Me, false )
+	triggerServerEvent('onClientNotifySpectate', localPlayer, false )
 	outputDebug( 'SPECTATE', 'Spectate._stop ' )
 	assert(Spectate.active, "Spectate._stop - Spectate.active")
 	for i,name in ipairs({'specprev', 'specprevhi', 'specnext', 'specnexthi', 'speclabel'}) do
@@ -1105,7 +1102,7 @@ function Spectate._stop()
 	removeCommandHandler("Spectate next")
 	
 	MovePlayerAway.stop()
-	setCameraTarget(g_Me)
+	setCameraTarget(localPlayer)
 	Spectate.target = nil
 	Spectate.active = false
 	if Spectate.savePos then
@@ -1183,7 +1180,7 @@ function Spectate.isValidTarget(player)
 	if player == nil then
 		return true
 	end
-	if player == g_Me or isPlayerFinished(player) or isPlayerRaceDead(player) or isPlayerSpectating(player) then
+	if player == localPlayer or isPlayerFinished(player) or isPlayerRaceDead(player) or isPlayerSpectating(player) then
 		return false
 	end
 	if ( Spectate.blockUntilTimes[player] or 0 ) > getTickCount() then
@@ -1246,11 +1243,11 @@ function Spectate.setTarget( player )
 		end
 		guiSetText(g_GUI.speclabel, 'Currently spectating:\n' .. getPlayerName(Spectate.target))
 	else
-		local x,y,z = getElementPosition(g_Me)
+		local x,y,z = getElementPosition(localPlayer)
 		x = x - ( x % 32 )
 		y = y - ( y % 32 )
 		z = getGroundPosition ( x, y, 5000 ) or 40
-		setCameraTarget( g_Me )
+		setCameraTarget( localPlayer )
 		setCameraMatrix( x,y,z+10,x,y+50,z+60)
 		guiSetText(g_GUI.speclabel, 'Currently spectating:\n No one to spectate')
 	end
@@ -1287,22 +1284,22 @@ end
 
 g_SavedPos = {}
 function savePosition()
-	g_SavedPos.x, g_SavedPos.y, g_SavedPos.z = getElementPosition(g_Me)
-	g_SavedPos.rz = getPedRotation(g_Me)
+	g_SavedPos.x, g_SavedPos.y, g_SavedPos.z = getElementPosition(localPlayer)
+	g_SavedPos.rz = getPedRotation(localPlayer)
 	g_SavedPos.vx, g_SavedPos.vy, g_SavedPos.vz = getElementPosition(g_Vehicle)
 	g_SavedPos.vrx, g_SavedPos.vry, g_SavedPos.vrz = getElementRotation(g_Vehicle)
 end
 
 function restorePosition()
-	setElementPosition( g_Me, g_SavedPos.x, g_SavedPos.y, g_SavedPos.z )
-	setPedRotation( g_Me, g_SavedPos.rz )
+	setElementPosition( localPlayer, g_SavedPos.x, g_SavedPos.y, g_SavedPos.z )
+	setPedRotation( localPlayer, g_SavedPos.rz )
 	setElementPosition( g_Vehicle, g_SavedPos.vx, g_SavedPos.vy, g_SavedPos.vz )
 	setElementRotation( g_Vehicle, g_SavedPos.vrx, g_SavedPos.vry, g_SavedPos.vrz )
 end
 
 
 addEvent ( "onClientScreenFadedOut", true )
-addEventHandler ( "onClientScreenFadedOut", g_Root,
+addEventHandler ( "onClientScreenFadedOut", root,
 	function()
 		Spectate.fadedout = true
 		Spectate.updateGuiFadedOut()
@@ -1310,7 +1307,7 @@ addEventHandler ( "onClientScreenFadedOut", g_Root,
 )
 
 addEvent ( "onClientScreenFadedIn", true )
-addEventHandler ( "onClientScreenFadedIn", g_Root,
+addEventHandler ( "onClientScreenFadedIn", root,
 	function()
 		Spectate.fadedout = false
 		Spectate.updateGuiFadedOut()
@@ -1318,9 +1315,9 @@ addEventHandler ( "onClientScreenFadedIn", g_Root,
 )
 
 addEvent ( "onClientPreRender", true )
-addEventHandler ( "onClientPreRender", g_Root,
+addEventHandler ( "onClientPreRender", root,
 	function()
-		if isPlayerRaceDead( g_Me ) then
+		if isPlayerRaceDead( localPlayer ) then
 			setCameraMatrix( getCameraMatrix() )
 		end
 		updateSpectatingCheckpointsAndRank()
@@ -1351,31 +1348,31 @@ MovePlayerAway.rotZ = 0
 MovePlayerAway.health = 0
 
 function MovePlayerAway.start()
-	local element = g_Vehicle or getPedOccupiedVehicle(g_Me) or g_Me
+	local element = g_Vehicle or getPedOccupiedVehicle(localPlayer) or localPlayer
 	MovePlayerAway.posX, MovePlayerAway.posY, MovePlayerAway.posZ = getElementPosition(element)
 	MovePlayerAway.posZ = 34567 + math.random(0,4000)
 	MovePlayerAway.rotZ = 0
 	MovePlayerAway.health = math.max(1,getElementHealth(element))
 	setElementHealth( element, 2000 )
-	setElementHealth( g_Me, 90 )
+	setElementHealth( localPlayer, 90 )
 	MovePlayerAway.update(true)
 	MovePlayerAway.timer:setTimer(MovePlayerAway.update,500,0)
-	triggerServerEvent("onRequestMoveAwayBegin", g_Me)
+	triggerServerEvent("onRequestMoveAwayBegin", localPlayer)
 end
 
 
 function MovePlayerAway.update(nozcheck)
 	-- Move our player far away
 	local camTarget = getCameraTarget()
-	if not getPedOccupiedVehicle(g_Me) then
-		setElementPosition( g_Me, MovePlayerAway.posX-10, MovePlayerAway.posY-10, MovePlayerAway.posZ )
-		setElementFrozen ( g_Me, true )
+	if not getPedOccupiedVehicle(localPlayer) then
+		setElementPosition( localPlayer, MovePlayerAway.posX-10, MovePlayerAway.posY-10, MovePlayerAway.posZ )
+		setElementFrozen ( localPlayer, true )
 		local vehicle = g_Vehicle
 		if vehicle and not g_MapOptions.spectatevehiclespersist then
 			triggerServerEvent('moveUnoccupiedVehicleForSpectate', vehicle, MovePlayerAway.posX, MovePlayerAway.posY, MovePlayerAway.posZ, MovePlayerAway.rotZ)
 		end
 	end
-	if getPedOccupiedVehicle(g_Me) then
+	if getPedOccupiedVehicle(localPlayer) then
 		if not nozcheck then
 			if camTarget then
 				MovePlayerAway.posX, MovePlayerAway.posY = getElementPosition(camTarget)
@@ -1398,10 +1395,10 @@ function MovePlayerAway.update(nozcheck)
 			setElementAngularVelocity( vehicle, 0,0,0 )
 			setElementRotation ( vehicle, 0,0,MovePlayerAway.rotZ )
 		elseif vehicle and g_MapOptions.spectatevehiclespersist then
-			setPedExitVehicle(g_Me)
+			setPedExitVehicle(localPlayer)
 		end
 	end
-	setElementHealth( g_Me, 90 )
+	setElementHealth( localPlayer, 90 )
 
 	if camTarget and camTarget ~= getCameraTarget() then
 		setCameraTarget(camTarget)
@@ -1409,7 +1406,7 @@ function MovePlayerAway.update(nozcheck)
 end
 
 function MovePlayerAway.stop()
-	triggerServerEvent("onRequestMoveAwayEnd", g_Me)
+	triggerServerEvent("onRequestMoveAwayEnd", localPlayer)
 	if MovePlayerAway.timer:isActive() then
 		MovePlayerAway.timer:killTimer()
 		local vehicle = g_Vehicle
@@ -1420,7 +1417,7 @@ function MovePlayerAway.stop()
 			setVehicleDamageProof ( vehicle, false )
 			setElementHealth ( vehicle, MovePlayerAway.health )
 		end
-		setElementVelocity( g_Me, 0,0,0 )
+		setElementVelocity( localPlayer, 0,0,0 )
 	end
 end
 
@@ -1435,14 +1432,14 @@ end
 function remoteSoonFadeIn( bNoCameraMove )
     setTimer(fadeCamera,250+500,1,true,1.0)		-- And up
 	if not bNoCameraMove then
-		setTimer( function() setCameraBehindPlayer( g_Me ) end ,250+500-150,1 )
+		setTimer( function() setCameraBehindPlayer( localPlayer ) end ,250+500-150,1 )
 	end
 	setTimer(checkVehicleIsHelicopter,250+500,1)
 end
 -----------------------------------------------------------------------
 
 function raceTimeout()
-	removeEventHandler('onClientRender', g_Root, updateTime)
+	removeEventHandler('onClientRender', root, updateTime)
 	if g_CurrentCheckpoint then
 		destroyCheckpoint(g_CurrentCheckpoint)
 		destroyCheckpoint(g_CurrentCheckpoint + 1)
@@ -1452,12 +1449,12 @@ function raceTimeout()
 		Animation.createAndPlay(g_GUI.hurry, Animation.presets.guiFadeOut(500), destroyElement)
 		g_GUI.hurry = nil
 	end
-	triggerEvent("onClientPlayerOutOfTime", g_Me)
+	triggerEvent("onClientPlayerOutOfTime", localPlayer)
 	toggleAllControls(false, true, false)
 end
 
 function unloadAll(preRace)
-    triggerEvent('onClientMapStopping', g_Me, preRace)
+    triggerEvent('onClientMapStopping', localPlayer, preRace)
 	for i=1,#g_Checkpoints do
 		destroyCheckpoint(i)
 	end
@@ -1479,10 +1476,10 @@ function unloadAll(preRace)
 	table.each(g_Objects, destroyElement)
 	g_Objects = {}
 	
-	setElementData(g_Me, 'race.checkpoint', nil)
+	setElementData(localPlayer, 'race.checkpoint', nil)
 	
 	g_Vehicle = nil
-	removeEventHandler('onClientRender', g_Root, updateTime)
+	removeEventHandler('onClientRender', root, updateTime)
 	
 	toggleAllControls(true)
 	
@@ -1582,27 +1579,27 @@ function isPlayerSpectating(player)
 	return getElementData(player, 'race.spectating')
 end
 
-addEventHandler('onClientPlayerJoin', g_Root,
+addEventHandler('onClientPlayerJoin', root,
 	function()
 		table.insertUnique(g_Players, source)
-		triggerEvent('onClientElementDataChange', g_Me, 'race rank') -- Refresh rank display (since total players changed)
+		triggerEvent('onClientElementDataChange', localPlayer, 'race rank') -- Refresh rank display (since total players changed)
 	end
 )
 
-addEventHandler('onClientPlayerSpawn', g_Root,
+addEventHandler('onClientPlayerSpawn', root,
 	function()
 		Spectate.blockAsTarget( source, 2000 )	-- No spectate at this player for 2 seconds
     end
 )
 
-addEventHandler('onClientPlayerWasted', g_Root,
+addEventHandler('onClientPlayerWasted', root,
 	function()
 		if not g_StartTick then
 			return
 		end
 		local player = source
 		local vehicle = getPedOccupiedVehicle(player)
-		if player == g_Me then
+		if player == localPlayer then
 			if #g_Players > 1 and (g_MapOptions.respawn == 'none' or g_MapOptions.respawntime >= 10000) then
 				if Spectate.blockManualTimer and isTimer(Spectate.blockManualTimer) then
 					killTimer(Spectate.blockManualTimer)
@@ -1615,27 +1612,27 @@ addEventHandler('onClientPlayerWasted', g_Root,
 	end
 )
 
-addEventHandler('onClientPlayerQuit', g_Root,
+addEventHandler('onClientPlayerQuit', root,
 	function()
 		table.removevalue(g_Players, source)
 		Spectate.blockUntilTimes[source] = nil
 		Spectate.validateTarget(source)		-- No spectate at this player
-		triggerEvent('onClientElementDataChange', g_Me, 'race rank') -- Refresh rank display (since total players changed)
+		triggerEvent('onClientElementDataChange', localPlayer, 'race rank') -- Refresh rank display (since total players changed)
 	end
 )
 
-addEventHandler('onClientResourceStop', g_ResRoot,
+addEventHandler('onClientResourceStop', resourceRoot,
 	function()
 		unloadAll()
-		removeEventHandler('onClientRender', g_Root, updateBars)
+		removeEventHandler('onClientRender', root, updateBars)
 		killTimer(g_WaterCheckTimer)
 		showHUD(true)
-		setPedCanBeKnockedOffBike(g_Me, true)
+		setPedCanBeKnockedOffBike(localPlayer, true)
 	end
 )
 
 addEvent('onNextMapSet', true)
-addEventHandler('onNextMapSet', g_Root,
+addEventHandler('onNextMapSet', root,
 	function(mapName)
 		g_dxGUI.nextdisplayName:text(mapName)
 	end
@@ -1695,11 +1692,11 @@ setTimer(
 function kill()
 	if Spectate.active then
 		if Spectate.savePos then
-			triggerServerEvent('onClientRequestSpectate', g_Me, false )
+			triggerServerEvent('onClientRequestSpectate', localPlayer, false )
 		end
 	else
 		Spectate.blockManual = true
-		triggerServerEvent('onRequestKillPlayer', g_Me)
+		triggerServerEvent('onRequestKillPlayer', localPlayer)
 		Spectate.blockManualTimer = setTimer(function() Spectate.blockManual = false end, 3000, 1)
 	end
 end
@@ -1727,18 +1724,18 @@ bindKey ( next(getBoundKeys"enter_exit"), "up", "cancelkill" )
 -- function kill()
 	-- if Spectate.active then
 		-- if Spectate.savePos then
-			-- triggerServerEvent('onClientRequestSpectate', g_Me, false )
+			-- triggerServerEvent('onClientRequestSpectate', localPlayer, false )
 		-- end
 	-- elseif (g_MapOptions.allowonfoot) then
 		-- -- LotsOfS: Kill is the same button as enter/exit vehicle. Add an additional restriction to allow vehicle enter/exit
 		-- if (getPedControlState(localPlayer, "action") or getPedControlState(localPlayer, "sub_mission")) then
 			-- Spectate.blockManual = true
-			-- triggerServerEvent('onRequestKillPlayer', g_Me)
+			-- triggerServerEvent('onRequestKillPlayer', localPlayer)
 			-- Spectate.blockManualTimer = setTimer(function() Spectate.blockManual = false end, 3000, 1)
 		-- end
     -- elseif (not g_MapOptions.allowonfoot) then
 		-- Spectate.blockManual = true
-		-- triggerServerEvent('onRequestKillPlayer', g_Me)
+		-- triggerServerEvent('onRequestKillPlayer', localPlayer)
 		-- Spectate.blockManualTimer = setTimer(function() Spectate.blockManual = false end, 3000, 1)
 	-- end
 -- end
@@ -1750,11 +1747,11 @@ bindKey ( next(getBoundKeys"enter_exit"), "up", "cancelkill" )
 function spectate()
 	if Spectate.active then
 		if Spectate.savePos then
-			triggerServerEvent('onClientRequestSpectate', g_Me, false )
+			triggerServerEvent('onClientRequestSpectate', localPlayer, false )
 		end
 	else
 		if not Spectate.blockManual then
-			triggerServerEvent('onClientRequestSpectate', g_Me, true )
+			triggerServerEvent('onClientRequestSpectate', localPlayer, true )
 		end
 	end
 end
@@ -1772,7 +1769,7 @@ function setPipeDebug(bOn)
 end
 
 addEvent('onNextMapSet', true)
-addEventHandler('onNextMapSet', g_Root,
+addEventHandler('onNextMapSet', root,
 	function(mapName)
 		g_dxGUI.nextdisplayName:text(g_NextMapWhatsSet)
 		g_dxGUI.nextdisplayName:color(255, 255, 255, 255)

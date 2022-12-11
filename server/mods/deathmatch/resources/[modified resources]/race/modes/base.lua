@@ -91,7 +91,7 @@ function RaceMode:setTimeLeft(timeLeft)
 		g_MapOptions.duration = self:getTimePassed() + timeLeft
 		TimerManager.destroyTimersFor("raceend")
 		TimerManager.createTimerFor("map","raceend"):setTimer(raceTimeout, timeLeft, 1)
-		clientCall(g_Root, 'setTimeLeft', timeLeft)
+		clientCall(root, 'setTimeLeft', timeLeft)
 	end
 end
 
@@ -100,7 +100,7 @@ function RaceMode.endMap()
         gotoState('PostFinish')
         local text = g_GameOptions.randommaps and 'Next map starts in:' or 'Vote for next map starts in:'
         Countdown.create(1, RaceMode.startNextMapSelect, text, 255, 255, 255, 0.6, 2.5 ):start()
-		triggerEvent('onPostFinish', g_Root)
+		triggerEvent('onPostFinish', root)
     end
 end
 
@@ -370,7 +370,7 @@ function RaceMode:onPlayerReachCheckpoint(player, checkpointNum)
 				{"image",path="img/killmessage.png",resource=getThisResource(),width=24},
 				getPlayerName(player),
 			},
-			g_Root,
+			root,
 			255,0,0
 		)
 		self.rankingBoard:add(player, time)

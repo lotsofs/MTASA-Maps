@@ -8,7 +8,7 @@ local AddonsInfoList = {}
 
 
 addEvent('onClientOpenConfig', true )
-addEventHandler('onClientOpenConfig', g_ResRoot,
+addEventHandler('onClientOpenConfig', resourceRoot,
 	function()
 		openConfigMenu()
 	end
@@ -60,12 +60,12 @@ function openConfigMenu ()
 	guiSetVisible(gui["scrollpane"],false)
 	guiScrollPaneSetScrollBars(gui["scrollpane"],false, true)
 
-	triggerServerEvent('onRequestAddonsInfo', g_Me )
+	triggerServerEvent('onRequestAddonsInfo', localPlayer )
 end
 
 
 addEvent('onClientReceiveAddonsInfo', true )
-addEventHandler('onClientReceiveAddonsInfo', g_ResRoot,
+addEventHandler('onClientReceiveAddonsInfo', resourceRoot,
 	function(addonsInfoMap)
 		-- Map to list
 		AddonsInfoList = {}
@@ -218,7 +218,7 @@ end
 --------------------------------
 -- Config events
 --------------------------------
-addEventHandler ( "onClientGUISize", g_ResRoot,
+addEventHandler ( "onClientGUISize", resourceRoot,
 	function ()
 		if source == gui["form"] then
 			resizeMenu()
@@ -226,7 +226,7 @@ addEventHandler ( "onClientGUISize", g_ResRoot,
 	end
 )
 
-addEventHandler ( "onClientGUIClick", g_ResRoot,
+addEventHandler ( "onClientGUIClick", resourceRoot,
 	function ()
 		if not gui["form"] then
 			return
@@ -245,9 +245,9 @@ addEventHandler ( "onClientGUIClick", g_ResRoot,
 					addonsInfoMap[info.name] = info
 				end
 				-- Send to server
-				triggerServerEvent('onRequestAddonsChange', g_Me, addonsInfoMap )
+				triggerServerEvent('onRequestAddonsChange', localPlayer, addonsInfoMap )
 				-- Update status
-				setTimer( function() triggerServerEvent('onRequestAddonsInfo', g_Me ) end, 150, 1 )
+				setTimer( function() triggerServerEvent('onRequestAddonsInfo', localPlayer ) end, 150, 1 )
 				return
 			end
 		end

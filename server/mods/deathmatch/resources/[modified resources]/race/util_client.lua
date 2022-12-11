@@ -1,8 +1,4 @@
-﻿g_Root = getRootElement()
-g_ResRoot = getResourceRootElement(getThisResource())
-g_Me = getLocalPlayer()
-
-addEvent('onClientCall_race', true)
+﻿addEvent('onClientCall_race', true)
 addEventHandler('onClientCall_race', resourceRoot,
 	function(fnName, ...)
 		local fn = _G
@@ -128,7 +124,7 @@ function setCameraBehindVehicle(vehicle)
 		local rx, ry, rz = getElementRotation(vehicle)
 		setCameraMatrix(x - 4*math.cos(math.rad(rz + 90)), y - 4*math.sin(math.rad(rz + 90)), z + 1, x, y, z + 1)
 	end
-	setTimer(setCameraTarget, 150, 1, getLocalPlayer())
+	setTimer(setCameraTarget, 150, 1, localPlayer)
 end
 
 function setCameraBehindPlayer(player)
@@ -143,7 +139,7 @@ function setCameraBehindPlayer(player)
 		local rx, ry, rz = getElementRotation(player)
 		setCameraMatrix(x - 4*math.cos(math.rad(rz  + 180)), y - 4*math.sin(math.rad(rz + 180)), z + 1, x, y, z + 1)
 	end
-	setTimer(setCameraTarget, 150, 1, getLocalPlayer())
+	setTimer(setCameraTarget, 150, 1, localPlayer)
 end
 
 function alignVehicleToGround(vehicle)
@@ -338,14 +334,14 @@ function fadeCamera(fadeIn,timeToFade,...)
     local ticksToFade = (not timeToFade or timeToFade < 1) and 0 or timeToFade * 1000
     if not fadeIn then
         fadeInFinTimer:killTimer()
-		triggerEvent( 'onClientScreenFadedOut', g_Root )
+		triggerEvent( 'onClientScreenFadedOut', root )
     else
         fadeInFinTimer:setTimer( onfadeInFin, math.max(50,ticksToFade/8), 1 )
     end
 end
 
 function onfadeInFin()
-	triggerEvent( 'onClientScreenFadedIn', g_Root )
+	triggerEvent( 'onClientScreenFadedIn', root )
 end
 
 -------------------------------------------------------

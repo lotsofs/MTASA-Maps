@@ -1,7 +1,7 @@
 addEvent("callTriggerOnClient", true)
 addEventHandler("callTriggerOnClient", resourceRoot, function(theTrigger, arg1, arg2, arg3)
 	if (theTrigger == "Exit Vehicle") then
-		setPedExitVehicle(g_Me)
+		setPedExitVehicle(localPlayer)
 	elseif (theTrigger == "Fall Off Bike") then
 		triggerSetFallOffBike(arg1)
 	elseif (theTrigger == "Vehicle Blip") then
@@ -17,9 +17,9 @@ function triggerSetFallOffBike(arg)
 	elseif (arg == "true") then
 		state = true
 	elseif (arg == "toggle") then
-		state = not canPedBeKnockedOffBike(g_Me)
+		state = not canPedBeKnockedOffBike(localPlayer)
 	else
 		state = false
 	end
-	setPedCanBeKnockedOffBike(g_Me, state)
+	setPedCanBeKnockedOffBike(localPlayer, state)
 end
