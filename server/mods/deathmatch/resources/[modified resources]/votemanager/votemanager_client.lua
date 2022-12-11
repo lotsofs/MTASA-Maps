@@ -1,12 +1,9 @@
-local rootElement = getRootElement()
-
 local voteWindow
 local boundVoteKeys = {}
 local nameFromVoteID = {}
 local voteIDFromName = {}
 local optionLabels = {}
 
--- Joshimuz edit
 local progressbars = {}
 
 local screenX,screenY = guiGetScreenSize()
@@ -25,7 +22,6 @@ local pollOptionsText = {}
 local pollVotes = {}
 local pollMaxVoters = 0
 local pollCurrentVote = 0
--- end Joshimuz edit
 
 local isVoteActive
 local hasAlreadyVoted = false
@@ -107,7 +103,7 @@ addEvent("doShowPoll", true)
 addEvent("doSendVote", true)
 addEvent("doStopPoll", true)
 
-addEventHandler("doShowPoll", rootElement,
+addEventHandler("doShowPoll", root,
 	function (pollData, pollOptions, pollTime)
 		--clear the send vote cache
 		cacheVoteNumber = ""
@@ -147,11 +143,9 @@ addEventHandler("doShowPoll", rootElement,
         layout.option.width = layout.window.width
         layout.cancel.width = layout.window.width
         layout.time.width   = layout.window.width
-		
-		-- Joshimuz edit
+
         --local screenX, screenY = guiGetScreenSize()
-		-- end Joshimuz edit
-        
+
 		--create the window
 		voteWindow = guiCreateWindowFromCache (
 						screenX,
@@ -216,15 +210,9 @@ addEventHandler("doShowPoll", rootElement,
 			guiSetAlpha(optionLabels[index], layout.option.alpha)
 			setElementParent(optionLabels[index], voteWindow)
 			
-			-- Joshimuz edit
-			
-			-- labelY = labelY + optionHeight + layout.option.bottom_padding
-			
 			progressbars[index] = guiCreateProgressBar(layout.option.posX, labelY + 15, 280, 15, layout.option.relative, voteWindow )
 			
 			labelY = labelY + optionHeight + layout.option.bottom_padding + 15
-			
-			-- end Joshimuz edit
 		end
 
 		--bind 0 keys if there are more than 9 options
@@ -279,17 +267,13 @@ addEventHandler("doShowPoll", rootElement,
 		guiSetPosition(voteWindow, screenX - layout.window.width, screenY - windowHeight, false)
 
         --set the default value after creating gui
-		-- Joshimuz edit
-        --layout.window.width = 150
-		layout.window.width = 300
-		-- end Joshimuz edit
-        
+        layout.window.width = 300
+
 		isVoteActive = true
 
 		finishTime = getTickCount() + pollTime
 		addEventHandler("onClientRender", rootElement, updateTime)
 		
-		-- Joshimuz edit
 		drawPoll = true
 		
 		pollTitle = pollData.title
@@ -297,11 +281,10 @@ addEventHandler("doShowPoll", rootElement,
 		pollCurrentVote = 0
 		
 		guiSetPosition(voteWindow, screenX + screenX, screenY - windowHeight, false)
-		-- end Joshimuz edit
 	end
 )
 
-addEventHandler("doStopPoll", rootElement,
+addEventHandler("doStopPoll", root,
 	function ()
 		isVoteActive = false
 		hasAlreadyVoted = false
@@ -313,14 +296,12 @@ addEventHandler("doStopPoll", rootElement,
 
 		unbindKey("backspace", "down", sendVote_bind)
 
-		removeEventHandler("onClientRender", rootElement, updateTime)
+		removeEventHandler("onClientRender", root, updateTime)
 		destroyElementToCache(voteWindow)
-		-- Joshimuz edit
+
 		drawPoll = false
-		
 		pollVotes = nil
 		pollMaxVoters = 0
-		-- end Joshimuz edit
 	end
 )
 
@@ -370,7 +351,7 @@ function sendVote(voteID)
 
 	--if the player hasnt voted already (or if vote change is allowed anyway), update the vote text
 	if not hasAlreadyVoted or isChangeAllowed then
-		if hasAlreadyVoted then
+		if hasAlreadyVoted and hasAlreadyVoted ~= -1 then
 			guiSetFont(optionLabels[hasAlreadyVoted], layout.option.font)
 			guiSetAlpha(optionLabels[hasAlreadyVoted], layout.option.alpha)
 			guiLabelSetColor(optionLabels[hasAlreadyVoted], layout.option.r, layout.option.g, layout.option.b)
@@ -388,12 +369,10 @@ function sendVote(voteID)
 
 	--send the vote to the server
 	triggerServerEvent("onClientSendVote", localPlayer, voteID)
-	
-	-- Joshimuz edit
+
 	pollCurrentVote = voteID
-	-- end Joshimuz edit
 end
-addEventHandler("doSendVote", rootElement, sendVote)
+addEventHandler("doSendVote", root, sendVote)
 
 addCommandHandler("vote",
 	function (command, ...)
@@ -422,7 +401,7 @@ addCommandHandler("cancelvote",
 -- If things change, and this code breaks, it might be easier just to remove it.
 --
 
-addEventHandler('onClientResourceStart', getRootElement(), function() precreateGuiElements() end )
+addEventHandler('onClientResourceStart', root, function() precreateGuiElements() end )
 
 local unusedWindows = {}
 local unusedLabels = {}
@@ -523,7 +502,6 @@ function table.insertUnique(t,val)
     table.insert(t,val)
 end
 
--- Joshimuz edit
 addEvent( "updateBars", true )
 function updateBars(voteCount, maxVoters) 
 	pollVotes = voteCount
@@ -570,4 +548,3 @@ function draw()
 end
 
 addEventHandler("onClientRender", root, draw)  -- Keep everything visible with onClientRender.
--- end Joshimuz edit

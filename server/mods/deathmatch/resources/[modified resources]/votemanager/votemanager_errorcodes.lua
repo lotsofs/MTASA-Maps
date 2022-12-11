@@ -1,4 +1,4 @@
-﻿errorCode = {
+errorCode = {
 	--startPoll error codes: 1x
 	pollAlreadyRunning = 10,
 	lessThanTwoOptions = 11,
@@ -16,4 +16,9 @@
 	noGamemodeRunning = 33,
 	mapIsntCompatible = 34,
 	twoModesNeeded = 35,
+	onlyOneCompatibleMap = 36
 }
+
+function getErrorCodes()
+	return errorCode
+end
