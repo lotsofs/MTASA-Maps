@@ -17,11 +17,11 @@ if isEditor() then
 	-- Copy cp_next into cp_now
 	setElementData(localPlayer, 'race.editor.cp_now', getElementData(localPlayer, 'race.editor.cp_next'))
 
-    -- override TitleScreen.show() and don't show things
+	-- override TitleScreen.show() and don't show things
 	TitleScreen._show = TitleScreen.show
 	function TitleScreen.show()
 		TitleScreen._show ()
-        hideGUIComponents('titleImage','titleText1','titleText2')
+		hideGUIComponents('titleImage','titleText1','titleText2')
 	end
 
 	function editorInitRace()

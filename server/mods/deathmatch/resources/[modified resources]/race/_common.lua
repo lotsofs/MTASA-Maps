@@ -4,9 +4,9 @@
 --
 
 --_DEBUG_LOG = {'UNDEF','MISC','OPTIMIZATION','TOPTIMES','STATE','JOINER','TIMER','RANDMAP','CHECKPOINT','CP','SPECTATE'}   -- More logging
---_DEBUG_TIMING = true        -- Introduce delays
---_DEBUG_CHECKS = true        -- Extra checks
-_TESTING = false             -- Any user can issue test commands
+--_DEBUG_TIMING = true		-- Introduce delays
+--_DEBUG_CHECKS = true		-- Extra checks
+_TESTING = false			 -- Any user can issue test commands
 
 ---------------------------------------------------------------------------
 -- Script location
@@ -19,25 +19,25 @@ function getScriptLocation()	return isServer() and "Server" or "Client"	end
 -- Math extentions
 ---------------------------------------------------------------------------
 function math.lerp(from,to,alpha)
-    return from + (to-from) * alpha
+	return from + (to-from) * alpha
 end
 
 function math.clamp(low,value,high)
-    return math.max(low,math.min(value,high))
+	return math.max(low,math.min(value,high))
 end
 
 function math.wrap(low,value,high)
-    while value > high do
-        value = value - (high-low)
-    end
-    while value < low do
-        value = value + (high-low)
-    end
-    return value
+	while value > high do
+		value = value - (high-low)
+	end
+	while value < low do
+		value = value + (high-low)
+	end
+	return value
 end
 
 function math.wrapdifference(low,value,other,high)
-    return math.wrap(low,value-other,high)+other
+	return math.wrap(low,value-other,high)+other
 end
 
 -- curve is { {x1, y1}, {x2, y2}, {x3, y3} ... }
@@ -192,65 +192,65 @@ Timer.instances = {}
 
 -- Create a Timer instance
 function Timer:create(autodestroy)
-    local id = #Timer.instances + 1
-    Timer.instances[id] = setmetatable(
-        {
-            id = id,
-            timer = nil,      -- Actual timer
-            autodestroy = autodestroy,
-        },
-        self
-    )
-    return Timer.instances[id]
+	local id = #Timer.instances + 1
+	Timer.instances[id] = setmetatable(
+		{
+			id = id,
+			timer = nil,	  -- Actual timer
+			autodestroy = autodestroy,
+		},
+		self
+	)
+	return Timer.instances[id]
 end
 
 -- Destroy a Timer instance
 function Timer:destroy()
-    self:killTimer()
-    TimerManager.removeTimer(self)
-    Timer.instances[self.id] = nil
-    self.id = 0
+	self:killTimer()
+	TimerManager.removeTimer(self)
+	Timer.instances[self.id] = nil
+	self.id = 0
 end
 
 -- Check if timer is valid
 function Timer:isActive()
-    return self.timer ~= nil
+	return self.timer ~= nil
 end
 
 -- killTimer
 function Timer:killTimer()
-    if self.timer then
-        killTimer( self.timer )
-        self.timer = nil
-    end
+	if self.timer then
+		killTimer( self.timer )
+		self.timer = nil
+	end
 end
 
 -- setTimer
 function Timer:setTimer( theFunction, timeInterval, timesToExecute, ... )
-    self:killTimer()
-    self.fn = theFunction
-    self.count = timesToExecute
-    self.dodestroy = false
-    self.args = { ... }
+	self:killTimer()
+	self.fn = theFunction
+	self.count = timesToExecute
+	self.dodestroy = false
+	self.args = { ... }
 	if timeInterval < 50 then
 		timeInterval = 50
 	end
-    self.timer = setTimer( function() self:handleFunctionCall() end, timeInterval, timesToExecute )
+	self.timer = setTimer( function() self:handleFunctionCall() end, timeInterval, timesToExecute )
 end
 
 function Timer:handleFunctionCall()
-    -- Delete reference to timer if there are no more repeats
-    if self.count > 0 then
-        self.count = self.count - 1
-        if self.count == 0 then
-            self.timer = nil
-            self.dodestroy = self.autodestroy
-        end
-    end
-    self.fn(unpack(self.args))
-    if self.dodestroy then
-        self:destroy()
-    end
+	-- Delete reference to timer if there are no more repeats
+	if self.count > 0 then
+		self.count = self.count - 1
+		if self.count == 0 then
+			self.timer = nil
+			self.dodestroy = self.autodestroy
+		end
+	end
+	self.fn(unpack(self.args))
+	if self.dodestroy then
+		self:destroy()
+	end
 end
 
 ---------------------------------------------------------------------------

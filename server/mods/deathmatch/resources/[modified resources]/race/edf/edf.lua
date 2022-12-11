@@ -8,17 +8,17 @@ addEventHandler ( "onMapOpened", root,
 			if (paintJob) then
 				setVehiclePaintjob(intVeh, tonumber(paintJob))
 			end
-			local col1, col2, col3, col4, col5, col6, col7, col8, col9, col10, col11, col12 = getVehicleColor(vehicle, true) 
-			if (exports.edf:edfGetElementProperty(intVeh, "colora")) then 
+			local col1, col2, col3, col4, col5, col6, col7, col8, col9, col10, col11, col12 = getVehicleColor(vehicle, true)
+			if (exports.edf:edfGetElementProperty(intVeh, "colora")) then
 				col1, col2, col3 = getColorFromString(exports.edf:edfGetElementProperty(intVeh, "colora"))
 			end
-			if (exports.edf:edfGetElementProperty(intVeh, "colorb")) then 
+			if (exports.edf:edfGetElementProperty(intVeh, "colorb")) then
 				col4, col5, col6 = getColorFromString(exports.edf:edfGetElementProperty(intVeh, "colorb"))
 			end
-			if (exports.edf:edfGetElementProperty(intVeh, "colorc")) then 
+			if (exports.edf:edfGetElementProperty(intVeh, "colorc")) then
 				col7, col8, col9 = getColorFromString(exports.edf:edfGetElementProperty(intVeh, "colorc"))
 			end
-			if (exports.edf:edfGetElementProperty(intVeh, "colord")) then 
+			if (exports.edf:edfGetElementProperty(intVeh, "colord")) then
 				col10, col11, col12 = getColorFromString(exports.edf:edfGetElementProperty(intVeh, "colord"))
 			end
 			setVehicleColor(vehicle, col1, col2, col3, col4, col5, col6, col7, col8, col9, col10, col11, col12)			
@@ -92,17 +92,17 @@ addEventHandler ( "onElementPropertyChanged", root,
 			local vehicle = getRepresentation(source, "vehicle")
 			if string.sub(propertyName, 1, 5) == "color" then
 				-- Color
-				local col1, col2, col3, col4, col5, col6, col7, col8, col9, col10, col11, col12 = getVehicleColor(vehicle, true) 
-				if (exports.edf:edfGetElementProperty(source, "colora")) then 
+				local col1, col2, col3, col4, col5, col6, col7, col8, col9, col10, col11, col12 = getVehicleColor(vehicle, true)
+				if (exports.edf:edfGetElementProperty(source, "colora")) then
 					col1, col2, col3 = getColorFromString(exports.edf:edfGetElementProperty(source, "colora"))
 				end
-				if (exports.edf:edfGetElementProperty(source, "colorb")) then 
+				if (exports.edf:edfGetElementProperty(source, "colorb")) then
 					col4, col5, col6 = getColorFromString(exports.edf:edfGetElementProperty(source, "colorb"))
 				end
-				if (exports.edf:edfGetElementProperty(source, "colorc")) then 
+				if (exports.edf:edfGetElementProperty(source, "colorc")) then
 					col7, col8, col9 = getColorFromString(exports.edf:edfGetElementProperty(source, "colorc"))
 				end
-				if (exports.edf:edfGetElementProperty(source, "colord")) then 
+				if (exports.edf:edfGetElementProperty(source, "colord")) then
 					col10, col11, col12 = getColorFromString(exports.edf:edfGetElementProperty(source, "colord"))
 				end
 				setVehicleColor(vehicle, col1, col2, col3, col4, col5, col6, col7, col8, col9, col10, col11, col12)			

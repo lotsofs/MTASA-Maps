@@ -214,7 +214,7 @@ function closeConfigMenu ()
 		destroyElement( gui["form"] )
 		gui = {}
 	end
-    showCursor ( false )
+	showCursor ( false )
 end
 
 

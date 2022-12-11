@@ -3,12 +3,12 @@
 --
 -- 1. Delay onPlayerJoin until client loaded
 -- 2. Patch the following calls to only use the joined players:
---      getElementsByType('player')
---      getDeadPlayers 
---      getPlayerCount 
---      getRandomPlayer
+--	  getElementsByType('player')
+--	  getDeadPlayers
+--	  getPlayerCount
+--	  getRandomPlayer
 -- 3. In any call that uses root or root to specify all players, use
---          g_RootPlayers instead. Or use the function onlyJoined(element) to handle the choice.
+--		  g_RootPlayers instead. Or use the function onlyJoined(element) to handle the choice.
 --
 
 addEvent('onPlayerJoining')		-- Pre join
@@ -20,7 +20,7 @@ addEvent('onPlayerJoined')		-- Post join
 --
 ---------------------------------
 g_EventHandlers = {
-	onPlayerJoin = {}       -- { i = { elem = elem, fn = fn, getpropagated = bool } }
+	onPlayerJoin = {}	   -- { i = { elem = elem, fn = fn, getpropagated = bool } }
 }
 
 -- Divert 'onEventName' to '_onEventName'
@@ -63,7 +63,7 @@ function callSavedEventHandlers(eventName, eventSource, ...)
 		if isElement(triggeredElem) then
 			while true do
 				if triggeredElem == handler.elem then
-	                source = eventSource
+					source = eventSource
 					handler.fn(...)
 					break
 				end
@@ -79,62 +79,62 @@ end
 
 ----------------------------------------------------------------------------
 --
--- Function patches 
---      Modify functions to act only on joined players
+-- Function patches
+--	  Modify functions to act only on joined players
 --
 ----------------------------------------------------------------------------
 
--- getElementsByType patch 
+-- getElementsByType patch
 _getElementsByType = getElementsByType
 function getElementsByType( type, startat )
-    startat = startat or root
-    if type ~= 'player' then
-        return _getElementsByType( type, startat )
-    else
-        return _getElementsByType( type, onlyJoined(startat) )
-    end
+	startat = startat or root
+	if type ~= 'player' then
+		return _getElementsByType( type, startat )
+	else
+		return _getElementsByType( type, onlyJoined(startat) )
+	end
 end
 
--- getDeadPlayers patch 
+-- getDeadPlayers patch
 _getDeadPlayers = getDeadPlayers
 function getDeadPlayers()
-    local deadPlayers = _getDeadPlayers()
-    for i,player in ipairs(getElementChildren(g_RootJoining)) do
-        table.removevalue(deadPlayers,player)
-    end
-    return deadPlayers
+	local deadPlayers = _getDeadPlayers()
+	for i,player in ipairs(getElementChildren(g_RootJoining)) do
+		table.removevalue(deadPlayers,player)
+	end
+	return deadPlayers
 end
 
--- getPlayerCount patch 
+-- getPlayerCount patch
 _getPlayerCount = getPlayerCount
 function getPlayerCount()
-    return g_RootPlayers and getElementChildrenCount(g_RootPlayers) or 0
+	return g_RootPlayers and getElementChildrenCount(g_RootPlayers) or 0
 end
 
--- getRandomPlayer patch 
+-- getRandomPlayer patch
 function getRandomPlayer()
-    if getPlayerCount() < 1 then
-        return nil
-    end
-    return getElementChildren(g_RootPlayers)[ math.random(1,getPlayerCount()) ]
+	if getPlayerCount() < 1 then
+		return nil
+	end
+	return getElementChildren(g_RootPlayers)[ math.random(1,getPlayerCount()) ]
 end
 
 
 ----------------------------------------------------------------------------
 --
--- Others functions 
+-- Others functions
 --
 ----------------------------------------------------------------------------
 
 -- If root, change to g_RootPlayers
 function onlyJoined(player)
-    if player == root then
-        if not g_RootPlayers then
-            return resourceRoot    -- return an element which will have no players
-        end
-        return g_RootPlayers
-    end
-    return player
+	if player == root then
+		if not g_RootPlayers then
+			return resourceRoot	-- return an element which will have no players
+		end
+		return g_RootPlayers
+	end
+	return player
 end
 
 -- Number of players, both pending and joined
@@ -144,71 +144,71 @@ end
 
 ----------------------------------------------------------------------------
 --
--- Event handlers 
+-- Event handlers
 --
 ----------------------------------------------------------------------------
 
 -- onResourceStart
---      Setup joining/joined containers and put all current players into g_RootJoining
+--	  Setup joining/joined containers and put all current players into g_RootJoining
 addEventHandler('onResourceStart', resourceRoot,
 	function()
-        -- Create a joining player node and a joined player node
-        table.each(getElementsByType('plrcontainer'), destroyElement)
-        g_RootJoining = createElement( 'plrcontainer', 'plrs joining' )
-        g_RootPlayers = createElement( 'plrcontainer', 'plrs joined' )
-        -- Put all current players into 'joining' group
-        for i,player in ipairs(_getElementsByType('player')) do
-            setElementParent( player, g_RootJoining )
+		-- Create a joining player node and a joined player node
+		table.each(getElementsByType('plrcontainer'), destroyElement)
+		g_RootJoining = createElement( 'plrcontainer', 'plrs joining' )
+		g_RootPlayers = createElement( 'plrcontainer', 'plrs joined' )
+		-- Put all current players into 'joining' group
+		for i,player in ipairs(_getElementsByType('player')) do
+			setElementParent( player, g_RootJoining )
 
-        end 
+		end
 	end
 )
 
 -- onResourceStop
---      Clean up
+--	  Clean up
 addEventHandler('onResourceStop', resourceRoot,
 	function()
-        table.each(getElementsByType('plrcontainer'), destroyElement)
+		table.each(getElementsByType('plrcontainer'), destroyElement)
 		g_RootJoining = nil
 		g_RootPlayers = nil
 	end
 )
 
 -- Real onPlayerJoin event was fired
---      Move player element to g_RootJoining
+--	  Move player element to g_RootJoining
 addEventHandler('_onPlayerJoin', root,
-    function ()
-        setElementParent( source, g_RootJoining )
-        triggerEvent( 'onPlayerJoining', source );
-    end
+	function ()
+		setElementParent( source, g_RootJoining )
+		triggerEvent( 'onPlayerJoining', source );
+	end
 )
 
 -- onPlayerQuit
---      Clean up
+--	  Clean up
 addEventHandler('onPlayerQuit', root,
 	function()
 	end
 )
 
 -- onLoadedAtClient
---      Client says he is good to go. Move player element to g_RootPlayers and call deferred onPlayerJoin event handlers.
+--	  Client says he is good to go. Move player element to g_RootPlayers and call deferred onPlayerJoin event handlers.
 addEvent('onLoadedAtClient', true)
 addEventHandler('onLoadedAtClient', resourceRoot,
 	function( player )
 		if checkClient( false, player, 'onLoadedAtClient' ) then return end
-        -- Tell other clients; join completed for this player
-        triggerClientEvent( g_RootPlayers, 'onOtherJoinCompleteAtServer', resourceRoot, player )
+		-- Tell other clients; join completed for this player
+		triggerClientEvent( g_RootPlayers, 'onOtherJoinCompleteAtServer', resourceRoot, player )
 
-        setElementParent( player, g_RootPlayers )
+		setElementParent( player, g_RootPlayers )
 
-        -- Tell client; join completed; and send a list of all joined players
-        triggerClientEvent( player, 'onMyJoinCompleteAtServer', resourceRoot, getElementChildren(g_RootPlayers) )
+		-- Tell client; join completed; and send a list of all joined players
+		triggerClientEvent( player, 'onMyJoinCompleteAtServer', resourceRoot, getElementChildren(g_RootPlayers) )
 
-        -- Call deferred onPlayerJoin event handlers
-        callSavedEventHandlers( 'onPlayerJoin', player )
+		-- Call deferred onPlayerJoin event handlers
+		callSavedEventHandlers( 'onPlayerJoin', player )
 
-        -- Custom event for joiner aware event handlers
-        triggerEvent( 'onPlayerJoined', player )
+		-- Custom event for joiner aware event handlers
+		triggerEvent( 'onPlayerJoined', player )
 	end
 )
 

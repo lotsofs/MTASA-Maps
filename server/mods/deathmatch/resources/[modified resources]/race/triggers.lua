@@ -17,37 +17,37 @@ end
 
 
 function distanceFromPlayerToFootSpawnpoint(player, spawnpoint)
-    if player then
-	    local x, y, z = getElementPosition(player)
-	    return getDistanceBetweenPoints3D(x, y, z, unpack(spawnpoint.position))
-    end
-    return 0
+	if player then
+		local x, y, z = getElementPosition(player)
+		return getDistanceBetweenPoints3D(x, y, z, unpack(spawnpoint.position))
+	end
+	return 0
 end
 
 function getSpaceAroundFootSpawnpoint(ignore,spawnpoint)
-    local space = 100000
-    for i,player in ipairs(g_Players) do
+	local space = 100000
+	for i,player in ipairs(g_Players) do
 		if player ~= ignore then
 			space = math.min(space, distanceFromPlayerToFootSpawnpoint(player, spawnpoint))
 		end
-    end
-    return space
+	end
+	return space
 end
 
 function hasSpaceFootAroundSpawnpoint(ignore,spawnpoint, requiredSpace)
-    for i,player in ipairs(g_Players) do
+	for i,player in ipairs(g_Players) do
 		if player ~= ignore then
 			if distanceFromPlayerToFootSpawnpoint(player, spawnpoint) < requiredSpace then
 				return false
 			end
-        end
-    end
-    return true
+		end
+	end
+	return true
 end
 
 local g_DoubleUpPos = 0
 function pickFreeFootSpawnpoint(prefix, ignore)
-    local options = {}
+	local options = {}
 	for i, v in pairs(g_OnfootSpawnpoints) do
 		if (prefix and string.sub(v.id, 1, #prefix) == prefix) then
 			table.insert(options, v)
@@ -55,33 +55,33 @@ function pickFreeFootSpawnpoint(prefix, ignore)
 	end
 	if #options == 0 then return nil end
 	-- Use the spawnpoints from #1 to #numplayers as a pool to use
-    local numToScan = math.min(getPlayerCount(), #options)
-    -- Starting at a random place in the pool...
-    local scanPos = math.random(1,numToScan)
-    -- ...loop through looking for a free spot
-    for i=1,numToScan do
-        local idx = (i + scanPos) % numToScan + 1
-        if hasSpaceFootAroundSpawnpoint(ignore,options[idx], 1) then
+	local numToScan = math.min(getPlayerCount(), #options)
+	-- Starting at a random place in the pool...
+	local scanPos = math.random(1,numToScan)
+	-- ...loop through looking for a free spot
+	for i=1,numToScan do
+		local idx = (i + scanPos) % numToScan + 1
+		if hasSpaceFootAroundSpawnpoint(ignore,options[idx], 1) then
 			return options[idx]
-        end
-    end
-    -- If one can't be found, find the spot which has the most space
-    local bestSpace = 0
-    local bestMatch = 1
-    for i=1,numToScan do
-        local idx = (i + scanPos) % numToScan + 1
-        local space = getSpaceAroundFootSpawnpoint(ignore,options[idx])
-        if space > bestSpace then
-            bestSpace = space
-            bestMatch = idx
-        end
-    end
+		end
+	end
+	-- If one can't be found, find the spot which has the most space
+	local bestSpace = 0
+	local bestMatch = 1
+	for i=1,numToScan do
+		local idx = (i + scanPos) % numToScan + 1
+		local space = getSpaceAroundFootSpawnpoint(ignore,options[idx])
+		if space > bestSpace then
+			bestSpace = space
+			bestMatch = idx
+		end
+	end
 	-- If bestSpace is too small, assume all spawnpoints are taken, and start to double up
 	if bestSpace < 0.1 then
 		g_DoubleUpPos = ( g_DoubleUpPos + 1 ) % #options
 		bestMatch = g_DoubleUpPos + 1
 	end
-    return options[bestMatch]
+	return options[bestMatch]
 end
 
 function callTrigger(theTrigger, player)
@@ -186,7 +186,7 @@ function callVehicleTrigger(theTrigger, player)
 	
 	local template = findInteractiveVehicle(vTrig.template)
 
-    if (vTrig.vehicletoaffect == "main" or not g_MapOptions.allowonfoot) then
+	if (vTrig.vehicletoaffect == "main" or not g_MapOptions.allowonfoot) then
 		performVehicleTrigger(vTrig, g_Vehicles[player], player, template)
 	elseif (vTrig.vehicletoaffect == "current") then
 		local vehicle = getPedOccupiedVehicle(player)
@@ -232,17 +232,17 @@ function performVehicleTrigger(trigger, vehicle, player, template, new)
 				addVehicleUpgrade(vehicle, template.upgrades)
 			end
 		end
-		local col1, col2, col3, col4, col5, col6, col7, col8, col9, col10, col11, col12 = getVehicleColor(vehicle, true) 
-		if (template.colora) then 
+		local col1, col2, col3, col4, col5, col6, col7, col8, col9, col10, col11, col12 = getVehicleColor(vehicle, true)
+		if (template.colora) then
 			col1, col2, col3 = unpack(template.colora)
 		end
-		if (template.colorb) then 
+		if (template.colorb) then
 			col4, col5, col6 = unpack(template.colorb)
 		end
-		if (template.colorc) then 
+		if (template.colorc) then
 			col7, col8, col9 = unpack(template.colorc)
 		end
-		if (template.colord) then 
+		if (template.colord) then
 			col10, col11, col12 = unpack(template.colord)
 		end
 		setVehicleColor(vehicle, col1, col2, col3, col4, col5, col6, col7, col8, col9, col10, col11, col12)
@@ -322,7 +322,7 @@ function performVehicleTrigger(trigger, vehicle, player, template, new)
 	end
 
 	if (trigger.vehicletoaffect == "new" or trigger.vehicletoaffect == "duplicate" and g_Vehicles[player] == getPedOccupiedVehicle(player)) then
-		-- put us inside the new car. 
+		-- put us inside the new car.
 		setElementData(vehicle, "raceiv.blocked", false)
 		warpPedIntoVehicle(player, vehicle)
 		if (template.cantenter == 'true') then

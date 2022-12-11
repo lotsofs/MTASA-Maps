@@ -63,17 +63,17 @@ function spawnInteractiveVehicle(stats)
 		end
 	end
 	-- Set colors. There has to be a better way of doing this
-	local col1, col2, col3, col4, col5, col6, col7, col8, col9, col10, col11, col12 = getVehicleColor(veh, true) 
-	if (stats.colora) then 
+	local col1, col2, col3, col4, col5, col6, col7, col8, col9, col10, col11, col12 = getVehicleColor(veh, true)
+	if (stats.colora) then
 		col1, col2, col3 = unpack(stats.colora)
 	end
-	if (stats.colorb) then 
+	if (stats.colorb) then
 		col4, col5, col6 = unpack(stats.colorb)
 	end
-	if (stats.colorc) then 
+	if (stats.colorc) then
 		col7, col8, col9 = unpack(stats.colorc)
 	end
-	if (stats.colord) then 
+	if (stats.colord) then
 		col10, col11, col12 = unpack(stats.colord)
 	end
 	setVehicleColor(veh, col1, col2, col3, col4, col5, col6, col7, col8, col9, col10, col11, col12)
@@ -146,7 +146,7 @@ setTimer(function()
 		if (distance > data.maxmovedistance and getElementData(vehicle, "raceiv.collisions") == "upon drive away") then
 			setElementData(vehicle, "raceiv.collide", true)
 			setElementData(vehicle, "raceiv.collisions", nil)
-		end 
+		end
 		if (not getVehicleController(vehicle)) then
 			if (getElementData(vehicle, "raceiv.taken")) then
 				-- Driver died or left the game without calling OnVehicleExit.
@@ -179,7 +179,7 @@ addEventHandler("onPlayerVehicleEnter", root, function(theVehicle, seat, jacked)
 	end
 end)
 
-function findFreeVehicle(player) 
+function findFreeVehicle(player)
 	local lastMinDis = 10
 	local nearestVeh = false
 	local px,py,pz = getElementPosition(player)
@@ -190,7 +190,7 @@ function findFreeVehicle(player)
 		if (not blocked and (not owner or owner == player) and not isVehicleBlown(v) and (interactable or g_Vehicles[player] == v)) then
 			local vx,vy,vz = getElementPosition(v)
 			local dis = getDistanceBetweenPoints3D(px,py,pz,vx,vy,vz)
-			if dis < lastMinDis then 
+			if dis < lastMinDis then
 				lastMinDis = dis
 				nearestVeh = v
 			end

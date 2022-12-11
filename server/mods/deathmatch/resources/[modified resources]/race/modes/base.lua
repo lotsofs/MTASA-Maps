@@ -96,12 +96,12 @@ function RaceMode:setTimeLeft(timeLeft)
 end
 
 function RaceMode.endMap()
-    if stateAllowsPostFinish() then
-        gotoState('PostFinish')
-        local text = g_GameOptions.randommaps and 'Next map starts in:' or 'Vote for next map starts in:'
-        Countdown.create(1, RaceMode.startNextMapSelect, text, 255, 255, 255, 0.6, 2.5 ):start()
+	if stateAllowsPostFinish() then
+		gotoState('PostFinish')
+		local text = g_GameOptions.randommaps and 'Next map starts in:' or 'Vote for next map starts in:'
+		Countdown.create(1, RaceMode.startNextMapSelect, text, 255, 255, 255, 0.6, 2.5 ):start()
 		triggerEvent('onPostFinish', root)
-    end
+	end
 end
 
 function RaceMode.startNextMapSelect()
@@ -236,9 +236,9 @@ end
 
 function RaceMode:onPlayerJoin(player, spawnpoint)
 	self.checkpointBackups[player] = {}
-	self.checkpointBackups[player][0] = { 
+	self.checkpointBackups[player][0] = {
 		onfoot = false, borrowed = false,
-		vehicle = spawnpoint.vehicle, position = spawnpoint.position, rotation = spawnpoint.rotation, velocity = {0, 0, 0}, turnvelocity = {0, 0, 0}, geardown = true, 
+		vehicle = spawnpoint.vehicle, position = spawnpoint.position, rotation = spawnpoint.rotation, velocity = {0, 0, 0}, turnvelocity = {0, 0, 0}, geardown = true,
 		vehicle2 = spawnpoint.vehicle, position2 = spawnpoint.position, rotation2 = spawnpoint.rotation, geardown2 = true, velocity2 = {0, 0, 0}, turnvelocity2 = {0, 0, 0}
 	}
 end
@@ -348,7 +348,7 @@ function RaceMode:onPlayerReachCheckpoint(player, checkpointNum)
 		finishActivePlayer( player )
 		setPlayerStatus( player, nil, "finished" )
 		if rank == 1 then
-            gotoState('SomeoneWon')
+			gotoState('SomeoneWon')
 			showMessage('You have won the race!', 0, 255, 0, player)
 			if self.rankingBoard then	-- Remove lingering labels
 				self.rankingBoard:destroy()
@@ -418,14 +418,14 @@ function RaceMode:onPlayerWasted(player)
 	end
 	TimerManager.destroyTimersFor("checkpointBackup",player)
 	if RaceMode.getMapOption('respawn') == 'timelimit' and not RaceMode.isPlayerFinished(source) then
-        -- See if its worth doing a respawn
-        local respawnTime       = RaceMode.getMapOption('respawntime')
-        if self:getTimeRemaining() - respawnTime > 3000 then
-            Countdown.create(respawnTime/1000, restorePlayer, 'You will respawn in:', 255, 255, 255, 0.25, 2.5, true, self.id, player):start(player)
-        end
-	    if RaceMode.getMapOption('respawntime') >= 5000 then
-		    TimerManager.createTimerFor("map",player):setTimer(clientCall, 2000, 1, player, 'Spectate.start', 'auto')
-	    end
+		-- See if its worth doing a respawn
+		local respawnTime	   = RaceMode.getMapOption('respawntime')
+		if self:getTimeRemaining() - respawnTime > 3000 then
+			Countdown.create(respawnTime/1000, restorePlayer, 'You will respawn in:', 255, 255, 255, 0.25, 2.5, true, self.id, player):start(player)
+		end
+		if RaceMode.getMapOption('respawntime') >= 5000 then
+			TimerManager.createTimerFor("map",player):setTimer(clientCall, 2000, 1, player, 'Spectate.start', 'auto')
+		end
 	end
 	if g_MapOptions.respawn == 'none' then
 		removeActivePlayer( player )
@@ -438,64 +438,64 @@ end
 
 
 function distanceFromVehicleToSpawnpoint(vehicle, spawnpoint)
-    if vehicle then
-	    local x, y, z = getElementPosition(vehicle)
-	    return getDistanceBetweenPoints3D(x, y, z, unpack(spawnpoint.position))
-    end
-    return 0
+	if vehicle then
+		local x, y, z = getElementPosition(vehicle)
+		return getDistanceBetweenPoints3D(x, y, z, unpack(spawnpoint.position))
+	end
+	return 0
 end
 
 function getSpaceAroundSpawnpoint(ignore,spawnpoint)
-    local space = 100000
-    for i,player in ipairs(g_Players) do
+	local space = 100000
+	for i,player in ipairs(g_Players) do
 		if player ~= ignore then
 			space = math.min(space, distanceFromVehicleToSpawnpoint(g_Vehicles[player], spawnpoint))
 		end
-    end
-    return space
+	end
+	return space
 end
 
 function hasSpaceAroundSpawnpoint(ignore,spawnpoint, requiredSpace)
-    for i,player in ipairs(g_Players) do
+	for i,player in ipairs(g_Players) do
 		if player ~= ignore then
 			if distanceFromVehicleToSpawnpoint(g_Vehicles[player], spawnpoint) < requiredSpace then
 				return false
 			end
-        end
-    end
-    return true
+		end
+	end
+	return true
 end
 
 local g_DoubleUpPos = 0
 function RaceMode:pickFreeSpawnpoint(ignore)
-    -- Use the spawnpoints from #1 to #numplayers as a pool to use
-    local numToScan = math.min(getPlayerCount(), #g_Spawnpoints)
-    -- Starting at a random place in the pool...
-    local scanPos = math.random(1,numToScan)
-    -- ...loop through looking for a free spot
-    for i=1,numToScan do
-        local idx = (i + scanPos) % numToScan + 1
-        if hasSpaceAroundSpawnpoint(ignore,g_Spawnpoints[idx], 1) then
-            return g_Spawnpoints[idx]
-        end
-    end
-    -- If one can't be found, find the spot which has the most space
-    local bestSpace = 0
-    local bestMatch = 1
-    for i=1,numToScan do
-        local idx = (i + scanPos) % numToScan + 1
-        local space = getSpaceAroundSpawnpoint(ignore,g_Spawnpoints[idx])
-        if space > bestSpace then
-            bestSpace = space
-            bestMatch = idx
-        end
-    end
+	-- Use the spawnpoints from #1 to #numplayers as a pool to use
+	local numToScan = math.min(getPlayerCount(), #g_Spawnpoints)
+	-- Starting at a random place in the pool...
+	local scanPos = math.random(1,numToScan)
+	-- ...loop through looking for a free spot
+	for i=1,numToScan do
+		local idx = (i + scanPos) % numToScan + 1
+		if hasSpaceAroundSpawnpoint(ignore,g_Spawnpoints[idx], 1) then
+			return g_Spawnpoints[idx]
+		end
+	end
+	-- If one can't be found, find the spot which has the most space
+	local bestSpace = 0
+	local bestMatch = 1
+	for i=1,numToScan do
+		local idx = (i + scanPos) % numToScan + 1
+		local space = getSpaceAroundSpawnpoint(ignore,g_Spawnpoints[idx])
+		if space > bestSpace then
+			bestSpace = space
+			bestMatch = idx
+		end
+	end
 	-- If bestSpace is too small, assume all spawnpoints are taken, and start to double up
 	if bestSpace < 0.1 then
 		g_DoubleUpPos = ( g_DoubleUpPos + 1 ) % #g_Spawnpoints
 		bestMatch = g_DoubleUpPos + 1
 	end
-    return g_Spawnpoints[bestMatch]
+	return g_Spawnpoints[bestMatch]
 end
 
 function freeSpawnpoint(i)
@@ -532,8 +532,8 @@ function restorePlayer(id, player, bNoFade, bDontFix)
 		bkp.onfoot = false
 		bkp.position = spawnpoint.position
 		bkp.rotation = spawnpoint.rotation
-		bkp.geardown = true                 -- Fix landing gear state
-		bkp.vehicle = spawnpoint.vehicle    -- Fix spawn'n'blow
+		bkp.geardown = true				 -- Fix landing gear state
+		bkp.vehicle = spawnpoint.vehicle	-- Fix spawn'n'blow
 		bkp.interior = spawnpoint.interior
 	end
 	-- Validate some bkp variables
@@ -548,7 +548,7 @@ function restorePlayer(id, player, bNoFade, bDontFix)
 	if (bkp.skin) then
 		setElementModel(player, bkp.skin)
 	end
-	if (bkp.borrowed) then 
+	if (bkp.borrowed) then
 		-- Create our own vehicle if we hit the checkpoint with a vehicle that isn't the 'main'
 		if (isElement(bkp.original) and not getVehicleController(bkp.original)) then
 			vehicle = bkp.original
@@ -559,8 +559,8 @@ function restorePlayer(id, player, bNoFade, bDontFix)
 	end
 	if (bkp.borrowed or bkp.onfoot) then
 		-- Move our main vehicle back to where it was in case you drove off with it, then died, and respawned next to where it was but now it's gone
-        setElementVelocity( vehicle2, 0,0,0 )
-        setElementAngularVelocity( vehicle2, 0,0,0 )
+		setElementVelocity( vehicle2, 0,0,0 )
+		setElementAngularVelocity( vehicle2, 0,0,0 )
 		local rx2, ry2, rz2 = unpack(bkp.rotation2)
 		local x2, y2, z2 = unpack(bkp.position2)
 		setElementPosition(vehicle2, x2, y2, z2)
@@ -581,8 +581,8 @@ function restorePlayer(id, player, bNoFade, bDontFix)
 		end
 	end
 	if vehicle and not bkp.onfoot then
-        setElementVelocity( vehicle, 0,0,0 )
-        setElementAngularVelocity( vehicle, 0,0,0 )
+		setElementVelocity( vehicle, 0,0,0 )
+		setElementAngularVelocity( vehicle, 0,0,0 )
 		setElementInterior(vehicle, bkp.interior or 0)
 		setElementPosition(vehicle, x, y, z)
 		setElementRotation(vehicle, rx or 0, ry or 0, rz or 0)
@@ -598,7 +598,7 @@ function restorePlayer(id, player, bNoFade, bDontFix)
 		setVehicleLandingGearDown(vehicle,bkp.geardown)		
 
 		RaceMode.playerFreeze(player, true, bDontFix, bkp.onfoot)
-        outputDebug( 'MISC', 'restorePlayer: setElementFrozen true for ' .. tostring(getPlayerName(player)) .. '  vehicle:' .. tostring(vehicle) )
+		outputDebug( 'MISC', 'restorePlayer: setElementFrozen true for ' .. tostring(getPlayerName(player)) .. '  vehicle:' .. tostring(vehicle) )
 		removeVehicleUpgrade(vehicle, 1010) -- remove nitro
 		if bkp.hasNitro then
 			addVehicleUpgrade(vehicle, 1010) -- add nos if player had nos
@@ -620,7 +620,7 @@ function restorePlayer(id, player, bNoFade, bDontFix)
 		TimerManager.destroyTimersFor("unfreeze",player)
 		TimerManager.createTimerFor("map","unfreeze",player):setTimer(restorePlayerUnfreeze, 2000, 1, id, player, bDontFix)
 	end
-    setCameraTarget(player)
+	setCameraTarget(player)
 	setPlayerStatus( player, "alive", "" )
 	
 	if (checkpoint > 1) then
@@ -644,7 +644,7 @@ function restorePlayerUnfreeze(id, player, bDontFix)
 	if (not vehicle) then
 		vehicle = vehicle2
 	end
-    outputDebug( 'MISC', 'restorePlayerUnfreeze: vehicle false for ' .. tostring(getPlayerName(player)) .. '  vehicle:' .. tostring(vehicle) )
+	outputDebug( 'MISC', 'restorePlayerUnfreeze: vehicle false for ' .. tostring(getPlayerName(player)) .. '  vehicle:' .. tostring(vehicle) )
 	local checkpointNum = getPlayerCurrentCheckpoint(player) - 1
 	local bkp = RaceMode.instances[id].checkpointBackups[player][checkpointNum]
 	if (bkp.onfoot or bkp.borrowed) then
@@ -664,7 +664,7 @@ end
 -- For use when starting or respawing
 --------------------------------------
 function RaceMode.playerFreeze(player, bRespawn, bDontFix, bOnFoot)
-    toggleAllControls(player,true)
+	toggleAllControls(player,true)
 	clientCall( player, "updateVehicleWeapons" )
 	local vehicle = getPedOccupiedVehicle(player)
 	local vehicle2 = RaceMode.getPlayerVehicle(player)
@@ -711,7 +711,7 @@ function RaceMode.playerUnfreeze(player, bDontFix)
 	if not isValidPlayer(player) then
 		return
 	end
-    toggleAllControls(player,true)
+	toggleAllControls(player,true)
 	clientCall( player, "updateVehicleWeapons" )
 	local vehicle = getPedOccupiedVehicle(player)
 	local vehicle2 = RaceMode.getPlayerVehicle(player)
@@ -724,10 +724,10 @@ function RaceMode.playerUnfreeze(player, bDontFix)
 		fixVehicle(vehicle)
 		fixVehicle(vehicle2)
 	end
-    setVehicleDamageProof(vehicle, false)
-    setVehicleDamageProof(vehicle2, false)
-    setVehicleEngineState(vehicle, true)
-    setVehicleEngineState(vehicle2, true)
+	setVehicleDamageProof(vehicle, false)
+	setVehicleDamageProof(vehicle2, false)
+	setVehicleEngineState(vehicle, true)
+	setVehicleEngineState(vehicle2, true)
 	setElementFrozen(player, false)
 	setElementFrozen(vehicle, false)
 	setElementFrozen(vehicle2, false)

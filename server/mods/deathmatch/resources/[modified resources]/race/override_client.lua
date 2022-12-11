@@ -29,20 +29,20 @@ addEventHandler('onClientElementDataChange', root,
 	end
 )
 
-addEventHandler('onClientVehicleExit', root, 
+addEventHandler('onClientVehicleExit', root,
 	function(thePlayer, seat)
 		OverrideClient.updateVars( source )
 		OverrideClient.updateVars( thePlayer )
 	end
 )
 
-addEventHandler('onClientVehicleStartEnter', root, 
+addEventHandler('onClientVehicleStartEnter', root,
 	function(player, seat, door)
 		OverrideClient.updateVars( source )
 	end
 )
 
-addEventHandler('onClientVehicleEnter', root, 
+addEventHandler('onClientVehicleEnter', root,
 	function(player, seat, door)
 		OverrideClient.updateVars( source )
 	end
@@ -80,7 +80,7 @@ function OverrideClient.updateVars( element )
 			setElementCollisionsEnabled ( g_Vehicle, collideworld )
 		end
 	else
-		local i = getElementData(element, "raceiv.interactable") 
+		local i = getElementData(element, "raceiv.interactable")
 		-- 1.0.2
 		-- Collide others
 		local collideothers = isCollideOthers ( element )
@@ -96,8 +96,8 @@ function OverrideClient.updateVars( element )
 		local collideworld = isCollideWorld ( element )
 		setElementCollisionsEnabled ( element, collideworld )
 		-- Handle interactive cars, primarily for foot races, though the cars can be used for normal races as well
-		if (alpha == 120) then 
-			return 
+		if (alpha == 120) then
+			return
 		end -- Don't do anything if respawn effect (120 alpha)
 		local otherPlayers = getElementsByType( "player" )
 		local ghostModeOff = false
@@ -109,7 +109,7 @@ function OverrideClient.updateVars( element )
 
 		if (i) then
 			-- All interactable vehicles need to have their stuff set.
-			local c = getElementData(element, "raceiv.collide") 
+			local c = getElementData(element, "raceiv.collide")
 			local t = getElementData(element, "raceiv.taken")
 			local o = getElementData(element, "raceiv.owner")
 			local vo = getVehicleController(element)
@@ -117,7 +117,7 @@ function OverrideClient.updateVars( element )
 			if (vo and o ~= vo) then o = vo end
 
 			if (not c) then -- This car has no cols
-				setElementAlpha(element, 180) 
+				setElementAlpha(element, 180)
 				-- Set collisions
 				for _,other in ipairs( otherPlayers ) do
 					setElementCollidableWith( element, other, false )
@@ -131,7 +131,7 @@ function OverrideClient.updateVars( element )
 					setElementCollidableWith( element, other, other == o or ghostModeOff )
 				end
 				for _,other in ipairs( otherVehicles ) do
-					local c2 = getElementData(other, "raceiv.collide") 
+					local c2 = getElementData(other, "raceiv.collide")
 					local t2 = getElementData(other, "raceiv.taken")
 					local o2 = getElementData(other, "raceiv.owner")
 					local i2 = getElementData(other, "raceiv.interactable")
@@ -151,23 +151,23 @@ function OverrideClient.updateVars( element )
 					end
 				end
 			elseif (t) then -- This car is claimed, but has no owner
-				setElementAlpha(element, ghostModeOff and 255 or 180) 
+				setElementAlpha(element, ghostModeOff and 255 or 180)
 				-- Set collisions
 				for _,other in ipairs( otherPlayers ) do
 					setElementCollidableWith( element, other, ghostModeOff )
 				end
 				for _,other in ipairs( otherVehicles ) do
-					local c2 = getElementData(other, "raceiv.collide") 
+					local c2 = getElementData(other, "raceiv.collide")
 					setElementCollidableWith( element, other, c2 and ghostModeOff )
 				end
 			else -- This car is parked and not claimed
-				setElementAlpha(element, 255) 
+				setElementAlpha(element, 255)
 				-- Set collisions
 				for _,other in ipairs( otherPlayers ) do
 					setElementCollidableWith( element, other, true )
 				end
 				for _,other in ipairs( otherVehicles ) do
-					local c2 = getElementData(other, "raceiv.collide") 
+					local c2 = getElementData(other, "raceiv.collide")
 					setElementCollidableWith( element, other, c2 )
 				end
 			end
@@ -179,7 +179,7 @@ function OverrideClient.updateVars( element )
 				setElementCollidableWith( element, other, other == o or ghostModeOff )
 			end	
 			for _,other in ipairs( otherVehicles ) do
-				local c2 = getElementData(other, "raceiv.collide") 
+				local c2 = getElementData(other, "raceiv.collide")
 				local t2 = getElementData(other, "raceiv.taken")
 				local o2 = getElementData(other, "raceiv.owner")
 				local i2 = getElementData(other, "raceiv.interactable")
@@ -208,7 +208,7 @@ function OverrideClient.updateVars( element )
 				end
 			end	
 			for _,other in ipairs( otherVehicles ) do
-				local c2 = getElementData(other, "raceiv.collide") 
+				local c2 = getElementData(other, "raceiv.collide")
 				local t2 = getElementData(other, "raceiv.taken")
 				local o2 = getElementData(other, "raceiv.owner")
 				local i2 = getElementData(other, "raceiv.interactable")

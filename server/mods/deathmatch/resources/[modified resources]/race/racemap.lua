@@ -12,7 +12,7 @@
 g_MapSettingNames = table.create(
 	{'time', 'weather', 'respawn', 'respawntime', 'duration', 'skins', 'bikehats', 'bikehatchance', 'carhats', 'carhatchance',
 	 'hairstyles', 'glasses', 'glasseschance', 'shirts', 'trousers', 'shoes',
-	 'ghostmode', 'vehicleweapons', 'autopimp', 'firewater', 'classicchangez', 'hunterminigun', 
+	 'ghostmode', 'vehicleweapons', 'autopimp', 'firewater', 'classicchangez', 'hunterminigun',
 	 'allowonfoot', 'falloffbike', 'spectatevehiclespersist', 'timeafterfirstfinish', 'countdownduration',
 	 'rustlermachinegun', 'fistfights', 'movementglitches'},
 	true
@@ -46,7 +46,7 @@ end
 function RaceMap.load(res)
 	--Check if there are any .<map/>'s by using the real element system first
 	local resourceRoot = getResourceRootElement(res)
-	if #getElementsByType("spawnpoint",resourceRoot) > 0 then 
+	if #getElementsByType("spawnpoint",resourceRoot) > 0 then
 		--Spawnpoints are contained within the MTA map, therefore lets assume only MTA maps were used (removes general.ModifyOtherObjects dependency)
 		local meta = xmlLoadFile(':' .. getResourceName(res) .. '/' .. 'meta.xml')
 		if not meta then
@@ -68,8 +68,8 @@ function RaceMap.load(res)
 		outputDebugString('Error while loading ' .. getResourceName(res) .. ': no meta.xml', 2)
 		return false
 	end
-    local infoNode = xmlFindChild(meta, 'info', 0)
-    local info = infoNode and xmlNodeGetAttributes ( infoNode ) or {}
+	local infoNode = xmlFindChild(meta, 'info', 0)
+	local info = infoNode and xmlNodeGetAttributes ( infoNode ) or {}
 	local racenode = xmlFindChild(meta, 'race', 0)
 	local file = racenode and xmlNodeGetAttribute(racenode, 'src')
 	xmlUnloadFile(meta)
@@ -283,8 +283,8 @@ end
 function RaceElementMap:getAll(name, type)
 	local result = {}
 	-- Block out specific stuff
-	if name == "object" then 
-		return {} 
+	if name == "object" then
+		return {}
 	elseif name == "rpickup" then
 		return self:getAll("racepickup","pickup")
 	end
