@@ -195,6 +195,10 @@
         <right name="command.banserial" access="false"></right>
         <right name="command.unbanserial" access="false"></right>
         <right name="command.listbans" access="false"></right>
+        <right name="command.takescreenshot" access="false"></right>
+        <right name="command.deletescreenshot" access="false"></right>
+        <right name="command.viewscreenshot" access="false"></right>
+        <right name="command.listscreenshots" access="false"></right>
     </acl>
     <acl name="Moderator">
         <right name="general.ModifyOtherObjects" access="false"></right>
@@ -282,6 +286,10 @@
         <right name="command.banserial" access="false"></right>
         <right name="command.unbanserial" access="false"></right>
         <right name="command.listbans" access="false"></right>
+        <right name="command.takescreenshot" access="true"></right>
+        <right name="command.deletescreenshot" access="true"></right>
+        <right name="command.viewscreenshot" access="true"></right>
+        <right name="command.listscreenshots" access="true"></right>
     </acl>
     <acl name="SuperModerator">
         <right name="general.ModifyOtherObjects" access="false"></right>
@@ -363,6 +371,10 @@
         <right name="command.banserial" access="true"></right>
         <right name="command.unbanserial" access="true"></right>
         <right name="command.listbans" access="true"></right>
+        <right name="command.takescreenshot" access="true"></right>
+        <right name="command.deletescreenshot" access="true"></right>
+        <right name="command.viewscreenshot" access="true"></right>
+        <right name="command.listscreenshots" access="true"></right>
     </acl>
     <acl name="Admin">
         <right name="general.ModifyOtherObjects" access="true"></right>
@@ -477,6 +489,10 @@
         <right name="command.banserial" access="true"></right>
         <right name="command.unbanserial" access="true"></right>
         <right name="command.listbans" access="true"></right>
+        <right name="command.takescreenshot" access="true"></right>
+        <right name="command.deletescreenshot" access="true"></right>
+        <right name="command.viewscreenshot" access="true"></right>
+        <right name="command.listscreenshots" access="true"></right>
     </acl>
     <acl name="RPC">
         <right name="function.callRemote" access="true"></right>
@@ -547,6 +563,10 @@
         <right name="command.banserial" access="false"></right>
         <right name="command.unbanserial" access="false"></right>
         <right name="command.listbans" access="false"></right>
+        <right name="command.takescreenshot" access="false"></right>
+        <right name="command.deletescreenshot" access="false"></right>
+        <right name="command.viewscreenshot" access="false"></right>
+        <right name="command.listscreenshots" access="false"></right>
     </acl>
     <acl name="MapEditor">
         <right name="general.ModifyOtherObjects" access="true"></right>
@@ -630,6 +650,10 @@
         <right name="command.banserial" access="false"></right>
         <right name="command.unbanserial" access="false"></right>
         <right name="command.listbans" access="false"></right>
+        <right name="command.takescreenshot" access="false"></right>
+        <right name="command.deletescreenshot" access="false"></right>
+        <right name="command.viewscreenshot" access="false"></right>
+        <right name="command.listscreenshots" access="false"></right>
     </acl>
     <acl name="raceACL">
         <right name="general.ModifyOtherObjects" access="true"></right>
@@ -703,6 +727,10 @@
         <right name="command.banserial" access="false"></right>
         <right name="command.unbanserial" access="false"></right>
         <right name="command.listbans" access="false"></right>
+        <right name="command.takescreenshot" access="false"></right>
+        <right name="command.deletescreenshot" access="false"></right>
+        <right name="command.viewscreenshot" access="false"></right>
+        <right name="command.listscreenshots" access="false"></right>
     </acl>
     <acl name="DevACL">
         <right name="resource.performancebrowser.http" access="true"></right>
@@ -773,5 +801,9 @@
         <right name="command.banserial" access="false"></right>
         <right name="command.unbanserial" access="false"></right>
         <right name="command.listbans" access="false"></right>
+        <right name="command.takescreenshot" access="false"></right>
+        <right name="command.deletescreenshot" access="false"></right>
+        <right name="command.viewscreenshot" access="false"></right>
+        <right name="command.listscreenshots" access="false"></right>
     </acl>
 </acl>
