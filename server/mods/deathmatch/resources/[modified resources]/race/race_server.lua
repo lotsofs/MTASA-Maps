@@ -134,6 +134,7 @@ function cacheGameOptions()
 	g_GameOptions.showauthorname					= getBool('race.showauthorname',true)
 	g_GameOptions.showmapinfo						= getBool('race.showmapinfo',true)
 	g_GameOptions.ghostmode_map_can_override		= getBool('race.ghostmode_map_can_override',true)
+	g_GameOptions.helibladecols_map_can_override	= getBool('race.helibladecols_map_can_override',true)
 	g_GameOptions.skins_map_can_override			= getBool('race.skins_map_can_override',true)
 	g_GameOptions.vehicleweapons_map_can_override   = getBool('race.vehicleweapons_map_can_override',true)
 	g_GameOptions.autopimp_map_can_override			= getBool('race.autopimp_map_can_override',true)
@@ -169,6 +170,7 @@ function cacheMapOptions(map)
 	g_MapOptions.skins						= map.skins or 'cj'
 	g_MapOptions.vehicleweapons 			= map.vehicleweapons == 'true'
 	g_MapOptions.ghostmode					= map.ghostmode == 'true'
+	g_MapOptions.helibladecollisionsdisabled= map.helibladecollisionsdisabled == 'true'
 	g_MapOptions.autopimp					= map.autopimp == 'true'
 	g_MapOptions.firewater					= map.firewater == 'true'
 	g_MapOptions.classicchangez				= map.classicchangez == 'true'
@@ -192,18 +194,11 @@ function cacheMapOptions(map)
 	-- Set ghostmode from g_GameOptions if not defined in the map, or map override not allowed
 	if not map.ghostmode or not g_GameOptions.ghostmode_map_can_override then
 		g_MapOptions.ghostmode = g_GameOptions.ghostmode
-	-- elseif g_GameOptions.ghostmode_war/ning_if_map_override and g_MapOptions.ghostmode ~= g_GameOptions.ghostmode then
-	-- 	if g_MapOptions.ghostmode then
-	-- 		outputChatBox( 'No/tice: Collisions are turned off for this map' )
-	-- 	else
-	-- 		outputChatBox( 'No/tice: Collisions are turned on for this map' )
-	-- 	end
 	end
 	
-
-	-- if g_MapOptions.allowonfoot then
-	-- 	outputChatBox( 'No/tice: Vehicle entering/exiting is turned on for this map' )
-	-- end
+	if not map.helibladecollisionsdisabled or not g_GameOptions.helibladecols_map_can_override then
+		g_MapOptions.helibladecollisionsdisabled = g_GameOptions.helibladecollisionsdisabled
+	end
 
 	-- Set skins from g_GameOptions if not defined in the map, or map override not allowed
 	if not map.skins or not g_GameOptions.skins_map_can_override then
@@ -213,12 +208,6 @@ function cacheMapOptions(map)
 	-- Set vehicleweapons from g_GameOptions if not defined in the map, or map override not allowed
 	if not map.vehicleweapons or not g_GameOptions.vehicleweapons_map_can_override then
 		g_MapOptions.vehicleweapons = g_GameOptions.vehicleweapons
-	-- elseif g_GameOptions.vehicleweapons_war/ning_if_map_override and g_MapOptions.vehicleweapons ~= g_GameOptions.vehicleweapons then
-	-- 	if g_MapOptions.vehicleweapons then
-	-- 		outputChatBox( 'No/tice: Vehicle weapons are turned on for this map' )
-	-- 	else
-	-- 		outputChatBox( 'No/tice: Vehicle weapons are turned off for this map' )
-	-- 	end
 	end
 
 	-- Set autopimp from g_GameOptions if not defined in the map, or map override not allowed
@@ -261,27 +250,28 @@ function loadMap(res)
 	g_MapInfo.resname   = map.info['resname'] or getResourceName(res)
 
 	g_SavedMapSettings = {}
-	g_SavedMapSettings.duration					= map.duration
-	g_SavedMapSettings.respawn					= map.respawn
-	g_SavedMapSettings.respawntime				= map.respawntime
-	g_SavedMapSettings.time						= map.time
-	g_SavedMapSettings.weather					= map.weather
-	g_SavedMapSettings.skins					= map.skins
-	g_SavedMapSettings.vehicleweapons			= map.vehicleweapons
-	g_SavedMapSettings.ghostmode				= map.ghostmode
-	g_SavedMapSettings.autopimp					= map.autopimp
-	g_SavedMapSettings.firewater				= map.firewater
-	g_SavedMapSettings.classicchangez			= map.classicchangez
-	g_SavedMapSettings.firewater				= map.firewater
-	g_SavedMapSettings.hunterminigun			= map.hunterminigun
-	g_SavedMapSettings.rustlermachinegun		= map.rustlermachinegun
-	g_SavedMapSettings.fistfights				= map.fistfights
-	g_SavedMapSettings.movementglitches			= map.movementglitches
-	g_SavedMapSettings.allowonfoot				= map.allowonfoot
-	g_SavedMapSettings.falloffbike				= map.falloffbike
-	g_SavedMapSettings.spectatevehiclespersist 	= map.spectatevehiclespersist
-	g_SavedMapSettings.timeafterfirstfinish		= map.timeafterfirstfinish
-	g_SavedMapSettings.countdownduration		= map.countdownduration
+	g_SavedMapSettings.duration						= map.duration
+	g_SavedMapSettings.respawn						= map.respawn
+	g_SavedMapSettings.respawntime					= map.respawntime
+	g_SavedMapSettings.time							= map.time
+	g_SavedMapSettings.weather						= map.weather
+	g_SavedMapSettings.skins						= map.skins
+	g_SavedMapSettings.vehicleweapons				= map.vehicleweapons
+	g_SavedMapSettings.ghostmode					= map.ghostmode
+	g_SavedMapSettings.helibladecollisionsdisabled 	= map.helibladecollisionsdisabled
+	g_SavedMapSettings.autopimp						= map.autopimp
+	g_SavedMapSettings.firewater					= map.firewater
+	g_SavedMapSettings.classicchangez				= map.classicchangez
+	g_SavedMapSettings.firewater					= map.firewater
+	g_SavedMapSettings.hunterminigun				= map.hunterminigun
+	g_SavedMapSettings.rustlermachinegun			= map.rustlermachinegun
+	g_SavedMapSettings.fistfights					= map.fistfights
+	g_SavedMapSettings.movementglitches				= map.movementglitches
+	g_SavedMapSettings.allowonfoot					= map.allowonfoot
+	g_SavedMapSettings.falloffbike					= map.falloffbike
+	g_SavedMapSettings.spectatevehiclespersist 		= map.spectatevehiclespersist
+	g_SavedMapSettings.timeafterfirstfinish			= map.timeafterfirstfinish
+	g_SavedMapSettings.countdownduration			= map.countdownduration
 
 	cacheMapOptions(g_SavedMapSettings)
 

@@ -37,19 +37,12 @@ function GhostPlayback:deleteGhost()
 	return false
 end
 
-function GhostPlayback:loadGhost(which)
-	if not which then
-		which = "top"
-	end
-
-	-- Load the old ghost if there is one
-	-- We must first retrieve the name of this ghost
-	local mapName = getResourceName( self.map )
-	local ghostResourceName
-
+function getGhostsForMap(map)
+	local runs = {}
+	local mapName = getResourceName( map )
 	local toc = xmlLoadFile("ghosts/" .. mapName .. ".toc")
-
-	if not toc then
+	-- Look for a table of contents. If it doesn't exist, make it
+	if not toc then 
 		-- Look for old file (backwards compatibility)
 		local fileName = "ghosts/" .. mapName .. ".ghost"
 		local old = xmlLoadFile( fileName )
@@ -61,26 +54,31 @@ function GhostPlayback:loadGhost(which)
 		if old then
 			-- Found old file, write it to a new table of contents
 			xmlUnloadFile( old )
-			ghostResourceName = fileName
 
 			toc = xmlCreateFile( "ghosts/" .. mapName .. ".toc", "toc")
 			if toc then
-				top = xmlCreateChild( toc, "top" )
+				local top = xmlCreateChild( toc, "top" )
 				if (top) then
 					xmlNodeSetAttribute( top, "f", fileName)
 				end	
 				xmlSaveFile( toc )
-				xmlUnloadFile( toc )
 			end
+			runs["top"] = fileName
+			xmlUnloadFile( toc )
 		end
-	else
-		local top = xmlFindChild( toc, which, 0 )
-		if top then
-			ghostResourceName = xmlNodeGetAttribute(top, "f") or false
-		end
-
-		xmlUnloadFile( toc )
+		return runs
 	end
+	-- toc exists. Read it
+	local nodes = xmlNodeGetChildren(toc)
+	for i,v in ipairs(nodes) do
+		runs[xmlNodeGetName(v)] = xmlNodeGetAttribute(v, "f")
+		iprint(runs)
+	end
+	xmlUnloadFile( toc )
+	return runs
+end
+
+function GhostPlayback:loadGhost(ghostResourceName)
 	if not ghostResourceName then return end
 
 	local ghost = xmlLoadFile( ghostResourceName )
@@ -144,19 +142,21 @@ function GhostPlayback:loadGhost(which)
 		-- Create the ped & vehicle
 		for _, v in ipairs( self.recording ) do
 			if v.ty == "st" then
-				-- Check start is near a spawnpoint
-				local bestDist = math.huge
-				for _,spawnpoint in ipairs(getElementsByType("spawnpoint")) do
-					bestDist = math.min( bestDist, getDistanceBetweenPoints3D( v.x, v.y, v.z, getElementPosition(spawnpoint) ) )
-				end
-				if bestDist > 5 then
-					for _,spawnpoint in ipairs(getElementsByType("spawnpoint_onfoot")) do
+				if g_GameOptions.validatespawn then				
+					-- Check start is near a spawnpoint
+					local bestDist = math.huge
+					for _,spawnpoint in ipairs(getElementsByType("spawnpoint")) do
 						bestDist = math.min( bestDist, getDistanceBetweenPoints3D( v.x, v.y, v.z, getElementPosition(spawnpoint) ) )
 					end
-				end
-				if bestDist > 5 then
-					outputDebugServer( "Found an invalid ghost file", mapName, nil, " (Spawn point too far away - " .. bestDist .. ")" )
-					return false
+					if bestDist > 5 then
+						for _,spawnpoint in ipairs(getElementsByType("spawnpoint_onfoot")) do
+							bestDist = math.min( bestDist, getDistanceBetweenPoints3D( v.x, v.y, v.z, getElementPosition(spawnpoint) ) )
+						end
+					end
+					if bestDist > 5 then
+						outputDebugServer( "Found an invalid ghost file", mapName, nil, " (Spawn point too far away - " .. bestDist .. ")" )
+						return false
+					end
 				end
 				self.ped = { p = v.p, x = v.x, y = v.y, z = v.z }
 				self.vehicle = { m = v.m, x = v.x, y = v.y, z = v.z, rx = v.rX, ry = v.rY, rz = v.rZ }
@@ -185,18 +185,33 @@ addEventHandler( "onMapStarting", root,
 			personalPlayback:destroy()
 		end
 
-		local mapName = exports.mapmanager:getRunningGamemodeMap()
-		topPlayback = GhostPlayback:create( mapName )
+		local map = exports.mapmanager:getRunningGamemodeMap()
+		getGhostsForMap(map)
+		iprint("STOPPED HERE. DELETE")
+		if true then
+			return
+		end
+
+		topPlayback = GhostPlayback:create( map )
 		topPlayback:loadGhost()
 		topPlayback:sendGhostData()
-		personalPlayback = GhostPlayback:create( mapName )
+		
+		personalPlayback = GhostPlayback:create( map )
 		for i, v in pairs(getElementsByType("player")) do
-			-- if (i > 1) then break end
 			vName = removeColorCoding((getPlayerName(v)))
 			hasPB = personalPlayback:loadGhost("pb_" .. vName:gsub('[%p%c%s]', ''))
 			if (hasPB) then
 				personalPlayback:sendGhostData(v, "pb")   
 			end
+		end
+		
+		local extraGhosts = {}
+		for i = 0,g_GameOptions.fillplayerslots,1 do
+			extraGhosts[i] = GhostPlayback:create( map )
+
+		end
+		if (g_GameOptions.fillplayerslots > #extraGhosts) then
+			personalPlayback:sendGhostData(root, "xtra" .. i)
 		end
 	end
 )

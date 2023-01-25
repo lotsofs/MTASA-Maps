@@ -212,8 +212,8 @@ end
 function TravelScreen.showDetails( ghostmode, vehicleweapons, respawn, allowonfoot, falloffbike, movementglitches, spectatevehiclespersist, fistfights )
 	local text5 = ""
 	text5 = text5 .. (ghostmode and "◼ Ghost mode\n" or "◻ Ghost mode\n")
-	text5 = text5 .. (vehicleweapons and "◼ Vehicle weapons\n" or "◻ Vehicle weapons\n")
 	text5 = text5 .. (respawn == 'timelimit' and "◼ Respawn\n" or "◻ Respawn\n")
+	text5 = text5 .. (vehicleweapons and "◼ Vehicle weapons\n" or "◻ Vehicle weapons\n")
 	text5 = text5 .. (allowonfoot and "◼ Exiting vehicles\n" or "◻ exiting vehicles\n")
 	local text6 = ""
 	if (allowonfoot) then

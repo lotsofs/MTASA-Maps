@@ -14,7 +14,7 @@ g_MapSettingNames = table.create(
 	 'hairstyles', 'glasses', 'glasseschance', 'shirts', 'trousers', 'shoes',
 	 'ghostmode', 'vehicleweapons', 'autopimp', 'firewater', 'classicchangez', 'hunterminigun',
 	 'allowonfoot', 'falloffbike', 'spectatevehiclespersist', 'timeafterfirstfinish', 'countdownduration',
-	 'rustlermachinegun', 'fistfights', 'movementglitches'},
+	 'rustlermachinegun', 'fistfights', 'movementglitches', 'helibladecollisionsdisabled'},
 	true
 )
 

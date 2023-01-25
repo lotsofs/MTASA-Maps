@@ -75,7 +75,10 @@ function cacheGameOptions()
 	g_GameOptions.verboselog			= getBool('race_ghost.verboselog',false)
 	g_GameOptions.alphavalue			= getNumber('race_ghost.alphavalue',120)
 	g_GameOptions.admingroup			= getString('race_ghost.admingroup','Admin')
-	g_GameOptions.recordpersonalbests	= getString('race_ghost.recordpersonalbests',false)
+	g_GameOptions.recordpersonalbests	= getBool('race_ghost.recordpersonalbests',false)
+	g_GameOptions.validatespawn			= getBool('race_ghost.validatespawn',false)
+	g_GameOptions.hideatstart			= getBool('race_ghost.hideatstart',false)
+	g_GameOptions.fillplayerslots		= getNumber('race_ghost.fillplayerslots',0)
 end
 
 

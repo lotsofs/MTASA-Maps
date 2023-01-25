@@ -167,6 +167,7 @@ if isEditor() then
 		g_GameOptions.joinspectating					= false
 		g_GameOptions.joinrandomvote					= false
 		g_GameOptions.ghostmode_map_can_override		= true
+		g_GameOptions.helibladecols_map_can_override 	= true
 		g_GameOptions.skins_map_can_override			= true
 		g_GameOptions.vehicleweapons_map_can_override   = true
 		g_GameOptions.autopimp_map_can_override			= true

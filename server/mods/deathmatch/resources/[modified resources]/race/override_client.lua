@@ -72,7 +72,7 @@ function OverrideClient.updateVars( element )
 				if other ~= g_Vehicle then
 					local docollide = collideothers and isCollideOthers ( other )
 					setElementCollisionsEnabled ( other, docollide )
-					setHeliBladeCollisionsEnabled ( other, g_GameOptions.helibladecollisionsdisabled )
+					setHeliBladeCollisionsEnabled ( other, g_MapOptions and not g_MapOptions.helibladecollisionsdisabled or not g_GameOptions.helibladecollisionsdisabled or true)
 				end
 			end
 			-- Collide world
@@ -89,7 +89,7 @@ function OverrideClient.updateVars( element )
 			for _,other in ipairs( otherVehicles ) do
 				local docollide = collideothers and isCollideOthers ( other )
 				setElementCollidableWith ( element, other, docollide )
-				setHeliBladeCollisionsEnabled ( other, g_GameOptions.helibladecollisionsdisabled )
+				setHeliBladeCollisionsEnabled ( other, g_MapOptions and not g_MapOptions.helibladecollisionsdisabled or not g_GameOptions.helibladecollisionsdisabled or true )
 			end
 		end
 		-- Collide world
@@ -254,7 +254,7 @@ addEventHandler('onClientPreRender', root,
 				if vehicle ~= g_Vehicle then
 					local docollide = collideothers and isCollideOthers ( vehicle )
 					setElementCollisionsEnabled ( vehicle, docollide )
-					setHeliBladeCollisionsEnabled ( vehicle, g_GameOptions.helibladecollisionsdisabled )
+					setHeliBladeCollisionsEnabled ( vehicle, g_MapOptions and not g_MapOptions.helibladecollisionsdisabled or not g_GameOptions.helibladecollisionsdisabled or true )
 				end
 			end
 			-- Collide world

@@ -86,22 +86,22 @@ function GhostPlayback:checkForCountdownEnd()
 			setElementAlpha( self.ped, g_GameOptions.alphavalue )
 		end
 
-        -- -- If at the start and ghost is very close to a player vehicle, make it invisible
-		-- -- This is nonsense. The ghost already is a ghost and making it invisible defeats the purpose of a ghost
-		-- if frozen and not self.isPlaying then
-		-- 	local x, y, z = getElementPosition(self.vehicle)
-		-- 	for _,player in ipairs(getElementsByType('player')) do
-		-- 		local plrveh = getPedOccupiedVehicle( player )
-		-- 		if plrveh then
-		-- 			local dist = getDistanceBetweenPoints3D(x, y, z, getElementPosition(plrveh))
-		-- 			if dist < 0.1 then
-		-- 				setElementAlpha( self.vehicle, 0 )
-		-- 				setElementAlpha( self.ped, 0 )
-		-- 				break
-		-- 			end
-		-- 		end
-		-- 	end
-		-- end
+        -- If at the start and ghost is very close to a player vehicle, make it invisible
+		-- This is nonsense. The ghost already is a ghost and making it invisible defeats the purpose of a ghost
+		if g_GameOptions.hideatstart and frozen and not self.isPlaying then
+			local x, y, z = getElementPosition(self.vehicle)
+			for _,player in ipairs(getElementsByType('player')) do
+				local plrveh = getPedOccupiedVehicle( player )
+				if plrveh then
+					local dist = getDistanceBetweenPoints3D(x, y, z, getElementPosition(plrveh))
+					if dist < 0.1 then
+						setElementAlpha( self.vehicle, 0 )
+						setElementAlpha( self.ped, 0 )
+						break
+					end
+				end
+			end
+		end
 	else
 		local frozen = isElementFrozen( localPlayer ) or getElementData(localPlayer, "race rank") == ""
 		if not frozen then
