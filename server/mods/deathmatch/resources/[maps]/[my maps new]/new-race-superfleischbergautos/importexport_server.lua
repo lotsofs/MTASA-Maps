@@ -1,4 +1,24 @@
 -- TODO:
+-- Runway indicators on map
+-- Go through rpoblematic spawns and replace the ground where needed (eg. the underground popo garages)
+-- Hide boat icon if not in boat
+-- Move transparency code client side
+-- Add pedestrians as spectators as some sort of endurance reward. Make them no collision. Maybe other decorations as well.
+-- Add points mechanic for damage
+-- None of this crap about it into a LEFT PLAYERS table, just index with player serials everywhere
+-- Crane one really likes to make 350 degree turns, but doesn't affect the actual deliveries. Only visual.
+-- Add options for no planes, boats, etc
+-- you could inform the client of the required_cp_count and do the collectCP *before* communicating with the server
+-- nth: Output to text
+-- blank box for newcomers (leaderboard)
+
+-- Test: Tropic bridge behavior
+-- Test: Heli blade collisions (others and yours)
+-- Flying a plane kamikaze into the marker can trigger a succesful delivery. Don't
+-- Find bug that causes deliveries upon random death far away
+
+
+
 -- DONE - a script that teleports players to a car at the start
 -- DONE - a script that detects the player inside the marker
 -- DONE - a script that teleports players to a new car
@@ -75,20 +95,6 @@
 -- DONE - There's an error in line 245 (if CUR > new + 1), but the bug report is not very good.
 -- DONE - Saved progress persists between map sessions?
 
-
--- Runway indicators on map
--- Go through rpoblematic spawns and replace the ground where needed (eg. the underground popo garages)
--- Hide boat icon if not in boat
--- Move transparency code client side
--- Add pedestrians as spectators as some sort of endurance reward. Make them no collision. Maybe other decorations as well.
--- Add points mechanic for damage
--- None of this crap about it into a LEFT PLAYERS table, just index with player serials everywhere
--- Crane one really likes to make 350 degree turns, but doesn't affect the actual deliveries. Only visual.
--- Add options for no planes, boats, etc
--- you could inform the client of the required_cp_count and do the collectCP *before* communicating with the server
--- nth: Output to text
--- blank box for newcomers (leaderboard)
-
 CHECKPOINT = {}
 CHECKPOINTS = getElementsByType("checkpoint")
 
@@ -109,47 +115,47 @@ LEFT_PLAYERS_PROGRESS = {}
 LEFT_PLAYERS_SHUFFLED_CARS = {}
 
 VEHICLES_WITH_GUNS = {
-	[476] = true,
-	[447] = true,
-	[430] = true,
-	[464] = true,
-	[425] = true
+	[425] = true, -- hunter
+	[430] = true, -- predator
+	[447] = true, -- seaspar
+	[464] = true, -- rcbaron
+	[476] = true  -- rustler
 } -- do not delete
 
-BOATS = {
-	[472] = true,
-	[473] = true,
-	[493] = true,
-	[595] = true,
-	[484] = true,
-	[430] = true,
-	[453] = true,
-	[452] = true,
-	[446] = true,
-	[454] = true,
+-- BOATS = {
+-- 	[430] = true, -- predator
+-- 	[446] = true, -- squalo
+-- 	[452] = true, -- speeder
+-- 	[453] = true, -- reefer
+-- 	[454] = true, -- tropic
+-- 	[472] = true, -- coastg
+-- 	[473] = true, -- dinghy
+-- 	[484] = true, -- marquis
+-- 	[493] = true, -- jetmax
+-- 	[595] = true, -- launch
 	
-	[610] = true,
-	[584] = true,
-	[608] = true,
-	[435] = true,
-	[450] = true,
-	[591] = true,
+-- 	[435] = true, -- artict1
+-- 	[450] = true, -- artict2
+-- 	[584] = true, -- petrotr
+-- 	[591] = true, -- artict3
+-- 	[608] = true, -- tugstair
+-- 	[610] = true, -- farmtr1
 	
-	[590] = true,
-	[538] = true,
-	[570] = true,
-	[569] = true,
-	[537] = true,
-	[449] = true
-}
+-- 	[449] = true, -- tram
+-- 	[537] = true, -- freight
+-- 	[538] = true, -- streak
+-- 	[569] = true, -- freiflat
+-- 	[570] = true, -- streakc
+-- 	[590] = true  -- freibox
+-- }
 
 TRAINS = {
-	[590] = true,
-	[538] = true,
-	[570] = true,
-	[569] = true,
-	[537] = true,
-	[449] = true
+	[449] = true, -- tram
+	[537] = true, -- freight
+	[538] = true, -- streak
+	[569] = true, -- freiflat
+	[570] = true, -- streakc
+	[590] = true  -- freibox
 } -- do not delete
 
 DATABASE = dbConnect("sqlite", ":/mapSuperFleischbergAutos.db")
@@ -198,6 +204,7 @@ function shuffleCarsOne(whose)
 		-- Race hasn't started yet
 		return
 	end
+	local sipp = SHUFFLED_INDICES_PER_PLAYER[whose]
 	if (sipp ~= nil and #sipp > 0) then
 		-- This player is not new
 		return
@@ -287,7 +294,7 @@ function teleportToNext(progress, player)
 	end
 
 	-- setElementFrozen(vehicle, true)
-	disableMovementControls(player, true)
+	setMovementControls(player, false)
 	setElementPosition(vehicle, x, y, z)
 	setElementAngularVelocity(vehicle, 0, 0, 0)
 	setElementVelocity(vehicle, 0, 0, 0)
@@ -309,7 +316,7 @@ function teleportToNext(progress, player)
 			return
 		end
 		setElementAlpha ( vehicle, 255 ) 
-		disableMovementControls(player, false)
+		setMovementControls(player, true)
 		triggerClientEvent(player, "playGoSound", resourceRoot)
 	end, 2000, 1, player)
 end
@@ -348,33 +355,13 @@ function playerRespawn(theVehicle, seat, jacked)
 end
 addEventHandler("onPlayerVehicleEnter", root, playerRespawn)
 
-function startRacePoll(newState, oldState)
+function raceStateChanged(newState, oldState)
 	if (newState ~= "GridCountdown") then
 		return
 	end
 	triggerClientEvent ( root, "configureCrane", resourceRoot )
-	
-	POLL_ACTIVE = true
-	-- poll thing, half of which I dont understand what it means
-	poll = exports.votemanager:startPoll {
-	--start settings (dictionary part)
-	title="Choose the map length:",
-	percentage=100,
-	timeout=CUTSCENE_LENGTH_IN_SECONDS,
-	allowchange=true,
-
-	--start options (array part)
-	[1]={"Bite Sized Chunk (5)", "pollFinished" , resourceRoot, 5},		
-	[2]={"One List (10)", "pollFinished" , resourceRoot, 10},			
-	[3]={"Classic (30)", "pollFinished" , resourceRoot, 30},			
-	[4]={"Full Experience (212)", "pollFinished", resourceRoot, 212},
-	}
-	if not poll then
-		applyPollResult(20)
-	end
-	
+	startRacePoll()
 	setTimer(startGame, (CUTSCENE_LENGTH_IN_SECONDS+0.5)*1000, 1)
-
 
 	-- -- This might become obsolete
 	-- for i, v in pairs(getElementsByType("player")) do
@@ -385,7 +372,30 @@ function startRacePoll(newState, oldState)
 	-- end
 end
 addEvent("onRaceStateChanging", true)
-addEventHandler("onRaceStateChanging", root, startRacePoll)
+addEventHandler("onRaceStateChanging", root, raceStateChanged)
+
+function startRacePoll()
+	POLL_ACTIVE = true
+	-- poll thing, half of which I dont understand what it means
+	poll = exports.votemanager:startPoll {
+	--start settings (dictionary part)
+	title="Choose the map length:",
+	percentage=100,
+	timeout=CUTSCENE_LENGTH_IN_SECONDS,
+	allowchange=true,
+
+	--start options (array part)
+	[1]={"A Basic Race (1)", "pollFinished" , resourceRoot, 1},		
+	[2]={"Bite Sized Chunk (5)", "pollFinished" , resourceRoot, 5},		
+	[3]={"One List (10)", "pollFinished" , resourceRoot, 10},			
+	[4]={"Classic (30)", "pollFinished" , resourceRoot, 30},			
+	[5]={"Extended (100)", "pollFinished", resourceRoot, 100},
+	[6]={"Full Experience (212)", "pollFinished", resourceRoot, 212},
+	}
+	if not poll then
+		applyPollResult(20)
+	end
+end
 
 function applyPollResult(pollResult)
 	REQUIRED_CHECKPOINTS = pollResult
@@ -433,149 +443,19 @@ function colorGenerator(player)
 	setVehicleColor(vehicle, colors[1], colors[2], colors[3], colors[4], colors[5], colors[6], colors[7], colors[8], colors[9], colors[10], colors[11], colors[12])
 end
 
-function disableMovementControls(player, yes)
-	yes = not yes
-	toggleControl(player, 'vehicle_left', yes)
-	toggleControl(player, 'vehicle_right', yes)
-	toggleControl(player, 'steer_forward', yes)
-	toggleControl(player, 'steer_back', yes)
-	toggleControl(player, 'brake_reverse', yes)
-	toggleControl(player, 'accelerate', yes)
-	toggleControl(player, 'special_control_up', yes)
-	toggleControl(player, 'special_control_down', yes)
+function setMovementControls(player, enabled)
+	toggleControl(player, 'vehicle_left', enabled)
+	toggleControl(player, 'vehicle_right', enabled)
+	toggleControl(player, 'steer_forward', enabled)
+	toggleControl(player, 'steer_back', enabled)
+	toggleControl(player, 'brake_reverse', enabled)
+	toggleControl(player, 'accelerate', enabled)
+	toggleControl(player, 'special_control_up', enabled)
+	toggleControl(player, 'special_control_down', enabled)
 end
 
------------------------------------------------------- Cheats ------------------------------------------------------
------------------------------------------------------- Cheats ------------------------------------------------------
------------------------------------------------------- Cheats ------------------------------------------------------
------------------------------------------------------- Cheats ------------------------------------------------------
------------------------------------------------------- Cheats ------------------------------------------------------
------------------------------------------------------- Cheats ------------------------------------------------------
------------------------------------------------------- Cheats ------------------------------------------------------
------------------------------------------------------- Cheats ------------------------------------------------------
------------------------------------------------------- Cheats ------------------------------------------------------
-
-function cheatResetProgress(playerSource, commandName)
-	outputChatBox ( "Resetting Progress", playerSource, 255, 127, 127, true )
-	SHUFFLED_INDICES_PER_PLAYER[playerSource] = {}
-	PLAYER_PROGRESS[playerSource] = 1
-	shuffleCarsOne(playerSource)
-	triggerClientEvent(playerSource, "updateTarget", playerSource, PLAYER_PROGRESS[playerSource])
-end
-addCommandHandler("resetprogress", cheatResetProgress)
-
--- function cheatSkipVehicle(playerSource, commandName)
--- 	progress = PLAYER_PROGRESS[playerSource] + 1
--- 	if (progress > REQUIRED_CHECKPOINTS) then
--- 		return
--- 	end
--- 	PLAYER_PROGRESS[playerSource] = progress
-	
--- 	teleportToNext(progress, playerSource)
--- 	triggerClientEvent(playerSource, "updateTarget", playerSource, progress)
--- end
--- addCommandHandler("cheatnext", cheatSkipVehicle)
-
-function cheatSkipForPlayer(playerSource, commandName, name)
-	if isObjectInACLGroup("user." .. getAccountName(getPlayerAccount(playerSource)), aclGetGroup ("Admin")) then
-		local playa = getPlayerFromName ( name )
-		if (not playa) then
-			iprint("[FleischBerg Autos] no such player")
-			return
-		end
-
-		progress = PLAYER_PROGRESS[playa] + 1
-		if (progress > REQUIRED_CHECKPOINTS) then
-			return
-		end
-		PLAYER_PROGRESS[playa] = progress
-		
-		teleportToNext(progress, playa)
-		triggerClientEvent(playa, "updateTarget", playa, progress)
-	end
-end
-addCommandHandler("ie_cheatSkipForPlayer", cheatSkipForPlayer )
-
--- function cheatFlipVehicle(playerSource, commandName)
--- 	vehicle = getPedOccupiedVehicle(playerSource)
--- 	setElementRotation(vehicle, 0, 180, 0)
--- end
--- addCommandHandler("cheatflip", cheatFlipVehicle)
-
--- function cheatPrevVehicle(playerSource, commandName)
--- 	progress = PLAYER_PROGRESS[playerSource] - 1
--- 	if (progress == 0) then
--- 		return
--- 	end
--- 	PLAYER_PROGRESS[playerSource] = progress
-	
--- 	teleportToNext(progress, playerSource)
--- 	triggerClientEvent(playerSource, "updateTarget", playerSource, progress)
--- end
--- addCommandHandler("cheatprev", cheatPrevVehicle)
-
--- function cheatTeleportVehicle(playerSource, commandName)
--- 	vehicle = getPedOccupiedVehicle(playerSource)
--- 	setElementPosition(vehicle, 0, 0, 20)
--- end
--- addCommandHandler("cheattp", cheatTeleportVehicle)
-
--- function cheatTeleportVehicleOp(playerSource, commandName)
--- 	vehicle = getPedOccupiedVehicle(playerSource)
--- 	setElementPosition(vehicle, 5, -241, 20)
--- end
--- addCommandHandler("cheattpop", cheatTeleportVehicleOp)
-
--- function cheatTeleportBoat(playerSource, commandName)
--- 	vehicle = getPedOccupiedVehicle(playerSource)
--- 	setElementPosition(vehicle, -219, -604, 20)
--- end
--- addCommandHandler("cheattpboat", cheatTeleportBoat)
-
 ---------------------------------
 ---------------------------------
----------------------------------
----------------------------------
----------------------------------
----------------------------------
----------------------------------
----------------------------------
-
-function finish(rank, _time)
-	name = getPlayerName(source)
-	RACE_FINISHED = true
-	if (DATABASE) then
-		dbExec(DATABASE, "CREATE TABLE IF NOT EXISTS progressTable (serial TEXT, progress INTEGER, indices TEXT)")
-		local s = getPlayerSerial(source)
-		local query = dbQuery(DATABASE, "SELECT * FROM progressTable WHERE serial=? LIMIT 1", s)
-		local results = dbPoll(query, -1)
-		if (results and #results > 0) then
-			dbExec(DATABASE, "DELETE FROM progressTable WHERE serial=?", s)
-		end
-		if (REQUIRED_CHECKPOINTS == #getElementsByType("checkpoint")) then
-			dbExec(DATABASE, "CREATE TABLE IF NOT EXISTS scoresTable (playername TEXT, score integer)")
-			query = dbQuery(DATABASE, "SELECT * FROM scoresTable WHERE playername = ?", name)
-			results = dbPoll(query, -1)		
-			if (LOADED_GAME_FROM_DB) then
-				return
-			end
-			if (results and #results > 0) then
-				if (_time < results[1]["score"]) then
-					dbExec(DATABASE, "UPDATE scoresTable SET score = ? WHERE playername = ?", _time, name)
-				end
-			else
-				dbExec(DATABASE, "INSERT INTO scoresTable(playername, score) VALUES (?,?)", name, _time)
-			end
-			query2 = dbQuery(DATABASE, "SELECT * FROM scoresTable ORDER BY score ASC LIMIT 10")		
-			results = dbPoll(query2, -1)
-			triggerClientEvent(root, "setScoreBoard", resourceRoot, results)
-		else
-			outputChatBox("ERROR: Scores database fault", 255, 127, 0)
-		end	
-	end
-end
-addEventHandler("onPlayerFinish", getRootElement(), finish)
-
 
 function cleanup(stoppedResource)
 	for i, v in ipairs(getElementsByType("player")) do
@@ -664,27 +544,3 @@ function playerJoining(loadedResource)
 end
 addEventHandler("onPlayerResourceStart", root, playerJoining)
 
--- database stuff
--- --------------
-
-function showScores(newState, oldState)
-	if (newState == "Running") then
-		-- triggerClientEvent(root, "setScoreBoard", resourceRoot, results)
-		triggerClientEvent(root, "showScoreBoard", resourceRoot, true, 31000)
-		return
-	elseif (newState == "GridCountdown") then
-		if (DATABASE) then
-			-- read the database
-			dbExec(DATABASE, "CREATE TABLE IF NOT EXISTS scoresTable (playername TEXT, score integer)")
-			query = dbQuery(DATABASE, "SELECT * FROM scoresTable ORDER BY score ASC LIMIT 10")
-			results = dbPoll(query, -1)
-			triggerClientEvent(root, "setScoreBoard", resourceRoot, results)
-			triggerClientEvent(root, "showScoreBoard", resourceRoot, true, nil)
-		else
-			outputChatBox("ERROR: Scores database fault", 255, 127, 0)
-		end
-	elseif (newState == "TimesUp" or newState == "EveryoneFinished" or newState == "PostFinish" or newState == "SomeoneWon") then
-		triggerClientEvent(root, "showScoreBoard", resourceRoot, true, nil)
-	end
-end
-addEventHandler("onRaceStateChanging", root, showScores)
