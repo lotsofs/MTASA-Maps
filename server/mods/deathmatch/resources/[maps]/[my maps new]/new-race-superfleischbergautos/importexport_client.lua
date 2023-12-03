@@ -5,14 +5,9 @@ MARKER_BOAT = getElementByID("_MARKER_EXPORT_BOAT")
 
 BOAT_DETECTOR = createColCuboid(-476, -966, -5, 929, 839, 15)
 AT_APPROACH_DETECTOR = createColSphere(-51.1, -192.5, -3, 900)
-REACH_CRANE1 = createColCircle(72.4, -339.4, 89)
-REACH_CRANE2 = createColCircle(-61.9, -286.4, 89)
 GODMODE_REGION_BOAT = createColCircle(-12.5, -342.0, 30)
 GODMODE_REGION_PLANE = createColCuboid(-61, -233, 0, 30, 29, 25)
 SPAWN_AREA = createColCuboid(20, -329, 1, 91, 34, 23)
-
-CRANE1_STATE = "init"
-CRANE2_STATE = "init"
 
 AT_RAMP_1 = getElementByID("AT_RAMP_1")
 AT_RAMP_2 = getElementByID("AT_RAMP_2")
@@ -28,11 +23,7 @@ PARTY_LIGHTS = {getElementByID("PARTY_LIGHTS_1"),
 				getElementByID("PARTY_LIGHTS_7")}
 
 
-CRANE_HOOK_VERTICAL_SPEED = 131
-CRANE_HOOK_HORIZONTAL_SPEED = 181
-CRANE_TURN_SPEED = 220
-CRANE_TURN_ODDS = 50
-HOOK_BOAT_HEIGHT_OFFSET = 6
+
 LOW_DAMAGE_DIVISOR = 2
 
 LOW_DAMAGE = false
@@ -401,54 +392,8 @@ function playerDead(killer, weapon, bodypart)
 end
 addEventHandler("onClientPlayerWasted", localPlayer, playerDead)
 
-function configureCrane()
-	crane = {}
-	crane["base1"] = getElementByID("_CRANE1_POLE")
-	crane["base2"] = getElementByID("_CRANE2_POLE")
-	crane["bar1"] = getElementByID("_CRANE1_BAR")
-	crane["bar2"] = getElementByID("_CRANE2_BAR")
-	crane["hook1"] = getElementByID("_CRANE1_HOOK")
-	crane["hook2"] = getElementByID("_CRANE2_HOOK")
-	crane["rope1"] = getElementByID("_CRANE1_ROPE")
-	crane["rope2"] = getElementByID("_CRANE2_ROPE")
-
-	-- Make the cranes visibile from afar by spawning a LowLOD version (TODO: someone pls tell me what model to use)
-	lowLOD3 = createObject(1391, -61.9, -286.4, 51.7, 0, 0, 0, true)
-	lowLOD4 = createObject(1391, 72.4, -339.4, 26.9, 0, 0, 0, true)
-	setObjectScale ( lowLOD3, 1.5)
-	setObjectScale ( lowLOD4, 1.5)
-	local a, b, c = getElementPosition(crane["bar1"])
-	local a2, b2, c2 = getElementPosition(crane["bar2"])
-	lowLOD1 = createObject(1394, a, b, c, 0, 0, 0, true)
-	lowLOD2 = createObject(1394, a2, b2, c2, 0, 0, 0, true)
-	setObjectScale ( lowLOD1, 1.5)
-	setObjectScale ( lowLOD2, 1.5)
-	attachElements ( lowLOD1, crane["bar1"], 0, 0, 0 )
-	attachElements ( lowLOD2, crane["bar2"], 0, 0, 0 )
-
-	-- attach crane 1
-	local barX, barY, barZ = getElementPosition(crane["bar1"])
-	local ropeX, ropeY, ropeZ = getElementPosition(crane["rope1"])
-	local hookX, hookY, hookZ = getElementPosition(crane["hook1"])
-	attachElements ( crane["hook1"], crane["rope1"], hookX-ropeX, hookY-ropeY, hookZ-ropeZ )
-	attachElements ( crane["rope1"], crane["bar1"], ropeX-barX, ropeY-barY, ropeZ-barZ )
-	
-	-- attach crane 2
-	local barX, barY, barZ = getElementPosition(crane["bar2"])
-	local ropeX, ropeY, ropeZ = getElementPosition(crane["rope2"])
-	local hookX, hookY, hookZ = getElementPosition(crane["hook2"])
-	attachElements ( crane["hook2"], crane["rope2"], hookX-ropeX, hookY-ropeY, hookZ-ropeZ )
-	attachElements ( crane["rope2"], crane["bar2"], ropeX-barX, ropeY-barY, ropeZ-barZ )
-	
-	-- done
-	CRANE1_STATE = "available"
-	CRANE2_STATE = "available"
-
-	setTimer(craneTimerTick, 100, 0)
-end
-
 function preRace()
-	configureCrane()
+	initCranes()
 	if (RACE_STARTED_ALREADY > 0) then
 		return
 	end
@@ -519,6 +464,7 @@ end
 -- Initialize all the crane stuff
 function gameStart()
 	introCutscene()
+	initCranes()
 
 	local x, y, z = getElementPosition(MARKER_BOAT)
 	createBlip(x, y, z, 9) -- Boat blip
@@ -526,16 +472,17 @@ function gameStart()
 	-- Heli blades are scoffed in ghost mode and MTA does not support any way to fix them decently.
 	-- However I can at least disable heliblade collisions of other players so they don't knock you out of the way
 	-- You can still knock yourself out of the way by hitting other players with your blades though, despite them being ghost
+	-- Update: Nope, that's annoying too. Disable player's blades too.
 	local allVehicles = getElementsByType("vehicle")
-	local myVehicle = getPedOccupiedVehicle(localPlayer)
+	-- local myVehicle = getPedOccupiedVehicle(localPlayer)
 	for i, v in ipairs(allVehicles) do
-		if (v ~= myVehicle) then
+		-- if (v ~= myVehicle) then
 			setHeliBladeCollisionsEnabled ( v, false )
-		end
+		-- end
 	end
 end
-addEvent("configureCrane", true)
-addEventHandler("configureCrane", resourceRoot, gameStart)
+addEvent("gridCountdownStarted", true)
+addEventHandler("gridCountdownStarted", resourceRoot, gameStart)
 
 function craneOneBoatGrab()
 	local vehicle = getPedOccupiedVehicle(localPlayer)
@@ -727,112 +674,9 @@ function setCraneBoatState(craneID, state)
 	end
 end
 
-function craneTimerTick()
-	
-	if (CRANE1_STATE:find("^boat") ~= nil) then
-		craneOneBoatGrab()
-		return
-	end
-	if (CRANE2_STATE:find("^boat") ~= nil) then
-		craneTwoBoatGrab()
-		return
-	end
-	
-	local vehicle = getPedOccupiedVehicle(localPlayer)
-	if (not vehicle) then
-		return
-	end
-	local vehicleModel = getElementModel(vehicle)
-	if (BOATS[vehicleModel]) then
-		if (CRANE1_STATE == "available") then
-			CRANE1_STATE = "waiting for boat"
-		end
-		if (CRANE2_STATE == "available") then
-			CRANE2_STATE = "waiting for boat"
-		end
-		return
-	end
 
-	local r = math.random(1,CRANE_TURN_ODDS)
-	if (r > 1) then
-		return
-	end
-	if (CRANE1_STATE == "available") then
-		-- Crane 1 has free movement
-		CRANE1_STATE = "rotating for fun"
-		r = math.random(-270,270)
-		rotateCraneRelative(1, r)
-	elseif (CRANE2_STATE == "available") then
-		-- Crane 2 is constrained between 36 - 376
-		CRANE2_STATE = "rotating for fun"
-		r = math.random(36,376)
-		rotateCraneTo(2, r)
-	end
-end
 
-function rotateCraneTo(craneID, wDest, time, speedMultiplier)
-	local bar
-	if (craneID == 1) then
-		bar = crane["bar1"]
-	elseif (craneID == 2) then
-		bar = crane["bar2"]
-	else
-		return
-	end
-	local x,y,z = getElementPosition(bar)
-	local u,v,w = getElementRotation(bar)
 
-	if (craneID == 2 and w <= 16) then
-		wDest = wDest - 360
-	elseif (craneID == 1 and wDest + 360 - w < 180) then
-		wDest = wDest + 360
-	end
-
-	wDiff = wDest - w
-	local duration
-	if (time == nil or time < 0) then
-		duration = math.abs(wDiff * CRANE_TURN_SPEED)
-	else
-		duration = time
-	end
-	if (speedMultiplier ~= nil) then
-		duration = duration * speedMultiplier
-	end
-	moveObject(bar, duration, x, y, z, 0, 0, wDiff, "InOutQuad")
-	setTimer(makeCraneAvailable, duration, 1, craneID)
-	return duration
-	-- local duration = math.abs(wDiff * CRANE_TURN_SPEED)
-	-- moveObject(bar, duration, x, y, z, 0, 0, wDiff, "InOutQuad")
-	-- setTimer(makeCraneAvailable, duration, 1, craneID)
-end
-
-function rotateCraneRelative(craneID, wDiff)
-	local bar
-	if (craneID == 1) then
-		bar = crane["bar1"]
-	elseif (craneID == 2) then
-		bar = crane["bar2"]
-	else
-		return
-	end
-	local x,y,z = getElementPosition(bar)
-	local u,v,w = getElementRotation(bar)
-	local duration = math.abs(wDiff * CRANE_TURN_SPEED)
-	moveObject(bar, duration, x, y, z, 0, 0, wDiff, "InOutQuad")
-	setTimer(makeCraneAvailable, duration, 1, craneID)
-end
-
-function makeCraneAvailable(craneID)
-	if (craneID == 1) then
-		if (CRANE1_STATE == "rotating for fun" or force == true) then
-			CRANE1_STATE = "available"
-		end
-	elseif (craneID == 2) then
-		if (CRANE2_STATE == "rotating for fun" or force == true) then
-			CRANE2_STATE = "available"
-		end
-	end
-end
 
 -- attach the hook to the bar after moving it
 function attachHook(craneID)

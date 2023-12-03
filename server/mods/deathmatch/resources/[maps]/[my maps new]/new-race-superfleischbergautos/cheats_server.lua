@@ -17,17 +17,17 @@ function cheatResetProgress(playerSource, commandName)
 end
 addCommandHandler("ie_resetprogress", cheatResetProgress)
 
--- function cheatSkipVehicle(playerSource, commandName)
--- 	progress = PLAYER_PROGRESS[playerSource] + 1
--- 	if (progress > REQUIRED_CHECKPOINTS) then
--- 		return
--- 	end
--- 	PLAYER_PROGRESS[playerSource] = progress
+function cheatSkipVehicle(playerSource, commandName)
+	progress = PLAYER_PROGRESS[playerSource] + 1
+	if (progress > REQUIRED_CHECKPOINTS) then
+		return
+	end
+	PLAYER_PROGRESS[playerSource] = progress
 	
--- 	teleportToNext(progress, playerSource)
--- 	triggerClientEvent(playerSource, "updateTarget", playerSource, progress)
--- end
--- addCommandHandler("cheatnext", cheatSkipVehicle)
+	teleportToNext(progress, playerSource)
+	triggerClientEvent(playerSource, "updateTarget", playerSource, progress)
+end
+addCommandHandler("cheatnext", cheatSkipVehicle)
 
 function cheatSkipForPlayer(playerSource, commandName, name)
 	if isObjectInACLGroup("user." .. getAccountName(getPlayerAccount(playerSource)), aclGetGroup ("Admin")) then
@@ -49,38 +49,38 @@ function cheatSkipForPlayer(playerSource, commandName, name)
 end
 addCommandHandler("ie_cheatSkipForPlayer", cheatSkipForPlayer )
 
--- function cheatFlipVehicle(playerSource, commandName)
--- 	vehicle = getPedOccupiedVehicle(playerSource)
--- 	setElementRotation(vehicle, 0, 180, 0)
--- end
--- addCommandHandler("cheatflip", cheatFlipVehicle)
+function cheatFlipVehicle(playerSource, commandName)
+	vehicle = getPedOccupiedVehicle(playerSource)
+	setElementRotation(vehicle, 0, 180, 0)
+end
+addCommandHandler("cheatflip", cheatFlipVehicle)
 
--- function cheatPrevVehicle(playerSource, commandName)
--- 	progress = PLAYER_PROGRESS[playerSource] - 1
--- 	if (progress == 0) then
--- 		return
--- 	end
--- 	PLAYER_PROGRESS[playerSource] = progress
+function cheatPrevVehicle(playerSource, commandName)
+	progress = PLAYER_PROGRESS[playerSource] - 1
+	if (progress == 0) then
+		return
+	end
+	PLAYER_PROGRESS[playerSource] = progress
 	
--- 	teleportToNext(progress, playerSource)
--- 	triggerClientEvent(playerSource, "updateTarget", playerSource, progress)
--- end
--- addCommandHandler("cheatprev", cheatPrevVehicle)
+	teleportToNext(progress, playerSource)
+	triggerClientEvent(playerSource, "updateTarget", playerSource, progress)
+end
+addCommandHandler("cheatprev", cheatPrevVehicle)
 
--- function cheatTeleportVehicle(playerSource, commandName)
--- 	vehicle = getPedOccupiedVehicle(playerSource)
--- 	setElementPosition(vehicle, 0, 0, 20)
--- end
--- addCommandHandler("cheattp", cheatTeleportVehicle)
+function cheatTeleportVehicle(playerSource, commandName)
+	vehicle = getPedOccupiedVehicle(playerSource)
+	setElementPosition(vehicle, 0, 0, 20)
+end
+addCommandHandler("cheattp", cheatTeleportVehicle)
 
--- function cheatTeleportVehicleOp(playerSource, commandName)
--- 	vehicle = getPedOccupiedVehicle(playerSource)
--- 	setElementPosition(vehicle, 5, -241, 20)
--- end
--- addCommandHandler("cheattpop", cheatTeleportVehicleOp)
+function cheatTeleportVehicleOp(playerSource, commandName)
+	vehicle = getPedOccupiedVehicle(playerSource)
+	setElementPosition(vehicle, 5, -241, 20)
+end
+addCommandHandler("cheattpop", cheatTeleportVehicleOp)
 
--- function cheatTeleportBoat(playerSource, commandName)
--- 	vehicle = getPedOccupiedVehicle(playerSource)
--- 	setElementPosition(vehicle, -219, -604, 20)
--- end
--- addCommandHandler("cheattpboat", cheatTeleportBoat)
+function cheatTeleportBoat(playerSource, commandName)
+	vehicle = getPedOccupiedVehicle(playerSource)
+	setElementPosition(vehicle, -219, -604, 20)
+end
+addCommandHandler("cheattpboat", cheatTeleportBoat)

@@ -29,9 +29,9 @@ function finish(rank, _time)
 			query2 = dbQuery(DATABASE, "SELECT * FROM scoresTable ORDER BY score ASC LIMIT 10")		
 			results = dbPoll(query2, -1)
 			triggerClientEvent(root, "setScoreBoard", resourceRoot, results)
-		else
-			outputChatBox("ERROR: Scores database fault", 255, 127, 0)
 		end	
+    else
+        outputChatBox("ERROR: Scores database fault", root, 255, 127, 0)
 	end
 end
 addEventHandler("onPlayerFinish", getRootElement(), finish)

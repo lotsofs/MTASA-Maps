@@ -231,7 +231,7 @@ function shuffleCarsOne(whose)
 		PLAYER_PROGRESS[whose] = 1
 		teleportToNext(1, whose)
 	end
-	-- triggerClientEvent ( whose, "configureCrane", resourceRoot )
+	-- triggerClientEvent ( whose, "gridCountdownStarted", resourceRoot )
 	-- setPlayerScriptDebugLevel(whose, 3)
 	colorGenerator(whose)
 end
@@ -255,7 +255,7 @@ function newJoineeMarkerHit(markerHit, matchingDimension, dumpVariable)
 		return
 	end
 
-	triggerClientEvent ( source, "configureCrane", resourceRoot )
+	triggerClientEvent ( source, "gridCountdownStarted", resourceRoot )
 	setTimer(function(whom)
 		shuffleCarsOne(whom)
 	end, (CUTSCENE_LENGTH_IN_SECONDS+0.5)*1000, 1, source)
@@ -359,7 +359,7 @@ function raceStateChanged(newState, oldState)
 	if (newState ~= "GridCountdown") then
 		return
 	end
-	triggerClientEvent ( root, "configureCrane", resourceRoot )
+	triggerClientEvent ( root, "gridCountdownStarted", resourceRoot )
 	startRacePoll()
 	setTimer(startGame, (CUTSCENE_LENGTH_IN_SECONDS+0.5)*1000, 1)
 
