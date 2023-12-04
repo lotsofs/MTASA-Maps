@@ -8,8 +8,17 @@
 ---- Scoreboard and UI stuff
 ---- Scoreboard and UI stuff
 
-TEXT = ""
+SCREENWIDTH, SCREENHEIGHT = guiGetScreenSize()
+
 SHOW_SCOREBOARD = false
+SHOW_TUTORIAL = false
+SHOW_MID_PLAY_TUTORIAL = false
+SHOW_CAR = false
+
+TEXT = ""
+TUTORIAL_BLURB = "<blurb>"
+MID_PLAY_BLURB = nil
+CAR_BLURB = "wwwwwwww"
 
 function setScoreBoard(scores)
 	text = "Top times for the Full Experience:\n_______________________________________\n"
@@ -72,7 +81,7 @@ addEvent("showScoreBoard", true)
 addEventHandler("showScoreBoard", root, showScoreBoard)
 addCommandHandler("showtimes", showScoreBoardCmd)
 
-function drawScoreBoard()
+function drawHudOverlay()
 	if (SHOW_SCOREBOARD) then
 		local width,height = guiGetScreenSize()
 		boxX = width * 0.275
@@ -80,16 +89,20 @@ function drawScoreBoard()
 		boxWidth = width * 0.18
 		boxHeight = (boxWidth * 0.6875)
 		dxDrawRectangle(boxX, boxY, boxWidth, boxHeight, tocolor(5, 33, 51, 127))
-		dxDrawText(TEXT, width*0.28, height*0.025, width*0.8, height*0.9, tocolor(230, 245, 255, 255), width / 1600, "default-bold", "left", "top", false, true, false, false)
+		dxDrawText(TEXT, width*0.28, height*0.025, width*0.8, height*0.9, tocolor(230, 245, 255, 255), width / 1600, "default-bold", "left", "top", false, true, false, true)
 	end
 	if (SHOW_TUTORIAL) then
-		drawBorderedText(TUTORIAL_BLURB, 2, SCREENWIDTH*0.20, SCREENHEIGHT*0.25, SCREENWIDTH*0.8, SCREENHEIGHT, tocolor(255, 255, 255, 255), 3, "default-bold", "center", "top", false, true, true, false)
+		drawBorderedText(TUTORIAL_BLURB, 2, SCREENWIDTH*0.20, SCREENHEIGHT*0.25, SCREENWIDTH*0.8, SCREENHEIGHT, tocolor(255, 255, 255, 255), 3, "default-bold", "center", "top", false, true, true, true)
 	end
 	if (SHOW_MID_PLAY_TUTORIAL) then
-		drawBorderedText(MID_PLAY_BLURB, 2, SCREENWIDTH*0.25, SCREENHEIGHT*0.75, SCREENWIDTH*0.75, SCREENHEIGHT, tocolor(255, 255, 255, 255), 2, "default-bold", "center", "top", false, true, true, false)
+		drawBorderedText(MID_PLAY_BLURB, 2, SCREENWIDTH*0.25, SCREENHEIGHT*0.75, SCREENWIDTH*0.75, SCREENHEIGHT, tocolor(255, 255, 255, 255), 2, "default-bold", "center", "top", false, true, true, true)
+	end
+	SHOW_CAR = true
+	if (SHOW_CAR) then
+		drawBorderedText(CAR_BLURB, 2, SCREENWIDTH*0.8, SCREENHEIGHT*0.78, SCREENWIDTH*0.98, SCREENHEIGHT, tocolor(54, 104, 44, 255), 3, "bankgothic", "right", "top", false, false, true, true)
 	end
 end
-addEventHandler("onClientRender", root, drawScoreBoard)
+addEventHandler("onClientRender", root, drawHudOverlay)
 
 function drawBorderedText(text, borderSize, width, height, width2, height2, color, size, font, horizAlign, vertiAlign, bool1, bool2, bool3, bool4)
 	text2 = string.gsub(text, "#%x%x%x%x%x%x", "")
