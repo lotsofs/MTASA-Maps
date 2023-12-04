@@ -10,6 +10,7 @@ CRANE_HOOK = {}
 CRANE_ROPE = {}
 CRANE_LOWLOD_A = {}
 CRANE_LOWLOD_B = {}
+CRANE_TIMER = {}
 
 CRANE_ROTATING = {}
 CRANE_HOOKING = {}
@@ -26,19 +27,14 @@ REACH_CRANE2 = createColCircle(-61.9, -286.4, 89)
 function initCranes()
     craneInit(1)
     craneInit(2)
-    craneInit(3)
+    -- craneInit(3)
 end
 
 function craneInit(craneID)
-    if (craneID == 3) then
-        return
-    end
-    
     if (CRANE_STATE[craneID] ~= "init") then
         return
     end
 
-    iprint("_CRANE" .. craneID .. "_POLE");
     CRANE_BASE[craneID] = getElementByID("_CRANE" .. craneID .. "_POLE")
     CRANE_BAR[craneID] = getElementByID("_CRANE" .. craneID .. "_BAR")
     CRANE_HOOK[craneID] = getElementByID("_CRANE" .. craneID .. "_HOOK")
@@ -74,47 +70,76 @@ function craneInit(craneID)
 end
 
 function craneTimerTick(craneID)
-    iprint(craneID, CRANE_STATE[craneID])
+    -- if (craneID == 1) then
+    --     iprint(craneID, CRANE_STATE[craneID], CRANE_ROTATING[craneID], CRANE_HOOKING[craneID])
+    -- end
     if (CRANE_ROTATING[craneID] == true or CRANE_HOOKING[craneID] == true) then
         -- The crane is currently busy rotating. Wait...
         return
     end
 
-    if (craneID == 1 or craneID == 2) then
-        -- Check if the player is in a boat. If they are, we will halt 
-        -- recreative crane movement and keep it idle until we arrive
-        local vehicle = getPedOccupiedVehicle(localPlayer)
-        if (not vehicle) then
-            return
-        end
-        local vehicleModel = getElementModel(vehicle)
-        if (BOATS[vehicleModel]) then
-            if (CRANE_STATE[craneID] == "available") then
-                CRANE_STATE[craneID] = "waiting for boat"
-            end
-        end
+    local vehicle = getPedOccupiedVehicle(localPlayer)
+    if (not vehicle) then
+        return
     end
-    
-    -- Rotate the crane for fun as it is not doing anything else
-    local r = math.random(1,CRANE_TURN_ODDS)
-	if (r > 1) then
-		return
-	end
-    if (CRANE_STATE[craneID] == "available") then
-		-- CRANE_STATE[craneID] = "rotating for fun"
-		if (craneID == 1 or craneID == 3) then
-            r = math.random(-270,270)
-		    rotateCraneRelative(craneID, r)        
+    local vehicleModel = getElementModel(vehicle)
+
+    if (CRANE_STATE[craneID] == "assist") then
+        local hX,hY,hZ = getElementPosition(CRANE_HOOK[craneID])
+        local vX,vY,vZ = getElementPosition(vehicle)
+        local hookDistance = getDistanceBetweenPoints2D(hX,hY,vX,vY)
+        -- Check if the hook is near the car
+        if (hookDistance < 0.5 and getElementHealth(vehicle) >= 250) then
+            local hU,hV,hW = getElementRotation(CRANE_HOOK[craneID])
+            local vU,vV,vW = getElementRotation(vehicle)
+            attachElements(vehicle, CRANE_ROPE[1], 0, 0, -HOOK_BOAT_HEIGHT_OFFSET, vU-hU, vV-hV, vW-hW)
+        end
+
+        local bX,bY,zY = getElementPosition(CRANE_BAR[craneID])
+        local bU,bV,bW = getElementRotation(CRANE_BAR[craneID])
+        local vehicleAngleFromCrane = findRotation(bX,bY,vX,vY)
+        local craneAngleFromVehicle = math.abs(vehicleAngleFromCrane - bW) % 360
+        -- Check if the crane is pointing at us
+        if (craneAngleFromVehicle < 0.1 or craneAngleFromVehicle > 359) then
+            -- The crane is pointing at us. Move hook in.
+            local vD = getDistanceBetweenPoints2D(bX,bY,vX,vY)
+            local t = -1
+            if (TRAILERS[vehicleModel]) then
+                t = 3000
+            end
+            moveHook(1, vZ + HOOK_BOAT_HEIGHT_OFFSET, math.min(vD,89), 0.5, t)
         else
-            r = math.random(36,376)
-            rotateCraneTo(craneID, r)           
+            -- The crane is not pointing at us, move the bar over the boat
+		    local t = -1
+		    if (TRAILERS[vehicleModel]) then
+    			t = 0
+	    	end
+		    rotateCraneTo(1, vehicleAngleFromCrane, t, 0.25)
         end
     end
 
-	-- if (CRANE1_STATE:find("^boat") ~= nil) then
-	-- 	craneOneBoatGrab()
-	-- 	return
-	-- end
+    
+    if (CRANE_STATE[craneID] == "available") then
+        -- Check if the player is in a boat. If they are, we will halt 
+        -- recreative crane movement and keep it idle until we arrive
+        if (BOATS[vehicleModel]) then
+            CRANE_STATE[craneID] = "waiting for boat"
+        end
+    end
+    
+    if (CRANE_STATE[craneID] == "available") then
+        -- Rotate the crane for fun as it is not doing anything else
+        local r = math.random(1,CRANE_TURN_ODDS)
+        if (r < 2) then
+            if (craneID ~= 2) then
+                r = math.random(-270,270)
+                rotateCraneRelative(craneID, r)        
+            else
+                r = math.random(36,376)
+                rotateCraneTo(craneID, r)           
+            end
+        end
+    end
 end
 
 function rotateCraneRelative(craneID, wDiff)
@@ -124,7 +149,11 @@ function rotateCraneRelative(craneID, wDiff)
 
     CRANE_ROTATING[craneID] = true
 	moveObject(CRANE_BAR[craneID], duration, x, y, z, 0, 0, wDiff, "InOutQuad")
-	setTimer(finalizeCraneRotation, duration, 1, craneID)
+	if (duration > 0) then
+        CRANE_TIMER[craneID] = setTimer(finalizeCraneRotation, duration, 1, craneID)
+    else
+        finalizeCraneRotation(craneID)
+    end
     return duration
 end
 
@@ -150,132 +179,127 @@ function rotateCraneTo(craneID, wDest, time, speedMultiplier)
 	end
 
     CRANE_ROTATING[craneID] = true
-	moveObject(bar, duration, x, y, z, 0, 0, wDiff, "InOutQuad")
-	setTimer(finalizeCraneRotation, duration, 1, craneID)
+	moveObject(CRANE_BAR[craneID], duration, x, y, z, 0, 0, wDiff, "InOutQuad")
+	if (duration > 0) then
+        CRANE_TIMER[craneID] = setTimer(finalizeCraneRotation, duration, 1, craneID)
+    else
+        finalizeCraneRotation(craneID)
+    end
 	return duration
 
 end
 
 function finalizeCraneRotation(craneID)
     CRANE_ROTATING[craneID] = false
+    CRANE_TIMER[craneID] = false
 end
 
+-- raise or lower the hook
+function moveHook(craneID, destinationZ, destinationD, speedMultiplier, time)
+	-- max values for crane 1: Z = 41, D = 89
+	-- max values for crane 2: Z = 70.6, D = 89
+	-- min D = 5ish
+    -- D = horizontal distance of the rope from the base
+	
+	local rope = CRANE_ROPE[craneID]
+	local base = CRANE_BAR[craneID]
 
+    detachElements(rope)
+	local u,v,w = getElementRotation(base)
+	setElementRotation(rope,u,v,w)
 
-
-
-
-
-
-
-
-
-
-function makeCraneAvailableOld(craneID, force)
-	if (craneID == 1) then
-		if (CRANE1_STATE == "rotating for fun" or force == true) then
-			CRANE1_STATE = "available"
-		end
-	elseif (craneID == 2) then
-		if (CRANE2_STATE == "rotating for fun" or force == true) then
-			CRANE2_STATE = "available"
-		end
+	local xBase, yBase, zBase = getElementPosition(base)
+	local xHook, yHook, zHook = getElementPosition(rope)
+	local aBar = findRotation( xBase, yBase, xHook, yHook ) 
+	local dHook = getDistanceBetweenPoints2D ( xBase, yBase, xHook, yHook )
+	if (destinationD < 0) then
+		destinationD = dHook
 	end
-end
-
-function rotateCraneToOld(craneID, wDest, time, speedMultiplier)
-	local bar
-	if (craneID == 1) then
-		bar = crane["bar1"]
-	elseif (craneID == 2) then
-		bar = crane["bar2"]
-	else
-		return
-	end
-	local x,y,z = getElementPosition(bar)
-	local u,v,w = getElementRotation(bar)
-
-	if (craneID == 2 and w <= 16) then
-		wDest = wDest - 360
-	elseif (craneID == 1 and wDest + 360 - w < 180) then
-		wDest = wDest + 360
+	local xNew, yNew = getPointFromDistanceRotation(xBase, yBase, destinationD, aBar)
+	if (destinationZ < 0) then
+		destinationZ = zHook
 	end
 
-	wDiff = wDest - w
 	local duration
-	if (time == nil or time < 0) then
-		duration = math.abs(wDiff * CRANE_TURN_SPEED)
-	else
-		duration = time
-	end
-	if (speedMultiplier ~= nil) then
-		duration = duration * speedMultiplier
-	end
-	moveObject(bar, duration, x, y, z, 0, 0, wDiff, "InOutQuad")
-	setTimer(makeCraneAvailable, duration, 1, craneID)
+    if (time ~= nil and time >= 0) then
+        duration = time
+    else
+        local zDiff = math.abs(zHook - destinationZ)
+        local zDuration = zDiff * CRANE_HOOK_VERTICAL_SPEED
+        local dDiff = math.abs(dHook - destinationD)
+        local dDuration = dDiff * CRANE_HOOK_HORIZONTAL_SPEED
+        
+        duration = math.max(dDuration, zDuration)
+        if (speedMultiplier ~= nil) then
+            duration = duration * speedMultiplier
+        end
+    end
+
+	CRANE_HOOKING[craneID] = true
+    moveObject(rope, duration, xNew, yNew, destinationZ, 0, 0, 0, "InOutQuad")
+	if (duration > 0) then
+        CRANE_TIMER[craneID] = setTimer(finalizeCraneHookment, duration, 1, craneID)
+    else
+        finalizeCraneHookment(craneID)
+    end
 	return duration
-	-- local duration = math.abs(wDiff * CRANE_TURN_SPEED)
-	-- moveObject(bar, duration, x, y, z, 0, 0, wDiff, "InOutQuad")
-	-- setTimer(makeCraneAvailable, duration, 1, craneID)
 end
 
-function rotateCraneRelativeOld(craneID, wDiff)
-	local bar
-	if (craneID == 1) then
-		bar = crane["bar1"]
-	elseif (craneID == 2) then
-		bar = crane["bar2"]
-	else
-		return
-	end    
-	local x,y,z = getElementPosition(bar)
-	local u,v,w = getElementRotation(bar)
-	local duration = math.abs(wDiff * CRANE_TURN_SPEED)
-	moveObject(bar, duration, x, y, z, 0, 0, wDiff, "InOutQuad")
-	setTimer(makeCraneAvailable, duration, 1, craneID)
-end    
+-- attach the hook to the bar after moving it
+function attachHook(craneID)
+    local barX, barY, barZ = getElementPosition(CRANE_BAR[craneID])
+    local ropeX, ropeY, ropeZ = getElementPosition(CRANE_ROPE[craneID])
+    local ropeU, ropeV, ropeW = getElementRotation(CRANE_ROPE[craneID])
+    attachElements ( CRANE_ROPE[craneID], CRANE_BAR[craneID], 0, getDistanceBetweenPoints2D (barX,barY,ropeX,ropeY), ropeZ-barZ )
+end
+
+function finalizeCraneHookment(craneID)
+    attachHook(craneID)
+    CRANE_HOOKING[craneID] = false
+    CRANE_TIMER[craneID] = false
+end
 
 
-function craneTimerTickOld(craneID)
+function craneDetectApproachingBoat(element, matchingDimension)
+	-- TODO: and not in spawn area
 	
-	if (CRANE1_STATE:find("^boat") ~= nil) then
-		craneOneBoatGrab()
+	if (element ~= localPlayer) then
 		return
 	end
-	if (CRANE2_STATE:find("^boat") ~= nil) then
-		craneTwoBoatGrab()
-		return
-	end
-	
 	local vehicle = getPedOccupiedVehicle(localPlayer)
 	if (not vehicle) then
 		return
 	end
-	local vehicleModel = getElementModel(vehicle)
-	if (BOATS[vehicleModel]) then
-		if (CRANE1_STATE == "available") then
-			CRANE1_STATE = "waiting for boat"
-		end
-		if (CRANE2_STATE == "available") then
-			CRANE2_STATE = "waiting for boat"
-		end
+    
+	vehicle = getElementModel(vehicle)
+	if (not vehicle or not BOATS[vehicle]) then
 		return
 	end
+	if (CRANE_STATE[1] ~= "waiting for boat") then
+		CRANE_STATE[1] = "waiting for boat"
+		iprint("Crane wasn't ready yet")
+	end
+	rotateCraneTo(1, 200, 20000)
+end
+addEventHandler("onClientColShapeHit", BOAT_DETECTOR, craneDetectApproachingBoat)
 
-	local r = math.random(1,CRANE_TURN_ODDS)
-	if (r > 1) then
-		return
-	end
-	if (CRANE1_STATE == "available") then
-		-- Crane 1 has free movement
-		CRANE1_STATE = "rotating for fun"
-		r = math.random(-270,270)
-		rotateCraneRelative(1, r)
-	elseif (CRANE2_STATE == "available") then
-		-- Crane 2 is constrained between 36 - 376
-		CRANE2_STATE = "rotating for fun"
-		r = math.random(36,376)
-		rotateCraneTo(2, r)
-	end
+function abortCraneMovement(craneID)
+    if (CRANE_ROTATING[craneID]) then
+        iprint("Crane was ill-prepared", craneID)
+        stopObject(CRANE_BAR[craneID])
+        CRANE_ROTATING[craneID] = false
+        killTimer(CRANE_TIMER[craneID])
+        CRANE_TIMER[craneID] = false
+    end
 end
 
+function craneGrab(craneID)
+	if (CRANE_STATE[craneID] == "available") then
+        iprint("Crane was not aware this would happen", craneID)
+        abortCraneMovement(craneID)
+    end
+    if (CRANE_STATE[craneID] == "waiting for boat") then
+        abortCraneMovement(craneID)
+    end
+    CRANE_STATE[craneID] = "assist"
+end

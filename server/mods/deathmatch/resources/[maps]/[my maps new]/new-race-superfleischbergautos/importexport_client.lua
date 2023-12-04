@@ -4,14 +4,9 @@ MARKER_EXPORT = getElementByID("_MARKER_EXPORT_PARK")
 MARKER_BOAT = getElementByID("_MARKER_EXPORT_BOAT")
 
 BOAT_DETECTOR = createColCuboid(-476, -966, -5, 929, 839, 15)
-AT_APPROACH_DETECTOR = createColSphere(-51.1, -192.5, -3, 900)
 GODMODE_REGION_BOAT = createColCircle(-12.5, -342.0, 30)
 GODMODE_REGION_PLANE = createColCuboid(-61, -233, 0, 30, 29, 25)
 SPAWN_AREA = createColCuboid(20, -329, 1, 91, 34, 23)
-
-AT_RAMP_1 = getElementByID("AT_RAMP_1")
-AT_RAMP_2 = getElementByID("AT_RAMP_2")
-AT_RAMP_3 = getElementByID("AT_RAMP_3")
 
 PARTY_PRESENT = false
 PARTY_LIGHTS = {getElementByID("PARTY_LIGHTS_1"),
@@ -28,10 +23,6 @@ LOW_DAMAGE_DIVISOR = 2
 
 LOW_DAMAGE = false
 CAR_DELIVERING = false
-
-SCREENWIDTH, SCREENHEIGHT = guiGetScreenSize()
-TUTORIAL_BLURB = "<blurb>"
-MID_PLAY_BLURB = nil
 
 SHUFFLED_CARS = {}
 PLAYER_CURRENT_TARGET = 1
@@ -205,25 +196,23 @@ function playerStoppedInMarker()
 		-- We are not actually stopped
 		return
 	end
-	
+	if (getElementAttachedTo(vehicle) ~= false) then
+		-- We are attached to a crane, do nothing
+		return
+	end
+	if (isElementWithinMarker(vehicle, MARKER_EXPORT)) then
+		-- We are in the export marker
+		CAR_DELIVERING = true
+		triggerServerEvent("updateProgress", resourceRoot, PLAYER_CURRENT_TARGET)
+		return
+	end
+
 	-- Check if the player is stopped by any of the cranes. Check crane 2 first because 1 doesnt need to do anything if 2 can handle it.
 	if (BOATS[getElementModel(vehicle)] and isElementWithinColShape(vehicle, REACH_CRANE2)) then
 		craneGrab(2)
 	elseif (BOATS[getElementModel(vehicle)] and isElementWithinColShape(vehicle, REACH_CRANE1)) then
 		craneGrab(1)
 	end
-
-	if (not isElementWithinMarker(vehicle, MARKER_EXPORT)) then
-		-- We are not in the export marker, do nothing
-		return
-	end
-
-	if (getElementAttachedTo(vehicle) ~= false) then
-		-- We are attached to a crane, do nothing
-		return
-	end
-	CAR_DELIVERING = true
-	triggerServerEvent("updateProgress", resourceRoot, PLAYER_CURRENT_TARGET)
 end
 setTimer(playerStoppedInMarker, 1, 0)
 
@@ -296,17 +285,10 @@ function resetDeliveryArea()
 	if (veh) then
 		detachElements(veh)
 	end
-	CRANE1_STATE = "available"
-	CRANE2_STATE = "available"
-	setElementAlpha(AT_RAMP_1, 0)
-	setElementAlpha(AT_RAMP_2, 0)
-	setElementAlpha(AT_RAMP_3, 0)
-	setElementCollisionsEnabled(AT_RAMP_1, false)
-	setElementCollisionsEnabled(AT_RAMP_2, false)
-	setElementCollisionsEnabled(AT_RAMP_3, false)
-	setElementPosition(AT_RAMP_1, -51.1, -192.5, -33)
-	setElementPosition(AT_RAMP_2, -50.7, -197.5, -35.1)
-	setElementPosition(AT_RAMP_3, -41.2, -202.2, -35.3)
+	CRANE_STATE[1] = "available"
+	CRANE_STATE[2] = "available"
+
+	hideRamps()
 	
 	LOW_DAMAGE = false
 	setElementCollisionsEnabled(BLOCKING_BRIDGE, true)
@@ -424,7 +406,7 @@ function introCutscene()
 		-- SHOW_TUTORIAL = true
 	end, 6000, 1)
 	setTimer(function()
-		TUTORIAL_BLURB = "Deliver all the vehicles to the FleischBerg© factory!"
+		TUTORIAL_BLURB = "#E1E1E1Deliver all the #FDFEFDvehicles #E1E1E1to the #BAA861FleischBerg© factory#E1E1E1!"
 		SHOW_TUTORIAL = true
 	end, 7000, 1)
 	setTimer(function()
@@ -432,7 +414,7 @@ function introCutscene()
 		SHOW_TUTORIAL = false
 	end, 11000, 1)
 	setTimer(function()
-		TUTORIAL_BLURB = "Vehicles can be delivered by parking them in this marker."
+		TUTORIAL_BLURB = "#E1E1E1Vehicles can be delivered by parking them in this marker."
 		SHOW_TUTORIAL = true
 	end, 11500, 1)
 	setTimer(function()
@@ -440,7 +422,7 @@ function introCutscene()
 		SHOW_TUTORIAL = false
 	end, 16000, 1)
 	setTimer(function()
-		TUTORIAL_BLURB = "These cranes will assist you with boats, trains, planes, and trailers."
+		TUTORIAL_BLURB = "#E1E1E1These cranes will assist you with boats, trains, planes, and trailers."
 		SHOW_TUTORIAL = true
 	end, 16500, 1)
 	setTimer(function()
@@ -448,7 +430,7 @@ function introCutscene()
 		SHOW_TUTORIAL = false
 	end, 22000, 1)
 	setTimer(function()
-		TUTORIAL_BLURB = "Simply park these vehicles anywhere within the cranes' range, such as inside this blue marker."
+		TUTORIAL_BLURB = "#E1E1E1Simply park these vehicles anywhere within the cranes' range, \nsuch as inside this #1925B8blue marker."
 		SHOW_TUTORIAL = true
 	end, 22500, 1)
 	setTimer(function()
@@ -491,29 +473,29 @@ function craneOneBoatGrab()
 	local u1,v1,w1 = getElementRotation(crane["hook1"])
 	local u2,v2,w2 = getElementRotation(vehicle)
 	if (CRANE1_STATE == "boat 0") then
-		-- move bar above boat
-		setCraneBoatState(1, "boat 1")
-		local r = findRotation(x1,y1,x2,y2)
-		local d
-		if (TRAILERS[getElementModel(vehicle)]) then
-			d = 0
-		end
-		local duration = rotateCraneTo(1, r, d, 0.25)
-		setTimer(function()
-			setCraneBoatState(1, "boat 2")
-		end, duration, 1)
+		-- -- move bar above boat
+		-- setCraneBoatState(1, "boat 1")
+		-- local r = findRotation(x1,y1,x2,y2)
+		-- local d
+		-- if (TRAILERS[getElementModel(vehicle)]) then
+		-- 	d = 0
+		-- end
+		-- local duration = rotateCraneTo(1, r, d, 0.25)
+		-- setTimer(function()
+		-- 	setCraneBoatState(1, "boat 2")
+		-- end, duration, 1)
 	elseif (CRANE1_STATE == "boat 2") then
-		-- move hook into boat
-		setCraneBoatState(1, "boat 3")
-		local d = getDistanceBetweenPoints2D ( x1,y1,x2,y2 )
-		t = nil
-		if (TRAILERS[getElementModel(vehicle)]) then
-			t = 3000
-		end
-		local duration = moveHook(1, z2 + HOOK_BOAT_HEIGHT_OFFSET, math.min(d,89), 0.5, t)
-		setTimer(function()
-			setCraneBoatState(1, "boat 4")
-		end, duration, 1)
+		-- -- move hook into boat
+		-- setCraneBoatState(1, "boat 3")
+		-- local d = getDistanceBetweenPoints2D ( x1,y1,x2,y2 )
+		-- t = nil
+		-- if (TRAILERS[getElementModel(vehicle)]) then
+		-- 	t = 3000
+		-- end
+		-- local duration = moveHook(1, z2 + HOOK_BOAT_HEIGHT_OFFSET, math.min(d,89), 0.5, t)
+		-- setTimer(function()
+		-- 	setCraneBoatState(1, "boat 4")
+		-- end, duration, 1)
 	elseif (CRANE1_STATE == "boat 4") then
 		-- raise hook up with boat
 		setCraneBoatState(1, "boat 5")
@@ -678,167 +660,9 @@ end
 
 
 
--- attach the hook to the bar after moving it
-function attachHook(craneID)
-	if (craneID == 1) then
-		local barX, barY, barZ = getElementPosition(crane["bar1"])
-		local barU, barV, barW = getElementRotation(crane["rope1"])
-		local ropeX, ropeY, ropeZ = getElementPosition(crane["rope1"])
-		local ropeU, ropeV, ropeW = getElementRotation(crane["rope1"])
-		attachElements ( crane["rope1"], crane["bar1"], 0, getDistanceBetweenPoints2D (barX,barY,ropeX,ropeY), ropeZ-barZ )
-	elseif (craneID == 2) then
-		local barX, barY, barZ = getElementPosition(crane["bar2"])
-		local ropeX, ropeY, ropeZ = getElementPosition(crane["rope2"])
-		local ropeU, ropeV, ropeW = getElementRotation(crane["rope2"])
-		attachElements ( crane["rope2"], crane["bar2"], 0, getDistanceBetweenPoints2D (barX,barY,ropeX,ropeY), ropeZ-barZ )
-	end
-end
 
--- raise or lower the hook
-function moveHook(craneID, destinationZ, destinationD, speedMultiplier, time)
-	-- max values for crane 1: Z = 41, D = 89
-	-- max values for crane 2: Z = 70.6, D = 89
-	-- min D = 5ish
-	
-	local rope
-	local base
-	if (craneID == 1) then
-		rope = crane["rope1"]
-		base = crane["bar1"]
-	elseif (craneID == 2) then
-		rope = crane["rope2"]
-		base = crane["bar2"]
-	else
-		return
-	end
-	detachElements(rope)
-	u,v,w = getElementRotation(base)
-	setElementRotation(rope,u,v,w)
 
-	xBase, yBase, zBase = getElementPosition(base)
-	xHook, yHook, zHook = getElementPosition(rope)
-	aBar = findRotation( xBase, yBase, xHook, yHook ) 
-	dHook = getDistanceBetweenPoints2D ( xBase, yBase, xHook, yHook )
-	if (destinationD < 0) then
-		destinationD = dHook
-	end
-	xNew, yNew = getPointFromDistanceRotation(xBase, yBase, destinationD, aBar)
-	if (destinationZ < 0) then
-		destinationZ = zHook
-	end
 
-	local zDiff = math.abs(zHook - destinationZ)
-	local zDuration = zDiff * CRANE_HOOK_VERTICAL_SPEED
-	local dDiff = math.abs(dHook - destinationD)
-	local dDuration = dDiff * CRANE_HOOK_HORIZONTAL_SPEED
-	
-	local duration = math.max(dDuration, zDuration)
-	if (speedMultiplier ~= nil) then
-		duration = duration * speedMultiplier
-	end
-	if (time ~= nil) then
-		duration = time
-	end
-
-	moveObject(rope, duration, xNew, yNew, destinationZ, 0, 0, 0, "InOutQuad")
-	setTimer(attachHook, duration, 1, craneID)
-	return duration
-end
-
-function craneGrab(craneID)
-	if (craneID == 1) then
-		if (CRANE1_STATE:find("^boat") ~= nil) then
-			return
-		end
-		if (CRANE1_STATE == "waiting for boat" or CRANE1_STATE == "rotating for fun") then
-			CRANE1_STATE = "boat 0"
-		end
-	end
-	if (craneID == 2) then
-		if (CRANE2_STATE:find("^boat") ~= nil) then
-			return
-		end
-		if (CRANE2_STATE == "waiting for boat" or CRANE2_STATE == "rotating for fun") then
-			CRANE2_STATE = "boat 0"
-		end
-	end
-end
-
-function craneDetectApproachingBoat(element, matchingDimension)
-	-- TODO: and not in spawn area
-	
-	if (element ~= localPlayer) then
-		return
-	end
-	local vehicle = getPedOccupiedVehicle(localPlayer)
-
-	-- local f1,f2,f3,f5,f6,f7,f8,f9 = getCameraMatrix()
-	-- setCameraMatrix(-1587, 702, -4)
-	-- -- setCameraMatrix(f1,f2,f3,f5,f6,f7,f8,f9)
-	-- setCameraTarget(localPlayer)
-	-- setTimer(function(vehicle)
-	-- 	setElementPosition(vehicle, -1587, 702, -4)
-	-- end, 10000, 1, vehicle)	
-
-	if (not vehicle) then
-		return
-	end
-	vehicle = getElementModel(vehicle)
-	if (not vehicle or not BOATS[vehicle]) then
-		return
-	end
-	if (CRANE1_STATE ~= "waiting for boat") then
-		CRANE1_STATE = "waiting for boat"
-		-- iprint("Crane wasn't ready yet")
-	end
-	rotateCraneTo(1, 200, 20000)
-end
-addEventHandler("onClientColShapeHit", BOAT_DETECTOR, craneDetectApproachingBoat)
-
-function erectAtHelperRamp(element, matchingDimension)
-	if (element ~= localPlayer) then
-		return
-	end
-	local vehicle = getPedOccupiedVehicle(localPlayer)
-	if (not vehicle) then
-		return
-	end
-	vehicle = getElementModel(vehicle)
-	if (not vehicle) then
-		return
-	end
-	if (MEDIUM_PLANES[vehicle]) then
-		CRANE1_STATE = "waiting for boat"
-		CRANE2_STATE = "waiting for boat"
-	end
-	if (not vehicle or vehicle ~= 577) then -- at400
-		if (AT_TUTORIAL_SHOWN) then
-			AT_TUTORIAL_SHOWN = false
-			MID_PLAY_BLURB = "The large mess has unfortunately been cleaned up."
-			SHOW_MID_PLAY_TUTORIAL = true
-			setTimer(function()
-				SHOW_MID_PLAY_TUTORIAL = false
-			end, 7000, 1)
-		end
-		return
-	end
-	setElementAlpha(AT_RAMP_1, 255)
-	setElementAlpha(AT_RAMP_2, 255)
-	setElementAlpha(AT_RAMP_3, 255)
-	setElementCollisionsEnabled(AT_RAMP_1, true)
-	setElementCollisionsEnabled(AT_RAMP_2, true)
-	setElementCollisionsEnabled(AT_RAMP_3, true)
-	setElementPosition(AT_RAMP_1, -51.1, -192.5, -3)
-	setElementPosition(AT_RAMP_2, -50.7, -197.5, 5.1)
-	setElementPosition(AT_RAMP_3, -41.2, -202.2, 5.3)
-	AT_TUTORIAL_SHOWN = true
-	MID_PLAY_BLURB = "Hey! Someone spilled a lot of junk next to the delivery point. That might come in handy!"
-	SHOW_MID_PLAY_TUTORIAL = true
-	setTimer(function()
-		SHOW_MID_PLAY_TUTORIAL = false
-	end, 7000, 1)
-end
-addEventHandler("onClientColShapeHit", AT_APPROACH_DETECTOR, erectAtHelperRamp)
 
 
 --- Other Stuff
