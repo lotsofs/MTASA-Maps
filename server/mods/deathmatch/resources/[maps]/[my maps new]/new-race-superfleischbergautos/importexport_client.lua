@@ -24,7 +24,6 @@ LOW_DAMAGE_DIVISOR = 2
 LOW_DAMAGE = false
 CAR_DELIVERING = false
 
-SHUFFLED_CARS = {}
 PLAYER_CURRENT_TARGET = 1
 -- LAST_CAR = false
 
@@ -174,6 +173,21 @@ TRAINS = {
 	[590] = true -- freibox
 }
 
+function deliverVehicle()
+	local score = getElementData(localPlayer, "Money")
+	if (not score) then
+		score = 0
+	end
+	veh = getPedOccupiedVehicle(localPlayer)
+	monetary = getVehicleHandling(veh)["monetary"]
+	damage = getElementHealth(veh) / 1000
+	reward = monetary * damage
+	reward = math.floor(reward)
+	score = score + reward
+	setElementData(localPlayer, "Money", score, true)
+	triggerServerEvent("updateProgress", resourceRoot, PLAYER_CURRENT_TARGET)
+end
+
 function playerStoppedInMarker()
 	-- This function checks every frame if the player is stopped. If so, check conditions.
 	if (CAR_DELIVERING) then
@@ -181,7 +195,7 @@ function playerStoppedInMarker()
 	end
 	
 	local x, y, z = getElementPosition(localPlayer)
-	if (z > 1000) then
+	if (z > 1000 or getElementData(localPlayer, "state") == "spectating") then
 		-- When spectating the position is set to 30k. 1000 is the max flight limit. Do nothing
 		return
 	end
@@ -203,7 +217,8 @@ function playerStoppedInMarker()
 	if (isElementWithinMarker(vehicle, MARKER_EXPORT)) then
 		-- We are in the export marker
 		CAR_DELIVERING = true
-		triggerServerEvent("updateProgress", resourceRoot, PLAYER_CURRENT_TARGET)
+		outputConsole("Delivering vehicle")
+		deliverVehicle()
 		return
 	end
 
@@ -227,12 +242,13 @@ function bigPlaneDelivery()
 	if (not MEDIUM_PLANES[getElementModel(veh)]) then
 		return
 	end
-	if (CRANE2_STATE == "boat 99") then
-		CRANE2_STATE = "boat 100"
-		outputConsole("Delivering plane due to CRANE2_STATE == boat 99")
-		triggerServerEvent("updateProgress", resourceRoot, PLAYER_CURRENT_TARGET)
+	if (CRANE_STATE[2] == "sleeping") then
+		-- Deliver because we used the crane to drop us off
+		outputConsole("Delivering plane due to CRANE_STATE 2 == sleeping")
+		deliverVehicle()
 		return
 	end
+
 	if (not BIG_PLANES[getElementModel(veh)]) then
 		return
 	end
@@ -244,18 +260,19 @@ function bigPlaneDelivery()
 	end
 	x, y, z = getElementVelocity(veh)
 	shittyVelocity = x*x + y*y + z*z
-	if (shittyVelocity > 0.0001) then
+	if (shittyVelocity > 0.001) then
 		return
 	end
 	-- collectCheckpoints(PLAYER_CURRENT_TARGET)
 	outputConsole("Delivering big plane")
-	triggerServerEvent("updateProgress", resourceRoot, PLAYER_CURRENT_TARGET)
+	deliverVehicle()
 end
 setTimer(bigPlaneDelivery, 100, 0)
 
 function updateTarget(new)
 	iprint("Update Target")
 	CAR_DELIVERING = false
+	-- Autoload
 	if (new > PLAYER_CURRENT_TARGET + 1) then
 		PLAYER_CURRENT_TARGET = new - 1
 		MID_PLAY_BLURB = "Your saved progress has been restored. Use /ie_resetprogress to undo."
@@ -264,9 +281,11 @@ function updateTarget(new)
 			SHOW_MID_PLAY_TUTORIAL = false
 		end, 7000, 1)
 	end
+	-- Reset progress?
 	if (new < PLAYER_CURRENT_TARGET) then
 		PLAYER_CURRENT_TARGET = new - 1
 	end
+	-- Normal behavior
 	collectCheckpoints(PLAYER_CURRENT_TARGET)
 	PLAYER_CURRENT_TARGET = new
 	resetDeliveryArea()
@@ -284,9 +303,18 @@ function resetDeliveryArea()
 	veh = getPedOccupiedVehicle(localPlayer)
 	if (veh) then
 		detachElements(veh)
+		setHeliBladeCollisionsEnabled ( veh, false )
 	end
 	CRANE_STATE[1] = "available"
 	CRANE_STATE[2] = "available"
+
+	local carName = VEHICLE_NAMES[getElementModel(veh)]
+	CAR_BLURB = carName
+	setElementData(localPlayer, "Vehicle", carName, true)
+	SHOW_CAR = true
+	setTimer(function()
+		SHOW_CAR = false
+	end, 6500, 1)
 
 	hideRamps()
 	
@@ -342,25 +370,6 @@ function handleVehicleDamage(attacker, weapon, loss, x, y, z, tire)
 		setElementHealth(source, getElementHealth(source) - (loss / LOW_DAMAGE_DIVISOR))
 		cancelEvent()
 	end
-		-- 	x, y, z = getElementPosition(source)
-		-- 	if (getElementHealth(source) > 250) then
-		-- 		return
-		-- 	end
-
-		-- 	if (source ~= getPedOccupiedVehicle(localPlayer)) then
-		-- 		return
-		-- 	end
-		-- 	if (not BIG_PLANES[getElementModel(source)]) then
-		-- 		return
-		-- 	end
-		-- 	if (not isElementWithinColShape(source, GODMODE_REGION_PLANE)) then
-		-- 		return
-		-- 	end
-		-- 	setElementHealth(source, 1000)
-		-- 	cancelEvent()
-		-- 	-- deliver vehicle anyway if it's a big plane inside the godmode region plane and it's ours:
-		-- 	collectCheckpoints(PLAYER_CURRENT_TARGET)
-		-- 	triggerServerEvent("updateProgress", resourceRoot, PLAYER_CURRENT_TARGET)
 end
 addEventHandler("onClientVehicleDamage", root, handleVehicleDamage)
 
@@ -443,10 +452,25 @@ function introCutscene()
 	end, 32000, 1)
 end
 
+function postCutsceneGameStart()
+	iprint("even called yo?) ")
+	resetDeliveryArea()
+	-- SHOW_CAR = true
+	-- setTimer(function()
+	-- 	SHOW_CAR = false
+	-- end, 6500, 1)
+end
+addEvent("postCutsceneGameStart", true)
+addEventHandler("postCutsceneGameStart", localPlayer, postCutsceneGameStart)
+	
+
+
 -- Initialize all the crane stuff
-function gameStart()
-	-- introCutscene()
+function preCutsceneGameStart()
+	introCutscene()
 	initCranes()
+	-- resetDeliveryArea()
+	setElementData(localPlayer, "Money", 0, true)
 
 	local x, y, z = getElementPosition(MARKER_BOAT)
 	createBlip(x, y, z, 9) -- Boat blip
@@ -464,177 +488,7 @@ function gameStart()
 	end
 end
 addEvent("gridCountdownStarted", true)
-addEventHandler("gridCountdownStarted", resourceRoot, gameStart)
-
--- function craneOneBoatGrab()
--- 	local vehicle = getPedOccupiedVehicle(localPlayer)
--- 	local x1,y1,z1 = getElementPosition(crane["bar1"])
--- 	local x2,y2,z2 = getElementPosition(vehicle)
--- 	local u1,v1,w1 = getElementRotation(crane["hook1"])
--- 	local u2,v2,w2 = getElementRotation(vehicle)
--- 	if (CRANE1_STATE == "boat 0") then
--- 		-- -- move bar above boat
--- 		-- setCraneBoatState(1, "boat 1")
--- 		-- local r = findRotation(x1,y1,x2,y2)
--- 		-- local d
--- 		-- if (TRAILERS[getElementModel(vehicle)]) then
--- 		-- 	d = 0
--- 		-- end
--- 		-- local duration = rotateCraneTo(1, r, d, 0.25)
--- 		-- setTimer(function()
--- 		-- 	setCraneBoatState(1, "boat 2")
--- 		-- end, duration, 1)
--- 	elseif (CRANE1_STATE == "boat 2") then
--- 		-- -- move hook into boat
--- 		-- setCraneBoatState(1, "boat 3")
--- 		-- local d = getDistanceBetweenPoints2D ( x1,y1,x2,y2 )
--- 		-- t = nil
--- 		-- if (TRAILERS[getElementModel(vehicle)]) then
--- 		-- 	t = 3000
--- 		-- end
--- 		-- local duration = moveHook(1, z2 + HOOK_BOAT_HEIGHT_OFFSET, math.min(d,89), 0.5, t)
--- 		-- setTimer(function()
--- 		-- 	setCraneBoatState(1, "boat 4")
--- 		-- end, duration, 1)
--- 	elseif (CRANE1_STATE == "boat 4") then
--- 		-- -- raise hook up with boat
--- 		-- setCraneBoatState(1, "boat 5")
--- 		-- local x3,y3,z3 = getElementPosition(crane["hook1"])
--- 		-- local d = getDistanceBetweenPoints2D ( x3,y3,x2,y2 )
--- 		-- -- if (d > 90) then
--- 		-- -- 	setCraneBoatState(1, "waiting for boat"
--- 		-- -- 	return
--- 		-- -- end
--- 		-- if (d > 1) then
--- 		-- 	setCraneBoatState(1, "boat 0")
--- 		-- 	return
--- 		-- end
--- 		-- if (getElementHealth(vehicle) >= 250) then
--- 		-- 	attachElements(vehicle, crane["rope1"], 0, 0, -HOOK_BOAT_HEIGHT_OFFSET, u2-u1, v2-v1, w2-w1)
--- 		-- end
--- 		rotateCraneTo(2, 218, nil, 0.5) -- rotate crane 2 into position
--- 		local duration = moveHook(1, BOATS[getElementModel(vehicle)][1], -1) -- formerly 35 - 41
--- 		setTimer(function()
--- 			setCraneBoatState(1, "boat 6")
--- 		end, duration, 1)
--- 	elseif (CRANE1_STATE == "boat 6") then
--- 		-- rotate crane with boat
--- 		setCraneBoatState(1, "boat 7")
--- 		local duration = rotateCraneTo(1, 94, nil, 0.5)
--- 		setTimer(function()
--- 			setCraneBoatState(1, "boat 8")
--- 		end, duration, 1)
--- 	elseif (CRANE1_STATE == "boat 8") then
--- 		-- move hook into range of other crane if not there yet
--- 		setCraneBoatState(1, "boat 9")
--- 		local d = getDistanceBetweenPoints2D ( x1,y1,x2,y2 )
--- 		if (d < 70) then
--- 			local duration = moveHook(1, -1, 83) -- former math.random(70,89)
--- 			setTimer(function()
--- 				setCraneBoatState(1, "boat 10")
--- 			end, duration, 1)
--- 		else
--- 			setCraneBoatState(1, "boat 10")
--- 		end
--- 	elseif (CRANE1_STATE == "boat 10") then
--- 		-- drop boat
--- 		setCraneBoatState(1, "boat 11")
--- 		detachElements(vehicle)
--- 		setTimer(function()
--- 			setCraneBoatState(1, "boat 12")
--- 		end, 500, 1)
--- 	elseif (CRANE1_STATE == "boat 12") then
--- 		-- move crane out of the way
--- 		setCraneBoatState(1, "boat 13")
--- 		local duration = rotateCraneTo(1, math.random(135, 405))
--- 	end
--- end
-
--- function craneTwoBoatGrab()
--- 	local vehicle = getPedOccupiedVehicle(localPlayer)
--- 	x1,y1,z1 = getElementPosition(crane["bar2"])
--- 	x2,y2,z2 = getElementPosition(vehicle)
--- 	u1,v1,w1 = getElementRotation(crane["hook2"])
--- 	u2,v2,w2 = getElementRotation(vehicle)
--- 	if (CRANE2_STATE == "boat 0") then
--- 		-- move bar above boat
--- 		setCraneBoatState(2, "boat 1")
--- 		local r = findRotation(x1,y1,x2,y2)
--- 		local d = 3000
--- 		if (TRAILERS[getElementModel(vehicle)]) then
--- 			d = 0
--- 		end
--- 		local duration = rotateCraneTo(2, r, d)
--- 		setTimer(function()
--- 			setCraneBoatState(2, "boat 2")
--- 		end, duration, 1)
--- 	elseif (CRANE2_STATE == "boat 2") then
--- 		-- move hook into boat
--- 		setCraneBoatState(2, "boat 3")
--- 		local d = getDistanceBetweenPoints2D ( x1,y1,x2,y2 )
--- 		t = nil
--- 		if (TRAILERS[getElementModel(vehicle)]) then
--- 			t = 3000
--- 		end
--- 		local duration = moveHook(2, z2 + HOOK_BOAT_HEIGHT_OFFSET, math.min(d,95), 0.5, t)
--- 		setTimer(function()
--- 			setCraneBoatState(2, "boat 4")
--- 		end, duration, 1)
--- 	elseif (CRANE2_STATE == "boat 4") then
--- 		-- raise hook up with boat
--- 		setCraneBoatState(2, "boat 5")
--- 		local x3,y3,z3 = getElementPosition(crane["hook2"])
--- 		local d = getDistanceBetweenPoints2D ( x3,y3,x2,y2 )
--- 		if (d > 1) then
--- 			setCraneBoatState(2, "boat 0")
--- 			return
--- 		end
--- 		if (getElementHealth(vehicle) >= 250) then
--- 			attachElements(vehicle, crane["rope2"], 0, 0, -HOOK_BOAT_HEIGHT_OFFSET, u2-u1, v2-v1, w2-w1)
--- 		end
--- 		local duration = moveHook(2, BOATS[getElementModel(vehicle)][2], -1)
--- 		setTimer(function()
--- 			setCraneBoatState(2, "boat 6")
--- 		end, duration, 1)
--- 	elseif (CRANE2_STATE == "boat 6") then
--- 		-- rotate crane with boat
--- 		setCraneBoatState(2, "boat 7")
--- 		local duration = rotateCraneTo(2, 350, nil, 0.3)
--- 		setTimer(function()
--- 			setCraneBoatState(2, "boat 8")
--- 		end, duration, 1)
--- 	elseif (CRANE2_STATE == "boat 8") then
--- 		-- move hook above marker
--- 		setCraneBoatState(2, "boat 9")
--- 		local d = getDistanceBetweenPoints2D ( x1,y1,x2,y2 )
--- 		if (d > 0) then
--- 			local duration = moveHook(2, -1, 65.5)
--- 			setTimer(function()
--- 				setCraneBoatState(2, "boat 10")
--- 			end, duration, 1)
--- 		else
--- 			setCraneBoatState(2, "boat 10")
--- 		end
--- 	elseif (CRANE2_STATE == "boat 10") then
--- 		-- drop boat
--- 		setCraneBoatState(2, "boat 11")
--- 		if (TRAINS[getElementModel(vehicle)]) then
--- 			local duration = moveHook(2, 12.8, -1)
--- 			setTimer(function()
--- 				setCraneBoatState(2, "boat 12")
--- 			end, duration, 1)
--- 		else
--- 			detachElements(vehicle)
--- 			setTimer(function()
--- 				setCraneBoatState(2, "boat 99")
--- 			end, 500, 1)
--- 		end	
--- 	elseif (CRANE2_STATE == "boat 12") then
--- 		setCraneBoatState(2, "boat 99")
--- 		detachElements(vehicle)
--- 		local duration = moveHook(2, math.random(20,41), -1)
--- 	end
--- end
+addEventHandler("gridCountdownStarted", resourceRoot, preCutsceneGameStart)
 
 function repairVehicleOnCrane()
 	local veh = getPedOccupiedVehicle(localPlayer)
@@ -643,26 +497,6 @@ function repairVehicleOnCrane()
 	end
 end
 setTimer(repairVehicleOnCrane, 100, 0)
-
-function setCraneBoatState(craneID, state)
-	if (craneID == 1) then
-		if (CRANE1_STATE:find("^boat") ~= nil) then
-			CRANE1_STATE = state
-		end
-	elseif (craneID == 2) then
-		if (CRANE2_STATE:find("^boat") ~= nil) then
-			CRANE2_STATE = state
-		end
-	end
-end
-
-
-
-
-
-
-
-
 
 
 --- Other Stuff

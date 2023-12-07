@@ -216,6 +216,7 @@ function shuffleCarsOne(whose)
 		LEFT_PLAYERS_PROGRESS[serial] = nil
 		SHUFFLED_INDICES_PER_PLAYER[whose] = LEFT_PLAYERS_SHUFFLED_CARS[serial]
 		teleportToNext(PLAYER_PROGRESS[whose], whose)
+		
 		triggerClientEvent(whose, "updateTarget", whose, PLAYER_PROGRESS[whose])
 	else	
 		local intsTable = {}
@@ -230,6 +231,8 @@ function shuffleCarsOne(whose)
 		end
 		PLAYER_PROGRESS[whose] = 1
 		teleportToNext(1, whose)
+		iprint("called here then? )")
+		triggerClientEvent(whose, "postCutsceneGameStart", whose)
 	end
 	-- triggerClientEvent ( whose, "gridCountdownStarted", resourceRoot )
 	-- setPlayerScriptDebugLevel(whose, 3)
@@ -393,7 +396,7 @@ function startRacePoll()
 	[6]={"Full Experience (212)", "pollFinished", resourceRoot, 212},
 	}
 	if not poll then
-		applyPollResult(20)
+		applyPollResult(1)
 	end
 end
 
@@ -406,6 +409,8 @@ addEventHandler("pollFinished", resourceRoot, applyPollResult)
 function startGame()
 	POLL_ACTIVE = false
 	shuffleCarsAll()
+	exports.scoreboard:addScoreboardColumn("Vehicle")
+	exports.scoreboard:addScoreboardColumn("Money")
 end
 
 function colorGenerator(player)
@@ -470,6 +475,8 @@ function cleanup(stoppedResource)
 		toggleControl(v, 'special_control_up', true)
 		toggleControl(v, 'special_control_down', true)
 	end
+	exports.scoreboard:removeScoreboardColumn("Vehicle")
+	exports.scoreboard:removeScoreboardColumn("Money")
 end
 addEventHandler( "onResourceStop", resourceRoot, cleanup)
 
