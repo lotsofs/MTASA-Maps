@@ -445,7 +445,7 @@ end
 
 -- Initialize all the crane stuff
 function gameStart()
-	introCutscene()
+	-- introCutscene()
 	initCranes()
 
 	local x, y, z = getElementPosition(MARKER_BOAT)
@@ -466,175 +466,175 @@ end
 addEvent("gridCountdownStarted", true)
 addEventHandler("gridCountdownStarted", resourceRoot, gameStart)
 
-function craneOneBoatGrab()
-	local vehicle = getPedOccupiedVehicle(localPlayer)
-	local x1,y1,z1 = getElementPosition(crane["bar1"])
-	local x2,y2,z2 = getElementPosition(vehicle)
-	local u1,v1,w1 = getElementRotation(crane["hook1"])
-	local u2,v2,w2 = getElementRotation(vehicle)
-	if (CRANE1_STATE == "boat 0") then
-		-- -- move bar above boat
-		-- setCraneBoatState(1, "boat 1")
-		-- local r = findRotation(x1,y1,x2,y2)
-		-- local d
-		-- if (TRAILERS[getElementModel(vehicle)]) then
-		-- 	d = 0
-		-- end
-		-- local duration = rotateCraneTo(1, r, d, 0.25)
-		-- setTimer(function()
-		-- 	setCraneBoatState(1, "boat 2")
-		-- end, duration, 1)
-	elseif (CRANE1_STATE == "boat 2") then
-		-- -- move hook into boat
-		-- setCraneBoatState(1, "boat 3")
-		-- local d = getDistanceBetweenPoints2D ( x1,y1,x2,y2 )
-		-- t = nil
-		-- if (TRAILERS[getElementModel(vehicle)]) then
-		-- 	t = 3000
-		-- end
-		-- local duration = moveHook(1, z2 + HOOK_BOAT_HEIGHT_OFFSET, math.min(d,89), 0.5, t)
-		-- setTimer(function()
-		-- 	setCraneBoatState(1, "boat 4")
-		-- end, duration, 1)
-	elseif (CRANE1_STATE == "boat 4") then
-		-- raise hook up with boat
-		setCraneBoatState(1, "boat 5")
-		local x3,y3,z3 = getElementPosition(crane["hook1"])
-		local d = getDistanceBetweenPoints2D ( x3,y3,x2,y2 )
-		-- if (d > 90) then
-		-- 	setCraneBoatState(1, "waiting for boat"
-		-- 	return
-		-- end
-		if (d > 1) then
-			setCraneBoatState(1, "boat 0")
-			return
-		end
-		if (getElementHealth(vehicle) >= 250) then
-			attachElements(vehicle, crane["rope1"], 0, 0, -HOOK_BOAT_HEIGHT_OFFSET, u2-u1, v2-v1, w2-w1)
-		end
-		rotateCraneTo(2, 218, nil, 0.5) -- rotate crane 2 into position
-		local duration = moveHook(1, BOATS[getElementModel(vehicle)][1], -1) -- formerly 35 - 41
-		setTimer(function()
-			setCraneBoatState(1, "boat 6")
-		end, duration, 1)
-	elseif (CRANE1_STATE == "boat 6") then
-		-- rotate crane with boat
-		setCraneBoatState(1, "boat 7")
-		local duration = rotateCraneTo(1, 94, nil, 0.5)
-		setTimer(function()
-			setCraneBoatState(1, "boat 8")
-		end, duration, 1)
-	elseif (CRANE1_STATE == "boat 8") then
-		-- move hook into range of other crane if not there yet
-		setCraneBoatState(1, "boat 9")
-		local d = getDistanceBetweenPoints2D ( x1,y1,x2,y2 )
-		if (d < 70) then
-			local duration = moveHook(1, -1, 83) -- former math.random(70,89)
-			setTimer(function()
-				setCraneBoatState(1, "boat 10")
-			end, duration, 1)
-		else
-			setCraneBoatState(1, "boat 10")
-		end
-	elseif (CRANE1_STATE == "boat 10") then
-		-- drop boat
-		setCraneBoatState(1, "boat 11")
-		detachElements(vehicle)
-		setTimer(function()
-			setCraneBoatState(1, "boat 12")
-		end, 500, 1)
-	elseif (CRANE1_STATE == "boat 12") then
-		-- move crane out of the way
-		setCraneBoatState(1, "boat 13")
-		local duration = rotateCraneTo(1, math.random(135, 405))
-	end
-end
+-- function craneOneBoatGrab()
+-- 	local vehicle = getPedOccupiedVehicle(localPlayer)
+-- 	local x1,y1,z1 = getElementPosition(crane["bar1"])
+-- 	local x2,y2,z2 = getElementPosition(vehicle)
+-- 	local u1,v1,w1 = getElementRotation(crane["hook1"])
+-- 	local u2,v2,w2 = getElementRotation(vehicle)
+-- 	if (CRANE1_STATE == "boat 0") then
+-- 		-- -- move bar above boat
+-- 		-- setCraneBoatState(1, "boat 1")
+-- 		-- local r = findRotation(x1,y1,x2,y2)
+-- 		-- local d
+-- 		-- if (TRAILERS[getElementModel(vehicle)]) then
+-- 		-- 	d = 0
+-- 		-- end
+-- 		-- local duration = rotateCraneTo(1, r, d, 0.25)
+-- 		-- setTimer(function()
+-- 		-- 	setCraneBoatState(1, "boat 2")
+-- 		-- end, duration, 1)
+-- 	elseif (CRANE1_STATE == "boat 2") then
+-- 		-- -- move hook into boat
+-- 		-- setCraneBoatState(1, "boat 3")
+-- 		-- local d = getDistanceBetweenPoints2D ( x1,y1,x2,y2 )
+-- 		-- t = nil
+-- 		-- if (TRAILERS[getElementModel(vehicle)]) then
+-- 		-- 	t = 3000
+-- 		-- end
+-- 		-- local duration = moveHook(1, z2 + HOOK_BOAT_HEIGHT_OFFSET, math.min(d,89), 0.5, t)
+-- 		-- setTimer(function()
+-- 		-- 	setCraneBoatState(1, "boat 4")
+-- 		-- end, duration, 1)
+-- 	elseif (CRANE1_STATE == "boat 4") then
+-- 		-- -- raise hook up with boat
+-- 		-- setCraneBoatState(1, "boat 5")
+-- 		-- local x3,y3,z3 = getElementPosition(crane["hook1"])
+-- 		-- local d = getDistanceBetweenPoints2D ( x3,y3,x2,y2 )
+-- 		-- -- if (d > 90) then
+-- 		-- -- 	setCraneBoatState(1, "waiting for boat"
+-- 		-- -- 	return
+-- 		-- -- end
+-- 		-- if (d > 1) then
+-- 		-- 	setCraneBoatState(1, "boat 0")
+-- 		-- 	return
+-- 		-- end
+-- 		-- if (getElementHealth(vehicle) >= 250) then
+-- 		-- 	attachElements(vehicle, crane["rope1"], 0, 0, -HOOK_BOAT_HEIGHT_OFFSET, u2-u1, v2-v1, w2-w1)
+-- 		-- end
+-- 		rotateCraneTo(2, 218, nil, 0.5) -- rotate crane 2 into position
+-- 		local duration = moveHook(1, BOATS[getElementModel(vehicle)][1], -1) -- formerly 35 - 41
+-- 		setTimer(function()
+-- 			setCraneBoatState(1, "boat 6")
+-- 		end, duration, 1)
+-- 	elseif (CRANE1_STATE == "boat 6") then
+-- 		-- rotate crane with boat
+-- 		setCraneBoatState(1, "boat 7")
+-- 		local duration = rotateCraneTo(1, 94, nil, 0.5)
+-- 		setTimer(function()
+-- 			setCraneBoatState(1, "boat 8")
+-- 		end, duration, 1)
+-- 	elseif (CRANE1_STATE == "boat 8") then
+-- 		-- move hook into range of other crane if not there yet
+-- 		setCraneBoatState(1, "boat 9")
+-- 		local d = getDistanceBetweenPoints2D ( x1,y1,x2,y2 )
+-- 		if (d < 70) then
+-- 			local duration = moveHook(1, -1, 83) -- former math.random(70,89)
+-- 			setTimer(function()
+-- 				setCraneBoatState(1, "boat 10")
+-- 			end, duration, 1)
+-- 		else
+-- 			setCraneBoatState(1, "boat 10")
+-- 		end
+-- 	elseif (CRANE1_STATE == "boat 10") then
+-- 		-- drop boat
+-- 		setCraneBoatState(1, "boat 11")
+-- 		detachElements(vehicle)
+-- 		setTimer(function()
+-- 			setCraneBoatState(1, "boat 12")
+-- 		end, 500, 1)
+-- 	elseif (CRANE1_STATE == "boat 12") then
+-- 		-- move crane out of the way
+-- 		setCraneBoatState(1, "boat 13")
+-- 		local duration = rotateCraneTo(1, math.random(135, 405))
+-- 	end
+-- end
 
-function craneTwoBoatGrab()
-	local vehicle = getPedOccupiedVehicle(localPlayer)
-	x1,y1,z1 = getElementPosition(crane["bar2"])
-	x2,y2,z2 = getElementPosition(vehicle)
-	u1,v1,w1 = getElementRotation(crane["hook2"])
-	u2,v2,w2 = getElementRotation(vehicle)
-	if (CRANE2_STATE == "boat 0") then
-		-- move bar above boat
-		setCraneBoatState(2, "boat 1")
-		local r = findRotation(x1,y1,x2,y2)
-		local d = 3000
-		if (TRAILERS[getElementModel(vehicle)]) then
-			d = 0
-		end
-		local duration = rotateCraneTo(2, r, d)
-		setTimer(function()
-			setCraneBoatState(2, "boat 2")
-		end, duration, 1)
-	elseif (CRANE2_STATE == "boat 2") then
-		-- move hook into boat
-		setCraneBoatState(2, "boat 3")
-		local d = getDistanceBetweenPoints2D ( x1,y1,x2,y2 )
-		t = nil
-		if (TRAILERS[getElementModel(vehicle)]) then
-			t = 3000
-		end
-		local duration = moveHook(2, z2 + HOOK_BOAT_HEIGHT_OFFSET, math.min(d,95), 0.5, t)
-		setTimer(function()
-			setCraneBoatState(2, "boat 4")
-		end, duration, 1)
-	elseif (CRANE2_STATE == "boat 4") then
-		-- raise hook up with boat
-		setCraneBoatState(2, "boat 5")
-		local x3,y3,z3 = getElementPosition(crane["hook2"])
-		local d = getDistanceBetweenPoints2D ( x3,y3,x2,y2 )
-		if (d > 1) then
-			setCraneBoatState(2, "boat 0")
-			return
-		end
-		if (getElementHealth(vehicle) >= 250) then
-			attachElements(vehicle, crane["rope2"], 0, 0, -HOOK_BOAT_HEIGHT_OFFSET, u2-u1, v2-v1, w2-w1)
-		end
-		local duration = moveHook(2, BOATS[getElementModel(vehicle)][2], -1)
-		setTimer(function()
-			setCraneBoatState(2, "boat 6")
-		end, duration, 1)
-	elseif (CRANE2_STATE == "boat 6") then
-		-- rotate crane with boat
-		setCraneBoatState(2, "boat 7")
-		local duration = rotateCraneTo(2, 350, nil, 0.3)
-		setTimer(function()
-			setCraneBoatState(2, "boat 8")
-		end, duration, 1)
-	elseif (CRANE2_STATE == "boat 8") then
-		-- move hook above marker
-		setCraneBoatState(2, "boat 9")
-		local d = getDistanceBetweenPoints2D ( x1,y1,x2,y2 )
-		if (d > 0) then
-			local duration = moveHook(2, -1, 65.5)
-			setTimer(function()
-				setCraneBoatState(2, "boat 10")
-			end, duration, 1)
-		else
-			setCraneBoatState(2, "boat 10")
-		end
-	elseif (CRANE2_STATE == "boat 10") then
-		-- drop boat
-		setCraneBoatState(2, "boat 11")
-		if (TRAINS[getElementModel(vehicle)]) then
-			local duration = moveHook(2, 12.8, -1)
-			setTimer(function()
-				setCraneBoatState(2, "boat 12")
-			end, duration, 1)
-		else
-			detachElements(vehicle)
-			setTimer(function()
-				setCraneBoatState(2, "boat 99")
-			end, 500, 1)
-		end	
-	elseif (CRANE2_STATE == "boat 12") then
-		setCraneBoatState(2, "boat 99")
-		detachElements(vehicle)
-		local duration = moveHook(2, math.random(20,41), -1)
-	end
-end
+-- function craneTwoBoatGrab()
+-- 	local vehicle = getPedOccupiedVehicle(localPlayer)
+-- 	x1,y1,z1 = getElementPosition(crane["bar2"])
+-- 	x2,y2,z2 = getElementPosition(vehicle)
+-- 	u1,v1,w1 = getElementRotation(crane["hook2"])
+-- 	u2,v2,w2 = getElementRotation(vehicle)
+-- 	if (CRANE2_STATE == "boat 0") then
+-- 		-- move bar above boat
+-- 		setCraneBoatState(2, "boat 1")
+-- 		local r = findRotation(x1,y1,x2,y2)
+-- 		local d = 3000
+-- 		if (TRAILERS[getElementModel(vehicle)]) then
+-- 			d = 0
+-- 		end
+-- 		local duration = rotateCraneTo(2, r, d)
+-- 		setTimer(function()
+-- 			setCraneBoatState(2, "boat 2")
+-- 		end, duration, 1)
+-- 	elseif (CRANE2_STATE == "boat 2") then
+-- 		-- move hook into boat
+-- 		setCraneBoatState(2, "boat 3")
+-- 		local d = getDistanceBetweenPoints2D ( x1,y1,x2,y2 )
+-- 		t = nil
+-- 		if (TRAILERS[getElementModel(vehicle)]) then
+-- 			t = 3000
+-- 		end
+-- 		local duration = moveHook(2, z2 + HOOK_BOAT_HEIGHT_OFFSET, math.min(d,95), 0.5, t)
+-- 		setTimer(function()
+-- 			setCraneBoatState(2, "boat 4")
+-- 		end, duration, 1)
+-- 	elseif (CRANE2_STATE == "boat 4") then
+-- 		-- raise hook up with boat
+-- 		setCraneBoatState(2, "boat 5")
+-- 		local x3,y3,z3 = getElementPosition(crane["hook2"])
+-- 		local d = getDistanceBetweenPoints2D ( x3,y3,x2,y2 )
+-- 		if (d > 1) then
+-- 			setCraneBoatState(2, "boat 0")
+-- 			return
+-- 		end
+-- 		if (getElementHealth(vehicle) >= 250) then
+-- 			attachElements(vehicle, crane["rope2"], 0, 0, -HOOK_BOAT_HEIGHT_OFFSET, u2-u1, v2-v1, w2-w1)
+-- 		end
+-- 		local duration = moveHook(2, BOATS[getElementModel(vehicle)][2], -1)
+-- 		setTimer(function()
+-- 			setCraneBoatState(2, "boat 6")
+-- 		end, duration, 1)
+-- 	elseif (CRANE2_STATE == "boat 6") then
+-- 		-- rotate crane with boat
+-- 		setCraneBoatState(2, "boat 7")
+-- 		local duration = rotateCraneTo(2, 350, nil, 0.3)
+-- 		setTimer(function()
+-- 			setCraneBoatState(2, "boat 8")
+-- 		end, duration, 1)
+-- 	elseif (CRANE2_STATE == "boat 8") then
+-- 		-- move hook above marker
+-- 		setCraneBoatState(2, "boat 9")
+-- 		local d = getDistanceBetweenPoints2D ( x1,y1,x2,y2 )
+-- 		if (d > 0) then
+-- 			local duration = moveHook(2, -1, 65.5)
+-- 			setTimer(function()
+-- 				setCraneBoatState(2, "boat 10")
+-- 			end, duration, 1)
+-- 		else
+-- 			setCraneBoatState(2, "boat 10")
+-- 		end
+-- 	elseif (CRANE2_STATE == "boat 10") then
+-- 		-- drop boat
+-- 		setCraneBoatState(2, "boat 11")
+-- 		if (TRAINS[getElementModel(vehicle)]) then
+-- 			local duration = moveHook(2, 12.8, -1)
+-- 			setTimer(function()
+-- 				setCraneBoatState(2, "boat 12")
+-- 			end, duration, 1)
+-- 		else
+-- 			detachElements(vehicle)
+-- 			setTimer(function()
+-- 				setCraneBoatState(2, "boat 99")
+-- 			end, 500, 1)
+-- 		end	
+-- 	elseif (CRANE2_STATE == "boat 12") then
+-- 		setCraneBoatState(2, "boat 99")
+-- 		detachElements(vehicle)
+-- 		local duration = moveHook(2, math.random(20,41), -1)
+-- 	end
+-- end
 
 function repairVehicleOnCrane()
 	local veh = getPedOccupiedVehicle(localPlayer)

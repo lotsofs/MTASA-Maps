@@ -11,6 +11,7 @@ CRANE_ROPE = {}
 CRANE_LOWLOD_A = {}
 CRANE_LOWLOD_B = {}
 CRANE_TIMER = {}
+CRANE_SLEEPTIMER = {}
 
 CRANE_ROTATING = {}
 CRANE_HOOKING = {}
@@ -84,59 +85,127 @@ function craneTimerTick(craneID)
     end
     local vehicleModel = getElementModel(vehicle)
 
-    if (CRANE_STATE[craneID] == "assist") then
-        local hX,hY,hZ = getElementPosition(CRANE_HOOK[craneID])
-        local vX,vY,vZ = getElementPosition(vehicle)
-        local hookDistance = getDistanceBetweenPoints2D(hX,hY,vX,vY)
-        -- Check if the hook is near the car
-        if (hookDistance < 0.5 and getElementHealth(vehicle) >= 250) then
-            local hU,hV,hW = getElementRotation(CRANE_HOOK[craneID])
-            local vU,vV,vW = getElementRotation(vehicle)
-            attachElements(vehicle, CRANE_ROPE[1], 0, 0, -HOOK_BOAT_HEIGHT_OFFSET, vU-hU, vV-hV, vW-hW)
-        end
-
-        local bX,bY,zY = getElementPosition(CRANE_BAR[craneID])
-        local bU,bV,bW = getElementRotation(CRANE_BAR[craneID])
-        local vehicleAngleFromCrane = findRotation(bX,bY,vX,vY)
-        local craneAngleFromVehicle = math.abs(vehicleAngleFromCrane - bW) % 360
-        -- Check if the crane is pointing at us
-        if (craneAngleFromVehicle < 0.1 or craneAngleFromVehicle > 359) then
-            -- The crane is pointing at us. Move hook in.
-            local vD = getDistanceBetweenPoints2D(bX,bY,vX,vY)
-            local t = -1
-            if (TRAILERS[vehicleModel]) then
-                t = 3000
+    if (CRANE_STATE[craneID] == "sleeping") then
+        if (CRANE_SLEEPTIMER[craneID] <= 0) then
+            if (craneID == 1) then
+                -- Rotate crane out of the way
+                rotateCraneTo(1, math.random(135, 405))
+                CRANE_STATE[1] = "available"
+            elseif (craneID == 2) then
+                -- Make crane 2 available again in case something went wrong
+                CRANE_STATE[2] = "available"
             end
-            moveHook(1, vZ + HOOK_BOAT_HEIGHT_OFFSET, math.min(vD,89), 0.5, t)
-        else
-            -- The crane is not pointing at us, move the bar over the boat
-		    local t = -1
-		    if (TRAILERS[vehicleModel]) then
-    			t = 0
-	    	end
-		    rotateCraneTo(1, vehicleAngleFromCrane, t, 0.25)
         end
-    end
+        CRANE_SLEEPTIMER[craneID] = CRANE_SLEEPTIMER[craneID] - 1
 
+    elseif (CRANE_STATE[craneID] == "assist") then
+        iprint("assisting", craneID)
+        if (getElementAttachedTo(vehicle) ~= false) then
+            iprint("boat attached", craneID)
+            local desiredZ = BOATS[vehicleModel][craneID]
+            local rX,rY,rZ = getElementPosition(CRANE_ROPE[craneID])
+            local bU,bV,bW = getElementRotation(CRANE_BAR[craneID])
+            local bX, bY, bZ = getElementPosition(CRANE_BASE[craneID])
+            local vX,vY,vZ = getElementPosition(vehicle)
+            local vehicleDistanceFromBase = getDistanceBetweenPoints2D(bX,bY,vX,vY)
+            local hookHeightDeviation = math.abs(rZ-desiredZ)
+            local rotDestination
+            if (craneID == 1) then
+                rotDestination = 94
+            elseif (craneID == 2) then
+                rotDestination = 350
+            end
+            local barDirectionDeviation = math.abs(bW-rotDestination)
+            iprint(hookHeightDeviation, barDirectionDeviation, craneID)
+            if (hookHeightDeviation > 0.1 and barDirectionDeviation > 0.1) then
+                -- Move the hook up to the required height
+                iprint("Hook Up", craneID)
+                moveHook(craneID, desiredZ, -1)
+            elseif (barDirectionDeviation > 0.1) then
+                -- Rotate the crane to its destination
+                iprint("Rotate", craneID)
+                rotateCraneTo(craneID, rotDestination, nil, 0.5)
+            elseif (craneID == 1 and vehicleDistanceFromBase < 70) then
+                -- Move the hook forward or backwards before the drop
+                iprint("Hook Forward", craneID)
+                moveHook(craneID,-1,83)
+            elseif (craneID == 2 and math.abs(vehicleDistanceFromBase-65.5) > 1) then
+                iprint("Hook Back", craneID)
+                moveHook(craneID,-1,65.5)
+            elseif (craneID == 1 and MEDIUM_PLANES[vehicleModel] and math.abs(rZ-11>0)) then
+                iprint("Lower Safely 1", craneID)
+                -- Lower big planes down safely so they don't get blown up when put down
+                moveHook(craneID, 10.5, -1)
+            elseif (craneID == 2 and TRAINS[vehicleModel] and math.abs(rZ-13>0)) then
+                iprint("Lower Safely 2", craneID)
+                -- Lower trains down into the marker since they have no proper physics
+                moveHook(craneID, 12.8, -1)
+            else
+                iprint("Detach", craneID)
+		        detachElements(vehicle)
+                if (craneID == 2) then
+                    moveHook(craneID, math.random(20,41), -1)
+                end
+                CRANE_SLEEPTIMER[craneID] = 5
+                CRANE_STATE[craneID] = "sleeping"
+            end
+            iprint("Stop assisting", craneID)
+        else
+            local vX,vY,vZ = getElementPosition(vehicle)
+            local hX,hY,hZ = getElementPosition(CRANE_HOOK[craneID])
+            local hookDistance = getDistanceBetweenPoints2D(hX,hY,vX,vY)
+            -- Check if the hook is near the car
+            if (hookDistance < 0.5 and getElementHealth(vehicle) >= 250) then
+                iprint(craneID, "hooking")
+                local hU,hV,hW = getElementRotation(CRANE_HOOK[craneID])
+                local vU,vV,vW = getElementRotation(vehicle)
+                attachElements(vehicle, CRANE_ROPE[craneID], 0, 0, -HOOK_BOAT_HEIGHT_OFFSET, vU-hU, vV-hV, vW-hW)
+                if (craneID == 1) then
+		            rotateCraneTo(2, 218, nil, 1) -- rotate crane 2 into position upon being grabbed by crane 1
+                end
+            end
     
-    if (CRANE_STATE[craneID] == "available") then
+            local bX,bY,zY = getElementPosition(CRANE_BAR[craneID])
+            local bU,bV,bW = getElementRotation(CRANE_BAR[craneID])
+            local vehicleAngleFromCrane = findRotation(bX,bY,vX,vY)
+            local craneAngleFromVehicle = math.abs(vehicleAngleFromCrane - bW) % 360
+            -- Check if the crane is pointing at us
+            if (craneAngleFromVehicle < 0.1 or craneAngleFromVehicle > 359.9) then
+                iprint(craneID, "pointing")
+                -- The crane is pointing at us. Move hook in.
+                local vD = getDistanceBetweenPoints2D(bX,bY,vX,vY)
+                local t = -1
+                if (TRAILERS[vehicleModel]) then
+                    t = 3000
+                end
+                moveHook(craneID, vZ + HOOK_BOAT_HEIGHT_OFFSET, math.min(vD,89), 0.5, t)
+            else
+                iprint(craneID, "not pointing")
+                -- The crane is not pointing at us, move the bar over the boat
+                local t = -1
+                if (TRAILERS[vehicleModel]) then
+                    t = 0
+                end
+                rotateCraneTo(craneID, vehicleAngleFromCrane, t, 0.25)
+            end
+        end
+
+    elseif (CRANE_STATE[craneID] == "available") then
         -- Check if the player is in a boat. If they are, we will halt 
         -- recreative crane movement and keep it idle until we arrive
         if (BOATS[vehicleModel]) then
             CRANE_STATE[craneID] = "waiting for boat"
-        end
-    end
-    
-    if (CRANE_STATE[craneID] == "available") then
-        -- Rotate the crane for fun as it is not doing anything else
-        local r = math.random(1,CRANE_TURN_ODDS)
-        if (r < 2) then
-            if (craneID ~= 2) then
-                r = math.random(-270,270)
-                rotateCraneRelative(craneID, r)        
-            else
-                r = math.random(36,376)
-                rotateCraneTo(craneID, r)           
+        else
+            -- Rotate the crane for fun as it is not doing anything else
+            local r = math.random(1,CRANE_TURN_ODDS)
+            if (r < 2) then
+                if (craneID ~= 2) then
+                    r = math.random(-270,270)
+                    rotateCraneRelative(craneID, r)        
+                else
+                    r = math.random(36,376)
+                    rotateCraneTo(craneID, r)           
+                end
             end
         end
     end
