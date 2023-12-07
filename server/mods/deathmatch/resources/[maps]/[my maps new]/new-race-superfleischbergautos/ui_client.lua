@@ -97,9 +97,8 @@ function drawHudOverlay()
 	if (SHOW_MID_PLAY_TUTORIAL) then
 		drawBorderedText(MID_PLAY_BLURB, 2, SCREENWIDTH*0.25, SCREENHEIGHT*0.75, SCREENWIDTH*0.75, SCREENHEIGHT, tocolor(255, 255, 255, 255), 2, "default-bold", "center", "top", false, true, true, true)
 	end
-	SHOW_CAR = true
 	if (SHOW_CAR) then
-		drawBorderedText(CAR_BLURB, 2, SCREENWIDTH*0.8, SCREENHEIGHT*0.78, SCREENWIDTH*0.98, SCREENHEIGHT, tocolor(54, 104, 44, 255), 3, "bankgothic", "right", "top", false, false, true, true)
+		drawBorderedText(CAR_BLURB, 2, SCREENWIDTH*0.2, SCREENHEIGHT*0.88, SCREENWIDTH*0.98, SCREENHEIGHT, tocolor(54, 104, 44, 255), 3, "bankgothic", "left", "top", false, false, true, true)
 	end
 end
 addEventHandler("onClientRender", root, drawHudOverlay)
