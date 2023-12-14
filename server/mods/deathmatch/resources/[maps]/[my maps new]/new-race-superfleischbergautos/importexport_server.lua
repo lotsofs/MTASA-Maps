@@ -162,7 +162,7 @@ DATABASE = dbConnect("sqlite", ":/mapSuperFleischbergAutos.db")
 	
 ------------------------------------------------------ Start of race ------------------------------------------------------
 
-function shuffleCarsAll()
+function selectCars()
 	local cars = getElementsByType("exportable")
 	-- Select cars for every player
 	if (#CHOSEN_CARS == 0) then
@@ -178,7 +178,7 @@ function shuffleCarsAll()
 	end
 	-- Shuffle the cars for each player
 	for i, v in pairs(getElementsByType("player")) do
-		shuffleCarsOne(v)
+		shuffleCarsPerPlayer(v)
 		-- if (not PLAYERS_WHO_JOINED_DURING_CUTSCENE[v]) then
 		-- 	local intsTable = {}
 		-- 	SHUFFLED_INDICES_PER_PLAYER[v] = {}
@@ -199,7 +199,7 @@ function shuffleCarsAll()
 	end
 end
 
-function shuffleCarsOne(whose)
+function shuffleCarsPerPlayer(whose)
 	if (#CHOSEN_CARS == 0) then
 		-- Race hasn't started yet
 		return
@@ -213,7 +213,7 @@ function shuffleCarsOne(whose)
 	local serial = getPlayerSerial(whose)
 	if (LEFT_PLAYERS_PROGRESS[serial]) then
 		PLAYER_PROGRESS[whose] = LEFT_PLAYERS_PROGRESS[serial]
-		LEFT_PLAYERS_PROGRESS[serial] = nil
+		--LEFT_PLAYERS_PROGRESS[serial] = nil
 		SHUFFLED_INDICES_PER_PLAYER[whose] = LEFT_PLAYERS_SHUFFLED_CARS[serial]
 		teleportToNext(PLAYER_PROGRESS[whose], whose)
 		
@@ -231,7 +231,6 @@ function shuffleCarsOne(whose)
 		end
 		PLAYER_PROGRESS[whose] = 1
 		teleportToNext(1, whose)
-		iprint("called here then? )")
 		triggerClientEvent(whose, "postCutsceneGameStart", whose)
 	end
 	-- triggerClientEvent ( whose, "gridCountdownStarted", resourceRoot )
@@ -254,13 +253,13 @@ function newJoineeMarkerHit(markerHit, matchingDimension, dumpVariable)
 	local sipp = SHUFFLED_INDICES_PER_PLAYER[source]
 	if (sipp ~= nil and #sipp > 0) then
 		-- This player is not new
-		-- shuffleCarsOne(source)
+		-- shuffleCarsPerPlayer(source)
 		return
 	end
 
 	triggerClientEvent ( source, "gridCountdownStarted", resourceRoot )
 	setTimer(function(whom)
-		shuffleCarsOne(whom)
+		shuffleCarsPerPlayer(whom)
 	end, (CUTSCENE_LENGTH_IN_SECONDS+0.5)*1000, 1, source)
 end
 addEventHandler("onPlayerMarkerHit", root, newJoineeMarkerHit)
@@ -402,13 +401,45 @@ end
 
 function applyPollResult(pollResult)
 	REQUIRED_CHECKPOINTS = pollResult
+
+	-- Do some trickery with the map name & the race scoreboard manager so that separate top times are tracked per map length
+	local customMapName = getMapName()
+	if (pollResult == 1) then
+		customMapName = customMapName .. " (A Basic Race)"
+	elseif (pollResult == 5) then
+		customMapName = customMapName .. " (Bite Sized Chunk)"
+	elseif (pollResult == 10) then
+		customMapName = customMapName .. " (One List)"
+	elseif (pollResult == 30) then
+		customMapName = customMapName .. " (Classic)"
+	elseif (pollResult == 100) then
+		customMapName = customMapName .. " (Extended)"
+	elseif (pollResult == 212) then
+		customMapName = customMapName .. " (Full Experience)"
+	end
+	setMapName ( customMapName )
+	
+	-- THe default top times manager does not respond to the above. So send it an event so it does
+	-- It appears that the leguaan server has their own thing for this, idk what. Strip this out for them
+	local timesManager = getResourceRootElement( getResourceFromName("race_toptimes"))
+	local raceResRoot = getResourceRootElement( getResourceFromName( "race" ) )
+	local raceInfo = raceResRoot and getElementData( raceResRoot, "info" )
+	
+	local stuff = {}
+	stuff.modename = raceInfo.mapInfo.modename
+	stuff.name = customMapName
+	stuff.statsKey = nil
+
+	if raceInfo and timesManager then
+		triggerEvent("onMapStarting", timesManager, stuff, stuff, stuff)
+	end
 end
 addEvent("pollFinished", true)
 addEventHandler("pollFinished", resourceRoot, applyPollResult)
 
 function startGame()
 	POLL_ACTIVE = false
-	shuffleCarsAll()
+	selectCars()
 	exports.scoreboard:addScoreboardColumn("Vehicle")
 	exports.scoreboard:addScoreboardColumn("Money")
 end
@@ -527,6 +558,9 @@ function playerLeaving(quitType)
 		return
 	end
 	if (getElementData(source, "race.finished")) then
+		return
+	end
+	if (PLAYER_PROGRESS[source] == nil or PLAYER_PROGRESS[source] < 2) then
 		return
 	end
 	local serial = getPlayerSerial(source)

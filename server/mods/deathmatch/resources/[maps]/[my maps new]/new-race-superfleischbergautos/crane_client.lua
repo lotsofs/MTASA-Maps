@@ -79,9 +79,6 @@ function craneTimerTick(craneID)
         detachElements(vehicle)
     end
     
-    -- if (craneID == 1) then
-    --     iprint(craneID, CRANE_STATE[craneID], CRANE_ROTATING[craneID], CRANE_HOOKING[craneID])
-    -- end
     if (CRANE_ROTATING[craneID] == true or CRANE_HOOKING[craneID] == true) then
         -- The crane is currently busy rotating. Wait...
         return
@@ -93,7 +90,6 @@ function craneTimerTick(craneID)
         if (CRANE_SLEEPTIMER[craneID] <= 0) then
             if (craneID == 1) then
                 -- Rotate crane out of the way
-                iprint("turning away", craneID)
                 rotateCraneTo(1, math.random(135, 405))
                 CRANE_STATE[1] = "available"
             elseif (craneID == 2) then
@@ -119,32 +115,24 @@ function craneTimerTick(craneID)
                 rotDestination = 350
             end
             local barDirectionDeviation = math.abs(bW-rotDestination)
-            iprint(hookHeightDeviation, barDirectionDeviation, craneID)
             if (hookHeightDeviation > 0.1 and barDirectionDeviation > 0.1) then
                 -- Move the hook up to the required height
-                iprint("Hook Up", craneID)
                 moveHook(craneID, desiredZ, -1)
             elseif (barDirectionDeviation > 0.1) then
                 -- Rotate the crane to its destination
-                iprint("Rotate", craneID)
                 rotateCraneTo(craneID, rotDestination, nil, 0.5)
             elseif (craneID == 1 and vehicleDistanceFromBase < 70) then
                 -- Move the hook forward or backwards before the drop
-                iprint("Hook Forward", craneID)
                 moveHook(craneID,-1,83)
             elseif (craneID == 2 and math.abs(vehicleDistanceFromBase-65.5) > 1) then
-                iprint("Hook Back", craneID)
                 moveHook(craneID,-1,65.5)
             elseif (craneID == 1 and MEDIUM_PLANES[vehicleModel] and rZ-14 > 0) then
                 -- Lower big planes down safely so they don't get blown up when put down
-                iprint("Lower Safely 1", craneID, rZ)
                 moveHook(craneID, 13.5, -1)
             elseif (craneID == 2 and TRAINS[vehicleModel] and rZ-13 > 0) then
-                iprint("Lower Safely 2", craneID)
                 -- Lower trains down into the marker since they have no proper physics
                 moveHook(craneID, 12.8, -1)
             else
-                iprint("Detach", craneID)
 		        detachElements(vehicle)
                 if (craneID == 2) then
                     moveHook(craneID, math.random(20,41), -1)
@@ -158,7 +146,6 @@ function craneTimerTick(craneID)
             local hookDistance = getDistanceBetweenPoints2D(hX,hY,vX,vY)
             -- Check if the hook is near the car
             if (hookDistance < 0.5 and getElementHealth(vehicle) >= 250) then
-                iprint(craneID, "hooking")
                 local hU,hV,hW = getElementRotation(CRANE_HOOK[craneID])
                 local vU,vV,vW = getElementRotation(vehicle)
                 attachElements(vehicle, CRANE_ROPE[craneID], 0, 0, -HOOK_BOAT_HEIGHT_OFFSET, vU-hU, vV-hV, vW-hW)
@@ -178,7 +165,6 @@ function craneTimerTick(craneID)
             local craneAngleFromVehicle = math.abs(vehicleAngleFromCrane - bW) % 360
             -- Check if the crane is pointing at us
             if (craneAngleFromVehicle < 0.1 or craneAngleFromVehicle > 359.9) then
-                iprint(craneID, "pointing")
                 -- The crane is pointing at us. Move hook in.
                 local vD = getDistanceBetweenPoints2D(bX,bY,vX,vY)
                 local t = -1
@@ -187,7 +173,6 @@ function craneTimerTick(craneID)
                 end
                 moveHook(craneID, vZ + HOOK_BOAT_HEIGHT_OFFSET, math.min(vD,89), 0.5, t)
             else
-                iprint(craneID, "not pointing")
                 -- The crane is not pointing at us, move the bar over the boat
                 local t = -1
                 if (TRAILERS[vehicleModel]) then
@@ -352,7 +337,7 @@ function craneDetectApproachingBoat(element, matchingDimension)
 		return
 	end
 	if (CRANE_STATE[1] == "available") then
-		iprint("Crane wasn't ready yet")
+		--iprint("Crane wasn't ready yet")
 	end
 	if (CRANE_STATE[1] == "available" or CRANE_STATE[1] == "waiting for boat") then
         rotateCraneTo(1, 200, 20000)
@@ -362,7 +347,7 @@ addEventHandler("onClientColShapeHit", BOAT_DETECTOR, craneDetectApproachingBoat
 
 function abortCraneMovement(craneID)
     if (CRANE_ROTATING[craneID]) then
-        iprint("Crane was ill-prepared", craneID)
+        --iprint("Crane was ill-prepared", craneID)
         stopObject(CRANE_BAR[craneID])
         CRANE_ROTATING[craneID] = false
         if (CRANE_TIMER[craneID]) then
@@ -374,7 +359,7 @@ end
 
 function craneGrab(craneID)
 	if (CRANE_STATE[craneID] == "available") then
-        iprint("Crane was not aware this would happen", craneID)
+        --iprint("Crane was not aware this would happen", craneID)
         abortCraneMovement(craneID)
     end
     if (CRANE_STATE[craneID] == "waiting for boat") then

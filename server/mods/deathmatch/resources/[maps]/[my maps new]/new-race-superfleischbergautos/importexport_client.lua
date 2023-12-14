@@ -270,7 +270,6 @@ end
 setTimer(bigPlaneDelivery, 100, 0)
 
 function updateTarget(new)
-	iprint("Update Target")
 	CAR_DELIVERING = false
 	-- Autoload
 	if (new > PLAYER_CURRENT_TARGET + 1) then
@@ -453,12 +452,7 @@ function introCutscene()
 end
 
 function postCutsceneGameStart()
-	iprint("even called yo?) ")
 	resetDeliveryArea()
-	-- SHOW_CAR = true
-	-- setTimer(function()
-	-- 	SHOW_CAR = false
-	-- end, 6500, 1)
 end
 addEvent("postCutsceneGameStart", true)
 addEventHandler("postCutsceneGameStart", localPlayer, postCutsceneGameStart)
