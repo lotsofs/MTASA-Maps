@@ -11,4 +11,4 @@ A race where all 212 vehicles in the game have been given a fixed spawn location
 Options exist to only do 5, 10, or 30 vehicles, as the full experience takes somewhere around 7 hours.  
 
 [Zip Download](https://github.com/lotsofs/MTASA-Maps/releases/tag/3_OT676jPYljymKXCIATFg)  
-[Folder Download / Source Code](https://github.com/lotsofs/MTASA-Maps/tree/aba5171b385c9013bfdfe16e29526c3f076cffdd/server/mods/deathmatch/resources/%5Bmaps%5D/%5Bmy%20maps%20new%5D/new-race-superfleischbergautos)
+[Folder Download / Source Code](https://github.com/lotsofs/MTASA-Maps/tree/master/server/mods/deathmatch/resources/%5Bmaps%5D/%5Bmy%20maps%20new%5D/new-race-superfleischbergautos)
