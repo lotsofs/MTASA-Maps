@@ -23,6 +23,7 @@ LOW_DAMAGE_DIVISOR = 2
 
 LOW_DAMAGE = false
 CAR_DELIVERING = false
+HALT_DELIVERY_TIMER_MS = 0
 
 PLAYER_CURRENT_TARGET = 1
 -- LAST_CAR = false
@@ -90,20 +91,6 @@ VEHICLES_WITH_GUNS = {
 	[464] = true, -- rcbaron
 	[476] = true  -- rustler
 }
-
--- HELICOPTERS = {
--- 	[417] = true, -- leviathn
--- 	[425] = true, -- hunter
--- 	[447] = true, -- seaspar
--- 	[465] = true, -- rcraider
--- 	[469] = true, -- sparrow
--- 	[487] = true, -- maverick
--- 	[488] = true, -- vcnmav
--- 	[497] = true, -- polmav
--- 	[501] = true, -- rcgoblin
--- 	[548] = true, -- cargobob
--- 	[563] = true  -- raindanc
--- }
 
 BOATS = {
 	[476] = {41, 67}, -- rustler
@@ -188,36 +175,62 @@ function deliverVehicle()
 	triggerServerEvent("updateProgress", resourceRoot, PLAYER_CURRENT_TARGET)
 end
 
-function playerStoppedInMarker()
-	-- This function checks every frame if the player is stopped. If so, check conditions.
-	if (CAR_DELIVERING) then
+function checkDelivery(deltaTime)
+	if (HALT_DELIVERY_TIMER_MS > 0) then
+		-- When delivering a car or respawning, we want to pause deliveries to avoid fake deliveries
+		-- This is put on a timer. We're not using timer class because it is clunky to use when
+		-- the timer needs to be reset midway through (eg someone spams enter to commit sudoku repeatedly)
+		HALT_DELIVERY_TIMER_MS = HALT_DELIVERY_TIMER_MS - deltaTime
 		return
 	end
-	
-	local x, y, z = getElementPosition(localPlayer)
-	if (z > 1000 or getElementData(localPlayer, "state") == "spectating") then
-		-- When spectating the position is set to 30k. 1000 is the max flight limit. Do nothing
-		return
-	end
+
 	local vehicle = getPedOccupiedVehicle(localPlayer)
 	if (not vehicle) then
-		-- Unsure when this happens. Guessing it does in spectate mode. Either way, do nothing
+		-- Unsure when this happens. Maybe in spectate mode. Either way, do nothing
 		return
 	end
-	x, y, z = getElementVelocity(vehicle)
-	shittyVelocity = x*x + y*y + z*z
-	if (shittyVelocity > 0.0001) then
-		-- We are not actually stopped
+
+	if (isElementFrozen(vehicle)) then
+		-- Upon respawning, our vehicle is frozen temporarily. Do not check for progress in this state.
 		return
 	end
+
 	if (getElementAttachedTo(vehicle) ~= false) then
 		-- We are attached to a crane, do nothing
 		return
 	end
+
+	local x,y,z = getElementPosition(localPlayer)
+	if (z > 1000 or getElementData(localPlayer, "state") == "spectating") then
+		-- When spectating the position is set to 30k. 1000 is the maxc flight limit. Do nothing
+		return
+	end
+
+	local vehicleModel = getElementModel(vehicle)
+	if (MEDIUM_PLANES[vehicleModel] and CRANE_STATE[2] == "sleeping") then
+		-- Deliver because we used the crane to drop off a plane
+		outputConsole("Delivering plane due to CRANE_STATE 2 == sleeping: " .. vehicleModel)
+		deliverVehicle()
+		return
+	end
+
+	local vx,vy,vz = getElementVelocity(vehicle)
+	local shittyVelocity = vx*vx+vy*vy+vz*vz
+	local targetVelocity = 0.0001
+	if (BIG_PLANES[vehicleModel]) then
+		-- Be less demanding for big planes
+		targetVelocity = 0.001
+	end
+
+	if (shittyVelocity > targetVelocity) then
+		iprint(shittyVelocity, targetVelocity)
+		-- We are not actually stopped
+		return
+	end
+
 	if (isElementWithinMarker(vehicle, MARKER_EXPORT)) then
-		-- We are in the export marker
-		CAR_DELIVERING = true
-		outputConsole("Delivering vehicle")
+		-- We are in the export marker. All conditions met. Deliver
+		outputConsole("Delivering vehicle as normal: " .. vehicleModel)
 		deliverVehicle()
 		return
 	end
@@ -229,45 +242,7 @@ function playerStoppedInMarker()
 		craneGrab(1)
 	end
 end
-setTimer(playerStoppedInMarker, 1, 0)
-
-function bigPlaneDelivery()
-	veh = getPedOccupiedVehicle(localPlayer)
-	if (not veh) then
-		return
-	end
-	if (veh ~= getPedOccupiedVehicle(localPlayer)) then
-		return
-	end
-	if (not MEDIUM_PLANES[getElementModel(veh)]) then
-		return
-	end
-	if (CRANE_STATE[2] == "sleeping") then
-		-- Deliver because we used the crane to drop us off
-		outputConsole("Delivering plane due to CRANE_STATE 2 == sleeping")
-		deliverVehicle()
-		return
-	end
-
-	if (not BIG_PLANES[getElementModel(veh)]) then
-		return
-	end
-	if (not isElementWithinColShape(veh, GODMODE_REGION_PLANE)) then
-		return
-	end
-	if (getElementAttachedTo(veh) ~= false) then
-		return
-	end
-	x, y, z = getElementVelocity(veh)
-	shittyVelocity = x*x + y*y + z*z
-	if (shittyVelocity > 0.001) then
-		return
-	end
-	-- collectCheckpoints(PLAYER_CURRENT_TARGET)
-	outputConsole("Delivering big plane")
-	deliverVehicle()
-end
-setTimer(bigPlaneDelivery, 100, 0)
+addEventHandler("onClientPreRender", root, checkDelivery)
 
 function updateTarget(new)
 	CAR_DELIVERING = false
@@ -299,6 +274,7 @@ addEvent("updateTarget", true)
 addEventHandler("updateTarget", localPlayer, updateTarget)
 
 function resetDeliveryArea()
+	HALT_DELIVERY_TIMER_MS = 5000
 	veh = getPedOccupiedVehicle(localPlayer)
 	if (veh) then
 		detachElements(veh)
