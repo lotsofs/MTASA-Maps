@@ -223,7 +223,6 @@ function checkDelivery(deltaTime)
 	end
 
 	if (shittyVelocity > targetVelocity) then
-		iprint(shittyVelocity, targetVelocity)
 		-- We are not actually stopped
 		return
 	end
