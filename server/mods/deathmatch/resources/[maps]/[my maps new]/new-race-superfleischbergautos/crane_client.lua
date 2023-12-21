@@ -101,6 +101,7 @@ function craneTimerTick(craneID)
 
     elseif (CRANE_STATE[craneID] == "assist") then
         if (getElementAttachedTo(vehicle) ~= false) then
+            -- Car is attached to crane. Rotate it etc
             local desiredZ = BOATS[vehicleModel][craneID]
             local rX,rY,rZ = getElementPosition(CRANE_ROPE[craneID])
             local bU,bV,bW = getElementRotation(CRANE_BAR[craneID])
@@ -122,9 +123,10 @@ function craneTimerTick(craneID)
                 -- Rotate the crane to its destination
                 rotateCraneTo(craneID, rotDestination, nil, 0.5)
             elseif (craneID == 1 and vehicleDistanceFromBase < 70) then
-                -- Move the hook forward or backwards before the drop
+                -- Move the hook forward or backwards before the drop (crane 1)
                 moveHook(craneID,-1,83)
             elseif (craneID == 2 and math.abs(vehicleDistanceFromBase-65.5) > 1) then
+                -- Move the hook forward or backwards before the drop (crane 2)
                 moveHook(craneID,-1,65.5)
             elseif (craneID == 1 and MEDIUM_PLANES[vehicleModel] and rZ-14 > 0) then
                 -- Lower big planes down safely so they don't get blown up when put down
@@ -133,6 +135,7 @@ function craneTimerTick(craneID)
                 -- Lower trains down into the marker since they have no proper physics
                 moveHook(craneID, 12.8, -1)
             else
+                -- Detach vehicle at destination
 		        detachElements(vehicle)
                 if (craneID == 2) then
                     moveHook(craneID, math.random(20,41), -1)
@@ -142,8 +145,8 @@ function craneTimerTick(craneID)
             end
         else
             local vX,vY,vZ = getElementPosition(vehicle)
-            local hX,hY,hZ = getElementPosition(CRANE_HOOK[craneID])
-            local hookDistance = getDistanceBetweenPoints2D(hX,hY,vX,vY)
+            local hX,hY,hZ = getElementPosition(CRANE_ROPE[craneID])
+            local hookDistance = getDistanceBetweenPoints3D(hX,hY,hZ,vX,vY,vZ+HOOK_BOAT_HEIGHT_OFFSET)
             -- Check if the hook is near the car
             if (hookDistance < 0.5 and getElementHealth(vehicle) >= 250) then
                 local hU,hV,hW = getElementRotation(CRANE_HOOK[craneID])
