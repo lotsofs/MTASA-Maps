@@ -1,0 +1,9 @@
+<help>
+The Message of the day (Motd) informs you about anything the serverowner wants to tell you, for example server rules, commands or news.
+
+The Motd is shown in a window on join, as well as when you enter the '/motd' command. You can, however, prevent the server from showing you the same Motd over and over again by ticking the checkbox on the bottom. This way, the Motd will only be shown again on request (by entering the command) or when the admin changes the Motd text.
+
+Admins:
+
+The Motd can be edited by entering '/editmotd'. Pressing the "Save"-Button will always increase the "version"-attribute of the Motd, which will then result in the Motd being shown also to those who checked the "Don't show again"-checkbox. However, if you only make small changes, you may want to use the "Don't increase version"-checkbox, which - if enabled - will prevent the version number from being increased.
+</help>

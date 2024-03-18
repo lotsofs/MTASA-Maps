@@ -1,0 +1,8 @@
+<meta>
+	<info name="ASS" longname="Anti-Social Simulator" description="Lets people play a Multiplayer mod by themselves" author="Joshimuz" type="script" version="2.0" />
+
+	<script src="ASS_c.lua" type="client" />
+	<script src="ASS_s.lua" type="server" />
+	<config src="help.xml" type="client" />
+	<min_mta_version server="1.5.4" client="1.5.4" />
+</meta>
