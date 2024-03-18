@@ -1,0 +1,37 @@
+<meta>
+    <info gamemodes="race" type="map" name="Very Important Person" author="LotsOfS" version="1.0.0" description="You&apos;re a limo driver. Drive your boss from his private plane to the country club, stat!
+
+The Stretch is perfectly qualified for this particular track, despite the fact that limousines are made to be comfortable for the passenger and not the driver. It features mostly full speed straights with only the end being particularly heavy on the turning.
+
+STRETCH (409/611) edition of an &quot;a race for every car&quot; challenge."></info>
+    <map src="aveh-409stretch.map" dimension="0"></map>
+    <settings>
+        <setting name="#skins" value='[ &quot;random&quot; ]'></setting>
+        <setting name="#movementglitches" value='[ &quot;false&quot; ]'></setting>
+        <setting name="#fistfights" value='[ &quot;false&quot; ]'></setting>
+        <setting name="#gamespeed" value="[ 1 ]"></setting>
+        <setting name="#countdownduration" value="[ -1 ]"></setting>
+        <setting name="#vehicleweapons" value='[ &quot;false&quot; ]'></setting>
+        <setting name="#minplayers" value="[ 0 ]"></setting>
+        <setting name="#waveheight" value="[ 0 ]"></setting>
+        <setting name="#duration" value="[ 1800 ]"></setting>
+        <setting name="#respawn" value='[ &quot;timelimit&quot; ]'></setting>
+        <setting name="#timeafterfirstfinish" value="[ -1 ]"></setting>
+        <setting name="#maxplayers" value="[ 128 ]"></setting>
+        <setting name="#useLODs" value="[ false ]"></setting>
+        <setting name="#time" value="11:45"></setting>
+        <setting name="#ghostmode" value='[ &quot;true&quot; ]'></setting>
+        <setting name="#falloffbike" value='[ &quot;false&quot; ]'></setting>
+        <setting name="#hunterminigun" value='[ &quot;false&quot; ]'></setting>
+        <setting name="#respawntime" value="[ 1 ]"></setting>
+        <setting name="#allowonfoot" value='[ &quot;false&quot; ]'></setting>
+        <setting name="#gravity" value="[ 0.0080000004 ]"></setting>
+        <setting name="#weather" value="[ 18 ]"></setting>
+        <setting name="#spectatevehiclespersist" value='[ &quot;false&quot; ]'></setting>
+        <setting name="#locked_time" value="[ false ]"></setting>
+        <setting name="#helibladecollisionsdisabled" value='[ &quot;false&quot; ]'></setting>
+        <setting name="#rustlermachinegun" value='[ &quot;true&quot; ]'></setting>
+    </settings>
+    <script src="mapEditorScriptingExtension_s.lua" type="server"></script>
+    <script src="mapEditorScriptingExtension_c.lua" type="client" validate="false"></script>
+</meta>
