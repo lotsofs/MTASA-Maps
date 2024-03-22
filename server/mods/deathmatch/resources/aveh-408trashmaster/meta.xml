@@ -1,29 +1,25 @@
 <meta>
-    <info gamemodes="race" type="map" name="Taking Off With The Trash" author="LotsOfS" version="1.0.0" description="You kidnapped the VIP businessman from the country club and stashed him in the back of your rubbishcar. Now pretend you&apos;re picking up trash so the police won&apos;t suspect you&apos;re not a real trashman.
-
-Not a long track distance-wise, but the slower vehicle combined with many stop-and-reverse sections lengthen its duration out of the below-average tier.
-
-TRASH (408/611) edition of an &quot;a race for every car&quot; challenge."></info>
+    <info gamemodes="race" type="map" name="Taking Off With The Trash" author="LotsOfS" version="1.0.0" description='You kidnapped the VIP businessman from the country club and stashed him in the back of your rubbishcar. Now pretend you&apos;re picking up trash so the police won&apos;t suspect you&apos;re not a real trashman.&#x0A;&#x0A;Not a long track distance-wise, but the slower vehicle combined with many stop-and-reverse sections lengthen its duration out of the below-average tier.&#x0A;&#x0A;TRASH (408/611) edition of an &quot;a race for every car&quot; challenge.'></info>
     <map src="aveh-408trashmaster.map" dimension="0"></map>
     <settings>
         <setting name="#skins" value='[ &quot;random&quot; ]'></setting>
         <setting name="#movementglitches" value='[ &quot;false&quot; ]'></setting>
         <setting name="#fistfights" value='[ &quot;false&quot; ]'></setting>
         <setting name="#gamespeed" value="[ 1 ]"></setting>
-        <setting name="#spectatevehiclespersist" value='[ &quot;false&quot; ]'></setting>
+        <setting name="#countdownduration" value="[ -1 ]"></setting>
         <setting name="#vehicleweapons" value='[ &quot;false&quot; ]'></setting>
         <setting name="#minplayers" value="[ 0 ]"></setting>
         <setting name="#waveheight" value="[ 0 ]"></setting>
         <setting name="#duration" value="[ 1800 ]"></setting>
         <setting name="#respawn" value='[ &quot;timelimit&quot; ]'></setting>
-        <setting name="#countdownduration" value="[ -1 ]"></setting>
+        <setting name="#spectatevehiclespersist" value='[ &quot;false&quot; ]'></setting>
         <setting name="#maxplayers" value="[ 128 ]"></setting>
         <setting name="#useLODs" value="[ false ]"></setting>
         <setting name="#time" value="16:34"></setting>
         <setting name="#hunterminigun" value='[ &quot;false&quot; ]'></setting>
         <setting name="#falloffbike" value='[ &quot;false&quot; ]'></setting>
-        <setting name="#respawntime" value="[ 1 ]"></setting>
         <setting name="#ghostmode" value='[ &quot;true&quot; ]'></setting>
+        <setting name="#respawntime" value="[ 1 ]"></setting>
         <setting name="#allowonfoot" value='[ &quot;false&quot; ]'></setting>
         <setting name="#gravity" value="[ 0.0080000004 ]"></setting>
         <setting name="#weather" value="[ 17 ]"></setting>

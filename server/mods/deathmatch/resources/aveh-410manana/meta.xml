@@ -1,0 +1,27 @@
+<meta>
+    <info gamemodes="race" type="map" name="Delivery for Woozie" author="LotsOfS" version="1.0.0" description="CJ just gave you a bunch of dynamite, stolen from the Quarry. Deliver this to Woozie. Ey, you be careful with that!
+    
+    Not a hard track, considering the car&apos;s low top speed ensures it stays controllable. However, the track does feature some sand and grass parts, on which the car might become slippier than you might anticipate.
+    
+    MANANA (410/611) edition of an &quot;a race for every car&quot; challenge."></info>
+    <map src="aveh-410manana.map" dimension="0"></map>
+    <settings>
+        <setting name="#skins" value='[ &quot;random&quot; ]'></setting>
+        <setting name="#maxplayers" value="[ 128 ]"></setting>
+        <setting name="#useLODs" value="[ false ]"></setting>
+        <setting name="#gamespeed" value="[ 1 ]"></setting>
+        <setting name="#ghostmode" value='[ &quot;true&quot; ]'></setting>
+        <setting name="#time" value="13:42"></setting>
+        <setting name="#vehicleweapons" value='[ &quot;false&quot; ]'></setting>
+        <setting name="#minplayers" value="[ 0 ]"></setting>
+        <setting name="#weather" value="[ 19 ]"></setting>
+        <setting name="#gravity" value="[ 0.0080000004 ]"></setting>
+        <setting name="#waveheight" value="[ 0 ]"></setting>
+        <setting name="#respawntime" value="[ 1 ]"></setting>
+        <setting name="#locked_time" value="[ false ]"></setting>
+        <setting name="#duration" value="[ 1800 ]"></setting>
+        <setting name="#respawn" value='[ &quot;timelimit&quot; ]'></setting>
+    </settings>
+    <script src="mapEditorScriptingExtension_s.lua" type="server"></script>
+    <script src="mapEditorScriptingExtension_c.lua" type="client" validate="false"></script>
+</meta>
