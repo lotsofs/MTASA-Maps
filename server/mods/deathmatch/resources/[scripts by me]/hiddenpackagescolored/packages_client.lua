@@ -3,6 +3,7 @@
 -- inflate numbers by including an extra area
 -- help.xml
 -- account manager
+-- bug: joining a game spawns ALL map packages, they only get filtered on next map start
 
 PACKAGE_DATA = { 
 	packageNormal = { 		model = 1575, 	r = 255, 	g = 255, 	b = 255, 	a = 32,		name = "#FFFFFFWhite" },
@@ -10,7 +11,8 @@ PACKAGE_DATA = {
 	packageHelicopter = { 	model = 1576, 	r = 255, 	g = 128, 	b = 0, 		a = 32,		name = "#FF7F00Orange"  },
 	packageBike = { 		model = 1578, 	r = 0, 		g = 255, 	b = 0, 		a = 32,		name = "#00FF00Green"  },
 	packageHard = { 		model = 1577, 	r = 255, 	g = 255, 	b = 0, 		a = 32,		name = "#FFFF00Yellow"  },
-	packageExtreme = { 		model = 1580, 	r = 255, 	g = 0, 		b = 0, 		a = 32,		name = "#FF0000Red"  }
+	packageExtreme = { 		model = 1580, 	r = 255, 	g = 0, 		b = 0, 		a = 32,		name = "#FF0000Red"  },
+	packageCustom = {		model = 1575,	r = 127,	g = 127,	b = 127,	a = 32,		name = "#7F7F7FBlack"  }
 }
 
 PACKAGE_ELEMENTS = {}
@@ -20,6 +22,8 @@ COLLECTED_PACKAGES = {}
 
 PACKAGE_GROUPS = {}
 
+PACKAGES_COLLECTED_BY_MAP = {}
+
 -- get all packages from the map file
 function getPackages()
 	PACKAGE_GROUPS["packagesNormal"] = getElementsByType("packageNormal", resourceRoot)
@@ -28,6 +32,7 @@ function getPackages()
 	PACKAGE_GROUPS["packagesBike"] = getElementsByType("packageBike", resourceRoot)
 	PACKAGE_GROUPS["packagesHard"] = getElementsByType("packageHard", resourceRoot)
 	PACKAGE_GROUPS["packagesExtreme"] = getElementsByType("packageExtreme", resourceRoot)
+	PACKAGE_GROUPS["packagesCustom"] = getElementsByType("packageCustom", resourceRoot)
 
 	COLLECTED_PACKAGES = getElementData(localPlayer, "coloredPackages.collected") or {}
 	-- stuff them into a table for future data lookups
@@ -59,14 +64,24 @@ function showPackages(packages)
 			PACKAGE_CORONAS[id] = createMarker(x, y, z + 0.6, "corona", 1, r, g, b, a)
 			PACKAGE_PICKUPS[id] = createPickup(x, y, z + 0.5, 3, model)
 		else
-			local region = getElementByID(getElementData(pack, "region"))
-			local dataName = "collected_" .. typeName
-			count = getElementData(region, dataName)
-			if (not count) then
-				count = 0
+			local map = getElementData(pack, "mapAssignment")
+			if (map) then
+				countM = PACKAGES_COLLECTED_BY_MAP[map]
+				if (not countM) then
+					countM = 0
+				end
+				countM = countM + 1
+				PACKAGES_COLLECTED_BY_MAP[map] = countM
+			else
+				local region = getElementByID(getElementData(pack, "region"))
+				local dataName = "collected_" .. typeName
+				count = getElementData(region, dataName)
+				if (not count) then
+					count = 0
+				end
+				count = count + 1
+				setElementData(region, dataName, count, false)
 			end
-			count = count + 1
-			setElementData(region, dataName, count, false)
 		end
 	end
 end
@@ -332,6 +347,7 @@ function reloadPackages()
 			setElementData(v, "collected_packageHelicopter", 0, false)
 		end
 	end	
+	PACKAGES_COLLECTED_BY_MAP = {}
 	
 	getPackages()
 	getRadarZones()
@@ -379,16 +395,26 @@ function onCollectPackage(packageId)
 	end
 	-- Update player package info
 	COLLECTED_PACKAGES = getElementData(localPlayer, "coloredPackages.collected")
-	-- Update the region package count
-	local region = getElementByID(getElementData(PACKAGE_ELEMENTS[packageId], "region"))
-	local typeName = getElementType(PACKAGE_ELEMENTS[packageId])
-	local dataName = "collected_" .. typeName
-	count = getElementData(region, dataName)
-	if (not count) then
-		count = 0
+	local map = getElementData(PACKAGE_ELEMENTS[packageId], "mapAssignment")
+	if (map) then
+		countM = PACKAGES_COLLECTED_BY_MAP[map]
+		if (not countM) then
+			countM = 0
+		end
+		countM = countM + 1
+		PACKAGES_COLLECTED_BY_MAP[map] = countM
+	else
+		-- Update the region package count
+		local region = getElementByID(getElementData(PACKAGE_ELEMENTS[packageId], "region"))
+		local typeName = getElementType(PACKAGE_ELEMENTS[packageId])
+		local dataName = "collected_" .. typeName
+		count = getElementData(region, dataName)
+		if (not count) then
+			count = 0
+		end
+		count = count + 1
+		setElementData(region, dataName, count, false)
 	end
-	count = count + 1
-	setElementData(region, dataName, count, false)
 	LAST_PACKAGE = PACKAGE_ELEMENTS[packageId]
 	MIDDLE_TEXT_TIMER = 300
 	setMiddleText()
@@ -414,14 +440,14 @@ function checkForMilestones()
 	if (not LAST_PACKAGE) then
 		return
 	end
-	type = getElementType(LAST_PACKAGE)
-	name = PACKAGE_DATA[type].name
+	packType = getElementType(LAST_PACKAGE)
+	name = PACKAGE_DATA[packType].name
 	
 	collected = 0
 	total = 0
 	for i, v in pairs(PACKAGE_ELEMENTS) do
 		type2 = getElementType(v)
-		if (type2 == type) then
+		if (type2 == packType) then
 			total = total + 1
 			if (COLLECTED_PACKAGES[i]) then
 				collected = collected + 1
@@ -429,10 +455,18 @@ function checkForMilestones()
 		end			
 	end
 	subCounter = ""
-	if (CURRENT_REGION) then
+	if (packType == "packageCustom") then
+		subMapCollected = PACKAGES_COLLECTED_BY_MAP[CURRENT_MAPID]
+		if (subMapCollected == TOTAL_PACKAGES_THIS_MAP) then
+			nickname = getPlayerName(localPlayer)
+			message = nickname .. " has collected every " .. name .. "#E7D9B0 Hidden Package in " .. CURRENT_MAPNAME .. "!"
+			triggerServerEvent("onMilestone", resourceRoot, message)
+			-- call a spam event
+		end
+	elseif (CURRENT_REGION) then
 		regionName = getElementData(CURRENT_REGION, "friendlyname")
-		subCollected = getElementData(CURRENT_REGION, "collected_" .. type) or 0
-		subTotal = getElementData(CURRENT_REGION, "total_" .. type) or 0
+		subCollected = getElementData(CURRENT_REGION, "collected_" .. packType) or 0
+		subTotal = getElementData(CURRENT_REGION, "total_" .. packType) or 0
 		if (subTotal == subCollected) then
 			nickname = getPlayerName(localPlayer)
 			message = nickname .. " has collected every " .. name .. "#E7D9B0 Hidden Package in " .. regionName .. "!"
@@ -497,51 +531,68 @@ MIDDLE_TEXT = ""
 MIDDLE_TEXT_TIMER = 0
 
 function setLeftText()
-	local totals = { packageNormal = 0; packageBike = 0; packageWater = 0; packageHelicopter = 0; packageHard = 0; packageExtreme = 0}
-	local collected = { packageNormal = 0; packageBike = 0; packageWater = 0; packageHelicopter = 0; packageHard = 0; packageExtreme = 0}
+	local totals = { packageNormal = 0; packageBike = 0; packageWater = 0; packageHelicopter = 0; packageHard = 0; packageExtreme = 0; packageCustom = 0}
+	local collected = { packageNormal = 0; packageBike = 0; packageWater = 0; packageHelicopter = 0; packageHard = 0; packageExtreme = 0; packageCustom = 0}
 
 	for i, v in pairs(PACKAGE_ELEMENTS) do
-		type = getElementType(v)
-		totals[type] = totals[type] + 1
+		packType = getElementType(v)
+		totals[packType] = totals[packType] + 1
 		
 		if (COLLECTED_PACKAGES[i]) then
-			collected[type] = collected[type] + 1
+			collected[packType] = collected[packType] + 1
 		end
 	end
-	LEFT_TEXT = "Total:\n"
+	LEFT_TEXT = "\nTotal:\n"
 	LEFT_TEXT = LEFT_TEXT .. "#FFFFFFWhite: " .. collected["packageNormal"] .. "/" .. totals["packageNormal"] .. "\n"
 	LEFT_TEXT = LEFT_TEXT .. "#00FF00Green: " .. collected["packageBike"] .. "/" .. totals["packageBike"] .. "\n"
 	LEFT_TEXT = LEFT_TEXT .. "#007FFFBlue: " .. collected["packageWater"] .. "/" .. totals["packageWater"] .. "\n"
 	LEFT_TEXT = LEFT_TEXT .. "#FF7F00Orange: " .. collected["packageHelicopter"] .. "/" .. totals["packageHelicopter"] .. "\n"
 	LEFT_TEXT = LEFT_TEXT .. "#FFFF00Yellow: " .. collected["packageHard"] .. "/" .. totals["packageHard"] .. "\n"
 	LEFT_TEXT = LEFT_TEXT .. "#FF0000Red: " .. collected["packageExtreme"] .. "/" .. totals["packageExtreme"] .. "\n"
+	LEFT_TEXT = LEFT_TEXT .. "#7F7F7FBlack: " .. collected["packageCustom"] .. "/" .. totals["packageCustom"] .. "\n"
 end
 
 function setRightText()
-	if (not CURRENT_REGION) then
-		RIGHT_TEXT = ""
-		return
+	local mapN = CURRENT_MAPNAME
+	RIGHT_TEXT = ""
+	if (mapN) then
+		RIGHT_TEXT = RIGHT_TEXT .. mapN .. "\n"
+	else
+		RIGHT_TEXT = RIGHT_TEXT .. "\n"
 	end
-	local name = getElementData(CURRENT_REGION, "friendlyname")
-	local cNor = getElementData(CURRENT_REGION, "collected_packageNormal") or 0
-	local cBik = getElementData(CURRENT_REGION, "collected_packageBike") or 0
-	local cHar = getElementData(CURRENT_REGION, "collected_packageHard") or 0
-	local cExt = getElementData(CURRENT_REGION, "collected_packageExtreme") or 0
-	local cHel = getElementData(CURRENT_REGION, "collected_packageHelicopter") or 0
-	local cWat = getElementData(CURRENT_REGION, "collected_packageWater") or 0
-	local tNor = getElementData(CURRENT_REGION, "total_packageNormal") or 0
-	local tBik = getElementData(CURRENT_REGION, "total_packageBike") or 0
-	local tHar = getElementData(CURRENT_REGION, "total_packageHard") or 0
-	local tExt = getElementData(CURRENT_REGION, "total_packageExtreme") or 0
-	local tHel = getElementData(CURRENT_REGION, "total_packageHelicopter") or 0
-	local tWat = getElementData(CURRENT_REGION, "total_packageWater") or 0
-	RIGHT_TEXT = name .. ":\n"
-	RIGHT_TEXT = RIGHT_TEXT .. "#FFFFFFWhite: " .. cNor .. "/" .. tNor .. "\n"
-	RIGHT_TEXT = RIGHT_TEXT .. "#00FF00Green: " .. cBik .. "/" .. tBik .. "\n"
-	RIGHT_TEXT = RIGHT_TEXT .. "#007FFFBlue: " .. cWat .. "/" .. tWat .. "\n"
-	RIGHT_TEXT = RIGHT_TEXT .. "#FF7F00Orange: " .. cHel .. "/" .. tHel .. "\n"
-	RIGHT_TEXT = RIGHT_TEXT .. "#FFFF00Yellow: " .. cHar .. "/" .. tHar .. "\n"
-	RIGHT_TEXT = RIGHT_TEXT .. "#FF0000Red: " .. cExt .. "/" .. tExt .. "\n"
+	if (not CURRENT_REGION) then
+		RIGHT_TEXT = RIGHT_TEXT .. "Current Region:\n"
+		RIGHT_TEXT = RIGHT_TEXT .. "#FFFFFFWhite: " .. 0 .. "/" .. 0 .. "\n"
+		RIGHT_TEXT = RIGHT_TEXT .. "#00FF00Green: " .. 0 .. "/" .. 0 .. "\n"
+		RIGHT_TEXT = RIGHT_TEXT .. "#007FFFBlue: " .. 0 .. "/" .. 0 .. "\n"
+		RIGHT_TEXT = RIGHT_TEXT .. "#FF7F00Orange: " .. 0 .. "/" .. 0 .. "\n"
+		RIGHT_TEXT = RIGHT_TEXT .. "#FFFF00Yellow: " .. 0 .. "/" .. 0 .. "\n"
+		RIGHT_TEXT = RIGHT_TEXT .. "#FF0000Red: " .. 0 .. "/" .. 0 .. "\n"
+	else
+		local name = getElementData(CURRENT_REGION, "friendlyname")
+		local cNor = getElementData(CURRENT_REGION, "collected_packageNormal") or 0
+		local cBik = getElementData(CURRENT_REGION, "collected_packageBike") or 0
+		local cHar = getElementData(CURRENT_REGION, "collected_packageHard") or 0
+		local cExt = getElementData(CURRENT_REGION, "collected_packageExtreme") or 0
+		local cHel = getElementData(CURRENT_REGION, "collected_packageHelicopter") or 0
+		local cWat = getElementData(CURRENT_REGION, "collected_packageWater") or 0
+		local tNor = getElementData(CURRENT_REGION, "total_packageNormal") or 0
+		local tBik = getElementData(CURRENT_REGION, "total_packageBike") or 0
+		local tHar = getElementData(CURRENT_REGION, "total_packageHard") or 0
+		local tExt = getElementData(CURRENT_REGION, "total_packageExtreme") or 0
+		local tHel = getElementData(CURRENT_REGION, "total_packageHelicopter") or 0
+		local tWat = getElementData(CURRENT_REGION, "total_packageWater") or 0
+		RIGHT_TEXT = RIGHT_TEXT .. name .. ":\n"
+		RIGHT_TEXT = RIGHT_TEXT .. "#FFFFFFWhite: " .. cNor .. "/" .. tNor .. "\n"
+		RIGHT_TEXT = RIGHT_TEXT .. "#00FF00Green: " .. cBik .. "/" .. tBik .. "\n"
+		RIGHT_TEXT = RIGHT_TEXT .. "#007FFFBlue: " .. cWat .. "/" .. tWat .. "\n"
+		RIGHT_TEXT = RIGHT_TEXT .. "#FF7F00Orange: " .. cHel .. "/" .. tHel .. "\n"
+		RIGHT_TEXT = RIGHT_TEXT .. "#FFFF00Yellow: " .. cHar .. "/" .. tHar .. "\n"
+		RIGHT_TEXT = RIGHT_TEXT .. "#FF0000Red: " .. cExt .. "/" .. tExt .. "\n"
+	end
+	local cCus = PACKAGES_COLLECTED_BY_MAP[CURRENT_MAPID] or 0
+	local tCus = TOTAL_PACKAGES_THIS_MAP or 0
+	RIGHT_TEXT = RIGHT_TEXT .. "#7F7F7FBlack: " .. cCus .. "/" .. tCus .. "\n"
 end
 
 LAST_PACKAGE = nil
@@ -550,14 +601,14 @@ function setMiddleText()
 	if (not LAST_PACKAGE) then
 		return
 	end
-	type = getElementType(LAST_PACKAGE)
-	name = PACKAGE_DATA[type].name
+	packType = getElementType(LAST_PACKAGE)
+	name = PACKAGE_DATA[packType].name
 	
 	collected = 0
 	total = 0
 	for i, v in pairs(PACKAGE_ELEMENTS) do
 		type2 = getElementType(v)
-		if (type2 == type) then
+		if (type2 == packType) then
 			total = total + 1
 			if (COLLECTED_PACKAGES[i]) then
 				collected = collected + 1
@@ -565,10 +616,14 @@ function setMiddleText()
 		end			
 	end
 	subCounter = ""
-	if (CURRENT_REGION) then
+
+	if (packType == "packageCustom") then
+		subCollected = PACKAGES_COLLECTED_BY_MAP[CURRENT_MAPID]
+		subCounter = subCollected .. " out of " .. TOTAL_PACKAGES_THIS_MAP .. " in " .. CURRENT_MAPNAME
+	elseif (CURRENT_REGION) then
 		regionName = getElementData(CURRENT_REGION, "friendlyname")
-		subCollected = getElementData(CURRENT_REGION, "collected_" .. type) or 0
-		subTotal = getElementData(CURRENT_REGION, "total_" .. type) or 0
+		subCollected = getElementData(CURRENT_REGION, "collected_" .. packType) or 0
+		subTotal = getElementData(CURRENT_REGION, "total_" .. packType) or 0
 		subCounter = subCollected .. " out of " .. subTotal .. " in " .. regionName
 	end
 	MIDDLE_TEXT = name .. " Hidden Package collected! \n" .. collected .. " out of " .. total .. "\n" .. subCounter
@@ -591,7 +646,7 @@ function drawPackageCounter()
 		boxX = width * 0.055
 		boxY = height * 0.455
 		boxWidth = width * 0.16
-		boxHeight = (boxWidth * 0.6275)
+		boxHeight = (boxWidth * 0.7225)
 		dxDrawRectangle(boxX, boxY, boxWidth, boxHeight, tocolor(0, 0, 0, 196), false)
 		-- textTitle
 		titleX = boxX + width * 0.005
@@ -603,14 +658,14 @@ function drawPackageCounter()
 		dxDrawText(titleText, titleX, titleY, titleWidth, titleHeight, tocolor(196, 196, 196, 255), titleFont, "default-bold", "left", "top", false, true, false, false)
 		-- textLeftTotal
 		leftX = boxX + width * 0.005
-		leftY = boxY + height * 0.035
+		leftY = boxY + height * 0.030
 		leftWidth = width*0.8
 		leftHeight = height*0.9
 		leftFont = width / 1400
 		dxDrawText(LEFT_TEXT, leftX, leftY, leftWidth, leftHeight, tocolor(196, 196, 196, 255), leftFont, "default-bold", "left", "top", false, true, false, true)	
 		-- textRightTotal
 		rightX = boxX + width * 0.005
-		rightY = boxY + height * 0.035
+		rightY = boxY + height * 0.030
 		rightWidth = width*0.21
 		rightHeight = height*0.9
 		rightFont = width / 1400
@@ -639,6 +694,7 @@ function onClientResourceStart(startedResource)
 	getRadarZones()
 
 	enablePackages()
+	changeMapPackages(nil, nil)
 end
 addEventHandler("onClientResourceStart", resourceRoot, onClientResourceStart)
 
@@ -650,3 +706,62 @@ addCommandHandler("resetpackages", resetPackages, false, false)
 
 addEvent("reloadPackages", true)
 addEventHandler("reloadPackages", root, reloadPackages)
+
+
+-- --------------------
+-- Custom packages specific
+
+function changeMapPackages(mapName, mapFriendly) 
+	
+	CURRENT_MAPID = mapName
+	CURRENT_MAPNAME = mapFriendly
+
+	
+	if not packagesEnabled() then
+		return
+	end
+	
+	TOTAL_PACKAGES_THIS_MAP = 0
+	for i, pack in pairs(PACKAGE_GROUPS["packagesCustom"]) do
+		-- destroy first just to be sure it's generating properly
+		if (PACKAGE_CORONAS[id]) then
+			destroyElement(PACKAGE_CORONAS[id])
+			PACKAGE_CORONAS[id] = nil
+		end
+		if (PACKAGE_PICKUPS[id]) then
+			destroyElement(PACKAGE_PICKUPS[id])
+			PACKAGE_PICKUPS[id] = nil
+		end
+
+		-- get information about package
+		local typeName = getElementType(pack)
+		local id = typeName .. i
+		local mapAssignment = getElementData(pack, "mapAssignment")
+		if (mapName == mapAssignment) then
+			TOTAL_PACKAGES_THIS_MAP = TOTAL_PACKAGES_THIS_MAP + 1
+			collected = COLLECTED_PACKAGES[id]
+			if (not collected or collected == false) then
+				local x, y, z = getElementPosition(pack)
+				local model = PACKAGE_DATA[typeName].model
+				local r = PACKAGE_DATA[typeName].r
+				local g = PACKAGE_DATA[typeName].g
+				local b = PACKAGE_DATA[typeName].b
+				local a = PACKAGE_DATA[typeName].a
+
+				PACKAGE_CORONAS[id] = createMarker(x, y, z + 0.6, "corona", 1, r, g, b, a)
+				PACKAGE_PICKUPS[id] = createObject(model, x, y, z + 0.5)
+				setElementCollisionsEnabled(PACKAGE_PICKUPS[id], false)
+				moveObject(PACKAGE_PICKUPS[id], 2000*1800, x, y, z, 0, 0, 360*1800)
+			end
+		end
+	end
+
+	-- update overlay if needed
+	if (SHOW_PACKAGE_COUNTER) then
+		setLeftText()
+		setRightText()
+	end
+end
+
+addEvent("changeMapPackages", true)
+addEventHandler("changeMapPackages", root, changeMapPackages)

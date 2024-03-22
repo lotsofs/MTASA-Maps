@@ -41,6 +41,13 @@
 		<marker size="0.5" type="marker" posZ="-0.3" color="#44000000" editorOnly="true"/>
 		<data name="region" type="element:region" required="false" default="" />
 	</element>
+	<element name="packageCustom" friendlyname="Hidden Package - Custom" icon="pickup_black.png">
+		<data name="position" type="coord3d" default="0,0,0"/>
+		<object model="1575" posZ="0.5" editorOnly="true"/>
+		<marker size="0.5" type="corona" posZ="0.5" color="#22222200" editorOnly="true"/>
+		<marker size="0.5" type="marker" posZ="-0.3" color="#22222200" editorOnly="true"/>
+		<data name="mapAssignment" type="string" required="false" default="" />
+	</element>
 	
 	
 	<element name="radarZone" friendlyname="Radar Zone" icon="radararea.png">
