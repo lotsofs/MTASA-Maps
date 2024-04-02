@@ -28,8 +28,12 @@ function onRaceStateChanging(newState, oldState)
 				toggleAllControls(player, false, true, false)
 				x2,y2,z2 = getElementPosition(v)
 				distance = y - y2
-				distance = distance * 10
-				distance = distance + 200
+
+				distance = distance - 253
+				distance = distance * 11.3
+				distance = distance + 2827
+
+				
 				if (x2 < 1470 or x2 > 1485) then
 					distance = distance + 150
 				end
@@ -89,10 +93,13 @@ function onRaceStateChanging(newState, oldState)
 				setVehicleHandling(v, "maxVelocity", handling.maxVelocity)
 			end
 		end
-		setTimer(function()
+		revealTimer = setTimer(function()
 			triggerClientEvent(root, "markDodosOnMap", resourceRoot)
-		end, 240000, 1)
+		end, 210000, 1)
 		--triggerClientEvent(root, "setOpponentCollisions", resourceRoot)
+	elseif (newState == "SomeoneWon") then
+		if isTimer(revealTimer) then killTimer(revealTimer) end
+		triggerClientEvent(root, "markDodosOnMap", resourceRoot)
 	end	
 end
 addEvent("onRaceStateChanging", true)
@@ -127,7 +134,7 @@ function onMapStarting()
 		end
 	end
 
-	handling = getModelHandling(429)
+	handling = getModelHandling(415)
 	for i, v in pairs(getElementsByType("vehicle")) do
 		if (getVehicleOccupant) then
 			setVehicleDamageProof(v, true)			
@@ -136,6 +143,9 @@ function onMapStarting()
 			setVehicleHandling(v, "engineAcceleration", handling.engineAcceleration)
 			setVehicleHandling(v, "engineInertia", handling.engineInertia)
 			setVehicleHandling(v, "maxVelocity", handling.maxVelocity)
+			setVehicleHandling(v, "tractionMultiplier", handling.tractionMultiplier)
+			-- setVehicleHandling(v, "tractionLoss", handling.tractionLoss)
+			-- setVehicleHandling(v, "tractionBias", handling.tractionBias)
 		end
 	end
 end
@@ -176,34 +186,3 @@ function onPlayerJoin()
 	joinedPlayer = source
 end
 addEventHandler("onPlayerJoin", root, onPlayerJoin)
-
-function playerDestroyedDodo()
-	dodosDestroyed = getElementData(client, "airpain3.dodosDestroyed")
-	car = getPedOccupiedVehicle(client)
-	xO,yO,zO = getElementPosition(car)
-	qO,rO,sO = getElementVelocity(car)
-	if (not dodosDestroyed) then
-		x,y,z = getElementPosition(CHECKPOINTS[1])
-		setElementPosition(car, x,y,z)
-		setElementPosition(car, xO, yO, zO)
-		setElementVelocity(car, qO, rO, sO)
-		dodosDestroyed = 1
-		setElementData(client, "airpain3.dodosDestroyed", dodosDestroyed)
-	else
-		dodosDestroyed = dodosDestroyed + 1
-		setElementData(client, "airpain3.dodosDestroyed", dodosDestroyed)
-		for i = 1, dodosDestroyed, 1 do
-			x,y,z = getElementPosition(CHECKPOINTS[i])
-			setElementPosition(car, x, y, z)
-		end
-		setElementPosition(car, xO, yO, zO)
-		setElementVelocity(car, qO, rO, sO)
-	end
-	if (dodosDestroyed == 8) then
-		triggerClientEvent(client, "spawnSecondDodos", resourceRoot)
-	elseif (dodosDestroyed == 18) then
-		triggerClientEvent(client, "spawnThirdDodos", resourceRoot)
-	end
-end
-addEvent("playerDestroyedDodo", true)
-addEventHandler("playerDestroyedDodo", resourceRoot, playerDestroyedDodo)

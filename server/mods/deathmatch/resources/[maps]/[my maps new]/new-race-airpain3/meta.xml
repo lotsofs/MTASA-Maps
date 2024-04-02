@@ -1,7 +1,7 @@
 <meta>
     <script src="airpain3_server.lua" type="server"></script>
     <script src="airpain3_client.lua" type="client"></script>
-    <info gamemodes="race" type="map" version="1.0.0" name="[R] Airpain 3" author="S."></info>
+    <info gamemodes="race" type="map" version="1.0.0" name="[MG] Airpain 3" author="S."></info>
     <map src="race-airpain3.map" dimension="0"></map>
     <settings>
         <setting name="#skins" value='[ &quot;cj&quot; ]'></setting>
@@ -19,7 +19,7 @@
         <setting name="#locked_time" value="[ false ]"></setting>
         <setting name="#duration" value="[ 1800 ]"></setting>
         <setting name="#respawn" value='[ &quot;timelimit&quot; ]'></setting>
-	<setting name="#countdownduration" value='[ 6 ]'></setting>
+	    <setting name="#countdownduration" value='[ 6 ]'></setting>
     </settings>
     <script src="mapEditorScriptingExtension_s.lua" type="server"></script>
     <script src="mapEditorScriptingExtension_c.lua" type="client" validate="false"></script>

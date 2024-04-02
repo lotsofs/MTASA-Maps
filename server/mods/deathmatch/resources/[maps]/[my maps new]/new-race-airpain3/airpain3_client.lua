@@ -18,50 +18,68 @@ TEXT = nil
 -- addEvent("setOpponentCollisions", true)
 -- addEventHandler("setOpponentCollisions", resourceRoot, setOpponentCollisions)
 
+function onClientExplosion(x, y, z, theType)
+	if(theType == 19) then
+		createExplosion(x,y,z,10)
+		cancelEvent()	
+	end
+end
+addEventHandler("onClientExplosion", root, onClientExplosion)
+
+function destroyDodo(dodo)
+	setElementFrozen(dodo, false)
+	setVehicleDamageProof(dodo, false)
+	x,y,z = getElementPosition(dodo)
+	createExplosion(x,y,z,10)
+	blowVehicle(dodo)
+	setVehicleHandling(dodo, "mass", 0)
+	
+	for i, v in pairs(getAttachedElements(dodo)) do
+		if (getElementType(v) == "blip") then
+			destroyElement(v)
+		end
+	end
+	setTimer(
+		function(deadDodo)
+			destroyElement(deadDodo)
+		end
+	, 10000, 1, dodo)
+end
+
+function gainProgression()
+	local dodosDestroyed = getElementData(localPlayer, "airpain3.dodosDestroyed") or 0
+	dodosDestroyed = dodosDestroyed + 1
+	if (dodosDestroyed == 8) then
+		spawnSecondDodos()
+	elseif (dodosDestroyed == 18) then
+		spawnThirdDodos()
+	end
+	setElementData(localPlayer, "airpain3.dodosDestroyed", dodosDestroyed)
+	
+	local vehicle = getPedOccupiedVehicle(localPlayer)
+    local checkpoint = getElementData(localPlayer, "race.checkpoint")
+    for i=checkpoint, dodosDestroyed do
+		local colshapes = getElementsByType("colshape", getResourceDynamicElementRoot(getResourceFromName("race")))
+		if (#colshapes == 0) then
+			break
+		end
+		triggerEvent("onClientColShapeHit",
+            colshapes[#colshapes], vehicle, true)
+    end
+end
+
 function onClientVehicleDamage(theAttacker, theWeapon, loss, damagePosX, damagePosY, damagePosZ, tireID)
 	if (theWeapon == 31 and getElementModel(source) == 593 and not isVehicleBlown(source) and theAttacker == getPedOccupiedVehicle(localPlayer)) then
-		setElementFrozen(source, false)
-		setVehicleDamageProof(source, false)
-		x,y,z = getElementPosition(source)
-		createExplosion(x,y,z,2)
-		blowVehicle(source)
-		triggerServerEvent("playerDestroyedDodo", resourceRoot)
-		for i, v in pairs(getAttachedElements(source)) do
-			if (getElementType(v) == "blip") then
-				destroyElement(v)
-			end
-		end
-		setTimer(function()
-			for i, v in pairs(getElementsByType("vehicle")) do
-				if (getElementModel(v) == 593 and isVehicleBlown(v)) then
-					destroyElement(v)
-				end
-			end
-		end, 10000, 1)
+		destroyDodo(source)
+		gainProgression()
 	end
 end
 addEventHandler("onClientVehicleDamage", root, onClientVehicleDamage)
 
 function onClientVehicleCollision(theHitElement, force, bodyPart, collisionX, collisionY, collisionZ, normalX, normalY, normalZ, hitElementForce, model)
 	if (theHitElement and source == getPedOccupiedVehicle(localPlayer) and getElementType(theHitElement) == "vehicle" and getElementModel(theHitElement) == 593 and not isVehicleBlown(theHitElement)) then
-		setElementFrozen(theHitElement, false)
-		setVehicleDamageProof(theHitElement, false)
-		x,y,z = getElementPosition(theHitElement)
-		createExplosion(x,y,z,2)
-		blowVehicle(theHitElement)
-		triggerServerEvent("playerDestroyedDodo", resourceRoot)
-		for i, v in pairs(getAttachedElements(theHitElement)) do
-			if (getElementType(v) == "blip") then
-				destroyElement(v)
-			end
-		end
-		setTimer(function()
-			for i, v in pairs(getElementsByType("vehicle")) do
-				if (getElementModel(v) == 593 and isVehicleBlown(v)) then
-					destroyElement(v)
-				end
-			end
-		end, 10000, 1)
+		destroyDodo(theHitElement)
+		gainProgression()
 	end
 end
 addEventHandler ( "onClientVehicleCollision", root, onClientVehicleCollision )
@@ -140,11 +158,6 @@ function receiveDodos(dodos)
 end
 addEvent("receiveDodos", true)
 addEventHandler("receiveDodos", resourceRoot, receiveDodos)
-
-
-
-
-
 
 
 
