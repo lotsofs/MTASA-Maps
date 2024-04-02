@@ -1,0 +1,27 @@
+<meta>
+    <info gamemodes="race" type="map" name="[R] Beyond Back o Beyond and Back to Back o Beyond" author="LotsOfS" version="1.0.0" description="Going on a roadtrip, starting and ending in the Back o Beyond. Turn up the radio, push down the gas pedal, and enjoy the ride.
+    
+    This lengthier race highlights the Infernus&apos;s top speed, which is unmatched by any other car. But with high speed comes a hard to control car that&apos;s slow to come to a halt. Fortunately there are not too many sharp turns where this is a problem, but more than none.
+    
+    INFERNUS (411/611) edition of an &quot;a race for every car&quot; challenge."></info>
+    <map src="aveh-411infernus.map" dimension="0"></map>
+    <settings>
+        <setting name="#skins" value='[ &quot;random&quot; ]'></setting>
+        <setting name="#maxplayers" value="[ 128 ]"></setting>
+        <setting name="#useLODs" value="[ false ]"></setting>
+        <setting name="#gamespeed" value="[ 1 ]"></setting>
+        <setting name="#ghostmode" value='[ &quot;true&quot; ]'></setting>
+        <setting name="#time" value="3:23"></setting>
+        <setting name="#vehicleweapons" value='[ &quot;false&quot; ]'></setting>
+        <setting name="#minplayers" value="[ 0 ]"></setting>
+        <setting name="#weather" value="[ 0 ]"></setting>
+        <setting name="#gravity" value="[ 0.0080000004 ]"></setting>
+        <setting name="#waveheight" value="[ 0 ]"></setting>
+        <setting name="#respawntime" value="[ 1 ]"></setting>
+        <setting name="#locked_time" value="[ false ]"></setting>
+        <setting name="#duration" value="[ 1800 ]"></setting>
+        <setting name="#respawn" value='[ &quot;timelimit&quot; ]'></setting>
+    </settings>
+    <script src="mapEditorScriptingExtension_s.lua" type="server"></script>
+    <script src="mapEditorScriptingExtension_c.lua" type="client" validate="false"></script>
+</meta>
