@@ -1,4 +1,4 @@
-g_ArmedVehicleIDs = table.create({ 425, 447, 520, 430, 464, 432 }, true) -- hunter, seasparrow, hydra, predator, rcbaron, rhino
+g_ArmedVehicleIDs = table.create({ 425, 447, 520, 430, 464, 432 }, true)
 g_WaterCraftIDs = table.create({ 539, 460, 417, 447, 472, 473, 493, 595, 484, 430, 453, 452, 446, 454 }, true)
 g_ModelForPickupType = { nitro = 2221, repair = 2222, vehiclechange = 2223 }
 g_HunterID = 425
@@ -11,65 +11,79 @@ g_Objects = {}
 addEventHandler('onClientResourceStart', resourceRoot,
 	function()
 		g_Players = getElementsByType('player')
-		
-		fadeCamera(false,0.0)
+
+        fadeCamera(false,0.0)
 		-- create GUI
 		local screenWidth, screenHeight = guiGetScreenSize()
 		g_dxGUI = {
 			ranknum = dxText:create('1', screenWidth - 60, screenHeight - 95, false, 'bankgothic', 2, 'right'),
-			ranksuffix = dxText:create('st', screenWidth - 15, screenHeight - 86, false, 'bankgothic', 1, 'right'),
+			ranksuffix = dxText:create('st', screenWidth - 15, screenHeight - 86, false, 'bankgothic', 1, "right"),
 			checkpoint = dxText:create('0/0', screenWidth - 15, screenHeight - 54, false, 'bankgothic', 0.8, 'right'),
 			timepassed = dxText:create('0:00:00', screenWidth - 10, screenHeight - 25, false, 'bankgothic', 0.7, 'right'),
 			
-			FileDisplay = dxText:create('File:', 4, screenHeight - 10, false, 'default-bold', 1.2, 'left'),
-			FileDisplayName = dxText:create('FILENAME', 45, screenHeight - 10, false, 'default-bold', 1.2, 'left'),
-			
-			authordisplay = dxText:create('By:', 4, screenHeight - 30, false, 'default-bold', 1.2, 'left'),
-			authordisplayName = dxText:create('AUTHOR', 45, screenHeight - 30, false, 'default-bold', 1.2, 'left'),
+			fileDisplay = dxText:create('File:', 4, screenHeight - 10, false, 'default-bold', 1.2, 'left'),
+			fileDisplayName = dxText:create('FILENAME', 45, screenHeight - 10, false, 'default-bold', 1.2, 'left'),
 
-			mapdisplay = dxText:create('Map:', 4, screenHeight - 50, false, 'default-bold', 1.2, 'left'),
-			mapdisplayName = dxText:create('MAPNAME', 45, screenHeight - 50, false, 'default-bold', 1.2, 'left'),
+			mapdisplay = dxText:create('Map:', 4, screenHeight - 30, false, 'default-bold', 1.2, 'left'),
+			mapdisplayName = dxText:create('<unknown>', 45, screenHeight - 30, false, 'default-bold', 1.2, 'left'),
 			
-			nextdisplay = dxText:create('Next:', 4, screenHeight - 70, false, 'default-bold', 1.2, 'left'),
-			nextdisplayName = dxText:create('NEXT', 45, screenHeight - 70, false, 'default-bold', 1.2, 'left'),
+			authordisplay = dxText:create('By:', 4, screenHeight - 50, false, 'default-bold', 1.2, 'left'),
+			authordisplayName = dxText:create('<unknown>', 45, screenHeight - 50, false, 'default-bold', 1.2, 'left'),
+
+			-- nextdisplay = dxText:create('Next:', 4, screenHeight - 50, false, 'default-bold', 1.2, 'left'),
+            -- nextdisplayName = dxText:create('None', 45, screenHeight - 50, false, 'default-bold', 1.2, 'left'),
 			
-			-- PingDisplay = dxText:create('Ping:', 4, screenHeight - 90, false, 'default-bold', 1.2, 'left'),
-			-- PingDisplayCount = dxText:create('0', 45, screenHeight - 90, false, 'default-bold', 1.2, 'left'),
+			FPSDisplay = dxText:create('FPS:', 4, screenHeight - 90, false, 'default-bold', 1.2, 'left'),
+			FPSDisplayCount = dxText:create('0', 45, screenHeight - 90, false, 'default-bold', 1.2, 'left'),
 			
-			-- FPSDisplay = dxText:create('FPS:', 4, screenHeight - 110, false, 'default-bold', 1.2, 'left'),
-			-- FPSDisplayCount = dxText:create('0', 45, screenHeight - 110, false, 'default-bold', 1.2, 'left'),
+			PingDisplay = dxText:create('Ping:', 4, screenHeight - 110, false, 'default-bold', 1.2, 'left'),
+			PingDisplayCount = dxText:create('0', 45, screenHeight - 110, false, 'default-bold', 1.2, 'left'),
+
+			ConfDisplay = dxText:create('Conf:', 4, screenHeight - 70, false, 'default-bold', 1.2, 'left'),
+			ConfGDisplay = dxText:create('Gm', 45, screenHeight - 70, false, 'default-bold', 1.2, 'left'),
+			ConfRDisplay = dxText:create('Rs', 75, screenHeight - 70, false, 'default-bold', 1.2, 'left'),
+			ConfWDisplay = dxText:create('Vw', 99, screenHeight - 70, false, 'default-bold', 1.2, 'left'),
 		}
-		
-		g_dxGUI.mapdisplay:color(150, 150, 150, 255)
+
+		g_dxGUI.mapdisplay:color(200, 255, 100, 255)
 		g_dxGUI.mapdisplay:type('stroke', 1.5)
 		g_dxGUI.mapdisplayName:color(255, 255, 255, 255)
 		g_dxGUI.mapdisplayName:type('stroke', 1.5)
 
-		g_dxGUI.authordisplay:color(150, 150, 150, 255)
+		g_dxGUI.authordisplay:color(200, 255, 100, 255)
 		g_dxGUI.authordisplay:type('stroke', 1.5)
 		g_dxGUI.authordisplayName:color(255, 255, 255, 255)
 		g_dxGUI.authordisplayName:type('stroke', 1.5)
 
-		g_dxGUI.nextdisplay:color(150, 150, 150, 255)
-		g_dxGUI.nextdisplay:type('stroke', 1.5)
-		g_dxGUI.nextdisplayName:color(255, 255, 255, 255)
-		g_dxGUI.nextdisplayName:type('stroke', 1.5)
+		-- g_dxGUI.nextdisplay:color(150, 255, 0, 255)
+		-- g_dxGUI.nextdisplay:type('stroke', 1.5)
+		-- g_dxGUI.nextdisplayName:color(255, 255, 255, 255)
+		-- g_dxGUI.nextdisplayName:type('stroke', 1.5)
 
-		-- g_dxGUI.FPSDisplay:color(150, 150, 150, 255)
-		-- g_dxGUI.FPSDisplay:type('stroke', 1.5)
-		-- g_dxGUI.FPSDisplayCount:color(255, 255, 255, 255)
-		-- g_dxGUI.FPSDisplayCount:type('stroke', 1.5)
+		g_dxGUI.fileDisplay:color(200, 255, 100, 255)
+		g_dxGUI.fileDisplay:type('stroke', 1.5)
+		g_dxGUI.fileDisplayName:color(255, 255, 255, 255)
+		g_dxGUI.fileDisplayName:type('stroke', 1.5)
 
-		-- g_dxGUI.PingDisplay:color(150, 150, 150, 255)
-		-- g_dxGUI.PingDisplay:type('stroke', 1.5)
-		-- g_dxGUI.PingDisplayCount:color(255, 255, 255, 255)
-		-- g_dxGUI.PingDisplayCount:type('stroke', 1.5)
+		g_dxGUI.FPSDisplay:color(200, 255, 100, 255)
+		g_dxGUI.FPSDisplay:type('stroke', 1.5)
+		g_dxGUI.FPSDisplayCount:color(255, 255, 255, 255)
+		g_dxGUI.FPSDisplayCount:type('stroke', 1.5)
+
+		g_dxGUI.PingDisplay:color(200, 255, 100, 255)
+		g_dxGUI.PingDisplay:type('stroke', 1.5)
+		g_dxGUI.PingDisplayCount:color(255, 255, 255, 255)
+		g_dxGUI.PingDisplayCount:type('stroke', 1.5)
+
+		g_dxGUI.ConfDisplay:color(200, 255, 100, 255)
+		g_dxGUI.ConfGDisplay:color(127, 127, 127, 255)
+		g_dxGUI.ConfRDisplay:color(127, 127, 127, 255)
+		g_dxGUI.ConfWDisplay:color(127, 127, 127, 255)
+		g_dxGUI.ConfDisplay:type('stroke', 1.5)
+		g_dxGUI.ConfGDisplay:type('stroke', 1.5)
+		g_dxGUI.ConfRDisplay:type('stroke', 1.5)
+		g_dxGUI.ConfWDisplay:type('stroke', 1.5)
 		
-		g_dxGUI.FileDisplay:color(150, 150, 150, 255)
-		g_dxGUI.FileDisplay:type('stroke', 1.5)
-		g_dxGUI.FileDisplayName:color(255, 255, 255, 255)
-		g_dxGUI.FileDisplayName:type('stroke', 1.5)
-
 		g_dxGUI.ranknum:type('stroke', 2, 0, 0, 0, 255)
 		g_dxGUI.ranksuffix:type('stroke', 2, 0, 0, 0, 255)
 		g_dxGUI.checkpoint:type('stroke', 1, 0, 0, 0, 255)
@@ -78,21 +92,20 @@ addEventHandler('onClientResourceStart', resourceRoot,
 			timeleftbg = guiCreateStaticImage(screenWidth/2-108/2, 15, 108, 24, 'img/timeleft.png', false, nil),
 			timeleft = guiCreateLabel(screenWidth/2-108/2, 19, 108, 30, '', false),
 			healthbar = FancyProgress.create(250, 1000, 'img/progress_health_bg.png', -65, 60, 123, 30, 'img/progress_health.png', 8, 8, 108, 15),
-			suicidebar = FancyProgress.create(250, 1000, 'img/progress_suicide_bg.png', -65, 60, 123, 30, 'img/progress_suicide.png', 8, 8, 108, 15),
 			speedbar = FancyProgress.create(0, 1.5, 'img/progress_speed_bg.png', -65, 90, 123, 30, 'img/progress_speed.png', 8, 8, 108, 15),
 		}
 		guiSetFont(g_GUI.timeleft, 'default-bold-small')
 		guiLabelSetHorizontalAlign(g_GUI.timeleft, 'center')
 		g_GUI.speedbar:setProgress(0)
-		
+
 		hideGUIComponents('timeleftbg', 'timeleft', 'healthbar', 'speedbar', 'ranknum', 'ranksuffix', 'checkpoint', 'timepassed')
-		RankingBoard.precreateLabels(10)
-		
+        RankingBoard.precreateLabels(10)
+
 		-- set update handlers
 		g_PickupStartTick = getTickCount()
 		addEventHandler('onClientRender', root, updateBars)
-		g_WaterCheckTimer = setTimer(checkWater, 1, 0)
-		
+		g_WaterCheckTimer = setTimer(checkWater, 1000, 0)
+
 		-- load pickup models and textures
 		for name,id in pairs(g_ModelForPickupType) do
 			engineImportTXD(engineLoadTXD('model/' .. name .. '.txd'), id)
@@ -106,12 +119,12 @@ addEventHandler('onClientResourceStart', resourceRoot,
 			setCameraClip ( true, false )
 		end
 
-		-- Init presentation screens
-		TravelScreen.init()
-		TitleScreen.init()
+        -- Init presentation screens
+        TravelScreen.init()
+        TitleScreen.init()
 
-		-- Show title screen now
-		TitleScreen.show()
+        -- Show title screen now
+        TitleScreen.show()
 
 		setPedCanBeKnockedOffBike(localPlayer, false)
 	end
@@ -142,94 +155,101 @@ function TitleScreen.init()
 end
 
 function TitleScreen.show()
-	showGUIComponents('titleImage','titleText1','titleText2')
+    showGUIComponents('titleImage','titleText1','titleText2')
 	guiMoveToBack(g_GUI['titleImage'])
-	TitleScreen.startTime = getTickCount()
-	TitleScreen.bringForward = 0
-	addEventHandler('onClientRender', root, TitleScreen.update)
+    TitleScreen.startTime = getTickCount()
+    TitleScreen.bringForward = 0
+    addEventHandler('onClientRender', root, TitleScreen.update)
 end
 
 function TitleScreen.update()
-	local secondsLeft = TitleScreen.getTicksRemaining() / 1000
-	local alpha = math.min(1,math.max( secondsLeft ,0))
-	guiSetAlpha(g_GUI['titleImage'], alpha)
-	g_dxGUI['titleText1']:color(220,220,220,255*alpha)
-	g_dxGUI['titleText2']:color(220,220,220,255*alpha)
-	if alpha == 0 then
-		hideGUIComponents('titleImage','titleText1','titleText2')
-		removeEventHandler('onClientRender', root, TitleScreen.update)
+    local secondsLeft = TitleScreen.getTicksRemaining() / 1000
+    local alpha = math.min(1,math.max( secondsLeft ,0))
+    guiSetAlpha(g_GUI['titleImage'], alpha)
+    g_dxGUI['titleText1']:color(220,220,220,255*alpha)
+    g_dxGUI['titleText2']:color(220,220,220,255*alpha)
+    if alpha == 0 then
+        hideGUIComponents('titleImage','titleText1','titleText2')
+        removeEventHandler('onClientRender', root, TitleScreen.update)
 	end
 end
 
 function TitleScreen.getTicksRemaining()
-	return math.max( 0, TitleScreen.startTime - TitleScreen.bringForward + 10000 - getTickCount() )
+    return math.max( 0, TitleScreen.startTime - TitleScreen.bringForward + 10000 - getTickCount() )
 end
 
 -- Start the fadeout as soon as possible
 function TitleScreen.bringForwardFadeout(maxSkip)
-	local ticksLeft = TitleScreen.getTicksRemaining()
-	local bringForward = ticksLeft - 1000
-	outputDebug( 'MISC', 'bringForward ' .. bringForward )
-	if bringForward > 0 then
-		TitleScreen.bringForward = math.min(TitleScreen.bringForward + bringForward,maxSkip)
-		outputDebug( 'MISC', 'TitleScreen.bringForward ' .. TitleScreen.bringForward )
-	end
+    local ticksLeft = TitleScreen.getTicksRemaining()
+    local bringForward = ticksLeft - 1000
+    outputDebug( 'MISC', 'bringForward ' .. bringForward )
+    if bringForward > 0 then
+        TitleScreen.bringForward = math.min(TitleScreen.bringForward + bringForward,maxSkip)
+        outputDebug( 'MISC', 'TitleScreen.bringForward ' .. TitleScreen.bringForward )
+    end
 end
 -------------------------------------------------------
 
 
 -------------------------------------------------------
 -- Travel screen - Message for client feedback when loading maps
+-- LotsOfS CUSTOM EDIT: Heavily extended travel screen to show more information, changes also made in functions that call these
 -------------------------------------------------------
 TravelScreen = {}
 TravelScreen.startTime = 0
 
 function TravelScreen.init()
 	local screenWidth, screenHeight = guiGetScreenSize()
-	g_GUI['travelImage']   = guiCreateStaticImage(screenWidth/2-256, screenHeight/2+90, 512, 256, 'img/travelling.png', false, nil)
-	g_dxGUI['travelText1'] = dxText:create('Travelling to', screenWidth/2, screenHeight/2-200, false, 'bankgothic', 0.60, 'center' )
-	g_dxGUI['travelText2'] = dxText:create('', screenWidth/2, screenHeight/2-170, false, 'bankgothic', 0.70, 'center' )
-	g_dxGUI['travelText3'] = dxText:create('', screenWidth/2, screenHeight/2-140, false, 'bankgothic', 0.70, 'center' )
-	g_dxGUI['travelText5'] = dxText:create('', screenWidth*0.3, screenHeight/2-60, false, 'bankgothic', 0.70, 'left' )
-	g_dxGUI['travelText6'] = dxText:create('', screenWidth*0.52, screenHeight/2-60, false, 'bankgothic', 0.70, 'left' )
-	g_dxGUI['travelText1']:color(240,240,240)
+	g_GUI['travelImage']   = guiCreateStaticImage(screenWidth/2-256, 50, 512, 256, 'img/travelling.png', false, nil)
+	g_dxGUI['travelTextHeader'] = dxText:create('Travelling to', screenWidth/2, screenHeight/2-200, false, 'bankgothic', 0.60, 'center' )
+	g_dxGUI['travelTextName'] = dxText:create('', screenWidth/2, screenHeight/2-170, false, 'bankgothic', 0.70, 'center' )
+	g_dxGUI['travelTextAuthor'] = dxText:create('', screenWidth/2, screenHeight/2-140, false, 'bankgothic', 0.70, 'center' )
+	g_dxGUI['travelTextConfigs'] = dxText:create('', screenWidth*0.3, screenHeight/2-60, false, 'bankgothic', 0.70, 'left' )
+	g_dxGUI['travelTextFacts'] = dxText:create('', screenWidth*0.52, screenHeight/2-60, false, 'bankgothic', 0.70, 'left' )
+	g_dxGUI['travelTextHeader']:color(240,240,240)
 
-	g_dxGUI['travelText4'] = dxText:create('', screenWidth/2, screenHeight/2-140, false, 'bankgothic', 0.70, 'center' )
-	g_dxGUI['travelText4']:boundingBox(0.2,0.1,0.8,1,true)
-	g_dxGUI['travelText4']:wordWrap(true)
-	hideGUIComponents('travelImage', 'travelText1', 'travelText2', 'travelText3')
+	g_dxGUI['travelTextDescription'] = dxText:create('', screenWidth/2, screenHeight/2-140, false, 'bankgothic', 0.70, 'center' )
+	g_dxGUI['travelTextDescription']:align("center","top")
+	g_dxGUI['travelTextDescription']:boundingBox(0.2,0.5,0.8,1,true)
+	g_dxGUI['travelTextDescription']:wordWrap(true)
+	hideGUIComponents('travelImage', 'travelTextHeader', 'travelTextName', 'travelTextAuthor')
 end
 
 function TravelScreen.show( mapName, authorName, description )
 	TravelScreen.startTime = getTickCount()
-	g_dxGUI['travelText2']:text(mapName)
-	g_dxGUI['travelText3']:text(authorName and "Author: " .. authorName or "")
-	g_dxGUI['travelText4']:text(description or "TEXT")
-	showGUIComponents('travelImage', 'travelText1', 'travelText2', 'travelText3', 'travelText4')
-	guiMoveToBack(g_GUI['travelImage'])
+	g_dxGUI['travelTextName']:text(mapName)
+	g_dxGUI['travelTextAuthor']:text(authorName and "Author: " .. authorName or "")
+	g_dxGUI['travelTextDescription']:text(description or "")
+	showGUIComponents('travelImage', 'travelTextHeader', 'travelTextName', 'travelTextAuthor', 'travelTextDescription')
+	guiMoveToBack(g_GUI['travelImage']) -- LotsOfS NOTE: This doesn't seem to do anything. Moved image to above text instead
 end
 
-function TravelScreen.showDetails( ghostmode, vehicleweapons, respawn, allowonfoot, falloffbike, movementglitches, spectatevehiclespersist, fistfights )
+function TravelScreen.showDetails( details )
 	local text5 = ""
-	text5 = text5 .. (ghostmode and "◼ Ghost mode\n" or "◻ Ghost mode\n")
-	text5 = text5 .. (respawn == 'timelimit' and "◼ Respawn\n" or "◻ Respawn\n")
-	text5 = text5 .. (vehicleweapons and "◼ Vehicle weapons\n" or "◻ Vehicle weapons\n")
-	text5 = text5 .. (allowonfoot and "◼ Exiting vehicles\n" or "◻ exiting vehicles\n")
+	text5 = text5 .. (details.ghostmode and "◼ Ghost mode\n" or "◻ Ghost mode\n")
+	text5 = text5 .. (details.respawn == 'timelimit' and "◼ Respawn: ".. details.respawntime/1000 .." sec\n" or "◻ Respawn\n")
+	text5 = text5 .. (details.vehicleweapons and "◼ Vehicle weapons\n" or "◻ Vehicle weapons\n")
 	local text6 = ""
-	if (allowonfoot) then
-		text6 = text6 .. (falloffbike and "◼ Fall off bikes\n" or "◻ Fall off bikes\n")
-		text6 = text6 .. (movementglitches and "◼ Super sprint\n" or "◻ Super sprint\n")
-		text6 = text6 .. (fistfights and "◼ Fighting\n" or "◻ Fighting\n")
-		text6 = text6 .. " \n"
-	end
-	g_dxGUI['travelText5']:text(text5)
-	g_dxGUI['travelText6']:text(text6)
-	showGUIComponents('travelText5', 'travelText6')
+
+	text6 = text6 .. details.numspawnpoints .. " Spawnpoint" .. (details.numspawnpoints ~= 1 and "s" or "") .. "\n"
+	text6 = text6 .. details.numcheckpoints .. " Checkpoint" .. (details.numcheckpoints ~= 1 and "s" or "") .. "\n"
+	text6 = text6 .. details.numobjects .. " Object" .. (details.numobjects ~= 1 and "s" or "") .. "\n"
+	text6 = text6 .. details.numpickups .. " Pickup" .. (details.numpickups ~= 1 and "s" or "") .. "\n"
+	-- text5 = text5 .. (allowonfoot and "◼ Exiting vehicles\n" or "◻ exiting vehicles\n")
+	-- if (allowonfoot) then
+	-- 	text6 = text6 .. (falloffbike and "◼ Fall off bikes\n" or "◻ Fall off bikes\n")
+	-- 	text6 = text6 .. (movementglitches and "◼ Super sprint\n" or "◻ Super sprint\n")
+	-- 	text6 = text6 .. (fistfights and "◼ Fighting\n" or "◻ Fighting\n")
+	-- 	text6 = text6 .. " \n"
+	-- end
+	g_dxGUI['travelTextConfigs']:text(text5)
+	g_dxGUI['travelTextFacts']:text(text6)
+	showGUIComponents('travelTextConfigs','travelTextFacts')
 	guiMoveToBack(g_GUI['travelImage'])
 end
 
 function TravelScreen.hide()
-	hideGUIComponents('travelImage', 'travelText1', 'travelText2', 'travelText3', 'travelText4', 'travelText5', 'travelText6')
+	hideGUIComponents('travelImage', 'travelTextHeader', 'travelTextName', 'travelTextAuthor', 'travelTextDescription', 'travelTextConfigs','travelTextFacts')
 end
 
 function TravelScreen.getTicksRemaining()
@@ -240,70 +260,68 @@ end
 
 -- Called from server
 function notifyLoadingMap( mapName, authorName, description )
-	fadeCamera( false, 0.0, 0,0,0 ) -- fadeout, instant, black
-	TravelScreen.show( mapName, authorName, description )
+    fadeCamera( false, 0.0, 0,0,0 ) -- fadeout, instant, black
+    TravelScreen.show( mapName, authorName, description )
 end
 
 -- Called from server
-function notifyLoadingMapDetails( ghostmode, vehicleweapons, respawn, allowonfoot, falloffbike, movementglitches, spectatevehiclespersist, fistfights )
-	fadeCamera( false, 0.0, 0,0,0 ) -- fadeout, instant, black
-	TravelScreen.showDetails( ghostmode, vehicleweapons, respawn, allowonfoot, falloffbike, movementglitches, spectatevehiclespersist, fistfights )
+function notifyLoadingMapDetails( details )
+	-- fadeCamera( false, 0.0, 0,0,0 ) -- fadeout, instant, black
+	TravelScreen.showDetails( details )
 end
+
 
 -- Called from server
 function initRace(vehicle, checkpoints, objects, pickups, mapoptions, ranked, duration, gameoptions, mapinfo, playerInfo)
-	outputDebug( 'MISC', 'initRace start' )
-	unloadAll(true)
+    outputDebug( 'MISC', 'initRace start' )
+	unloadAll()
+		
+	math.randomseed(mapName)
+	cpColorRandom = { math.random(0,255), math.random(0,255), math.random(0,255) } 
 	
 	g_Players = getElementsByType('player')
 	g_MapOptions = mapoptions
 	g_GameOptions = gameoptions
 	g_MapInfo = mapinfo
-	g_PlayerInfo = playerInfo
-	triggerEvent('onClientMapStarting', localPlayer, mapinfo )
-	
-	g_dxGUI.authordisplayName:text(g_MapInfo.author or "<none>")
-	g_dxGUI.mapdisplayName:text(g_MapInfo.name or "<none>")
-	g_dxGUI.FileDisplayName:text(g_MapInfo.resname or "<none>")
-	g_dxGUI.nextdisplayName:text("<none>")
-	
+    g_PlayerInfo = playerInfo
+	g_dxGUI.mapdisplayName:text(g_MapInfo.name)
+	g_dxGUI.authordisplayName:text(g_MapInfo.author)
+	g_dxGUI.fileDisplayName:text(g_MapInfo.resname)
+    triggerEvent('onClientMapStarting', localPlayer, mapinfo )
+
+
+	if (g_MapOptions.ghostmode) then
+		g_dxGUI.ConfGDisplay:color(255,255,255,255)
+	else
+		g_dxGUI.ConfGDisplay:color(127,127,127,255)
+	end
+	if (g_MapOptions.respawn == "timelimit") then
+		g_dxGUI.ConfRDisplay:color(255,255,255,255)
+	else
+		g_dxGUI.ConfRDisplay:color(127,127,127,255)
+	end
+	if (g_MapOptions.vehicleweapons) then
+		g_dxGUI.ConfWDisplay:color(255,255,255,255)
+	else
+		g_dxGUI.ConfWDisplay:color(127,127,127,255)
+	end
+
 	fadeCamera(true)
 	showHUD(false)
-	
+
 	g_Vehicle = vehicle
 	setVehicleDamageProof(g_Vehicle, true)
 	OverrideClient.updateVars(g_Vehicle)
-	
+
 	--local x, y, z = getElementPosition(g_Vehicle)
-	-- setCameraBehindVehicle(vehicle)
-	setCameraBehindPlayer(localPlayer) -- LotsOfS on foot support
+	setCameraBehindVehicle(vehicle)
 	--alignVehicleToGround(vehicle)
 	updateVehicleWeapons()
 	setCloudsEnabled(g_GameOptions.cloudsenable)
 	setBlurLevel(g_GameOptions.blurlevel)
-	setPedCanBeKnockedOffBike(localPlayer, g_MapOptions.allowonfoot and g_MapOptions.falloffbike)
-
 	g_dxGUI.mapdisplay:visible(g_GameOptions.showmapname)
-	g_dxGUI.mapdisplayName:visible(g_GameOptions.showmapname)
-	g_dxGUI.authordisplay:visible(g_GameOptions.showmapname)
-	g_dxGUI.authordisplayName:visible(g_GameOptions.showmapname)
-	g_dxGUI.nextdisplay:visible(false)
-	g_dxGUI.nextdisplayName:visible(false)
-	-- g_dxGUI.FPSDisplay:visible(g_GameOptions.showmapname)
-	-- g_dxGUI.FPSDisplayCount:visible(g_GameOptions.showmapname)
-	-- g_dxGUI.PingDisplay:visible(g_GameOptions.showmapname)
-	-- g_dxGUI.PingDisplayCount:visible(g_GameOptions.showmapname)
-	g_dxGUI.FileDisplay:visible(g_GameOptions.showmapname)
-	g_dxGUI.FileDisplayName:visible(g_GameOptions.showmapname)
 
 	-- checkpoints
-	local colorSeed = 10
-	for i,char in ipairs( { string.byte(g_MapInfo.name,1,g_MapInfo.name:len()) } ) do
-		colorSeed = math.mod( colorSeed * 11 + char, 216943)
-	end
-	math.randomseed(colorSeed)  
-	cpColorRandom = { math.random(0,255), math.random(0,255), math.random(0,255) }
-
 	g_Checkpoints = checkpoints
 
 	-- pickups
@@ -313,7 +331,6 @@ function initRace(vehicle, checkpoints, objects, pickups, mapoptions, ranked, du
 	for i,pickup in pairs(pickups) do
 		pos = pickup.position
 		object = createObject(g_ModelForPickupType[pickup.type], pos[1], pos[2], pos[3])
-		setElementInterior(object, pickup.interior or 0)
 		setElementCollisionsEnabled(object, false)
 		colshape = createColSphere(pos[1], pos[2], pos[3], 3.5)
 		g_Pickups[colshape] = { object = object }
@@ -326,22 +343,23 @@ function initRace(vehicle, checkpoints, objects, pickups, mapoptions, ranked, du
 			g_Pickups[colshape].label = dxText:create(getVehicleNameFromModel(g_Pickups[colshape].vehicle), 0.5, 0.5)
 			g_Pickups[colshape].label:color(255, 255, 255, 0)
 			g_Pickups[colshape].label:type("shadow",2)
-		end
+        end
 	end
 
 	-- objects
-	g_Objects = {}
-	for i,object2 in ipairs(objects) do
-		local pos2 = object2.position
-		local rot = object2.rotation
-		g_Objects[i] = createObject(object2.model, pos2[1], pos2[2], pos2[3], rot[1], rot[2], rot[3])
-	end
+	-- LotsOfS CUSTOM EDIT: This was no longer used, and started throwing an error with a small change I made
+	-- g_Objects = {}
+	-- for i,object2 in ipairs(objects) do
+	-- 	local pos2 = object2.position
+	-- 	local rot = object2.rotation
+	-- 	g_Objects[i] = createObject(object2.model, pos2[1], pos2[2], pos2[3], rot[1], rot[2], rot[3])
+	-- end
 
 	if #g_Checkpoints > 0 then
 		g_CurrentCheckpoint = 0
 		showNextCheckpoint()
 	end
-	
+
 	-- GUI
 	g_dxGUI.timepassed:text('0:00:00')
 	showGUIComponents('healthbar', 'speedbar', 'timepassed')
@@ -356,13 +374,13 @@ function initRace(vehicle, checkpoints, objects, pickups, mapoptions, ranked, du
 	else
 		hideGUIComponents('checkpoint')
 	end
-	
+
 	g_HurryDuration = g_GameOptions.hurrytime
 	if duration then
 		launchRace(duration)
 	end
 
-	fadeCamera( false, 0.0 )
+    fadeCamera( false, 0.0 )
 
 	-- Editor start
 	if isEditor() then
@@ -370,24 +388,22 @@ function initRace(vehicle, checkpoints, objects, pickups, mapoptions, ranked, du
 		return
 	end
 
-	-- Min 3 seconds on travel message
-	local delay = TravelScreen.getTicksRemaining()
-	delay = math.max(3000,delay)
-	setTimer(TravelScreen.hide,delay+1000,1)
-	
-	-- Delay readyness until after title
-	TitleScreen.bringForwardFadeout(3000)
-	-- delay = 0
-	delay = delay + math.max( 0, TitleScreen.getTicksRemaining() - 1500 )
+    -- Min 3 seconds on travel message
+    local delay = TravelScreen.getTicksRemaining()
+    delay = math.max(50,delay)
+    setTimer(TravelScreen.hide,delay + 2950,1)
 
-	-- Do fadeup and then tell server client is ready
-	-- fadeCamera(true, 2)
-	-- setTimer(fadeCamera, delay + 750, 1, true, 10.0)
-	setTimer(fadeCamera, delay + 1500, 1, true, 2.0)
+    -- Delay readyness until after title
+    TitleScreen.bringForwardFadeout(3000)
+    delay = delay + math.max( 0, TitleScreen.getTicksRemaining() - 1500 )
 
-	setTimer( function() triggerServerEvent('onNotifyPlayerReady', localPlayer) end, delay + 3500, 1 )
-	outputDebug( 'MISC', 'initRace end' )
-	setTimer( function() setCameraBehindPlayer( localPlayer ) end, delay + 300, 1 )
+    -- Do fadeup and then tell server client is ready
+    setTimer(fadeCamera, delay + 750, 1, true, 10.0)
+    setTimer(fadeCamera, delay + 1500, 1, true, 2.0)
+
+    setTimer( function() triggerServerEvent('onNotifyPlayerReady', localPlayer) end, delay + 3500, 1 )
+    outputDebug( 'MISC', 'initRace end' )
+    setTimer( function() setCameraBehindVehicle( g_Vehicle ) end, delay + 300, 1 )
 end
 
 -- Called from the server when settings are changed
@@ -400,31 +416,19 @@ function updateOptions ( gameoptions, mapoptions )
 	updateVehicleWeapons()
 	setCloudsEnabled(g_GameOptions.cloudsenable)
 	setBlurLevel(g_GameOptions.blurlevel)
-
 	g_dxGUI.mapdisplay:visible(g_GameOptions.showmapname)
-	g_dxGUI.mapdisplayName:visible(g_GameOptions.showmapname)
-	g_dxGUI.authordisplay:visible(g_GameOptions.showmapname)
-	g_dxGUI.authordisplayName:visible(g_GameOptions.showmapname)
-	g_dxGUI.nextdisplay:visible(g_GameOptions.showmapname)
-	g_dxGUI.nextdisplayName:visible(g_GameOptions.showmapname)
-	-- g_dxGUI.FPSDisplay:visible(g_GameOptions.showmapname)
-	-- g_dxGUI.FPSDisplayCount:visible(g_GameOptions.showmapname)
-	-- g_dxGUI.PingDisplay:visible(g_GameOptions.showmapname)
-	-- g_dxGUI.PingDisplayCount:visible(g_GameOptions.showmapname)
-	g_dxGUI.FileDisplay:visible(g_GameOptions.showmapname)
-	g_dxGUI.FileDisplayName:visible(g_GameOptions.showmapname)
 end
 
 function launchRace(duration)
 	g_Players = getElementsByType('player')
-	
+
 	if type(duration) == 'number' then
 		showGUIComponents('timeleftbg', 'timeleft')
 		guiLabelSetColor(g_GUI.timeleft, 255, 255, 255)
 		g_Duration = duration
 		addEventHandler('onClientRender', root, updateTime)
 	end
-	
+
 	setVehicleDamageProof(g_Vehicle, false)
 
 	g_StartTick = getTickCount()
@@ -539,68 +543,61 @@ function updatePickups()
 end
 addEventHandler('onClientRender', root, updatePickups)
 
--- local fps = 0
--- addEventHandler("onClientPreRender", root,
--- 	function (msSinceLastFrame)
--- 		fps = (1 / msSinceLastFrame) * 1000
--- 	end
--- )
+local fps = 0
+addEventHandler("onClientPreRender", root,
+	function (msSinceLastFrame)
+		fps = (1 / msSinceLastFrame) * 1000
+	end
+)
 
--- function updateFPSAndPing()
--- 	g_dxGUI.FPSDisplayCount:text(tostring(math.floor(fps + 0.5)))
--- 	g_dxGUI.PingDisplayCount:text(tostring(getPlayerPing(localPlayer)))
--- end
--- setTimer(updateFPSAndPing, 1000, 0)
-	
+function updateFPSAndPing()
+	g_dxGUI.FPSDisplayCount:text(tostring(math.floor(fps * 10) / 10))
+	g_dxGUI.PingDisplayCount:text(tostring(getPlayerPing(localPlayer)))
+end
+setTimer(updateFPSAndPing, 1000, 0)
+
 addEventHandler('onClientColShapeHit', root,
 	function(elem)
 		local pickup = g_Pickups[source]
-		if (not pickup) then
+		if elem ~= g_Vehicle or not pickup or isVehicleBlown(g_Vehicle) or getElementHealth(localPlayer) == 0 then
 			return
 		end
-		local vehicle
-		if (pickup.vehicletoaffect == 'current') then
-			vehicle = getPedOccupiedVehicle(localPlayer)
-			if (not vehicle) then
-				return
-			end
-		else
-			vehicle = g_Vehicle
-		end
-		if elem ~= vehicle or isVehicleBlown(vehicle) or getElementHealth(localPlayer) == 0 then
-			return
-		end
+		outputDebug( 'CHECKPOINT', 'onClientColShapeHit'
+						.. ' elem:' .. tostring(elem)
+						.. ' g_Vehicle:' .. tostring(g_Vehicle)
+						.. ' isVehicleBlown(g_Vehicle):' .. tostring(isVehicleBlown(g_Vehicle))
+						.. ' localPlayer:' .. tostring(localPlayer)
+						.. ' getElementHealth(localPlayer):' .. tostring(getElementHealth(localPlayer))
+						.. ' source:' .. tostring(source)
+						.. ' pickup:' .. tostring(pickup)
+						)
 		if pickup.load then
-			handleHitPickup(pickup, vehicle)
+			handleHitPickup(pickup)
 		end
 	end
 )
 
-function handleHitPickup(pickup, vehicle)
-	if (not vehicle) then
-		vehicle = g_Vehicle
-	end
-	if (not vehicle) then return end
+function handleHitPickup(pickup)
 	if pickup.type == 'vehiclechange' then
-		if pickup.vehicle == getElementModel(vehicle) then
+		if pickup.vehicle == getElementModel(g_Vehicle) then
 			return
 		end
 		local health = nil
-		g_PrevVehicleHeight = getElementDistanceFromCentreOfMassToBaseOfModel(vehicle)
-		alignVehicleWithUp(vehicle)
+		g_PrevVehicleHeight = getElementDistanceFromCentreOfMassToBaseOfModel(g_Vehicle)
+		alignVehicleWithUp()
 		if checkModelIsAirplane(pickup.vehicle) then -- Hack fix for Issue #4104
-			health = getElementHealth(vehicle)
+			health = getElementHealth(g_Vehicle)
 		end
-		setElementModel(vehicle, pickup.vehicle)
+		setElementModel(g_Vehicle, pickup.vehicle)
 		if health then
-			fixVehicle(vehicle)
-			setElementHealth(vehicle, health)
+			fixVehicle(g_Vehicle)
+			setElementHealth(g_Vehicle, health)
 		end
-		vehicleChanging(g_MapOptions.classicchangez, pickup.vehicle, vehicle)
+		vehicleChanging(g_MapOptions.classicchangez, pickup.vehicle)
 	elseif pickup.type == 'nitro' then
-		addVehicleUpgrade(vehicle, 1010)
+		addVehicleUpgrade(g_Vehicle, 1010)
 	elseif pickup.type == 'repair' then
-		fixVehicle(vehicle)
+		fixVehicle(g_Vehicle)
 	end
 	triggerServerEvent('onPlayerPickUpRacePickupInternal', localPlayer, pickup.id, pickup.respawn)
 	playSoundFrontEnd(46)
@@ -633,87 +630,44 @@ function loadPickup(pickupID)
 	end
 end
 
-function vehicleChanging( changez, newModel, vehicle )
-	if (not vehicle) then vehicle = g_Vehicle end
-	if getElementModel(vehicle) ~= newModel then
-		outputConsole( "Vehicle change model mismatch (" .. tostring(getElementModel(vehicle)) .. "/" .. tostring(newModel) .. ")" )
+function vehicleChanging( changez, newModel )
+	if getElementModel(g_Vehicle) ~= newModel then
+		outputConsole( "Vehicle change model mismatch (" .. tostring(getElementModel(g_Vehicle)) .. "/" .. tostring(newModel) .. ")" )
 	end
-	local newVehicleHeight = getElementDistanceFromCentreOfMassToBaseOfModel(vehicle)
-	local x, y, z = getElementPosition(vehicle)
+	local newVehicleHeight = getElementDistanceFromCentreOfMassToBaseOfModel(g_Vehicle)
+	local x, y, z = getElementPosition(g_Vehicle)
 	if g_PrevVehicleHeight and newVehicleHeight > g_PrevVehicleHeight then
 		z = z - g_PrevVehicleHeight + newVehicleHeight
 	end
 	if changez then
 		z = z + 1
 	end
-	setElementPosition(vehicle, x, y, z)
+	setElementPosition(g_Vehicle, x, y, z)
 	g_PrevVehicleHeight = nil
 	updateVehicleWeapons()
 	checkVehicleIsHelicopter()
 end
 
 function updateVehicleWeapons()
-	if (not g_MapOptions) then
-		return
-	end
-	local vehicle = getPedOccupiedVehicle(localPlayer)
-	if vehicle then
-		-- LotsOfS: Patch to allow disabling rustler weapons as well as fist fights for feetrace
-		weapons = true
-		if (g_ArmedVehicleIDs[getElementModel(vehicle)]) then
-			weapons = g_MapOptions.vehicleweapons
-		elseif (getElementModel(vehicle) == 476) then
-			weapons = g_MapOptions.rustlermachinegun
-		end
+	if g_Vehicle then
+		local weapons = not g_ArmedVehicleIDs[getElementModel(g_Vehicle)] or g_MapOptions.vehicleweapons
 		toggleControl('vehicle_fire', weapons)
-
-		if getElementModel(vehicle) == g_HunterID and not g_MapOptions.hunterminigun then
+		if getElementModel(g_Vehicle) == g_HunterID and not g_MapOptions.hunterminigun then
 			weapons = false
 		end
 		toggleControl('vehicle_secondary_fire', weapons)
-	else
-		toggleControl('fire', g_MapOptions.fistfights or isElementInWater(source))
-		toggleControl('action', g_MapOptions.fistfights) -- You can fire while aiming with this button, and it's not used for anything
-		toggleControl('aim_weapon', g_MapOptions.fistfights) -- You can fire by pressing enter/exit while aiming too, so just disable aiming
 	end
 end
-
-addEventHandler('onClientPlayerWeaponSwitch', root,
-	function(prev, new)
-		if (source ~= localPlayer) then return end
-		-- Attack is still possible by pressing enter/exit while aiming with a melee weapon. Disable aiming for fist weapons.
-		toggleControl('aim_weapon', g_MapOptions.fistfights or (new ~= 0 and new ~= 1 and new ~= 10 and new ~= 11)) -- melee weapons & gifts
-		toggleControl('fire', g_MapOptions.fistfights or new == 11 or new == 12 or isElementInWater(source)) -- goggles, parachute, detonator
-	end
-)
-
 
 function vehicleUnloading()
 	g_Vehicle = nil
 end
 
 function updateBars()
-	-- LotsOfS: I had to change this to work with on foot health for the pedestrian. If in a vehicle, it would check g_Vehicle health, but it now is possible to enter any vehicle.
-	if (not isPedInVehicle(localPlayer)) then
-		local stat = getPedStat(localPlayer, 24) -- max health
-		local maxHP = 100 + (stat - 569) / 4.31
-		g_GUI.healthbar:setProgress(getElementHealth(localPlayer) / maxHP * 750 + 250) -- health bar goes from 250 - 1000 because it's made for vehicles
-		local vx, vy, vz = getElementVelocity(localPlayer)
+	if g_Vehicle then
+		g_GUI.healthbar:setProgress(getElementHealth(g_Vehicle))
+		local vx, vy, vz = getElementVelocity(g_Vehicle)
 		g_GUI.speedbar:setProgress(math.sqrt(vx*vx + vy*vy + vz*vz))
-	else
-		local veh = getPedOccupiedVehicle(localPlayer)
-		if (not veh) then return end
-		g_GUI.healthbar:setProgress(getElementHealth(veh))
-		local vx, vy, vz = getElementVelocity(veh)
-		g_GUI.speedbar:setProgress(math.sqrt(vx*vx + vy*vy + vz*vz))
-	end
-	
-	if (suicideTimer and isTimer(suicideTimer)) then
-		g_GUI.suicidebar:show()
-		local timeRemaining, _, timeInterval = getTimerDetails(suicideTimer)
-		g_GUI.suicidebar:setProgress(1000 - (timeRemaining / timeInterval * 750))
-	else
-		g_GUI.suicidebar:hide()
 	end
 end
 
@@ -765,6 +719,7 @@ function setRankDisplay( rank )
 end
 addCommandHandler("rank", function(command,rank) setRankDisplay(tonumber(rank)) end)
 
+
 addEventHandler('onClientElementDataChange', root,
 	function(dataName)
 		if dataName == 'race.finished' then
@@ -782,24 +737,19 @@ addEventHandler('onClientElementDataChange', root,
 
 
 function checkWater()
-	if g_Vehicle then
-		if (g_MapOptions.allowonfoot) then
-			local weapon = getPedWeaponSlot(localPlayer)
-			toggleControl('fire', g_MapOptions.fistfights or isElementInWater(localPlayer) or weapon == 11 or weapon == 12) -- goggles, parachute, detonator
-			return --LotsOfS: Allow swimming and tossing cars in the drink if allowonfoot is true
-		end
-		if not g_WaterCraftIDs[getElementModel(g_Vehicle)] then
-			local x, y, z = getElementPosition(localPlayer)
-			local waterZ = getWaterLevel(x, y, z)
-			if waterZ and z < waterZ - 0.5 and not isPlayerRaceDead(localPlayer) and not isPlayerFinished(localPlayer) and g_MapOptions then
-				if g_MapOptions.firewater then
-					blowVehicle ( g_Vehicle, true )
-				else
-					setElementHealth(localPlayer,0)
-					triggerServerEvent('onRequestKillPlayer',localPlayer)
-				end
-			end
-		end
+    if g_Vehicle then
+        if not g_WaterCraftIDs[getElementModel(g_Vehicle)] then
+            local x, y, z = getElementPosition(localPlayer)
+            local waterZ = getWaterLevel(x, y, z)
+            if waterZ and z < waterZ - 0.5 and not isPlayerRaceDead(localPlayer) and not isPlayerFinished(localPlayer) and g_MapOptions then
+                if g_MapOptions.firewater then
+                    blowVehicle ( g_Vehicle, true )
+                else
+                    setElementHealth(localPlayer,0)
+                    triggerServerEvent('onRequestKillPlayer',localPlayer)
+                end
+            end
+        end
 		-- Check stalled vehicle
 		if not getVehicleEngineState( g_Vehicle ) then
 			setVehicleEngineState( g_Vehicle, true )
@@ -872,7 +822,7 @@ function updateSpectatingCheckpointsAndRank()
 		local rankValue = getElementData(watchedPlayer, 'race rank') or 0
 		if rankValue ~= rankValuePrev then
 			rankValuePrev = rankValue
-			setRankDisplay( rankValue )	
+			setRankDisplay( rankValue )
 		end
 	end
 end
@@ -896,15 +846,6 @@ function getWatchedPlayer()
 end
 -------------------------------------------------------------------------------
 
-function checkIfInsideCheckpoint()
-	if (not g_CurrentCheckpoint) then return end
-	if (g_Checkpoints[g_CurrentCheckpoint].colshape and isElementWithinColShape(source, g_Checkpoints[g_CurrentCheckpoint].colshape)) then
-		checkpointReached(source)
-	end
-end
-addEventHandler ( "onClientPlayerVehicleExit", localPlayer, checkIfInsideCheckpoint )
-addEventHandler ( "onClientPlayerVehicleEnter", localPlayer, checkIfInsideCheckpoint )
-
 function checkpointReached(elem)
 	outputDebug( 'CP', 'checkpointReached'
 					.. ' ' .. tostring(g_CurrentCheckpoint)
@@ -914,33 +855,7 @@ function checkpointReached(elem)
 					.. ' localPlayer:' .. tostring(localPlayer)
 					.. ' getElementHealth(localPlayer):' .. tostring(getElementHealth(localPlayer))
 					)
-	-- LotsOfS: Added extra checks for when the player is on foot in on foot races
-	if (not g_MapOptions.allowonfoot and elem ~= g_Vehicle) then
-		return
-	end
-	if (Spectate.active or getElementHealth(localPlayer) == 0 or isVehicleBlown(g_Vehicle)) then
-		return
-	end
-	-- if (elem == g_Vehicle and not getVehicleController(g_Vehicle)) then
-	-- 	return
-	-- end
-	if elem ~= g_Vehicle and elem ~= localPlayer and elem ~= getPedOccupiedVehicle(localPlayer) then
-		return
-	end
-	local vehicle = getPedOccupiedVehicle(localPlayer)
-	if (elem == localPlayer and vehicle == g_Vehicle) then
-		return
-	end
-	if (vehicle and getElementData(vehicle, "raceiv.blocked")) then
-		return
-	end
-	if (g_Checkpoints[g_CurrentCheckpoint].restrictions == 'onfoot' and getPedOccupiedVehicle(localPlayer)) then
-		return
-	end
-	if (g_Checkpoints[g_CurrentCheckpoint].restrictions == 'invehicle' and not getPedOccupiedVehicle(localPlayer)) then
-		return
-	end
-	if (g_Checkpoints[g_CurrentCheckpoint].restrictions == 'mainvehicleonly' and elem ~= g_Vehicle) then
+	if elem ~= g_Vehicle or isVehicleBlown(g_Vehicle) or getElementHealth(localPlayer) == 0 or Spectate.active then
 		return
 	end
 
@@ -958,7 +873,6 @@ function checkpointReached(elem)
 		end
 		vehicleChanging(g_MapOptions.classicchangez, g_Checkpoints[g_CurrentCheckpoint].vehicle)
 	end
-	
 	triggerServerEvent('onPlayerReachCheckpointInternal', localPlayer, g_CurrentCheckpoint)
 	playSoundFrontEnd(43)
 	if g_CurrentCheckpoint < #g_Checkpoints then
@@ -975,7 +889,7 @@ function checkpointReached(elem)
 			g_GUI.hurry = false
 		end
 		destroyCheckpoint(#g_Checkpoints)
-		triggerEvent('onClientPlayerFinish', localPlayer)
+        triggerEvent('onClientPlayerFinish', localPlayer)
 		toggleAllControls(false, true, false)
 	end
 end
@@ -1072,7 +986,7 @@ function Spectate._start()
 	Spectate.setTarget( Spectate.findNewTarget(localPlayer,1) )
 	MovePlayerAway.start()
 	Spectate.setTarget( Spectate.target )
-	Spectate.validateTarget(Spectate.target)
+    Spectate.validateTarget(Spectate.target)
 	Spectate.tickTimer:setTimer( Spectate.tick, 500, 0 )
 	
 	addCommandHandler("Spectate previous", Spectate.previous)
@@ -1092,7 +1006,6 @@ function Spectate._stop()
 			g_GUI[name] = nil
 		end
 	end
-	
 	removeCommandHandler("Spectate previous")
 	removeCommandHandler("Spectate next")
 	
@@ -1122,10 +1035,30 @@ function Spectate.next(bGUIFeedback)
 	end
 end
 
+function Spectate.random()
+	Spectate.setTarget( Spectate.findRandomTarget() )
+end
+
 ---------------------------------------------
 -- Step along to the next player to spectate
 local playersRankSorted = {}
 local playersRankSortedTime = 0
+
+function Spectate.findRandomTarget()
+	local playersRandomized = {}
+	for _,player in ipairs(g_Players) do
+		table.insert(playersRandomized, player)
+	end
+	while #playersRandomized > 0 do
+		local randomNo = math.random(1,#playersRandomized)
+		if Spectate.isValidTarget(playersRandomized[randomNo]) then
+			return playersRandomized[randomNo]
+		else
+			table.remove(playersRandomized, randomNo)
+		end
+	end
+	return nil
+end
 
 function Spectate.findNewTarget(current,dir)
 
@@ -1160,9 +1093,9 @@ function Spectate.findNewTarget(current,dir)
 	end
 
 	-- Find next player in list
-	local pos = table.find(playersRankSorted, 'player', current) or 1
+	local pos = table.find(playersRankSorted, 'player', current) or 1	
 	for i=1,#playersRankSorted do
-		pos = ((pos + dir - 1) % #playersRankSorted ) + 1
+		pos = ((pos + dir - 1) % #playersRankSorted ) + 1		
 		if Spectate.isValidTarget(playersRankSorted[pos].player) then
 			return playersRankSorted[pos].player
 		end
@@ -1264,7 +1197,7 @@ function Spectate.tick()
 		end
 	end
 	if not Spectate.target or ( Spectate.getCameraTargetPlayer() and Spectate.getCameraTargetPlayer() ~= Spectate.target ) or not Spectate.isValidTarget(Spectate.target) then
-		Spectate.previous(false)
+		Spectate.random(true)
 	end
 end
 
@@ -1361,11 +1294,6 @@ function MovePlayerAway.update(nozcheck)
 	local camTarget = getCameraTarget()
 	if not getPedOccupiedVehicle(localPlayer) then
 		setElementPosition( localPlayer, MovePlayerAway.posX-10, MovePlayerAway.posY-10, MovePlayerAway.posZ )
-		setElementFrozen ( localPlayer, true )
-		local vehicle = g_Vehicle
-		if vehicle and not g_MapOptions.spectatevehiclespersist then
-			triggerServerEvent('moveUnoccupiedVehicleForSpectate', vehicle, MovePlayerAway.posX, MovePlayerAway.posY, MovePlayerAway.posZ, MovePlayerAway.rotZ)
-		end
 	end
 	if getPedOccupiedVehicle(localPlayer) then
 		if not nozcheck then
@@ -1379,18 +1307,16 @@ function MovePlayerAway.update(nozcheck)
 				else
 					_,_, MovePlayerAway.rotZ = getElementRotation(camTarget)
 				end
-			end 
+			end
 		end
 		local vehicle = g_Vehicle
-		if vehicle and not g_MapOptions.spectatevehiclespersist then
-			fixVehicle( vehicle)
+		if vehicle then
+			fixVehicle( vehicle )
 			setElementFrozen ( vehicle, true )
 			setElementPosition( vehicle, MovePlayerAway.posX, MovePlayerAway.posY, MovePlayerAway.posZ )
 			setElementVelocity( vehicle, 0,0,0 )
 			setElementAngularVelocity( vehicle, 0,0,0 )
 			setElementRotation ( vehicle, 0,0,MovePlayerAway.rotZ )
-		elseif vehicle and g_MapOptions.spectatevehiclespersist then
-			setPedExitVehicle(localPlayer)
 		end
 	end
 	setElementHealth( localPlayer, 90 )
@@ -1425,9 +1351,9 @@ function remoteStopSpectateAndBlack()
 end
 
 function remoteSoonFadeIn( bNoCameraMove )
-	setTimer(fadeCamera,250+500,1,true,1.0)		-- And up
+    setTimer(fadeCamera,250+500,1,true,1.0)		-- And up
 	if not bNoCameraMove then
-		setTimer( function() setCameraBehindPlayer( localPlayer ) end ,250+500-150,1 )
+		setTimer( function() setCameraBehindVehicle( g_Vehicle ) end ,250+500-150,1 )
 	end
 	setTimer(checkVehicleIsHelicopter,250+500,1)
 end
@@ -1448,14 +1374,14 @@ function raceTimeout()
 	toggleAllControls(false, true, false)
 end
 
-function unloadAll(preRace)
-	triggerEvent('onClientMapStopping', localPlayer, preRace)
+function unloadAll()
+    triggerEvent('onClientMapStopping', localPlayer)
 	for i=1,#g_Checkpoints do
 		destroyCheckpoint(i)
 	end
 	g_Checkpoints = {}
 	g_CurrentCheckpoint = nil
-	
+
 	for colshape,pickup in pairs(g_Pickups) do
 		destroyElement(colshape)
 		if pickup.object then
@@ -1467,17 +1393,17 @@ function unloadAll(preRace)
 	end
 	g_Pickups = {}
 	g_VisiblePickups = {}
-	
+
 	table.each(g_Objects, destroyElement)
 	g_Objects = {}
-	
+
 	setElementData(localPlayer, 'race.checkpoint', nil)
-	
+
 	g_Vehicle = nil
 	removeEventHandler('onClientRender', root, updateTime)
-	
+
 	toggleAllControls(true)
-	
+
 	if g_GUI then
 		hideGUIComponents('timeleftbg', 'timeleft', 'healthbar', 'speedbar', 'ranknum', 'ranksuffix', 'checkpoint', 'timepassed')
 		if g_GUI.hurry then
@@ -1499,7 +1425,7 @@ function createCheckpoint(i)
 		return
 	end
 	local pos = checkpoint.position
-	local color = checkpoint.color or cpColorRandom or { 255, 255, 255 }
+	local color = checkpoint.color or cpColorRandom or { 0, 0, 255 }
 	checkpoint.marker = createMarker(pos[1], pos[2], pos[3], checkpoint.type or 'checkpoint', checkpoint.size, color[1], color[2], color[3])
 	if (not checkpoint.type or checkpoint.type == 'checkpoint') and i == #g_Checkpoints then
 		setMarkerIcon(checkpoint.marker, 'finish')
@@ -1507,10 +1433,8 @@ function createCheckpoint(i)
 	if checkpoint.type == 'ring' and i < #g_Checkpoints then
 		setMarkerTarget(checkpoint.marker, unpack(g_Checkpoints[i+1].position))
 	end
-	if (checkpoint.hideradarblip ~= "true") then
-		checkpoint.blip = createBlip(pos[1], pos[2], pos[3], 0, isCurrent and 2 or 1, color[1], color[2], color[3])
-		setBlipOrdering(checkpoint.blip, 1)
-	end
+	checkpoint.blip = createBlip(pos[1], pos[2], pos[3], 0, isCurrent and 2 or 1, color[1], color[2], color[3])
+	setBlipOrdering(checkpoint.blip, 1)
 	return checkpoint.marker
 end
 
@@ -1518,20 +1442,17 @@ function makeCheckpointCurrent(i,bOtherPlayer)
 	local checkpoint = g_Checkpoints[i]
 	local pos = checkpoint.position
 	local color = checkpoint.color or { 255, 0, 0 }
-	if (checkpoint.hideradarblip ~= "true") then
-		if not checkpoint.blip then
-			checkpoint.blip = createBlip(pos[1], pos[2], pos[3], 0, 2, color[1], color[2], color[3])
-			setBlipOrdering(checkpoint.blip, 1)
-		else
-			setBlipSize(checkpoint.blip, 2)
-		end
-	end	
-	if not checkpoint.type or checkpoint.type == 'checkpoint' or checkpoint.type == 'arrow' then
-		checkpoint.colshape = createColCircle(pos[1], pos[2], checkpoint.size + (checkpoint.extrasize or 4))
-	elseif checkpoint.type == 'cylinder' then
-		checkpoint.colshape = createColTube(pos[1], pos[2], pos[3], checkpoint.size, checkpoint.size)
+	if not checkpoint.blip then
+		checkpoint.blip = createBlip(pos[1], pos[2], pos[3], 0, 2, color[1], color[2], color[3])
+		setBlipOrdering(checkpoint.blip, 1)
 	else
-		checkpoint.colshape = createColSphere(pos[1], pos[2], pos[3], checkpoint.size + (checkpoint.extrasize or 4))
+		setBlipSize(checkpoint.blip, 2)
+	end
+
+	if not checkpoint.type or checkpoint.type == 'checkpoint' then
+		checkpoint.colshape = createColCircle(pos[1], pos[2], checkpoint.size + 4)
+	else
+		checkpoint.colshape = createColSphere(pos[1], pos[2], pos[3], checkpoint.size + 4)
 	end
 	if not bOtherPlayer then
 		addEventHandler('onClientColShapeHit', checkpoint.colshape, checkpointReached)
@@ -1543,10 +1464,8 @@ function destroyCheckpoint(i)
 	if checkpoint and checkpoint.marker then
 		destroyElement(checkpoint.marker)
 		checkpoint.marker = nil
-		if (checkpoint.hideradarblip ~= "true") then
-			destroyElement(checkpoint.blip)
-			checkpoint.blip = nil
-		end
+		destroyElement(checkpoint.blip)
+		checkpoint.blip = nil
 		if checkpoint.colshape then
 			destroyElement(checkpoint.colshape)
 			checkpoint.colshape = nil
@@ -1584,7 +1503,7 @@ addEventHandler('onClientPlayerJoin', root,
 addEventHandler('onClientPlayerSpawn', root,
 	function()
 		Spectate.blockAsTarget( source, 2000 )	-- No spectate at this player for 2 seconds
-	end
+    end
 )
 
 addEventHandler('onClientPlayerWasted', root,
@@ -1626,15 +1545,6 @@ addEventHandler('onClientResourceStop', resourceRoot,
 	end
 )
 
-addEvent('onNextMapSet', true)
-addEventHandler('onNextMapSet', root,
-	function(mapName)
-		g_dxGUI.nextdisplayName:text(mapName)
-		g_dxGUI.nextdisplay:visible(g_GameOptions.showmapname)
-		g_dxGUI.nextdisplayName:visible(g_GameOptions.showmapname)
-	end
-)
-
 ------------------------
 -- Make vehicle upright
 
@@ -1642,8 +1552,8 @@ function directionToRotation2D( x, y )
 	return rem( math.atan2( y, x ) * (360/6.28) - 90, 360 )
 end
 
-function alignVehicleWithUp(vehicle)
-	if not vehicle then vehicle = g_Vehicle end
+function alignVehicleWithUp()
+	local vehicle = g_Vehicle
 	if not vehicle then return end
 
 	local matrix = getElementMatrix( vehicle )
@@ -1686,59 +1596,21 @@ setTimer(
 --
 ---------------------------------------------------------------------------
 
+
 function kill()
 	if Spectate.active then
 		if Spectate.savePos then
 			triggerServerEvent('onClientRequestSpectate', localPlayer, false )
 		end
-	else
+    else
 		Spectate.blockManual = true
 		triggerServerEvent('onRequestKillPlayer', localPlayer)
 		Spectate.blockManualTimer = setTimer(function() Spectate.blockManual = false end, 3000, 1)
 	end
 end
-
-function startKill()
-	if (g_MapOptions.allowonfoot) then
-		suicideTimer = setTimer(kill, 1000, 1)
-	else
-		kill()
-	end
-end
-
-function cancelKill()
-	if (suicideTimer and isTimer(suicideTimer)) then
-		killTimer(suicideTimer)
-	end
-end
-
-addCommandHandler('kill',startKill)
-addCommandHandler('Commit suicide',startKill)
-addCommandHandler('cancelkill',cancelKill)
+addCommandHandler('kill',kill)
+addCommandHandler('Commit suicide',kill)
 bindKey ( next(getBoundKeys"enter_exit"), "down", "Commit suicide" )
-bindKey ( next(getBoundKeys"enter_exit"), "up", "cancelkill" )
-
--- function kill()
-	-- if Spectate.active then
-		-- if Spectate.savePos then
-			-- triggerServerEvent('onClientRequestSpectate', localPlayer, false )
-		-- end
-	-- elseif (g_MapOptions.allowonfoot) then
-		-- -- LotsOfS: Kill is the same button as enter/exit vehicle. Add an additional restriction to allow vehicle enter/exit
-		-- if (getPedControlState(localPlayer, "action") or getPedControlState(localPlayer, "sub_mission")) then
-			-- Spectate.blockManual = true
-			-- triggerServerEvent('onRequestKillPlayer', localPlayer)
-			-- Spectate.blockManualTimer = setTimer(function() Spectate.blockManual = false end, 3000, 1)
-		-- end
-	-- elseif (not g_MapOptions.allowonfoot) then
-		-- Spectate.blockManual = true
-		-- triggerServerEvent('onRequestKillPlayer', localPlayer)
-		-- Spectate.blockManualTimer = setTimer(function() Spectate.blockManual = false end, 3000, 1)
-	-- end
--- end
--- addCommandHandler('kill',kill)
--- addCommandHandler('Commit suicide',kill)
--- bindKey ( next(getBoundKeys"enter_exit"), "down", "Commit suicide" )
 
 
 function spectate()
@@ -1752,7 +1624,6 @@ function spectate()
 		end
 	end
 end
-
 bindKey("b","down","Toggle spectator")
 bindKey('arrow_l', 'down', 'Spectate previous')
 bindKey('arrow_r', 'down', 'Spectate next')
@@ -1761,40 +1632,26 @@ addCommandHandler('spectate',spectate)
 addCommandHandler('Toggle spectator',spectate)
 
 function setPipeDebug(bOn)
-	g_bPipeDebug = bOn
-	outputConsole( 'bPipeDebug set to ' .. tostring(g_bPipeDebug) )
+    g_bPipeDebug = bOn
+    outputConsole( 'bPipeDebug set to ' .. tostring(g_bPipeDebug) )
 end
 
 addEvent('onNextMapSet', true)
 addEventHandler('onNextMapSet', root,
 	function(mapName)
-		g_dxGUI.nextdisplayName:text(g_NextMapWhatsSet)
-		g_dxGUI.nextdisplayName:color(255, 255, 255, 255)
-		g_dxGUI.nextdisplay:visible(g_GameOptions.showmapname)
-		g_dxGUI.nextdisplayName:visible(g_GameOptions.showmapname)
+		-- g_dxGUI.nextdisplayName:text(g_NextMapWhatsSet)
+		-- g_dxGUI.nextdisplayName:color(255, 255, 255, 255)
 	end
 )
 
--- Save NOS between checkpoints --
+-- Custom features --
 local checkpointData = {}
 
 local function saveNosLevel(checkpointNum)
-	local vehicle2 = getPedOccupiedVehicle(localPlayer)
-	local nosLevel2
-	local nosCount2
-	local nosActivated2
-	if (vehicle2) then
-		nosLevel2 = getVehicleNitroLevel(vehicle2)
-		nosCount2 = getVehicleNitroCount(vehicle2)
-		nosActivated2 = isVehicleNitroActivated(vehicle2)		
-	end
 	checkpointData[checkpointNum] = {
-		nosLevel = getVehicleNitroLevel(g_Vehicle),
-		nosCount = getVehicleNitroCount(g_Vehicle),
-		nosActivated = isVehicleNitroActivated(g_Vehicle),
-		nosLevel2 = nosLevel2,
-		nosCount2 = nosCount2,
-		nosActivated2 = nosActivated2
+		nosLevel = getVehicleNitroLevel(getPedOccupiedVehicle(localPlayer)),
+		nosCount = getVehicleNitroCount(getPedOccupiedVehicle(localPlayer)),
+		nosActivated = isVehicleNitroActivated(getPedOccupiedVehicle(localPlayer))
 	};
 end
 addEvent('race:saveNosLevel', true)
@@ -1804,18 +1661,11 @@ local function recallNosLevel(checkpointNum)
 	local data = checkpointData[checkpointNum]
 	if data then
 		if data.nosCount then
-			setVehicleNitroCount(g_Vehicle, data.nosCount)
-		end
-		if data.nosLevel then
-			setVehicleNitroLevel(g_Vehicle, data.nosLevel)
+			setVehicleNitroCount(getPedOccupiedVehicle(localPlayer), data.nosCount)
 		end
 
-		local vehicle2 = getPedOccupiedVehicle(localPlayer)
-		if (vehicle2 and data.nosCount2) then
-			setVehicleNitroCount(vehicle2, data.nosCount2)
-		end
-		if (vehicle2 and data.nosLevel2) then
-			setVehicleNitroLevel(vehicle2, data.nosLevel2)
+		if data.nosLevel then
+			setVehicleNitroLevel(getPedOccupiedVehicle(localPlayer), data.nosLevel)
 		end
 	end
 end
@@ -1826,23 +1676,13 @@ local function startNosAgain(checkpointNum)
 	local data = checkpointData[checkpointNum]
 	if data then
 		if data.nosCount then
-			setVehicleNitroCount(g_Vehicle, data.nosCount)
+			setVehicleNitroCount(getPedOccupiedVehicle(localPlayer), data.nosCount)
 		end
+		
 		if data.nosLevel then
-			setVehicleNitroLevel(g_Vehicle, data.nosLevel)
+			setVehicleNitroLevel(getPedOccupiedVehicle(localPlayer), data.nosLevel)
 		end
-		setVehicleNitroActivated(g_Vehicle, data.nosActivated)
-
-		local vehicle2 = getPedOccupiedVehicle(localPlayer)
-		if (vehicle2 and data.nosCount2) then
-			setVehicleNitroCount(vehicle2, data.nosCount2)
-		end
-		if (vehicle2 and data.nosLevel2) then
-			setVehicleNitroLevel(vehicle2, data.nosLevel2)
-		end
-		if (vehicle2) then
-			setVehicleNitroActivated(vehicle2, data.nosActivated2)
-		end
+		setVehicleNitroActivated(getPedOccupiedVehicle(localPlayer), data.nosActivated)
 	end
 end
 addEvent('race:startNosAgain', true)

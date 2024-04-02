@@ -1,4 +1,4 @@
-allowRPC('setElementPosition')
+﻿allowRPC('setElementPosition')
 g_MotorBikeIDs = table.create({ 448, 461, 462, 463, 468, 471, 521, 522, 523, 581, 586 }, true)
 g_ArmedVehicleIDs = table.create({ 425, 447, 520, 430, 464, 432 }, true)
 g_AircraftIDs = table.create({ 592, 577, 511, 548, 512, 593, 425, 520, 417, 487, 553, 488, 497, 563, 476, 447, 519, 460, 469, 513 }, true)
@@ -13,11 +13,10 @@ g_Spawnpoints = {}			-- { i = { position={x, y, z}, rotation={x, y, z}, vehicle=
 g_Checkpoints = {}			-- { i = { position={x, y, z}, size=size, color={r, g, b}, type=type, vehicle=vehicleID, paintjob=paintjob, upgrades={...} } }
 g_Objects = {}				-- { i = { position={x, y, z}, rotation={x, y, z}, model=modelID } }
 g_Pickups = {}				-- { i = { position={x, y, z}, type=type, vehicle=vehicleID, paintjob=paintjob, upgrades={...} }
+g_OnfootSpawnpoints = {}
 
 g_Players = {}				-- { i = player }
 g_Vehicles = {}				-- { player = vehicle }
-
-
 
 addEventHandler('onPlayerJoin', root,
 	function()
@@ -35,16 +34,16 @@ addEventHandler('onGamemodeMapStart', root,
 		if getTotalPlayerCount() == 0 then
 			outputDebugString('Stopping map')
 			triggerEvent('onGamemodeMapStop', root, mapres)
-            return
+			return
 		end
-        gotoState('LoadingMap')
-        -- set up all players as not ready
-        for i,player in ipairs(getElementsByType('player')) do
-            setPlayerNotReady(player)
-        end
-        -- tell clients new map is loading
-        clientCall(root, 'notifyLoadingMap', 
-			getResourceInfo(mapres, "name") or getResourceName(mapres), 
+		gotoState('LoadingMap')
+		-- set up all players as not ready
+		for i,player in ipairs(getElementsByType('player')) do
+			setPlayerNotReady(player)
+		end
+		-- tell clients new map is loading
+		clientCall(root, 'notifyLoadingMap',
+			getResourceInfo(mapres, "name") or getResourceName(mapres),
 			g_GameOptions.showauthorname and getResourceInfo( mapres , "author"),
 			g_GameOptions.showmapinfo and getResourceInfo( mapres, "description")
 		)
@@ -53,32 +52,28 @@ addEventHandler('onGamemodeMapStart', root,
 			outputDebugString('Unloading previous map')
 			unloadAll()
 		end
+
 		TimerManager.createTimerFor("raceresource","loadmap"):setTimer( doLoadMap, 50, 1 ,mapres )
 	end
 )
 -- continue loading map after onGamemodeMapStart has completed
 function doLoadMap(mapres)
 	if not loadMap(mapres) then
-        -- Select another map on load error
-        problemChangingMap()
+		-- Select another map on load error
+		problemChangingMap()
 		return
 	end
 	if g_GameOptions.showmapinfo then
-		local detailsArray = {}
-		detailsArray["ghostmode"] = g_MapOptions.ghostmode
-		detailsArray["vehicleweapons"] = g_MapOptions.vehicleweapons
-		detailsArray["respawn"] = g_MapOptions.respawn
-		detailsArray["respawntime"] = g_MapOptions.respawntime
-		detailsArray["numspawnpoints"] = g_MapInfo.numspawnpoints
-		detailsArray["numcheckpoints"] = g_MapInfo.numcheckpoints
-		detailsArray["numobjects"] = g_MapInfo.numobjects
-		detailsArray["numpickups"] = g_MapInfo.numpickups
-		clientCall(root, 'notifyLoadingMapDetails', detailsArray)
-			-- g_MapOptions.allowonfoot,
-			-- g_MapOptions.falloffbike,
-			-- g_MapOptions.movementglitches,
-			-- g_MapOptions.spectatevehiclespersist,
-			-- g_MapOptions.fistfights
+		clientCall(root, 'notifyLoadingMapDetails',
+			g_MapOptions.ghostmode,
+			g_MapOptions.vehicleweapons,
+			g_MapOptions.respawn,
+			g_MapOptions.allowonfoot,
+			g_MapOptions.falloffbike,
+			g_MapOptions.movementglitches,
+			g_MapOptions.spectatevehiclespersist,
+			g_MapOptions.fistfights
+		)
 	end
 	g_CurrentRaceMode = RaceMode.getApplicableMode():create()
 	g_MapInfo.modename  = g_CurrentRaceMode:getName()
@@ -103,12 +98,13 @@ addEventHandler('onSettingChange', resourceRoot,
 function cacheGameOptions()
 	g_GameOptions = {}
 	g_GameOptions.timeafterfirstfinish  			= getNumber('race.timeafterfirstfinish',30) * 1000
-	g_GameOptions.percentagetimeafterfirstfinish  	= getNumber('race.percentagetimeafterfirstfinish',25) / 100
+	g_GameOptions.percentagetimeafterfirstfinish  	= getNumber('race.percentagetimeafterfirstfinish',0)
 	g_GameOptions.hurrytime							= getNumber('race.hurrytime',15) * 1000
 	g_GameOptions.defaultrespawnmode				= getString('race.respawnmode','none')
 	g_GameOptions.defaultrespawntime				= getNumber('race.respawntime',5) * 1000
 	g_GameOptions.defaultduration					= getNumber('race.duration',6000) * 1000
 	g_GameOptions.ghostmode							= getBool('race.ghostmode',false)
+	g_GameOptions.helibladecollisionsdisabled 		= getBool('race.helibladecollisionsdisabled',false)
 	g_GameOptions.ghostalpha						= getBool('race.ghostalpha',false)
 	g_GameOptions.ghostalphalevel					= getNumber('race.ghostalphalevel',180)
 	g_GameOptions.randommaps						= getBool('race.randommaps',false)
@@ -124,9 +120,12 @@ function cacheGameOptions()
 	g_GameOptions.cloudsenable						= getBool('race.clouds',true)
 	g_GameOptions.joinspectating					= getBool('race.joinspectating',true)
 	g_GameOptions.stealthspectate					= getBool('race.stealthspectate',true)
+	g_GameOptions.countdownduration					= getNumber('race.countdownduration', 3)
 	g_GameOptions.countdowneffect					= getBool('race.countdowneffect',true)
 	g_GameOptions.showmapname						= getBool('race.showmapname',true)
 	g_GameOptions.hunterminigun						= getBool('race.hunterminigun',true)
+	g_GameOptions.allowonfoot						= getBool('race.allowonfoot',false)
+	g_GameOptions.falloffbike						= getBool('race.falloffbike',false)
 	g_GameOptions.securitylevel						= getNumber('race.securitylevel',2)
 	g_GameOptions.anyonecanspec						= getBool('race.anyonecanspec',true)
 	g_GameOptions.norsadminspectate					= getBool('race.norsadminspectate',false)
@@ -135,15 +134,16 @@ function cacheGameOptions()
 	g_GameOptions.showauthorname					= getBool('race.showauthorname',true)
 	g_GameOptions.showmapinfo						= getBool('race.showmapinfo',true)
 	g_GameOptions.ghostmode_map_can_override		= getBool('race.ghostmode_map_can_override',true)
+	g_GameOptions.helibladecols_map_can_override	= getBool('race.helibladecols_map_can_override',true)
 	g_GameOptions.skins_map_can_override			= getBool('race.skins_map_can_override',true)
 	g_GameOptions.vehicleweapons_map_can_override   = getBool('race.vehicleweapons_map_can_override',true)
 	g_GameOptions.autopimp_map_can_override			= getBool('race.autopimp_map_can_override',true)
 	g_GameOptions.firewater_map_can_override		= getBool('race.firewater_map_can_override',true)
 	g_GameOptions.classicchangez_map_can_override	= getBool('race.classicchangez_map_can_override',true)
-	g_GameOptions.ghostmode_warning_if_map_override			= getBool('race.ghostmode_warning_if_map_override',true)
-	g_GameOptions.vehicleweapons_warning_if_map_override	= getBool('race.vehicleweapons_warning_if_map_override',true)
+	-- g_GameOptions.ghostmode_war/ning_if_map_override			= getBool('race.ghostmode_war/ning_if_map_override',true)
+	-- g_GameOptions.vehicleweapons_war/ning_if_map_override	= getBool('race.vehicleweapons_war/ning_if_map_override',true)
 	g_GameOptions.hunterminigun_map_can_override	= getBool('race.hunterminigun_map_can_override',true)
-	g_GameOptions.endmapwhenonlyspectators	= getBool('race.endmapwhenonlyspectators',true)
+	g_GameOptions.endmapwhenonlyspectators			= getBool('race.endmapwhenonlyspectators', true)
 	if g_GameOptions.statskey ~= 'name' and g_GameOptions.statskey ~= 'serial' then
 		outputWarning( "statskey is not set to 'name' or 'serial'" )
 		g_GameOptions.statskey = 'name'
@@ -161,36 +161,43 @@ function cacheMapOptions(map)
 	if g_MapOptions.respawn ~= 'timelimit' and g_MapOptions.respawn ~= 'none' then
 		g_MapOptions.respawn = 'timelimit'
 	end
-	g_MapOptions.respawntime	= g_MapOptions.respawn == 'timelimit' and (map.respawntime and map.respawntime*1000 or g_GameOptions.defaultrespawntime)
-	g_MapOptions.time			= map.time or '12:00'
-	g_MapOptions.weather		= map.weather or 0
-
-	g_MapOptions.skins			= map.skins or 'cj'
-	g_MapOptions.vehicleweapons = map.vehicleweapons == 'true'
-	g_MapOptions.ghostmode		= map.ghostmode == 'true'
-	g_MapOptions.autopimp		= map.autopimp == 'true'
-	g_MapOptions.firewater		= map.firewater == 'true'
-	g_MapOptions.classicchangez	= map.classicchangez == 'true'
-	g_MapOptions.hunterminigun	= map.hunterminigun == 'true'
-
+	g_MapOptions.respawntime			= g_MapOptions.respawn == 'timelimit' and (map.respawntime and map.respawntime >= 0 and map.respawntime*1000 or g_GameOptions.defaultrespawntime)
+	g_MapOptions.time					= map.time or '12:00'
+	g_MapOptions.weather				= map.weather or 0
+	g_MapOptions.timeafterfirstfinish	= map.timeafterfirstfinish and tonumber(map.timeafterfirstfinish) >= 0 and map.timeafterfirstfinish*1000 or g_GameOptions.timeafterfirstfinish
+	g_MapOptions.countdownduration		= map.countdownduration and tonumber(map.countdownduration) >= 0 and map.countdownduration or g_GameOptions.countdownduration
+	
+	g_MapOptions.skins						= map.skins or 'cj'
+	g_MapOptions.vehicleweapons 			= map.vehicleweapons == 'true'
+	g_MapOptions.ghostmode					= map.ghostmode == 'true'
+	g_MapOptions.helibladecollisionsdisabled= map.helibladecollisionsdisabled == 'true'
+	g_MapOptions.autopimp					= map.autopimp == 'true'
+	g_MapOptions.firewater					= map.firewater == 'true'
+	g_MapOptions.classicchangez				= map.classicchangez == 'true'
+	g_MapOptions.hunterminigun				= map.hunterminigun == 'true'
+	g_MapOptions.rustlermachinegun			= map.rustlermachinegun ~= 'false' -- Backwards compatibility. Always true in old race maps.
+	g_MapOptions.fistfights					= map.fistfights == 'true'
+	g_MapOptions.movementglitches			= map.movementglitches	== 'true'
+	g_MapOptions.allowonfoot				= map.allowonfoot == 'true'
+	g_MapOptions.falloffbike	 			= map.falloffbike == 'true'
+	g_MapOptions.spectatevehiclespersist	= map.spectatevehiclespersist == 'true'
+	
 	outputDebug("MISC", "duration = "..g_MapOptions.duration.."  respawn = "..g_MapOptions.respawn.."  respawntime = "..tostring(g_MapOptions.respawntime).."  time = "..g_MapOptions.time.."  weather = "..g_MapOptions.weather)
-
+	
 	if g_MapOptions.time then
 		setTime(g_MapOptions.time:match('(%d+):(%d+)'))
 	end
 	if g_MapOptions.weather then
 		setWeather(g_MapOptions.weather)
 	end
-
+	
 	-- Set ghostmode from g_GameOptions if not defined in the map, or map override not allowed
 	if not map.ghostmode or not g_GameOptions.ghostmode_map_can_override then
 		g_MapOptions.ghostmode = g_GameOptions.ghostmode
-	elseif g_GameOptions.ghostmode_warning_if_map_override and g_MapOptions.ghostmode ~= g_GameOptions.ghostmode then
-		if g_MapOptions.ghostmode then
-			outputChatBox( 'Notice: Collisions are turned off for this map' )
-		else
-			outputChatBox( 'Notice: Collisions are turned on for this map' )
-		end
+	end
+	
+	if not map.helibladecollisionsdisabled or not g_GameOptions.helibladecols_map_can_override then
+		g_MapOptions.helibladecollisionsdisabled = g_GameOptions.helibladecollisionsdisabled
 	end
 
 	-- Set skins from g_GameOptions if not defined in the map, or map override not allowed
@@ -201,12 +208,6 @@ function cacheMapOptions(map)
 	-- Set vehicleweapons from g_GameOptions if not defined in the map, or map override not allowed
 	if not map.vehicleweapons or not g_GameOptions.vehicleweapons_map_can_override then
 		g_MapOptions.vehicleweapons = g_GameOptions.vehicleweapons
-	elseif g_GameOptions.vehicleweapons_warning_if_map_override and g_MapOptions.vehicleweapons ~= g_GameOptions.vehicleweapons then
-		if g_MapOptions.vehicleweapons then
-			outputChatBox( 'Notice: Vehicle weapons are turned on for this map' )
-		else
-			outputChatBox( 'Notice: Vehicle weapons are turned off for this map' )
-		end
 	end
 
 	-- Set autopimp from g_GameOptions if not defined in the map, or map override not allowed
@@ -231,45 +232,55 @@ function cacheMapOptions(map)
 end
 
 
+
 -- Called from:
---      onGamemodeMapStart
+--	  onGamemodeMapStart
 function loadMap(res)
 	local map = RaceMap.load(res)
 	if not map then
 		outputDebugString( 'Error loading map ' .. tostring(getResourceName(res)) )
-        outputChatBox( 'Error loading map ' .. tostring(getResourceName(res)) )
+		outputChatBox( 'Error loading map ' .. tostring(getResourceName(res)) )
 		return false
 	end
 
 	-- set options
-    g_MapInfo = getMapInfo(res)
-    g_MapInfo.name      = map.info['name'] or 'unnamed'
-	g_MapInfo.author    = map.info['author']
-    g_MapInfo.resname   = map.info['resname'] or getResourceName(res)
+	g_MapInfo = getMapInfo(res)
+	g_MapInfo.name	  = map.info['name'] or 'unnamed'
+	g_MapInfo.author	= map.info['author']
+	g_MapInfo.resname   = map.info['resname'] or getResourceName(res)
 
 	g_SavedMapSettings = {}
-	g_SavedMapSettings.duration			= map.duration
-	g_SavedMapSettings.respawn			= map.respawn
-	g_SavedMapSettings.respawntime		= map.respawntime
-	g_SavedMapSettings.time				= map.time
-	g_SavedMapSettings.weather			= map.weather
-	g_SavedMapSettings.skins			= map.skins
-	g_SavedMapSettings.vehicleweapons	= map.vehicleweapons
-	g_SavedMapSettings.ghostmode		= map.ghostmode
-	g_SavedMapSettings.autopimp			= map.autopimp
-	g_SavedMapSettings.firewater		= map.firewater
-	g_SavedMapSettings.classicchangez	= map.classicchangez
-	g_SavedMapSettings.firewater		= map.firewater
-	g_SavedMapSettings.hunterminigun	= map.hunterminigun
+	g_SavedMapSettings.duration						= map.duration
+	g_SavedMapSettings.respawn						= map.respawn
+	g_SavedMapSettings.respawntime					= map.respawntime
+	g_SavedMapSettings.time							= map.time
+	g_SavedMapSettings.weather						= map.weather
+	g_SavedMapSettings.skins						= map.skins
+	g_SavedMapSettings.vehicleweapons				= map.vehicleweapons
+	g_SavedMapSettings.ghostmode					= map.ghostmode
+	g_SavedMapSettings.helibladecollisionsdisabled 	= map.helibladecollisionsdisabled
+	g_SavedMapSettings.autopimp						= map.autopimp
+	g_SavedMapSettings.firewater					= map.firewater
+	g_SavedMapSettings.classicchangez				= map.classicchangez
+	g_SavedMapSettings.firewater					= map.firewater
+	g_SavedMapSettings.hunterminigun				= map.hunterminigun
+	g_SavedMapSettings.rustlermachinegun			= map.rustlermachinegun
+	g_SavedMapSettings.fistfights					= map.fistfights
+	g_SavedMapSettings.movementglitches				= map.movementglitches
+	g_SavedMapSettings.allowonfoot					= map.allowonfoot
+	g_SavedMapSettings.falloffbike					= map.falloffbike
+	g_SavedMapSettings.spectatevehiclespersist 		= map.spectatevehiclespersist
+	g_SavedMapSettings.timeafterfirstfinish			= map.timeafterfirstfinish
+	g_SavedMapSettings.countdownduration			= map.countdownduration
 
 	cacheMapOptions(g_SavedMapSettings)
 
 	-- If no checkpoints and ghostmode no defined in the map, turn ghostmode off for this map
 	if #map:getAll('checkpoint') == 0 and not map.ghostmode and g_MapOptions.ghostmode then
 		g_MapOptions.ghostmode = false
-		if g_GameOptions.ghostmode_warning_if_map_override then
-			outputChatBox( 'Notice: Collisions are turned on for this map' )
-		end
+		-- if g_GameOptions.ghostmode_war/ning_if_map_override then
+		-- 	outputChatBox( 'Notice: Collisions are turned on for this map' )
+		-- end
 	end
 
 	-- Check race can start ok
@@ -282,15 +293,18 @@ function loadMap(res)
 			return false
 		end
 	end
-
+	
 	-- read spawnpoints
 	g_Spawnpoints = map:getAll('spawnpoint')
-	g_MapInfo.numspawnpoints = #g_Spawnpoints
-
+	g_OnfootSpawnpoints = map:getAll('spawnpoint_onfoot')
+	
 	-- read checkpoints
 	g_Checkpoints = map:getAll('checkpoint')
-	g_MapInfo.numcheckpoints = #g_Checkpoints
-
+	
+	-- LotsOfS: Process Custom Stuff
+	processInteractiveVehicles(map:getAll('vehicle_interactive'))
+	processTriggers(map)
+	
 	-- if map isn't made in the new editor or map is an old race map multiplicate the checkpointsize with 4
 	local madeInNewEditor = map.def and ( map.def:find("editor_main") or map.def:find("race") )
 	if not madeInNewEditor or map:isRaceFormat() then
@@ -298,16 +312,16 @@ function loadMap(res)
 			checkpoint.size = checkpoint.size and checkpoint.size*4 or 4
 		end
 	end
-
+	
 	if map:isDMFormat() then
 		-- sort checkpoints
 		local chains = {}		-- a chain is a list of checkpoints that immediately follow each other
 		local prevchainnum, chainnum, nextchainnum
 		for i,checkpoint in ipairs(g_Checkpoints) do
-
+		
 			--check size
 			checkpoint.size = checkpoint.size or 4
-
+			
 			-- any chain we can place this checkpoint after?
 			chainnum = table.find(chains, '[last]', 'nextid', checkpoint.id)
 			if chainnum then
@@ -339,16 +353,12 @@ function loadMap(res)
 		end
 		g_Checkpoints = chains[1] or {}
 	end
-
+	
 	-- read objects
-	-- LotsOfS CUSTOM EDIT: This always returned a {}, so I changed it to return the count of objects instead without 
-	-- doing any further calculations on it, to be used for fun map stats in the loading screen.
 	g_Objects = map:getAll('object')
-	g_MapInfo.numobjects = g_Objects
-
+	
 	-- read pickups
-	g_Pickups = map:getAll('pickup')
-	g_MapInfo.numpickups = #g_Pickups
+	g_Pickups = map:getAll('rpickup')
 
 	-- unload map xml
 	map:unload()
@@ -356,12 +366,12 @@ function loadMap(res)
 end
 
 -- Called from:
---      onGamemodeMapStart
+--	  onGamemodeMapStart
 function startRace()
-    gotoState('PreGridCountdown')
+	gotoState('PreGridCountdown')
 	setElementData( resourceRoot, "info", {mapInfo = g_MapInfo, mapOptions = g_MapOptions, gameOptions = g_GameOptions}, false )
 	AddonOverride.removeAll()
-    triggerEvent('onMapStarting', root, g_MapInfo, g_MapOptions, g_GameOptions )
+	triggerEvent('onMapStarting', root, g_MapInfo, g_MapOptions, g_GameOptions )
 	g_Players = {}
 	TimerManager.createTimerFor("map","spawn"):setTimer(joinHandlerByTimer, 500, 0)
 	if g_CurrentRaceMode:isRanked() then
@@ -369,9 +379,8 @@ function startRace()
 	end
 end
 
-
 -- Called from:
---      g_RaceStartCountdown
+--	  g_RaceStartCountdown
 function launchRace()
 	for i,player in pairs(g_Players) do
 		unfreezePlayerWhenReady(player)
@@ -382,7 +391,7 @@ function launchRace()
 	end
 	g_CurrentRaceMode:launch()
 	g_CurrentRaceMode.running = true
-    gotoState('Running')
+	gotoState('Running')
 end
 
 g_RaceStartCountdown = Countdown.create(6, launchRace)
@@ -394,41 +403,42 @@ g_RaceStartCountdown:addClientHook(1, 'playSoundFrontEnd', 44)
 g_RaceStartCountdown:addClientHook(0, 'playSoundFrontEnd', 45)
 
 
+
 -- Called from:
---      event onPlayerJoin
---      g_SpawnTimer = setTimer(joinHandler, 500, 0) in startRace
+--	  event onPlayerJoin
+--	  g_SpawnTimer = setTimer(joinHandler, 500, 0) in startRace
 -- Interesting calls to:
---      g_RaceStartCountdown:start()
+--	  g_RaceStartCountdown:start()
 --
 -- note: player is always nil on entry
 
 function joinHandlerByEvent()
-    setPlayerNotReady(source)
-    joinHandlerBoth()
+	setPlayerNotReady(source)
+	joinHandlerBoth()
 end
 
 function joinHandlerByTimer()
-    joinHandlerBoth()
+	joinHandlerBoth()
 end
 
 function joinHandlerBoth(player)
 	if #g_Spawnpoints == 0 then
-		-- start vote if no map is loaded
+ 		-- start vote if no map is loaded
 		if not TimerManager.hasTimerFor("watchdog") then
-            TimerManager.createTimerFor("map","watchdog"):setTimer(
-                function()
-                    if #g_Spawnpoints == 0 then
-                        outputDebugString('No map loaded; showing votemanager')
+			TimerManager.createTimerFor("map","watchdog"):setTimer(
+				function()
+					if #g_Spawnpoints == 0 then
+						outputDebugString('No map loaded; showing votemanager')
 						TimerManager.destroyTimersFor("spawn")
-                        RaceMode.endMap()
-                    end
-                end,
-                1000, 1 )
-        end
-        return
-    else
+						RaceMode.endMap()
+					end
+				end,
+				1000, 1 )
+		end
+		return
+	else
 		TimerManager.destroyTimersFor("watchdog")
-    end
+	end
 	if TimerManager.hasTimerFor("spawn") then
 		for i,p in ipairs(getElementsByType('player')) do
 			if not table.find(g_Players, p) then
@@ -437,13 +447,14 @@ function joinHandlerBoth(player)
 			end
 		end
 		if not player then
-            -- Is everyone ready?
-            if howManyPlayersNotReady() == 0 then
+			-- Is everyone ready?
+			if howManyPlayersNotReady() == 0 then
 				TimerManager.destroyTimersFor("spawn")
-                if stateAllowsGridCountdown() then
-                    gotoState('GridCountdown')
-			        g_RaceStartCountdown:start()
-                end
+				if stateAllowsGridCountdown() then
+					gotoState('GridCountdown')
+					g_RaceStartCountdown.startvalue = g_MapOptions.countdownduration -- LotsOfS: Hack to make this map dependent
+					g_RaceStartCountdown:start()
+				end
 			end
 			return
 		end
@@ -453,120 +464,138 @@ function joinHandlerBoth(player)
 		player = source
 		setPlayerStatus( player, "joined", "" )
 	else
-        setPlayerStatus( player, "not ready", "" )
-    end
-    if not player then
-        outputDebug( 'MISC', 'joinHandler: player==nil' )
-        return
-    end
+		setPlayerStatus( player, "not ready", "" )
+	end
+	if not player then
+		outputDebug( 'MISC', 'joinHandler: player==nil' )
+		return
+	end
 
 	table.insert(g_Players, player)
-    local vehicle
+	local vehicle
 	if true then
-        local spawnpoint = g_CurrentRaceMode:pickFreeSpawnpoint(player)
+		local spawnpoint = g_CurrentRaceMode:pickFreeSpawnpoint(player)
+		
+		local x, y, z = unpack(spawnpoint.position)
+		local rx, ry, rz = unpack(spawnpoint.rotation)
+		-- Set random seed dependant on map name, so everyone gets the same models
+		setRandomSeedForMap('clothes')
 
-        local x, y, z = unpack(spawnpoint.position)
-        local rx, ry, rz = unpack(spawnpoint.rotation)
-        -- Set random seed dependant on map name, so everyone gets the same models
-        setRandomSeedForMap('clothes')
-
-        if g_MapOptions.skins == 'cj' then
-            spawnPlayer(player, x + 4, y, z, 0, 0)
-
-            local clothes = { [16] = math.random(12, 13), [17] = 7 }    -- 16=Hats(12:helmet 13:moto) 17=Extra(7:garageleg)
-            for vehicles,vehicleclothes in pairs(g_VehicleClothes) do
-                if table.find(vehicles, spawnpoint.vehicle) then
-                    for type,index in pairs(vehicleclothes) do
-                        clothes[type] = index or nil
-                    end
-                end
-            end
-            local texture, model
-            for type,index in pairs(clothes) do
-                texture, model = getClothesByTypeIndex(type, index)
-                addPedClothes(player, texture, model, type)
-            end
-        elseif g_MapOptions.skins == 'random' then
-            repeat until spawnPlayer(player, x + 4, y, z, 0, math.random(9, 288))
-        else
-            local ok
-            for i=1,20 do
-                ok = spawnPlayer(player, x + 4, y, z, 0, getRandomFromRangeList(g_MapOptions.skins))
-                if ok then break end
-            end
-            if not ok then
-                spawnPlayer(player, x + 4, y, z, 0, 264)
-            end
-        end
+		if g_MapOptions.skins == 'cj' then
+			spawnPlayer(player, x + 4, y, z, 0, 0, (spawnpoint.interior or 0))
+			
+			local clothes = { [16] = math.random(12, 13), [17] = 7 }	-- 16=Hats(12:helmet 13:moto) 17=Extra(7:garageleg)
+			for vehicles,vehicleclothes in pairs(g_VehicleClothes) do
+				if table.find(vehicles, spawnpoint.vehicle) then
+					for type,index in pairs(vehicleclothes) do
+						clothes[type] = index or nil
+					end
+				end
+			end
+			if (g_MapOptions.allowonfoot) then
+				clothes = { [0] = math.random(1, 2), [2] = math.random(11,15), [3] = math.random(10,18) }
+			end
+			local texture, model
+			for type,index in pairs(clothes) do
+				texture, model = getClothesByTypeIndex(type, index)
+				addPedClothes(player, texture, model, type)
+			end
+		elseif g_MapOptions.skins == 'random' then
+			repeat until spawnPlayer(player, x + 4, y, z, 0, math.random(9, 288), (spawnpoint.interior or 0))
+		else
+			local ok
+			for i=1,20 do
+				ok = spawnPlayer(player, x + 4, y, z, 0, getRandomFromRangeList(g_MapOptions.skins), spawnpoint.interior)
+				if ok then break end
+			end
+			if not ok then
+				spawnPlayer(player, x + 4, y, z, 0, 264, (spawnpoint.interior or 0))
+			end
+		end
 
 		setPlayerSpectating(player, false)
-        setPlayerNotReady( player )
-        setPedStat(player, 160, 1000)
-        setPedStat(player, 229, 1000)
-        setPedStat(player, 230, 1000)
-
-        if spawnpoint.vehicle then
-            setRandomSeedForMap('vehiclecolors')
+		setPlayerNotReady( player )
+		setPedStat(player, 160, 1000)
+		setPedStat(player, 229, 1000)
+		setPedStat(player, 230, 1000)
+		setGlitchEnabled("quickreload", g_MapOptions.movementglitches)
+		setGlitchEnabled("fastmove", g_MapOptions.movementglitches)
+		setGlitchEnabled("fastfire", g_MapOptions.movementglitches)
+		setGlitchEnabled("crouchbug", g_MapOptions.movementglitches)
+		setGlitchEnabled("fastsprint", g_MapOptions.movementglitches)
+		setGlitchEnabled("quickstand", g_MapOptions.movementglitches)
+		
+		if spawnpoint.vehicle then
+			setRandomSeedForMap('vehiclecolors')
 			-- Replace groups of unprintable characters with a space, and then remove any leading space
 			local plate = getPlayerName(player):gsub( '[^%a%d]+', ' ' ):gsub( '^ ', '' )
 			vehicle = createVehicle(spawnpoint.vehicle, x, y, z, rx, ry, rz, plate:sub(1, 8))
-			if setElementSyncer then
+			setElementInterior(player, (spawnpoint.interior or 0))
+			setElementInterior(vehicle, (spawnpoint.interior or 0))
+			if setElementSyncer and not g_MapOptions.allowonfoot then
 				setElementSyncer( vehicle, false )
 			end
-            g_Vehicles[player] = vehicle
+			g_Vehicles[player] = vehicle
+			setElementData(vehicle, "raceiv.owner", player) -- LotsOfS Edit: For Interactive Vehicles/ Foot Races
 			Override.setAlpha( "ForRCVehicles", player, g_RCVehicleIDs[spawnpoint.vehicle] and 0 or nil )
-            RaceMode.playerFreeze(player)
-            outputDebug( 'MISC', 'joinHandlerBoth: setElementFrozen true for ' .. tostring(getPlayerName(player)) .. '  vehicle:' .. tostring(vehicle) )
-            if bPlayerJoined and g_CurrentRaceMode.running then
-                unfreezePlayerWhenReady(player)
-            end
+			RaceMode.playerFreeze(player)
+			outputDebug( 'MISC', 'joinHandlerBoth: setElementFrozen true for ' .. tostring(getPlayerName(player)) .. '  vehicle:' .. tostring(vehicle) )
+			if bPlayerJoined and g_CurrentRaceMode.running then
+				unfreezePlayerWhenReady(player)
+			end
 
 			if g_MapOptions.respawn == 'none' and not stateAllowsSpawnInNoRespawnMap() then
-                g_CurrentRaceMode.setPlayerIsFinished(player)
-                setElementPosition(vehicle, 0, 0, 0)
-            end
-
-            if spawnpoint.paintjob or spawnpoint.upgrades then
-                setVehiclePaintjobAndUpgrades(vehicle, spawnpoint.paintjob, spawnpoint.upgrades)
-            else
-                if g_MapOptions.autopimp then
-                    pimpVehicleRandom(vehicle)
-                end
-                if g_GameOptions.vehiclecolors == 'random' then
-                    setRandomSeedForMap('vehiclecolors')
-                    local vehicleColorFixed = false
-                    for vehicleID,color in pairs(g_FixedColorVehicles) do
-                        if vehicleID == tonumber(spawnpoint.vehicle) then
-                            if color then
-                                setVehicleColor(vehicle, color[1], color[2], color[3], color[4])
-                            end
-                            vehicleColorFixed = true
-                            break
-                        end
-                    end
-                    if not vehicleColorFixed then
+				g_CurrentRaceMode.setPlayerIsFinished(player)
+				setElementPosition(vehicle, 0, 0, 0)
+			end
+			
+			if spawnpoint.paintjob or spawnpoint.upgrades then
+				setVehiclePaintjobAndUpgrades(vehicle, spawnpoint.paintjob, spawnpoint.upgrades)
+			else
+				if g_MapOptions.autopimp then
+					pimpVehicleRandom(vehicle)
+				end
+				if g_GameOptions.vehiclecolors == 'random' then
+					setRandomSeedForMap('vehiclecolors')
+					local vehicleColorFixed = false
+					for vehicleID,color in pairs(g_FixedColorVehicles) do
+						if vehicleID == tonumber(spawnpoint.vehicle) then
+							if color then
+								setVehicleColor(vehicle, color[1], color[2], color[3], color[4])
+							end
+							vehicleColorFixed = true
+							break
+						end
+					end
+					if not vehicleColorFixed then
 						setVehicleColorToRandomHSV(vehicle)
-						-- note: the below would always set the tertiary color of cement truck, squalo & camper to black. when choosing to revert it, perhaps fix that.
-						-- setVehicleColor(vehicle, math.random(0, 126), math.random(0, 126), 0, 0)
-                    end
-                end
-            end
-            warpPedIntoVehicle(player, vehicle)
-        end
+						-- setVehicleColor(vehicle, math.random(0, 126), math.random(0, 126), math.random(0, 126), math.random(0, 126))
+					end
+				end
+			end
+	
+			warpPedIntoVehicle(player, vehicle)
+		end
 
 		destroyBlipsAttachedTo(player)
-        createBlipAttachedTo(player, 0, 1, 200, 200, 200)
-        g_CurrentRaceMode:onPlayerJoin(player, spawnpoint)
-    end
+		createBlipAttachedTo(player, 0, 1, 200, 200, 200)
 
-    -- Send client all info
-    local playerInfo = {}
-    playerInfo.admin    = isPlayerInACLGroup(player, g_GameOptions.admingroup)
-    playerInfo.testing  = _TESTING
-    playerInfo.joined   = bPlayerJoined
+		g_CurrentRaceMode:onPlayerJoin(player, spawnpoint)
+
+		-- LotsOfS: On-foot spawnpoint support
+		if (spawnpoint.trigger) then
+			callTrigger(spawnpoint.trigger, player)
+		end
+	end
+
+	-- Send client all info
+	local playerInfo = {}
+	playerInfo.admin	= isPlayerInACLGroup(player, g_GameOptions.admingroup)
+	playerInfo.testing  = _TESTING
+	playerInfo.joined   = bPlayerJoined
 	local duration = bPlayerJoined and (g_MapOptions.duration and (g_MapOptions.duration - g_CurrentRaceMode:getTimePassed()) or true)
 	clientCall(player, 'initRace', vehicle, g_Checkpoints, g_Objects, g_Pickups, g_MapOptions, g_CurrentRaceMode:isRanked(), duration, g_GameOptions, g_MapInfo, playerInfo )
-
+	
 	if bPlayerJoined and getPlayerCount() == 2 and stateAllowsRandomMapVote() and g_GameOptions.joinrandomvote then
 		-- Start random map vote if someone joined a lone player mid-race
 		TimerManager.createTimerFor("map"):setTimer(startMidMapVoteForRandomMap,7000,1)
@@ -593,28 +622,28 @@ function joinHandlerBoth(player)
 end
 addEventHandler('onPlayerJoin', root, joinHandlerByEvent)
 
-
 -- Called from:
---      joinHandler
---      unfreezePlayerWhenReady
---      launchRace
+--	  joinHandler
+--	  unfreezePlayerWhenReady
+--	  launchRace
 function unfreezePlayerWhenReady(player)
 	if not isValidPlayer(player) then
-        outputDebug( 'MISC', 'unfreezePlayerWhenReady: not isValidPlayer(player)' )
+		outputDebug( 'MISC', 'unfreezePlayerWhenReady: not isValidPlayer(player)' )
 		return
 	end
-    if isPlayerNotReady(player) then
-        outputDebug( 'MISC', 'unfreezePlayerWhenReady: isPlayerNotReady(player) for ' .. tostring(getPlayerName(player)) )
-        TimerManager.createTimerFor("map",player):setTimer( unfreezePlayerWhenReady, 500, 1, player )
-    else
-        RaceMode.playerUnfreeze(player)
-        outputDebug( 'MISC', 'unfreezePlayerWhenReady: setElementFrozen false for ' .. tostring(getPlayerName(player)) )
-    end
+	if isPlayerNotReady(player) then
+		outputDebug( 'MISC', 'unfreezePlayerWhenReady: isPlayerNotReady(player) for ' .. tostring(getPlayerName(player)) )
+		TimerManager.createTimerFor("map",player):setTimer( unfreezePlayerWhenReady, 500, 1, player )
+	else
+		RaceMode.playerUnfreeze(player)
+		outputDebug( 'MISC', 'unfreezePlayerWhenReady: setElementFrozen false for ' .. tostring(getPlayerName(player)) )
+	end
 end
 
 
+
 -- Called from:
---      g_RankTimer = setTimer(updateRank, 1000, 0) in startRace
+--	  g_RankTimer = setTimer(updateRank, 1000, 0) in startRace
 function updateRank()
 	if g_CurrentRaceMode then
 		g_CurrentRaceMode:updateRanks()
@@ -628,20 +657,20 @@ end
 -- players have different skin/clothes.
 -- For smooth gameplay, ensure everyone has the same skin setup including crash helmet etc.
 function setRandomSeedForMap( type )
-    local seed = 0
-    if type == 'clothes' then
-        seed = 100                  -- All players get the same driver skin/clothes
-    elseif type == 'upgrades' then
-        seed = 0                    -- All players get the same set of vehicle upgrades
-    elseif type == 'vehiclecolors' then
-        seed = getTickCount()       -- Allow vehicle colors to vary between players
-    else
-        outputWarning( 'Unknown setRandomSeedForMap type ' .. type )
-    end
-    for i,char in ipairs( { string.byte(g_MapInfo.name,1,g_MapInfo.name:len()) } ) do
-        seed = math.mod( seed * 11 + char, 216943)
-    end
-    math.randomseed(seed)
+	local seed = 0
+	if type == 'clothes' then
+		seed = 100				  -- All players get the same driver skin/clothes
+	elseif type == 'upgrades' then
+		seed = 0					-- All players get the same set of vehicle upgrades
+	elseif type == 'vehiclecolors' then
+		seed = getTickCount()	   -- Allow vehicle colors to vary between players
+	else
+		outputWarning( 'Unknown setRandomSeedForMap type ' .. type )
+	end
+	for i,char in ipairs( { string.byte(g_MapInfo.name,1,g_MapInfo.name:len()) } ) do
+		seed = math.mod( seed * 11 + char, 216943)
+	end
+	math.randomseed(seed)	
 end
 
 
@@ -651,9 +680,9 @@ addEvent('onPlayerReachCheckpointInternal', true)
 addEventHandler('onPlayerReachCheckpointInternal', root,
 	function(checkpointNum)
 		if checkClient( false, source, 'onPlayerReachCheckpointInternal' ) then return end
-        if not stateAllowsCheckpoint() then
-            return
-        end
+		if not stateAllowsCheckpoint() then
+			return
+		end
 		local vehicle = g_Vehicles[source]
 		local checkpoint = g_Checkpoints[checkpointNum]
 		if checkpoint.vehicle then
@@ -669,7 +698,7 @@ addEventHandler('onPlayerReachCheckpointInternal', root,
 				end
 			end
 		end
-
+		
 		local rank, time = g_CurrentRaceMode:onPlayerReachCheckpoint(source, checkpointNum)
 		if checkpointNum < #g_Checkpoints then
 			triggerEvent('onPlayerReachCheckpoint', source, checkpointNum, time)
@@ -689,8 +718,8 @@ addEventHandler('onPlayerPickUpRacePickupInternal', root,
 		if not pickup or not vehicle then return end
 		if respawntime and tonumber(respawntime) >= 50 and not pickup.isRespawning then
 			pickup.isRespawning = true
-			TimerManager.createTimerFor("map"):setTimer(ServerLoadPickup, tonumber(respawntime), 1, pickupID)
 			clientCall(root, 'unloadPickup', pickupID)
+			TimerManager.createTimerFor("map"):setTimer(ServerLoadPickup, tonumber(respawntime), 1, pickupID)
 		end
 		if pickup.type == 'nitro' then
 			addVehicleUpgrade(vehicle, 1010)
@@ -704,6 +733,10 @@ addEventHandler('onPlayerPickUpRacePickupInternal', root,
 			end
 		end
 		triggerEvent('onPlayerPickUpRacePickup', source, pickupID, pickup.type, pickup.vehicle)
+		-- On-foot spawnpoint support
+		if (pickup.trigger) then
+			callTrigger(pickup.trigger, source)
+		end
 	end
 )
 
@@ -718,9 +751,9 @@ addEventHandler('onPlayerWasted', root,
 		if g_CurrentRaceMode then
 			if not g_CurrentRaceMode.startTick then
 				local x, y, z = getElementPosition(source)
-				spawnPlayer(source, x, y, z, 0, getElementModel(source))
+				spawnPlayer(source, x, y, z, 0, getElementModel(source), getElementInterior(source))
 				if g_Vehicles[source] then
-					warpPedIntoVehicle(source, g_Vehicles[source])
+					warpPedIntoVehicle(source, g_Vehicles[source])	
 				end
 			else
 				setPlayerStatus( source, "dead", "" )
@@ -750,9 +783,9 @@ function raceTimeout()
 end
 
 -- Called from:
---      onGamemodeMapStart
---      onGamemodeMapStop
---      onResourceStop
+--	  onGamemodeMapStart
+--	  onGamemodeMapStop
+--	  onResourceStop
 function unloadAll()
 	if getPlayerCount() > 0 then
 		clientCall(root, 'unloadAll')
@@ -766,13 +799,15 @@ function unloadAll()
 		destroyMessage(player)
 	end
 	destroyMessage(root)
-
+	
 	table.each(g_Vehicles, destroyElement)
 	g_Vehicles = {}
 	g_Spawnpoints = {}
+	g_OnfootSpawnpoins = {}
 	g_Checkpoints = {}
 	g_Objects = {}
 	g_Pickups = {}
+	destroyInteractiveVehicles()
 	if g_CurrentRaceMode then
 		g_CurrentRaceMode:destroy()
 	end
@@ -787,14 +822,14 @@ addEventHandler('onGamemodeMapStop', root,
 			setElementData ( player, "race rank", "" )
 			setElementData ( player, "checkpoint", "" )
 		end
-        fadeCamera ( g_RootPlayers, false, 0.0, 0,0, 0 )
-        gotoState('NoMap')
+		fadeCamera ( g_RootPlayers, false, 0.0, 0,0, 0 )
+		gotoState('NoMap')
 		unloadAll()
 	end
 )
 
 -- Called from:
---      nowhere
+--	  nowhere
 addEventHandler('onPollDraw', root,
 	function()
 		outputDebugString('Poll ended in a draw')
@@ -820,6 +855,7 @@ addEventHandler('onResourceStart', resourceRoot,
 	end
 )
 
+
 addEventHandler('onGamemodeStart', resourceRoot,
 	function()
 		outputDebugString('Race onGamemodeStart')
@@ -838,8 +874,8 @@ end
 
 addEventHandler('onResourceStop', resourceRoot,
 	function()
-        gotoState( 'Race resource stopping' )
-        fadeCamera ( root, false, 0.0, 0,0, 0 )
+		gotoState( 'Race resource stopping' )
+		fadeCamera ( root, false, 0.0, 0,0, 0 )
 		outputDebugString('Resource stopping')
 		unloadAll()
 		exports.scoreboard:removeScoreboardColumn('race rank')
@@ -861,13 +897,13 @@ addEventHandler('onPlayerQuit', root,
 		if g_CurrentRaceMode then
 			g_CurrentRaceMode:onPlayerQuit(source)
 		end
-
+		
 		for i,player in pairs(g_Players) do
 			if not isPlayerFinished(player) then
 				return
 			end
 		end
-
+		
 		if getTotalPlayerCount() < 2 then
 			outputDebugString('Stopping map')
 			triggerEvent('onGamemodeMapStop', root, exports.mapmanager:getRunningGamemodeMap())
@@ -880,7 +916,12 @@ addEventHandler('onPlayerQuit', root,
 	end
 )
 
-addEventHandler('onVehicleStartExit', root, function() cancelEvent() end)
+addEventHandler('onVehicleStartExit', root,
+function()
+	if (not g_SavedMapSettings.allowonfoot or isElementFrozen(source)) then
+		cancelEvent()
+	end
+end)
 
 function getPlayerCurrentCheckpoint(player)
 	return getElementData(player, 'race.checkpoint') or 1
@@ -906,14 +947,14 @@ end
 
 addEvent('onRequestKillPlayer', true)
 addEventHandler('onRequestKillPlayer', root,
-    function()
+	function()
 		if checkClient( false, source, 'onRequestKillPlayer' ) then return end
-        local player = source
-        if stateAllowsKillPlayer() then
-            setElementHealth(player, 0)
-            toggleAllControls(player,false, true, false)
-        end
-    end
+		local player = source
+		if stateAllowsKillPlayer() then
+			setElementHealth(player, 0)
+			toggleAllControls(player,false, true, false)
+		end
+	end
 )
 
 function toggleServerGhostmode(player)
@@ -977,22 +1018,20 @@ addEventHandler('onClientRequestSpectate', root,
 				Override.setCollideOthers( "ForSpectating", RaceMode.getPlayerVehicle( player ), 0 )
 				g_SavedVelocity[player] = {}
 				g_SavedVelocity[player].velocity = {getElementVelocity(g_Vehicles[player])}
-				g_SavedVelocity[player].turnvelocity = {getVehicleTurnVelocity(g_Vehicles[player])}
+				g_SavedVelocity[player].turnvelocity = {getElementAngularVelocity(g_Vehicles[player])}
 				
 				if g_GameOptions.endmapwhenonlyspectators then
 					removeActivePlayer(player)
-				end
-				if getActivePlayerCount() < 1 then
-					-- LOTSOFS CUSTOM EDIT: Start a timer instead of insta-ending the map because people might be double pressing for a respawn
-					TimerManager.createTimerFor("map"):setTimer(
-					function()
-						-- we already did this check, but things might have changed in the second wait period
-						if getActivePlayerCount() < 1 then
-							-- gotoState('EveryoneFinished')
-							RaceMode.endMap()
-						end
-					end,
-					500, 1 )
+					if getActivePlayerCount() == 0 then
+						TimerManager.createTimerFor("map"):setTimer(
+							function()
+								-- Timer to check again, so that people using spectate for respawning don't instantly end the map
+								if getActivePlayerCount() == 0 then
+									RaceMode.endMap()
+								end
+							end,
+						500, 1 )
+					end
 				end
 			else
 				clientCall(player, "Spectate.stop", 'manual' )
@@ -1006,6 +1045,7 @@ addEventHandler('onClientRequestSpectate', root,
 					RaceMode.playerFreeze(player, true, true)
 					TimerManager.createTimerFor("map",player):setTimer(afterSpectatePlayerUnfreeze, 2000, 1, player, true)
 				end
+
 				if g_GameOptions.endmapwhenonlyspectators then
 					addActivePlayer(player)
 				end
@@ -1052,7 +1092,7 @@ addEventHandler('onNotifyPlayerReady', root,
 
 ------------------------
 -- Players not ready stuff
-g_NotReady = {}             -- { player = bool }
+g_NotReady = {}			 -- { player = bool }
 g_NotReadyDisplay = nil
 g_NotReadyTextItems = {}
 g_NotReadyDisplayOnTime = 0
@@ -1063,7 +1103,7 @@ g_NotReadyMaxWait = nil
 -- Remove ref if player quits
 addEventHandler('onPlayerQuit', root,
 	function()
-        g_NotReady[source] = nil
+		g_NotReady[source] = nil
 		g_SavedVelocity[source] = nil
 	end
 )
@@ -1071,32 +1111,32 @@ addEventHandler('onPlayerQuit', root,
 -- Give 10 seconds for joining players to become not ready
 addEventHandler('onPlayerJoining', root,
 	function()
-        g_JoinerExtraWait = getTickCount() + 10000
+		g_JoinerExtraWait = getTickCount() + 10000
 	end
 )
 
 -- Give 5 seconds for first player to start joining
 addEventHandler('onGamemodeMapStart', root,
 	function(mapres)
-        g_JoinerExtraWait = getTickCount() + 5000
+		g_JoinerExtraWait = getTickCount() + 5000
 		g_NotReadyMaxWait = false
 	end
 )
 
 -- Give 30 seconds for not ready players to become ready
 function setPlayerNotReady( player )
-    g_NotReady[player] = true
-    g_NotReadyTimeout = getTickCount() + 20000 + 10000
-    if _DEBUG_TIMING then g_NotReadyTimeout = g_NotReadyTimeout - 15000 end
-    activateNotReadyText()
+	g_NotReady[player] = true
+	g_NotReadyTimeout = getTickCount() + 20000 + 10000
+	if _DEBUG_TIMING then g_NotReadyTimeout = g_NotReadyTimeout - 15000 end
+	activateNotReadyText()
 end
 
 -- Alter not ready timeout
 function setPlayerReady( player )
 	setPlayerStatus( player, "alive", nil )
-    g_NotReady[player] = false
-    g_NotReadyTimeout = getTickCount() + 20000
-    if _DEBUG_TIMING then g_NotReadyTimeout = g_NotReadyTimeout - 10000 end
+	g_NotReady[player] = false
+	g_NotReadyTimeout = getTickCount() + 20000
+	if _DEBUG_TIMING then g_NotReadyTimeout = g_NotReadyTimeout - 10000 end
 	-- Set max timeout to 30 seconds after first person is ready
 	if not g_NotReadyMaxWait then
 		g_NotReadyMaxWait = getTickCount() + 30000
@@ -1108,57 +1148,57 @@ function setPlayerReady( player )
 end
 
 function isPlayerNotReady( player )
-    return g_NotReady[player]
+	return g_NotReady[player]
 end
 
 
 function howManyPlayersNotReady()
-    local count = 0
-    for i,player in ipairs(g_Players) do
-        if isPlayerNotReady(player) then
-            count = count + 1
-        end
-    end
-    if g_JoinerExtraWait and g_JoinerExtraWait > getTickCount() then
-        count = count + 1 -- If the JoinerExtraWait is set, pretend someone is not ready
-    end
-    if g_NotReadyTimeout and g_NotReadyTimeout < getTickCount() then
-        count = 0       -- If the NotReadyTimeout has passed, pretend everyone is ready
-    end
-    if g_NotReadyMaxWait and g_NotReadyMaxWait < getTickCount() then
-        count = 0       -- If the NotReadyMaxWait has passed, pretend everyone is ready
-    end
-    return count, names
+	local count = 0
+	for i,player in ipairs(g_Players) do
+		if isPlayerNotReady(player) then
+			count = count + 1
+		end
+	end
+	if g_JoinerExtraWait and g_JoinerExtraWait > getTickCount() then
+		count = count + 1 -- If the JoinerExtraWait is set, pretend someone is not ready
+	end
+	if g_NotReadyTimeout and g_NotReadyTimeout < getTickCount() then
+		count = 0	   -- If the NotReadyTimeout has passed, pretend everyone is ready
+	end
+	if g_NotReadyMaxWait and g_NotReadyMaxWait < getTickCount() then
+		count = 0	   -- If the NotReadyMaxWait has passed, pretend everyone is ready
+	end
+	return count, names
 end
 
 
 function activateNotReadyText()
-    if stateAllowsNotReadyMessage() then
-        if not g_NotReadyDisplay then
+	if stateAllowsNotReadyMessage() then
+		if not g_NotReadyDisplay then
 			TimerManager.createTimerFor("raceresource","notready"):setTimer( updateNotReadyText, 100, 0 )
-	        g_NotReadyDisplay = textCreateDisplay()
-	        g_NotReadyTextItems[1] = textCreateTextItem('', 0.5, 0.7, 'medium', 255, 235, 215, 255, 1.5, 'center', 'center')
-	        textDisplayAddText(g_NotReadyDisplay, g_NotReadyTextItems[1])
-        end
-    end
+			g_NotReadyDisplay = textCreateDisplay()
+			g_NotReadyTextItems[1] = textCreateTextItem('', 0.5, 0.7, 'medium', 255, 235, 215, 255, 1.5, 'center', 'center')
+			textDisplayAddText(g_NotReadyDisplay, g_NotReadyTextItems[1])
+		end
+	end
 end
 
 function updateNotReadyText()
-    if howManyPlayersNotReady() == 0 then
-        deactiveNotReadyText()
-    end
+	if howManyPlayersNotReady() == 0 then
+		deactiveNotReadyText()
+	end
 	if g_NotReadyDisplay then
-        -- Make sure all ready players are observers
-        for i,player in ipairs(g_Players) do
-            if isPlayerNotReady(player) then
-                textDisplayRemoveObserver(g_NotReadyDisplay, player)
-            else
-                if not textDisplayIsObserver(g_NotReadyDisplay, player) then
-                    textDisplayAddObserver(g_NotReadyDisplay, player)
-                    g_NotReadyDisplayOnTime = getTickCount()
-                end
-            end
-        end
+		-- Make sure all ready players are observers
+		for i,player in ipairs(g_Players) do
+			if isPlayerNotReady(player) then
+				textDisplayRemoveObserver(g_NotReadyDisplay, player)
+			else
+				if not textDisplayIsObserver(g_NotReadyDisplay, player) then
+					textDisplayAddObserver(g_NotReadyDisplay, player)
+					g_NotReadyDisplayOnTime = getTickCount()
+				end
+			end
+		end
 		-- Only show 'Waiting for other players...' if there actually are any other players
 		if getTotalPlayerCount() > 1 then
 			textItemSetText(g_NotReadyTextItems[1], 'Waiting for other players...' )
@@ -1167,21 +1207,21 @@ function updateNotReadyText()
 end
 
 function deactiveNotReadyText()
-    if g_NotReadyDisplay then
+	if g_NotReadyDisplay then
 		TimerManager.destroyTimersFor("notready")
-        -- Ensure message is displayed for at least 2 seconds
-        local hideDisplayDelay  = math.max(50,math.min(2000,2000+g_NotReadyDisplayOnTime - getTickCount()))
-        local display           = g_NotReadyDisplay;
-        local textItems         = { g_NotReadyTextItems[1] };
+		-- Ensure message is displayed for at least 2 seconds
+		local hideDisplayDelay  = math.max(50,math.min(2000,2000+g_NotReadyDisplayOnTime - getTickCount()))
+		local display		   = g_NotReadyDisplay;
+		local textItems		 = { g_NotReadyTextItems[1] };
 		TimerManager.createTimerFor("raceresource"):setTimer(
-            function()
-		        textDestroyDisplay(display)
-		        textDestroyTextItem(textItems[1])
-            end,
-            hideDisplayDelay, 1 )
+			function()
+				textDestroyDisplay(display)
+				textDestroyTextItem(textItems[1])
+			end,
+			hideDisplayDelay, 1 )
 		g_NotReadyDisplay = nil
 		g_NotReadyTextItems[1] = nil
-    end
+	end
 end
 
 
@@ -1317,6 +1357,12 @@ g_checkPedIndex = 0
 
 TimerManager.createTimerFor("raceresource","warppeds"):setTimer(
 	function ()
+		if (#g_Players == 0 ) then
+			return -- LotsOfS: Had to add this check because this would get called even in empty servers, and spam errors because there's no map loaded.
+		end
+		if (g_SavedMapSettings.allowonfoot) then
+			return
+		end
 		-- Make sure all players are in a vehicle
 		local maxCheck = 6		-- Max number to check per call
 		local maxWarp = 3		-- Max number to warp per call
@@ -1371,7 +1417,7 @@ TimerManager.createTimerFor("raceresource","integrity"):setTimer(
 		if g_IntegrityFailCount > 1 then
 			outputRace( "Race script integrity compromised - Restarting" )
 			exports.mapmanager:changeGamemode( getResourceFromName('race') )
-		end
+		end	
 	end,
 	1000,0
 )
@@ -1395,13 +1441,13 @@ addCommandHandler('pipedebug',
 		if not _TESTING and not isPlayerInACLGroup(player, g_GameOptions.admingroup) then
 			return
 		end
-        if g_PipeDebugTo then
-            clientCall(g_PipeDebugTo, 'setPipeDebug', false)
-        end
-        g_PipeDebugTo = (arg == "1") and player
-        if g_PipeDebugTo then
-            clientCall(g_PipeDebugTo, 'setPipeDebug', true)
-        end
+		if g_PipeDebugTo then
+			clientCall(g_PipeDebugTo, 'setPipeDebug', false)
+		end
+		g_PipeDebugTo = (arg == "1") and player
+		if g_PipeDebugTo then
+			clientCall(g_PipeDebugTo, 'setPipeDebug', true)
+		end
 	end
 )
 
@@ -1463,3 +1509,18 @@ function checkClient(checkAccess,player,...)
 	end
 	return false
 end
+
+
+----------------------
+-- LotsOfS
+
+addEvent('moveUnoccupiedVehicleForSpectate', true)
+addEventHandler('moveUnoccupiedVehicleForSpectate', resourceRoot, function(x, y, z, r)
+	if (getVehicleController(source)) then return end
+	fixVehicle( source)
+	setElementFrozen ( source, true )
+	setElementPosition( source, x, y, z )
+	setElementVelocity( source, 0,0,0 )
+	setElementAngularVelocity( source, 0,0,0 )
+	setElementRotation ( source, 0,0, r )
+end)

@@ -269,9 +269,13 @@ function RaceMode:onPlayerReachCheckpoint(player, checkpointNum)
 			end
 			self.rankingBoard = RankingBoard:create()
 			if g_MapOptions.duration then
-				-- LotsOfS: Upon finishing, set the time remaining to % of 1st player's finish time, as set by a config
-				self:setTimeLeft( g_GameOptions.percentagetimeafterfirstfinish * self:getTimePassed())
-				-- self:setTimeLeft( g_GameOptions.timeafterfirstfinish )
+				if (g_MapOptions.timeafterfirstfinish >= 0) then
+					self:setTimeLeft( g_MapOptions.timeafterfirstfinish )				
+				elseif (g_GameOptions.percentagetimeafterfirstfinish > 0) then
+					self:setTimeLeft( g_GameOptions.percentagetimeafterfirstfinish * self:getTimePassed())
+				else
+					self:setTimeLeft( g_GameOptions.timeafterfirstfinish )
+				end
 			end
 		else
 			showMessage('You finished ' .. rank .. ( (rank < 10 or rank > 20) and ({ [1] = 'st', [2] = 'nd', [3] = 'rd' })[rank % 10] or 'th' ) .. '!', 0, 255, 0, player)
