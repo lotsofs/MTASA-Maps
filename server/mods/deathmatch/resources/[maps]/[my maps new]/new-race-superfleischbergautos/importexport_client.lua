@@ -161,6 +161,8 @@ TRAINS = {
 }
 
 function deliverVehicle()
+	if (HALT_DELIVERY_TIMER_MS > 0) then return end
+	HALT_DELIVERY_TIMER_MS = 2000
 	local score = getElementData(localPlayer, "Money")
 	if (not score) then
 		score = 0
