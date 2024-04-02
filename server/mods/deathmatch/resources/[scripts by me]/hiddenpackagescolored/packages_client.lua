@@ -723,6 +723,9 @@ function changeMapPackages(mapName, mapFriendly)
 	
 	TOTAL_PACKAGES_THIS_MAP = 0
 	for i, pack in pairs(PACKAGE_GROUPS["packagesCustom"]) do
+		local typeName = getElementType(pack)
+		local id = typeName .. i
+		
 		-- destroy first just to be sure it's generating properly
 		if (PACKAGE_CORONAS[id]) then
 			destroyElement(PACKAGE_CORONAS[id])
@@ -732,10 +735,8 @@ function changeMapPackages(mapName, mapFriendly)
 			destroyElement(PACKAGE_PICKUPS[id])
 			PACKAGE_PICKUPS[id] = nil
 		end
-
+		
 		-- get information about package
-		local typeName = getElementType(pack)
-		local id = typeName .. i
 		local mapAssignment = getElementData(pack, "mapAssignment")
 		if (mapName == mapAssignment) then
 			TOTAL_PACKAGES_THIS_MAP = TOTAL_PACKAGES_THIS_MAP + 1
@@ -751,7 +752,7 @@ function changeMapPackages(mapName, mapFriendly)
 				PACKAGE_CORONAS[id] = createMarker(x, y, z + 0.6, "corona", 1, r, g, b, a)
 				PACKAGE_PICKUPS[id] = createObject(model, x, y, z + 0.5)
 				setElementCollisionsEnabled(PACKAGE_PICKUPS[id], false)
-				moveObject(PACKAGE_PICKUPS[id], 2000*1800, x, y, z, 0, 0, 360*1800)
+				moveObject(PACKAGE_PICKUPS[id], 2000*1800, x, y, z, 0, 0, 360*1800) --rotate
 			end
 		end
 	end

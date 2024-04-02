@@ -5,11 +5,26 @@ MAP_PACKAGE_COUNT = {}
 
 CUT_PACKAGE_LIST = {
     -- 1: 2024-03-22 Removing too easy black packages after first release feedback
-    {"packageCustom1","packageCustom2","packageCustom3","packageCustom6","packageCustom7","packageCustom10","packageCustom12","packageCustom17","packageCustom21","packageCustom44","packageCustom46","packageCustom52","packageCustom54","packageCustom59"}
-    -- 2
-    -- {}
+    {"packageCustom1","packageCustom2","packageCustom3","packageCustom6",
+    "packageCustom7","packageCustom10","packageCustom12","packageCustom17",
+    "packageCustom21","packageCustom44","packageCustom46","packageCustom52",
+    "packageCustom54","packageCustom59"},
+    -- 2: 2024-03-25 Package that sticked out through the floor and was automatically picked up
+    {"packageCustom7"}
     -- 3
-    -- {}
+    -- {} -- DONT FORGET TO PUT TRAILING COMMAS
+    -- {} -- DONT FORGET TO PUT TRAILING COMMAS
+    -- {} -- DONT FORGET TO PUT TRAILING COMMAS
+    -- {} -- DONT FORGET TO PUT TRAILING COMMAS
+    -- {} -- DONT FORGET TO PUT TRAILING COMMAS
+    -- {} -- DONT FORGET TO PUT TRAILING COMMAS
+    -- {} -- DONT FORGET TO PUT TRAILING COMMAS
+    -- {} -- DONT FORGET TO PUT TRAILING COMMAS
+    -- {} -- DONT FORGET TO PUT TRAILING COMMAS
+    -- {} -- DONT FORGET TO PUT TRAILING COMMAS
+    -- {} -- DONT FORGET TO PUT TRAILING COMMAS
+    -- {} -- DONT FORGET TO PUT TRAILING COMMAS
+    -- {} -- DONT FORGET TO PUT TRAILING COMMAS
 }
 
 -- get all packages from the map file, then spawn them
@@ -175,7 +190,7 @@ function onPlayerQuit()
         local packagesJson = toJSON(packages)
         setAccountData(playeraccount, "coloredPackages.collected", packagesJson)
         setAccountData(playeraccount, "coloredPackages.nonParticipant", nonParticipant)
-        setAccountData(thePreviousAccount, "coloredPackages.resetHistory", resetHistory)
+        setAccountData(playeraccount, "coloredPackages.resetHistory", resetHistory)
     end
 end
 addEventHandler("onPlayerQuit", root, onPlayerQuit)
@@ -185,6 +200,10 @@ function onPlayerLogin(thePreviousAccount, theCurrentAccount)
         local nonParticipant = getAccountData(theCurrentAccount, "coloredPackages.nonParticipant")
         local packagesJson = getAccountData(theCurrentAccount, "coloredPackages.collected")
         local resetHistory = getAccountData(theCurrentAccount, "coloredPackages.resetHistory") or 0
+        if (not packagesJson) then
+            setElementData(source, "coloredPackages.resetHistory", #CUT_PACKAGE_LIST)
+            return
+        end
         local packages = fromJSON(packagesJson)
         -- TODO: This reset history is only done upon player login, but should ideally be done on resource start as well
         -- This isn't an issue on robot's server since it never restarts resources while players are there, but if this ever
