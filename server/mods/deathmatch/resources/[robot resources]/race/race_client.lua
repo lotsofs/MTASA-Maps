@@ -22,7 +22,7 @@ addEventHandler('onClientResourceStart', resourceRoot,
 			timepassed = dxText:create('0:00:00', screenWidth - 10, screenHeight - 25, false, 'bankgothic', 0.7, 'right'),
 			
 			fileDisplay = dxText:create('File:', 4, screenHeight - 10, false, 'default-bold', 1.2, 'left'),
-			fileDisplayName = dxText:create('FILENAME', 45, screenHeight - 10, false, 'default-bold', 1.2, 'left'),
+			fileDisplayName = dxText:create('<unknown>', 45, screenHeight - 10, false, 'default-bold', 1.2, 'left'),
 
 			mapdisplay = dxText:create('Map:', 4, screenHeight - 30, false, 'default-bold', 1.2, 'left'),
 			mapdisplayName = dxText:create('<unknown>', 45, screenHeight - 30, false, 'default-bold', 1.2, 'left'),
