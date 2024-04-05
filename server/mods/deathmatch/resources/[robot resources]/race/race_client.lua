@@ -284,9 +284,9 @@ function initRace(vehicle, checkpoints, objects, pickups, mapoptions, ranked, du
 	g_GameOptions = gameoptions
 	g_MapInfo = mapinfo
     g_PlayerInfo = playerInfo
-	g_dxGUI.mapdisplayName:text(g_MapInfo.name)
-	g_dxGUI.authordisplayName:text(g_MapInfo.author)
-	g_dxGUI.fileDisplayName:text(g_MapInfo.resname)
+	g_dxGUI.mapdisplayName:text(g_MapInfo.name or "<none>")
+	g_dxGUI.authordisplayName:text(g_MapInfo.author or "<none>")
+	g_dxGUI.fileDisplayName:text(g_MapInfo.resname or "<none>")
     triggerEvent('onClientMapStarting', localPlayer, mapinfo )
 
 
