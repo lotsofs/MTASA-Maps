@@ -235,7 +235,7 @@ function TravelScreen.showDetails( details )
 	text6 = text6 .. details.numcheckpoints .. " Checkpoint" .. (details.numcheckpoints ~= 1 and "s" or "") .. "\n"
 	text6 = text6 .. details.numobjects .. " Object" .. (details.numobjects ~= 1 and "s" or "") .. "\n"
 	text6 = text6 .. details.numpickups .. " Pickup" .. (details.numpickups ~= 1 and "s" or "") .. "\n"
-	-- text5 = text5 .. (allowonfoot and "◼ Exiting vehicles\n" or "◻ exiting vehicles\n")
+	-- text5 = text5 .. (allowonfoot and "◼ Exiting vehicles\n" or "◻ Exiting vehicles\n")
 	-- if (allowonfoot) then
 	-- 	text6 = text6 .. (falloffbike and "◼ Fall off bikes\n" or "◻ Fall off bikes\n")
 	-- 	text6 = text6 .. (movementglitches and "◼ Super sprint\n" or "◻ Super sprint\n")
