@@ -31,6 +31,7 @@
         <setting name="#duration" value="[ 172800 ]"></setting>
         <setting name="#respawn" value='[ &quot;timelimit&quot; ]'></setting>
         <setting name="#timeafterfirstfinish" value='[ 172800 ]'></setting>
+        <setting name="#countdownduration" value='[ 6 ]'></setting>
     </settings>
     <script src="mapEditorScriptingExtension_s.lua" type="server"></script>
     <script src="mapEditorScriptingExtension_c.lua" type="client" validate="false"></script>

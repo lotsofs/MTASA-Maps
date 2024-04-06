@@ -305,6 +305,18 @@ function teleportToNext(progress, player)
 	setElementAlpha ( vehicle, 0 ) 
 	setCameraTarget ( player, player )
 
+	if (progress == 1 and model == 581) then
+		iprint("BF START. DEBUG PLS ", getPlayerName(player))
+		setTimer( function(vehiclee, xx, yy, zz, rrX, rrY, rrZ)
+			-- setElementFrozen(vehicle, true)
+			setElementPosition(vehiclee, xx, yy, zz)
+			setElementAngularVelocity(vehiclee, 0, 0, 0)
+			setElementVelocity(vehiclee, 0, 0, 0)
+			setElementRotation(vehiclee, rrX, rrY, rrZ)
+			fixVehicle(vehiclee)
+		end, 1500, 1, vehicle, x, y, z, rX, rY, rZ)
+	end
+
 	setTimer( function(vehicle)
 		if (not isElement(vehicle)) then
 			return
@@ -541,11 +553,13 @@ function autoSave()
 	if (DATABASE) then
 		for i, v in pairs(getElementsByType("player")) do
 			s = getPlayerSerial(v)
-			local json = toJSON(SHUFFLED_INDICES_PER_PLAYER[v])
-			if (results and #results > 0) then
-				dbExec(DATABASE, "UPDATE progressTable SET progress = ?, indices = ? WHERE serial = ?", PLAYER_PROGRESS[v], json, s)
-			else
-				dbExec(DATABASE, "INSERT INTO progressTable(serial, progress, indices) VALUES (?,?,?)", getPlayerSerial(v), PLAYER_PROGRESS[v], json)
+			if (SHUFFLED_INDICES_PER_PLAYER[v]) then
+				local json = toJSON(SHUFFLED_INDICES_PER_PLAYER[v])
+				if (results and #results > 0) then
+					dbExec(DATABASE, "UPDATE progressTable SET progress = ?, indices = ? WHERE serial = ?", PLAYER_PROGRESS[v], json, s)
+				else
+					dbExec(DATABASE, "INSERT INTO progressTable(serial, progress, indices) VALUES (?,?,?)", getPlayerSerial(v), PLAYER_PROGRESS[v], json)
+				end
 			end
 		end	
 	end
