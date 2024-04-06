@@ -1,0 +1,47 @@
+<meta>
+    <min_mta_version server="1.5.8-9.20957" client="1.5.8-9.2095" />
+    
+    <script src="constants.lua" type="shared" />
+    
+    <script src="server/constants.lua" type="server"></script>
+    <script src="server/job.lua" type="server"></script>
+    <script src="server/player.lua" type="server"></script>
+    <script src="server/exit.lua" type="server"></script>
+    <script src="server/game.lua" type="server"></script>
+    
+    <script src="client/constants.lua" type="client"></script>
+    <script src="client/logic.lua" type="client"></script>
+    <script src="client/ux.lua" type="client"></script>
+    
+    <file src="client/fugitive.png" />
+    <file src="client/mechanic.png" />
+    <file src="client/hotshot.png" />
+    <file src="client/fugitive_bw.png" />
+    <file src="client/mechanic_bw.png" />
+    <file src="client/hotshot_bw.png" />
+    <file src="client/lodsofemone.wav" />
+    <file src="client/pag.mp3" />
+    <file src="client/select.mp3" />
+    
+    <info gamemodes="race" type="map" name="[MG] Most Wanted: Los Santos" author="Big Pig" version="0.0.5" edf:definition="MG-MostWantedLosSantos.edf"></info>
+    <map src="MG-MostWantedLosSantos.map" dimension="0"></map>
+    <settings>
+        <setting name="#skins" value="[ 111 ]"></setting>
+        <setting name="#maxplayers" value="[ 128 ]"></setting>
+        <setting name="#useLODs" value="[ true ]"></setting>
+        <setting name="#gamespeed" value="[ 1 ]"></setting>
+        <setting name="#ghostmode" value='[ &quot;false&quot; ]'></setting>
+        <setting name="#time" value="3:0"></setting>
+        <setting name="#vehicleweapons" value='[ &quot;false&quot; ]'></setting>
+        <setting name="#minplayers" value="[ 0 ]"></setting>
+        <setting name="#respawntime" value="[ 5 ]"></setting>
+        <setting name="#gravity" value="[ 0.0080000004 ]"></setting>
+        <setting name="#waveheight" value="[ 0 ]"></setting>
+        <setting name="#weather" value="[ 1 ]"></setting>
+        <setting name="#locked_time" value="[ true ]"></setting>
+        <setting name="#duration" value="[ 720 ]"></setting>
+        <setting name="#respawn" value='[ &quot;none&quot; ]'></setting>
+    </settings>
+    <script src="mapEditorScriptingExtension_s.lua" type="server"></script>
+    <script src="mapEditorScriptingExtension_c.lua" type="client" validate="false"></script>
+</meta>

@@ -1,0 +1,67 @@
+<def name="MG-MostWantedLosSantos">
+	<element name="pickup_job" friendlyname="Pickup Job">
+		<data name="position" type="coord3d" default="0,0,0" />
+		<data name="rotation" type="coord3d" default="0,0,0" />
+		<object model="3632" position="0,0,0" editorOnly="true" alpha="0"/>
+	</element>
+	<element name="delivery_job_start" friendlyname="Delivery Job Start">
+		<data name="position" type="coord3d" default="0,0,0" />
+		<data name="rotation" type="coord3d" default="0,0,0" />
+		<!-- used to match end points -->
+		<data name="job_id" type="number" default="0" />
+		<object model="3496" position="0,0,0" editorOnly="true" alpha="0"/>
+	</element>
+	<element name="delivery_job_end" friendlyname="Delivery Job End">
+		<data name="position" type="coord3d" default="0,0,0" />
+		<data name="rotation" type="coord3d" default="0,0,0" />
+		<!-- used to match start points -->
+		<data name="job_id" type="number" default="0" />
+		<object model="1255" position="0,0,0" editorOnly="true" alpha="0"/>
+	</element>
+	<element name="contact_job" friendlyname="Contact Job">
+		<data name="position" type="coord3d" default="0,0,0" />
+		<data name="rotation" type="coord3d" default="0,0,0" />
+		<object model="4" position="0,0,0" editorOnly="true" alpha="0"/>
+	</element>
+	<element name="destruction_job" friendlyname="Destruction Job">
+		<data name="position" type="coord3d" default="0,0,0" />
+		<data name="rotation" type="coord3d" default="0,0,0" />
+		<object model="3632" position="0,0,0" editorOnly="true" alpha="0"/>
+	</element>
+	<element name="extortion_job" friendlyname="Extortion Job">
+		<data name="position" type="coord3d" default="0,0,0" />
+		<data name="rotation" type="coord3d" default="0,0,0" />
+		<object model="3031" position="0,0,0" editorOnly="true" alpha="0"/>
+	</element>
+	<element name="group_job" friendlyname="Group Job">
+		<data name="position" type="coord3d" default="0,0,0" />
+		<data name="rotation" type="coord3d" default="0,0,0" />
+		<object model="2932" position="0,0,0" editorOnly="true" alpha="0"/>
+	</element>
+	<element name="exit_group" friendlyname="qqqqqExit Group">
+    </element>
+    <element name="exit_wall" friendlyname="yExit Wall">
+        <parent name="group" type="exit_group" default="" />
+        <data name="position" type="coord3d" default="0,0,0" />
+        <data name="rotation" type="coord3d" default="0,0,0" />
+        <object model="8172" position="0,0,0" editorOnly="true" rotation="90,0,0" alpha="0"/>
+    </element>
+    <element name="exit_barricade" friendlyname="xExit Barricade">
+        <parent name="group" type="exit_group" default="" />
+        <data name="position" type="coord3d" default="0,0,0" />
+        <data name="rotation" type="coord3d" default="0,0,0" />
+        <object model="981" position="0,0,0" rotation="0,0,180" alpha="0"/>
+    </element>
+    <element name="exit_point" friendlyname="zExit Point">
+        <parent name="group" type="exit_group" default="" />
+        <data name="position" type="coord3d" default="0,0,0" />
+        <data name="rotation" type="coord3d" default="0,0,0" />
+        <object model="3435" position="0,0,0" editorOnly="true" alpha="0"/>
+    </element>
+    <element name="swat_van" friendlyname="ySwat Van">
+        <parent name="group" type="exit_group" default="" />
+        <data name="position" type="coord3d" default="0,0,0" />
+        <data name="rotation" type="coord3d" default="0,0,0" />
+        <object model="3471" position="0,0,0" alpha="0"/>
+    </element>
+</def>
