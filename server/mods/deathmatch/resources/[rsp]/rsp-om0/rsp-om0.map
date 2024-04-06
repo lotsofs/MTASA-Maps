@@ -1,0 +1,10 @@
+<map edf:definitions="editor_main">
+    <markertemplate 
+        id="missionstart_losdesperados" 
+        type="cylinder" color="#0000ffff" size="2" interior="0" dimension="0" alpha="255" 
+        posX="2495.2" posY="-1687.5" posZ="13.5" rotX="0" rotY="0" rotZ="0" 
+        starts="losdesperados"
+        positiveRequirement1="riot"
+        negativeRequirement1="losdesperados"
+    ></markertemplate>
+</map>

@@ -1,0 +1,55 @@
+-- MARKERS = {}
+
+-- function markerHit( hitPlayer, matchingDimension )
+-- 	for i, m in pairs(MARKERS) do
+-- 		if (m == source) then
+-- 			local starts = getElementData(m, "starts")
+
+-- 		end
+-- 	end
+-- end
+
+-- function checkRequirement(req, positive)
+-- 	iprint(req)
+-- 	if not req then return true end
+-- 	local reqMet = getElementData(localPlayer, "asp_completed_"..req)
+-- 	iprint(req,"=",reqMet,"needs to be",positive,":",reqMet == positive)
+-- 	return reqMet == positive
+-- end
+
+-- function onMissionToggle(enabled)
+-- 	if (enabled) then
+-- 		for i,m in pairs(MARKERS) do
+-- 			destroyElement(m)
+-- 			MARKERS[i] = nil
+-- 		end
+-- 	else
+-- 		local markerTemplates = getElementsByType("markertemplate")
+-- 		MARKERS = {}
+-- 		for i, m in ipairs(markerTemplates) do
+-- 			local conditionsMet = 
+-- 				checkRequirement(getElementData(m, "positiveRequirement1"), true) and
+-- 				checkRequirement(getElementData(m, "positiveRequirement2"), true) and
+-- 				checkRequirement(getElementData(m, "positiveRequirement3"), true) and
+-- 				checkRequirement(getElementData(m, "negativeRequirement1"), false) and
+-- 				checkRequirement(getElementData(m, "negativeRequirement2"), false) and
+-- 				checkRequirement(getElementData(m, "negativeRequirement3"), false)
+			
+-- 			if (conditionsMet) then			
+-- 				local x = getElementData(m, "posX")
+-- 				local y = getElementData(m, "posY")
+-- 				local z = getElementData(m, "posZ") - 1
+-- 				local col = getElementData(m, "color")
+-- 				local r,g,b,a = getColorFromString(col)
+-- 				local size = getElementData(m, "size")
+-- 				local markerType = getElementData(m, "type")
+-- 				local starts = getElementData(m, "starts")
+-- 				local markerId = "marker_" .. getElementID(m)
+-- 				MARKERS[markerId] = createMarker(x, y, z, markerType, size, r, g, b, a)
+-- 				setElementData(MARKERS[markerId], "starts", starts)
+-- 			end
+-- 		end
+-- 	end
+-- end
+-- addEvent("onMissionToggle", true)
+-- addEventHandler("onMissionToggle", localPlayer, onMissionToggle)
