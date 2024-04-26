@@ -17,18 +17,31 @@ function startGame(res)
 			setElementData(p, "rsp-completed-riot", true)
 			setElementData(p, "rsp-completed-losdesperados", false)
 			setElementData(p, "rsp-onmission", false)
+			setElementData(p, "rsp-completion", 0)
 		end
 		startResourceCustom("rsp-om0")
+	elseif (getResourceName(res):find("^rsp-")) then
+		-- local missionName = string.sub(getResourceName(res), 5)
+		-- iprint(missionName)
+		-- iprint(ACTIVEMISSIONS[missionName])
+		-- for _, p in pairs(ACTIVEMISSIONS[missionName]) do
+		-- 	triggerClientEvent(p, "AnEvent", root, "WHOOOOO")
+		-- 	iprint("SUc")
+		-- end
 	end
 end
-addEventHandler( "onResourceStart", resourceRoot, startGame)
+addEventHandler( "onResourceStart", root, startGame)
 
 function startMission(mission, player)
-	if not ACTIVEMISSIONS[mission] then
+	setElementData(player, "rsp-onmission", mission)
+	local resState = getResourceState(getResourceFromName("rsp-"..mission))
+	if (resState == "loaded") then
 		startResourceCustom("rsp-"..mission)
-		ACTIVEMISSIONS[mission] = {}
+	elseif (resState ~= "running") then
+		-- idk what to do here yet
+	else
+		triggerClientEvent(player, "onClientMissionStarted", root, mission)
 	end
-	table.insert(ACTIVEMISSIONS[mission], player)
 end
 addEvent( "onStartMissionRequested", true)
 addEventHandler("onStartMissionRequested", root, startMission)

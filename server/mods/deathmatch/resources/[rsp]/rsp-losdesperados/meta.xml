@@ -12,6 +12,6 @@
         <setting name="#weather" value="[ 0 ]"></setting>
         <setting name="#time" value="12:0"></setting>
     </settings>
-    <script src="mapEditorScriptingExtension_s.lua" type="server"></script>
-    <script src="mapEditorScriptingExtension_c.lua" type="client" validate="false"></script>
+    <script src="losdesperados_s.lua" type="server"></script>
+    <script src="losdesperados_c.lua" type="client" validate="true"></script>
 </meta>
