@@ -6,13 +6,13 @@
 -- bug: joining a game spawns ALL map packages, they only get filtered on next map start
 
 PACKAGE_DATA = { 
-	packageNormal = { 		model = 1575, 	r = 255, 	g = 255, 	b = 255, 	a = 32,		name = "#FFFFFFWhite" },
-	packageWater = { 		model = 1579, 	r = 0, 		g = 0, 		b = 255, 	a = 32,		name = "#007FFFBlue"  },
-	packageHelicopter = { 	model = 1576, 	r = 255, 	g = 128, 	b = 0, 		a = 32,		name = "#FF7F00Orange"  },
-	packageBike = { 		model = 1578, 	r = 0, 		g = 255, 	b = 0, 		a = 32,		name = "#00FF00Green"  },
-	packageHard = { 		model = 1577, 	r = 255, 	g = 255, 	b = 0, 		a = 32,		name = "#FFFF00Yellow"  },
-	packageExtreme = { 		model = 1580, 	r = 255, 	g = 0, 		b = 0, 		a = 32,		name = "#FF0000Red"  },
-	packageCustom = {		model = 1575,	r = 127,	g = 127,	b = 127,	a = 32,		name = "#7F7F7FBlack"  }
+	packageNormal = { 		model = 1575, 	r = 255, 	g = 255, 	b = 255, 	a = 32,		name = "White" },
+	packageWater = { 		model = 1579, 	r = 0, 		g = 0, 		b = 255, 	a = 32,		name = "Blue"  },
+	packageHelicopter = { 	model = 1576, 	r = 255, 	g = 128, 	b = 0, 		a = 32,		name = "Orange"  },
+	packageBike = { 		model = 1578, 	r = 0, 		g = 255, 	b = 0, 		a = 32,		name = "Green"  },
+	packageHard = { 		model = 1577, 	r = 255, 	g = 255, 	b = 0, 		a = 32,		name = "Yellow"  },
+	packageExtreme = { 		model = 1580, 	r = 255, 	g = 0, 		b = 0, 		a = 32,		name = "Red"  },
+	packageCustom = {		model = 1575,	r = 127,	g = 127,	b = 127,	a = 32,		name = "Black"  }
 }
 
 PACKAGE_ELEMENTS = {}
@@ -488,7 +488,6 @@ function checkForMilestones()
 	end
 end
 
-
 function toggleOverlay()
 	SHOW_PACKAGE_COUNTER = not SHOW_PACKAGE_COUNTER 
 	if (SHOW_PACKAGE_COUNTER) then
@@ -542,26 +541,51 @@ function setLeftText()
 			collected[packType] = collected[packType] + 1
 		end
 	end
-	LEFT_TEXT = "\nTotal:\n"
-	LEFT_TEXT = LEFT_TEXT .. "#FFFFFFWhite: " .. collected["packageNormal"] .. "/" .. totals["packageNormal"] .. "\n"
-	LEFT_TEXT = LEFT_TEXT .. "#00FF00Green: " .. collected["packageBike"] .. "/" .. totals["packageBike"] .. "\n"
-	LEFT_TEXT = LEFT_TEXT .. "#007FFFBlue: " .. collected["packageWater"] .. "/" .. totals["packageWater"] .. "\n"
-	LEFT_TEXT = LEFT_TEXT .. "#FF7F00Orange: " .. collected["packageHelicopter"] .. "/" .. totals["packageHelicopter"] .. "\n"
-	LEFT_TEXT = LEFT_TEXT .. "#FFFF00Yellow: " .. collected["packageHard"] .. "/" .. totals["packageHard"] .. "\n"
-	LEFT_TEXT = LEFT_TEXT .. "#FF0000Red: " .. collected["packageExtreme"] .. "/" .. totals["packageExtreme"] .. "\n"
-	LEFT_TEXT = LEFT_TEXT .. "#7F7F7FBlack: " .. collected["packageCustom"] .. "/" .. totals["packageCustom"] .. "\n"
+	local totalCollected = collected["packageNormal"] + collected["packageBike"] + collected["packageWater"] + collected["packageHelicopter"] + collected["packageHard"] + collected["packageExtreme"] + collected["packageCustom"]
+	local totalExisting = totals["packageNormal"] + totals["packageBike"] + totals["packageWater"] + totals["packageHelicopter"] + totals["packageHard"] + totals["packageExtreme"] + totals["packageCustom"]
+	local totalPercentage = math.floor(totalCollected / totalExisting * 100)
+
+	local percentageNormal = math.floor(collected["packageNormal"] / totals["packageNormal"] * 100)
+	local percentageBike = math.floor(collected["packageBike"] / totals["packageBike"] * 100)
+	local percentageWater = math.floor(collected["packageWater"] / totals["packageWater"] * 100)
+	local percentageHelicopter =  math.floor(collected["packageHelicopter"] / totals["packageHelicopter"] * 100)
+	local percentageHard =  math.floor(collected["packageHard"] / totals["packageHard"] * 100)
+	local percentageExtreme = math.floor(collected["packageExtreme"] / totals["packageExtreme"] * 100)
+	local percentageCustom = math.floor(collected["packageCustom"] / totals["packageCustom"] * 100)
+	
+	LEFT_TEXT = "\nTotal: " .. totalCollected .. "/" .. totalExisting .. " (" .. totalPercentage .. "%)\n"
+	LEFT_TEXT = LEFT_TEXT .. "#FFFFFFWhite: " .. collected["packageNormal"] .. "/" .. totals["packageNormal"] .. " (" .. percentageNormal .. "%)\n"
+	LEFT_TEXT = LEFT_TEXT .. "#00FF00Green: " .. collected["packageBike"] .. "/" .. totals["packageBike"] .. " (" .. percentageBike .. "%)\n"
+	LEFT_TEXT = LEFT_TEXT .. "#007FFFBlue: " .. collected["packageWater"] .. "/" .. totals["packageWater"] .. " (" .. percentageWater .. "%)\n"
+	LEFT_TEXT = LEFT_TEXT .. "#FF7F00Orange: " .. collected["packageHelicopter"] .. "/" .. totals["packageHelicopter"] .. " (" .. percentageHelicopter .. "%)\n"
+	LEFT_TEXT = LEFT_TEXT .. "#FFFF00Yellow: " .. collected["packageHard"] .. "/" .. totals["packageHard"] .. " (" .. percentageHard .. "%)\n"
+	LEFT_TEXT = LEFT_TEXT .. "#FF0000Red: " .. collected["packageExtreme"] .. "/" .. totals["packageExtreme"] .. " (" .. percentageExtreme .. "%)\n"
+	LEFT_TEXT = LEFT_TEXT .. "\n#7F7F7FBlack: " .. collected["packageCustom"] .. "/" .. totals["packageCustom"] .. " (" .. percentageCustom .. "%)\n"
+	-- LEFT_TEXT = LEFT_TEXT .. "\n\n#7F7F7FBlack: " .. collected["packageCustom"] .. "/" .. totals["packageCustom"] .. " (" .. percentageCustom .. "%)\n"
 end
 
 function setRightText()
-	local mapN = CURRENT_MAPNAME
+	-- local mapN = "Current Map:\n" .. (CURRENT_MAPNAME or "<unknown>")
+	local mapN = CURRENT_MAPNAME or "<unknown map>"
+	local suggestedMap = CURRENT_MAPNAME
+	local totalSuggested = 0
+	local totalShown = TOTAL_PACKAGES_THIS_MAP
+	-- if (TOTAL_PACKAGES_THIS_MAP == 0) then
+	-- 	local rng = math.random(#PACKAGE_GROUPS["packagesCustom"])
+	-- 	local suggestedMap = getElementData(PACKAGE_GROUPS["packagesCustom"][rng], "mapAssignment")
+	-- 	mapN = "Map suggestion:\n" .. suggestedMap
+	-- 	for i, v in ipairs(PACKAGE_GROUPS["packagesCustom"]) do
+	-- 		if getElementData(v, "mapAssignment") == suggestedMap then
+	-- 			totalSuggested = totalSuggested + 1
+	-- 		end
+	-- 	end
+	-- 	totalShown = totalSuggested
+	-- end
+
 	RIGHT_TEXT = ""
-	if (mapN) then
-		RIGHT_TEXT = RIGHT_TEXT .. mapN .. "\n"
-	else
-		RIGHT_TEXT = RIGHT_TEXT .. "\n"
-	end
 	if (not CURRENT_REGION) then
 		RIGHT_TEXT = RIGHT_TEXT .. "Current Region:\n"
+		RIGHT_TEXT = RIGHT_TEXT .. "Total: " .. 0 .. "/" .. 0 .. "\n"
 		RIGHT_TEXT = RIGHT_TEXT .. "#FFFFFFWhite: " .. 0 .. "/" .. 0 .. "\n"
 		RIGHT_TEXT = RIGHT_TEXT .. "#00FF00Green: " .. 0 .. "/" .. 0 .. "\n"
 		RIGHT_TEXT = RIGHT_TEXT .. "#007FFFBlue: " .. 0 .. "/" .. 0 .. "\n"
@@ -576,23 +600,46 @@ function setRightText()
 		local cExt = getElementData(CURRENT_REGION, "collected_packageExtreme") or 0
 		local cHel = getElementData(CURRENT_REGION, "collected_packageHelicopter") or 0
 		local cWat = getElementData(CURRENT_REGION, "collected_packageWater") or 0
+		
 		local tNor = getElementData(CURRENT_REGION, "total_packageNormal") or 0
 		local tBik = getElementData(CURRENT_REGION, "total_packageBike") or 0
 		local tHar = getElementData(CURRENT_REGION, "total_packageHard") or 0
 		local tExt = getElementData(CURRENT_REGION, "total_packageExtreme") or 0
 		local tHel = getElementData(CURRENT_REGION, "total_packageHelicopter") or 0
 		local tWat = getElementData(CURRENT_REGION, "total_packageWater") or 0
+
+		local cTot = cNor + cBik + cWat + cHel + cHar
+		local tTot = tNor + tBik + tWat + tHel + tHar
+
+		local pNor = ((tNor == 0) and "-") or math.floor(cNor / tNor * 100)
+		local pBik = ((tBik == 0) and "-") or math.floor(cBik / tBik * 100)
+		local pHar = ((tHar == 0) and "-") or math.floor(cHar / tHar * 100)
+		local pExt = ((tExt == 0) and "-") or math.floor(cExt / tExt * 100)
+		local pHel = ((tHel == 0) and "-") or math.floor(cHel / tHel * 100)
+		local pWat = ((tWat == 0) and "-") or math.floor(cWat / tWat * 100)
+		local pTot = ((tTot == 0) and "-") or math.floor(cTot / tTot * 100)
 		RIGHT_TEXT = RIGHT_TEXT .. name .. ":\n"
-		RIGHT_TEXT = RIGHT_TEXT .. "#FFFFFFWhite: " .. cNor .. "/" .. tNor .. "\n"
-		RIGHT_TEXT = RIGHT_TEXT .. "#00FF00Green: " .. cBik .. "/" .. tBik .. "\n"
-		RIGHT_TEXT = RIGHT_TEXT .. "#007FFFBlue: " .. cWat .. "/" .. tWat .. "\n"
-		RIGHT_TEXT = RIGHT_TEXT .. "#FF7F00Orange: " .. cHel .. "/" .. tHel .. "\n"
-		RIGHT_TEXT = RIGHT_TEXT .. "#FFFF00Yellow: " .. cHar .. "/" .. tHar .. "\n"
-		RIGHT_TEXT = RIGHT_TEXT .. "#FF0000Red: " .. cExt .. "/" .. tExt .. "\n"
+		RIGHT_TEXT = RIGHT_TEXT .. "Total: " .. cTot .. "/" .. tTot .. " (" .. pTot .. "%)\n"
+		RIGHT_TEXT = RIGHT_TEXT .. "#FFFFFFWhite: " .. cNor .. "/" .. tNor .. " (" .. pNor .. "%)\n"
+		RIGHT_TEXT = RIGHT_TEXT .. "#00FF00Green: " .. cBik .. "/" .. tBik .. " (" .. pBik .. "%)\n"
+		RIGHT_TEXT = RIGHT_TEXT .. "#007FFFBlue: " .. cWat .. "/" .. tWat .. " (" .. pWat .. "%)\n"
+		RIGHT_TEXT = RIGHT_TEXT .. "#FF7F00Orange: " .. cHel .. "/" .. tHel .. " (" .. pHel .. "%)\n"
+		RIGHT_TEXT = RIGHT_TEXT .. "#FFFF00Yellow: " .. cHar .. "/" .. tHar .. " (" .. pHar .. "%)\n"
+		RIGHT_TEXT = RIGHT_TEXT .. "#FF0000Red: " .. cExt .. "/" .. tExt .. " (" .. pExt .. "%)\n"
 	end
+	if (mapN) then
+		RIGHT_TEXT = RIGHT_TEXT .. "#AFAFAF" .. mapN .. "\n"
+	else
+		RIGHT_TEXT = RIGHT_TEXT .. "#AFAFAF" .. "\n"
+	end
+	-- local cCus = PACKAGES_COLLECTED_BY_MAP[suggestedMap] or 0
+	-- local tCus = totalShown or 0
+	-- local pCus = ((tCus == 0) and "-") or math.floor(cCus / tCus * 100)
+	-- RIGHT_TEXT = RIGHT_TEXT .. "#7F7F7FBlack: " .. cCus .. "/" .. tCus .. " (" .. pCus .. "%)\n"
 	local cCus = PACKAGES_COLLECTED_BY_MAP[CURRENT_MAPID] or 0
 	local tCus = TOTAL_PACKAGES_THIS_MAP or 0
-	RIGHT_TEXT = RIGHT_TEXT .. "#7F7F7FBlack: " .. cCus .. "/" .. tCus .. "\n"
+	local pCus = ((tCus == 0) and "-") or math.floor(cCus / tCus * 100)
+	RIGHT_TEXT = RIGHT_TEXT .. "#7F7F7FBlack: " .. cCus .. "/" .. tCus .. " (" .. pCus .. "%)\n"
 end
 
 LAST_PACKAGE = nil
@@ -619,7 +666,7 @@ function setMiddleText()
 
 	if (packType == "packageCustom") then
 		subCollected = PACKAGES_COLLECTED_BY_MAP[CURRENT_MAPID]
-		subCounter = subCollected .. " out of " .. TOTAL_PACKAGES_THIS_MAP .. " in " .. CURRENT_MAPNAME
+		subCounter = subCollected .. " out of " .. TOTAL_PACKAGES_THIS_MAP .. " in" .. CURRENT_MAPNAME
 	elseif (CURRENT_REGION) then
 		regionName = getElementData(CURRENT_REGION, "friendlyname")
 		subCollected = getElementData(CURRENT_REGION, "collected_" .. packType) or 0
@@ -627,6 +674,9 @@ function setMiddleText()
 		subCounter = subCollected .. " out of " .. subTotal .. " in " .. regionName
 	end
 	MIDDLE_TEXT = name .. " Hidden Package collected! \n" .. collected .. " out of " .. total .. "\n" .. subCounter
+	MIDDLE_R = PACKAGE_DATA[packType].r
+	MIDDLE_G = PACKAGE_DATA[packType].g
+	MIDDLE_B = PACKAGE_DATA[packType].b
 end
 
 function drawPackageCounter()
@@ -638,15 +688,15 @@ function drawPackageCounter()
 		titleWidth = width*1
 		titleHeight = height*0.9
 		titleFont = width / 300
-		drawBorderedText( MIDDLE_TEXT, titleFont * 0.5, titleX, titleY, titleWidth, titleHeight, tocolor(196, 196, 196, 255), titleFont, "default-bold", "center", "top", false, true, false, true)
+		drawBorderedText( MIDDLE_TEXT, titleFont * 0.5, titleX, titleY, titleWidth, titleHeight, tocolor(MIDDLE_R, MIDDLE_G, MIDDLE_B, 255), titleFont, "default-bold", "center", "top", false, true, false, false)
 	end
 	if (SHOW_PACKAGE_COUNTER) then
 		local width,height = guiGetScreenSize()
 		-- box
-		boxX = width * 0.055
+		boxX = width * 0.045
 		boxY = height * 0.455
-		boxWidth = width * 0.16
-		boxHeight = (boxWidth * 0.7225)
+		boxWidth = width * 0.18
+		boxHeight = (height * 0.225)
 		dxDrawRectangle(boxX, boxY, boxWidth, boxHeight, tocolor(0, 0, 0, 196), false)
 		-- textTitle
 		titleX = boxX + width * 0.005
@@ -655,21 +705,21 @@ function drawPackageCounter()
 		titleHeight = height*0.9
 		titleFont = width / 1200
 		titleText = "PACKAGES COLLECTED:"
-		dxDrawText(titleText, titleX, titleY, titleWidth, titleHeight, tocolor(196, 196, 196, 255), titleFont, "default-bold", "left", "top", false, true, false, false)
+		dxDrawText(titleText, titleX, titleY, titleWidth, titleHeight, tocolor(178, 178, 178, 255), titleFont, "default-bold", "left", "top", false, true, false, false)
 		-- textLeftTotal
 		leftX = boxX + width * 0.005
 		leftY = boxY + height * 0.030
 		leftWidth = width*0.8
 		leftHeight = height*0.9
 		leftFont = width / 1400
-		dxDrawText(LEFT_TEXT, leftX, leftY, leftWidth, leftHeight, tocolor(196, 196, 196, 255), leftFont, "default-bold", "left", "top", false, true, false, true)	
+		dxDrawText(LEFT_TEXT, leftX, leftY, leftWidth, leftHeight, tocolor(178, 178, 178, 255), leftFont, "default-bold", "left", "top", false, true, false, true)	
 		-- textRightTotal
 		rightX = boxX + width * 0.005
 		rightY = boxY + height * 0.030
-		rightWidth = width*0.21
+		rightWidth = width*0.22
 		rightHeight = height*0.9
 		rightFont = width / 1400
-		dxDrawText(RIGHT_TEXT, rightX, rightY, rightWidth, rightHeight, tocolor(196, 196, 196, 255), rightFont, "default-bold", "right", "top", false, true, false, true)	
+		dxDrawText(RIGHT_TEXT, rightX, rightY, rightWidth, rightHeight, tocolor(178, 178, 178, 255), rightFont, "default-bold", "right", "top", false, true, false, true)	
 	end
 end
 
@@ -694,6 +744,7 @@ function onClientResourceStart(startedResource)
 	getRadarZones()
 
 	enablePackages()
+	iprint("changeMapPackages because onClientResourceStart")
 	changeMapPackages(nil, nil)
 end
 addEventHandler("onClientResourceStart", resourceRoot, onClientResourceStart)
@@ -712,15 +763,13 @@ addEventHandler("reloadPackages", root, reloadPackages)
 -- Custom packages specific
 
 function changeMapPackages(mapName, mapFriendly) 
-	
-	CURRENT_MAPID = mapName
-	CURRENT_MAPNAME = mapFriendly
-
-	
 	if not packagesEnabled() then
 		return
 	end
-	
+	iprint("Changing Map Packages", mapName, mapFriendly)
+	CURRENT_MAPID = mapName
+	CURRENT_MAPNAME = mapFriendly
+
 	TOTAL_PACKAGES_THIS_MAP = 0
 	for i, pack in pairs(PACKAGE_GROUPS["packagesCustom"]) do
 		local typeName = getElementType(pack)
@@ -732,15 +781,20 @@ function changeMapPackages(mapName, mapFriendly)
 			PACKAGE_CORONAS[id] = nil
 		end
 		if (PACKAGE_PICKUPS[id]) then
+			iprint("Destroying", id)
 			destroyElement(PACKAGE_PICKUPS[id])
 			PACKAGE_PICKUPS[id] = nil
 		end
 		
 		-- get information about package
 		local mapAssignment = getElementData(pack, "mapAssignment")
+		if (SHOW_PACKAGE_COUNTER) then
+			iprint("PROCESS PACKAGE", i, mapAssignment, mapName)
+		end
 		if (mapName == mapAssignment) then
 			TOTAL_PACKAGES_THIS_MAP = TOTAL_PACKAGES_THIS_MAP + 1
 			collected = COLLECTED_PACKAGES[id]
+			iprint("Found a package for this map", mapAssignment, id, collected)
 			if (not collected or collected == false) then
 				local x, y, z = getElementPosition(pack)
 				local model = PACKAGE_DATA[typeName].model
@@ -751,6 +805,8 @@ function changeMapPackages(mapName, mapFriendly)
 
 				PACKAGE_CORONAS[id] = createMarker(x, y, z + 0.6, "corona", 1, r, g, b, a)
 				PACKAGE_PICKUPS[id] = createObject(model, x, y, z + 0.5)
+				setElementInterior(PACKAGE_CORONAS[id], getElementInterior(localPlayer), x, y, z)
+				setElementInterior(PACKAGE_PICKUPS[id], getElementInterior(localPlayer), x, y, z)
 				setElementCollisionsEnabled(PACKAGE_PICKUPS[id], false)
 				moveObject(PACKAGE_PICKUPS[id], 2000*1800, x, y, z, 0, 0, 360*1800) --rotate
 			end

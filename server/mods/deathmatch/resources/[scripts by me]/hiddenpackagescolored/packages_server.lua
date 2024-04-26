@@ -120,7 +120,7 @@ end
 -- -----------------------------
 
 function collectPackage(source, player)
-    packageId = getElementID(source)
+	packageId = getElementID(source)
     
     local playerNonParticipation = getElementData(player, "coloredPackages.nonParticipant")
     if (playerNonParticipation) then
@@ -167,10 +167,66 @@ local function onColShapeHit(hitElement, matchingDimension)
 end
 addEventHandler("onColShapeHit", resourceRoot, onColShapeHit)
 
+function farOutPackageHack() -- Hack for packages that have broken hitboxes (floating point error?)
+	local p = PACKAGE_HITBOXES["packageCustom97"]
+	if (p) then
+		local m = getResourceName(call(getResourceFromName("mapmanager"), "getRunningGamemodeMap"))
+		if (m == "R-HoldWRandomiser") then
+			for _,v in ipairs(getElementsByType("player")) do
+				local x1,y1,z1 = getElementPosition(v)
+				local x2,y2,z2 = getElementPosition(p)
+				local d = getDistanceBetweenPoints3D(x1,y1,z1,x2,y2,z2)
+				if (d < 45) then
+					collectPackage(p, v)
+				end
+			end
+		end
+	end
+end
+setTimer(farOutPackageHack, 500, 0)
+
 -- other stuff
 -- -----------
 
 function onResourceStart(startedResource)
+    if (startedResource ~= getThisResource()) then return end
+
+    for _, p in pairs(getElementsByType("player")) do
+        local account = getPlayerAccount(p)
+        if not isGuestAccount(account) then
+
+            local nonParticipant = getAccountData(account, "coloredPackages.nonParticipant")
+            local packagesJson = getAccountData(account, "coloredPackages.collected")
+            local resetHistory = getAccountData(account, "coloredPackages.resetHistory") or 0
+            if (not packagesJson) then
+                setElementData(p, "coloredPackages.resetHistory", #CUT_PACKAGE_LIST)
+                return
+            end
+            local packages = fromJSON(packagesJson)
+            -- TODO: This reset history is only done upon player login, but should ideally be done on resource start as well
+            -- This isn't an issue on robot's server since it never restarts resources while players are there, but if this ever
+            -- epxands elsewhere, it needs to be done.
+            for i=resetHistory+1,#CUT_PACKAGE_LIST do
+                for j, v in ipairs(CUT_PACKAGE_LIST[i]) do
+                    if (packages[v]) then
+                        iprint(account, v, packages[v], "Cut content. Resetting collection status.")
+                        packages[v] = nil
+                    end
+                end
+            end
+            resetHistory = #CUT_PACKAGE_LIST
+            setElementData(p, "coloredPackages.resetHistory", resetHistory)
+            setElementData(p, "coloredPackages.nonParticipant", nonParticipant)
+            setElementData(p, "coloredPackages.collected", packages)
+        end
+
+        -- triggerClientEvent(p, "reloadPackages", p)
+        local currentMap = call(getResourceFromName("mapmanager"), "getRunningGamemodeMap")
+        local currentMapFile = getResourceName(currentMap)
+        local currentMapName = getResourceInfo(currentMap,"name")
+        -- triggerClientEvent(p, "changeMapPackages", resourceRoot, currentMapFile, currentMapName)
+    end
+
     getPackages()
 end
 addEventHandler("onResourceStart", resourceRoot, onResourceStart)
