@@ -1,24 +1,24 @@
 <meta>
-    <info gamemodes="race" type="map" name="Steeplechase" author="LotsOfS" version="1.0.0" description='The Blueberry farmer wanted to organize an epic steeplechase race, complete with jumps and chutes and everything. Sadly he has no proper horses to do it with; he&apos;ll have to use his Ponies.&#x0A;    &#x0A;    Obstacle course race with jumps and some tight turns. Not too difficult, but the bounciness and rolliness of the van might make it difficult to keep speed.&#x0A;    &#x0A;    PONY (413/611) edition of an &quot;a map for every vehicle&quot; challenge.'></info>
-    <map src="aveh-413pony.map" dimension="0"></map>
+    <info gamemodes="race" type="map" name="Trainstation to Trainstation" author="LotsOfS" version="1.0.0" description='Your friend on the train challenged you betting that you can&apos;t get off the train, rush to the next trainstation, and get on again. Prove him wrong!&#x0A;&#x09;&#x0A;&#x09;Named after the animal, and equally as fast, this car has no apparent weaknesses. But don&apos;t think that means you can keep your foot off the brake; you will need it in between the straights.&#x0A;&#x09;&#x0A;&#x09;CHEETAH (415/611) edition of an &quot;a map for every vehicle&quot; challenge.'></info>
+    <map src="aveh-415cheetah.map" dimension="0"></map>
     <settings>
         <setting name="#skins" value='[ &quot;random&quot; ]'></setting>
         <setting name="#gamespeed" value="[ 1 ]"></setting>
         <setting name="#ghostmode" value='[ &quot;true&quot; ]'></setting>
-        <setting name="#vehicleweapons" value='[ &quot;false&quot; ]'></setting>
+        <setting name="#vehicleweapons" value='[ &quot;true&quot; ]'></setting>
         <setting name="#minplayers" value="[ 0 ]"></setting>
         <setting name="#waveheight" value="[ 0 ]"></setting>
         <setting name="#timeafterfirstfinish" value="[ -1 ]"></setting>
         <setting name="#respawn" value='[ &quot;timelimit&quot; ]'></setting>
         <setting name="#maxplayers" value="[ 128 ]"></setting>
         <setting name="#useLODs" value="[ false ]"></setting>
-        <setting name="#time" value="13:13"></setting>
+        <setting name="#time" value="17:59"></setting>
         <setting name="#gravity" value="[ 0.0080000004 ]"></setting>
-        <setting name="#weather" value="[ 3 ]"></setting>
+        <setting name="#weather" value="[ 0 ]"></setting>
         <setting name="#duration" value="[ 1800 ]"></setting>
-        <setting name="#locked_time" value="[ true ]"></setting>
-        <setting name="#countdownduration" value="[ -1 ]"></setting>
+        <setting name="#locked_time" value="[ false ]"></setting>
         <setting name="#respawntime" value="[ 1 ]"></setting>
+        <setting name="#countdownduration" value="[ -1 ]"></setting>
     </settings>
     <script src="mapEditorScriptingExtension_s.lua" type="server"></script>
     <script src="mapEditorScriptingExtension_c.lua" type="client" validate="false"></script>

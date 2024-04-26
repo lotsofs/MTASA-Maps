@@ -1,24 +1,24 @@
 <meta>
-    <info gamemodes="race" type="map" name="Recruitment Drive-Thru" author="LotsOfS" version="1.0.0" description="When the Grove Street leadership went to get chicken, the Ballas didn&apos;t actually plan an attack. They just wanted to shoot an epic movie with Sweet as the main actor. You are the Ballas; lure the Grove Street OG homies to the film studios.
-    
-    A simple track but with plenty turns. Nothing the Voodoo can&apos;t handle.
-    
-    VOODOO (412/611) edition of an &quot;a map for every vehicle&quot; challenge."></info>
-    <map src="aveh-412voodoo.map" dimension="0"></map>
+    <info gamemodes="race" type="map" name="Beach Disaster" author="LotsOfS" version="1.0.0" description="Not one, but two (2) accidents at the beach during this year's V-Rock festival. Get to the rescue!
+	
+	Quick and incredibly bumpy race over sand. Good thing the Ambulance is one of the most capable vehicles on that terrain type.
+	
+	AMBULAN (416/611) edition of an &quot;a map for every vehicle&quot; challenge."></info>
+    <map src="aveh-416ambulance.map" dimension="0"></map>
     <settings>
         <setting name="#skins" value='[ &quot;random&quot; ]'></setting>
         <setting name="#gamespeed" value="[ 1 ]"></setting>
         <setting name="#countdownduration" value="[ -1 ]"></setting>
-        <setting name="#vehicleweapons" value='[ &quot;false&quot; ]'></setting>
+        <setting name="#vehicleweapons" value='[ &quot;true&quot; ]'></setting>
         <setting name="#minplayers" value="[ 0 ]"></setting>
         <setting name="#waveheight" value="[ 0 ]"></setting>
         <setting name="#timeafterfirstfinish" value="[ -1 ]"></setting>
         <setting name="#respawn" value='[ &quot;timelimit&quot; ]'></setting>
         <setting name="#maxplayers" value="[ 128 ]"></setting>
         <setting name="#useLODs" value="[ false ]"></setting>
-        <setting name="#time" value="17:43"></setting>
+        <setting name="#time" value="3:12"></setting>
         <setting name="#gravity" value="[ 0.0080000004 ]"></setting>
-        <setting name="#weather" value="[ 1 ]"></setting>
+        <setting name="#weather" value="[ 12 ]"></setting>
         <setting name="#ghostmode" value='[ &quot;true&quot; ]'></setting>
         <setting name="#locked_time" value="[ false ]"></setting>
         <setting name="#duration" value="[ 1800 ]"></setting>
