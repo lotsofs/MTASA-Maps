@@ -6,13 +6,13 @@
 -- bug: joining a game spawns ALL map packages, they only get filtered on next map start
 
 PACKAGE_DATA = { 
-	packageNormal = { 		model = 1575, 	r = 255, 	g = 255, 	b = 255, 	a = 32,		name = "White" },
-	packageWater = { 		model = 1579, 	r = 0, 		g = 0, 		b = 255, 	a = 32,		name = "Blue"  },
-	packageHelicopter = { 	model = 1576, 	r = 255, 	g = 128, 	b = 0, 		a = 32,		name = "Orange"  },
-	packageBike = { 		model = 1578, 	r = 0, 		g = 255, 	b = 0, 		a = 32,		name = "Green"  },
-	packageHard = { 		model = 1577, 	r = 255, 	g = 255, 	b = 0, 		a = 32,		name = "Yellow"  },
-	packageExtreme = { 		model = 1580, 	r = 255, 	g = 0, 		b = 0, 		a = 32,		name = "Red"  },
-	packageCustom = {		model = 1575,	r = 127,	g = 127,	b = 127,	a = 32,		name = "Black"  }
+	packageNormal = { 		model = 1575, 	r = 255, 	g = 255, 	b = 255, 	a = 32,		name = "White",		hex = "#FFFFFF" },
+	packageWater = { 		model = 1579, 	r = 0, 		g = 0, 		b = 255, 	a = 32,		name = "Blue",		hex = "#0000FF"  },
+	packageHelicopter = { 	model = 1576, 	r = 255, 	g = 128, 	b = 0, 		a = 32,		name = "Orange",	hex = "#FF7F00"  },
+	packageBike = { 		model = 1578, 	r = 0, 		g = 255, 	b = 0, 		a = 32,		name = "Green",		hex = "#00FF00"  },
+	packageHard = { 		model = 1577, 	r = 255, 	g = 255, 	b = 0, 		a = 32,		name = "Yellow",	hex = "#FFFF00"  },
+	packageExtreme = { 		model = 1580, 	r = 255, 	g = 0, 		b = 0, 		a = 32,		name = "Red",		hex = "#FF0000"  },
+	packageCustom = {		model = 1575,	r = 127,	g = 127,	b = 127,	a = 32,		name = "Black",		hex = "#7F7F7F"  }
 }
 
 PACKAGE_ELEMENTS = {}
@@ -459,7 +459,7 @@ function checkForMilestones()
 		subMapCollected = PACKAGES_COLLECTED_BY_MAP[CURRENT_MAPID]
 		if (subMapCollected == TOTAL_PACKAGES_THIS_MAP) then
 			nickname = getPlayerName(localPlayer)
-			message = nickname .. " has collected every " .. name .. "#E7D9B0 Hidden Package in " .. CURRENT_MAPNAME .. "!"
+			message = nickname .. " has collected every " .. hex .. name .. "#E7D9B0 Hidden Package in " .. CURRENT_MAPNAME .. "!"
 			triggerServerEvent("onMilestone", resourceRoot, message)
 			-- call a spam event
 		end
@@ -469,20 +469,20 @@ function checkForMilestones()
 		subTotal = getElementData(CURRENT_REGION, "total_" .. packType) or 0
 		if (subTotal == subCollected) then
 			nickname = getPlayerName(localPlayer)
-			message = nickname .. " has collected every " .. name .. "#E7D9B0 Hidden Package in " .. regionName .. "!"
+			message = nickname .. " has collected every " .. hex .. name .. "#E7D9B0 Hidden Package in " .. regionName .. "!"
 			triggerServerEvent("onMilestone", resourceRoot, message)
 			-- call a spam event
 		end
 	end
 	if (collected % 10 == 0) then
 		nickname = getPlayerName(localPlayer)
-		message = nickname .. " has collected " .. collected .. " " .. name .. "#E7D9B0 Hidden Packages!"
+		message = nickname .. " has collected " .. collected .. " " .. hex .. name .. "#E7D9B0 Hidden Packages!"
 		triggerServerEvent("onMilestone", resourceRoot, message)
 		-- call a spam event
 	end
 	if (collected == total) then
 		nickname = getPlayerName(localPlayer)
-		message = nickname .. " has collected all " .. name .. "#E7D9B0 Hidden Packages! Well done!"
+		message = nickname .. " has collected all " .. hex .. name .. "#E7D9B0 Hidden Packages! Well done!"
 		triggerServerEvent("onMilestone", resourceRoot, message)
 		-- call a spam event
 	end
@@ -541,8 +541,8 @@ function setLeftText()
 			collected[packType] = collected[packType] + 1
 		end
 	end
-	local totalCollected = collected["packageNormal"] + collected["packageBike"] + collected["packageWater"] + collected["packageHelicopter"] + collected["packageHard"] + collected["packageExtreme"] + collected["packageCustom"]
-	local totalExisting = totals["packageNormal"] + totals["packageBike"] + totals["packageWater"] + totals["packageHelicopter"] + totals["packageHard"] + totals["packageExtreme"] + totals["packageCustom"]
+	local totalCollected = collected["packageNormal"] + collected["packageBike"] + collected["packageWater"] + collected["packageHelicopter"] + collected["packageHard"] + collected["packageExtreme"] --+ collected["packageCustom"]
+	local totalExisting = totals["packageNormal"] + totals["packageBike"] + totals["packageWater"] + totals["packageHelicopter"] + totals["packageHard"] + totals["packageExtreme"] --+ totals["packageCustom"]
 	local totalPercentage = math.floor(totalCollected / totalExisting * 100)
 
 	local percentageNormal = math.floor(collected["packageNormal"] / totals["packageNormal"] * 100)
@@ -608,8 +608,8 @@ function setRightText()
 		local tHel = getElementData(CURRENT_REGION, "total_packageHelicopter") or 0
 		local tWat = getElementData(CURRENT_REGION, "total_packageWater") or 0
 
-		local cTot = cNor + cBik + cWat + cHel + cHar
-		local tTot = tNor + tBik + tWat + tHel + tHar
+		local cTot = cNor + cBik + cWat + cHel + cHar + cExt
+		local tTot = tNor + tBik + tWat + tHel + tHar + tExt
 
 		local pNor = ((tNor == 0) and "-") or math.floor(cNor / tNor * 100)
 		local pBik = ((tBik == 0) and "-") or math.floor(cBik / tBik * 100)
