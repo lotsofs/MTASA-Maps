@@ -389,6 +389,7 @@ addEvent("onRaceStateChanging", true)
 addEventHandler("onRaceStateChanging", root, raceStateChanged)
 
 function startRacePoll()
+	exports.votemanager:stopPoll {}
 	POLL_ACTIVE = true
 	-- poll thing, half of which I dont understand what it means
 	poll = exports.votemanager:startPoll {
