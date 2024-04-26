@@ -111,8 +111,10 @@ function loadLocalPBGhost(mapInfo)
 	pbPlayback = GhostPlaybackC:create( mapName )
 	local pbGhost = pbPlayback:loadGhost("ghosts/" .. mapName .. "_" .. getPlayerName(localPlayer):gsub('[%p%c%s]', '') .. "_PB.ghost")
 	if (pbGhost) then
-		globalInfo.personalBest = pbPlayback.personalBest
-		pbPlayback:sendGhostData("PB")
+		if (globalInfo.personalBest > pbPlayback.bestTime) then
+			globalInfo.personalBest = pbPlayback.bestTime
+			pbPlayback:sendGhostData("PB")
+		end
 	else
 		triggerServerEvent("onClientRequestPBGhost", localPlayer, mapName)
 	end

@@ -233,7 +233,7 @@ addEventHandler( "onMapStarting", root,
 
 		tickCount2 = getTickCount()
 		tickCountDiff = tickCount2 - tickCount
-		iprint(tickCountDiff .. " ms | Top ghost loaded")
+		-- iprint(tickCountDiff .. " ms | Top ghost loaded")
 		tickCount = tickCount2
 		
 		local extraPlaybacks = {}
@@ -258,7 +258,7 @@ addEventHandler( "onMapStarting", root,
 
 		tickCount2 = getTickCount()
 		tickCountDiff = tickCount2 - tickCount
-		iprint(tickCountDiff .. " ms | " .. #extraPlaybacks .. " Extra ghosts loaded")
+		-- iprint(tickCountDiff .. " ms | " .. #extraPlaybacks .. " Extra ghosts loaded")
 		tickCount = tickCount2
 
 		-- Send all ghosts to all players
@@ -273,7 +273,7 @@ addEventHandler( "onMapStarting", root,
 
 		tickCount2 = getTickCount()
 		tickCountDiff = tickCount2 - tickCount
-		iprint(tickCountDiff .. " ms | Ghosts sent to clients")
+		-- iprint(tickCountDiff .. " ms | Ghosts sent to clients")
 		tickCount = tickCount2
 	end
 )
@@ -292,7 +292,7 @@ addEventHandler( "onClientRequestPBGhost", root,
 
 		tickCount2 = getTickCount()
 		tickCountDiff = tickCount2 - tickCount
-		iprint(tickCountDiff .. " ms | PB ghost loaded and sent to " .. pName)
+		-- iprint(tickCountDiff .. " ms | PB ghost loaded and sent to " .. pName)
 		tickCount = tickCount2
 	end
 )

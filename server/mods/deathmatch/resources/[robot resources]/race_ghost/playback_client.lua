@@ -234,7 +234,7 @@ addEventHandler( "onClientGhostDataReceive", root,
 			globalInfo.racer = racer
 			if (racer == getPlayerName(localPlayer)) then
 				globalInfo.personalBest = time
-				return
+				-- return
 			end
 		elseif (playbackID == "PB") then
 			-- This should no longer occur since PB ghosts are handled differently now (We send the raw XML instead of Ghost Data)

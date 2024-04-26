@@ -233,6 +233,7 @@ function startNextMapVote()
     for index, map in ipairs(compatibleMaps) do
         local mapName = getResourceInfo(map, "name") or getResourceName(map)
         table.insert(poll, {mapName, 'nextMapVoteResult', getRootElement(), map})
+		incrementMapPollNominations(map)
     end
        
     if not g_playAgainCount then
@@ -590,6 +591,36 @@ function getMapInfo( map )
 	return mapInfo
 end
 
+function incrementMapPollNominations(map)
+	executeSQLQuery( 'BEGIN TRANSACTION' )
+
+	ensureTableExists(2)
+
+	local cmd = ( 'INSERT OR IGNORE INTO ' .. getTableName(2) .. ' VALUES ('
+					.. ''		.. sqlString( getResourceName( map ) )
+					.. ','		.. sqlInt( 0 )
+			.. ')' )
+	executeSQLQuery( cmd )
+
+	local pollNominations = 0
+	local rows = executeSQLQuery( 'SELECT * FROM ' .. getTableName(2) )
+	for i,row in ipairs(rows) do
+		local map2 = getResourceFromName( row.resName )
+		if map2 then
+			pollNominations = row.pollNominations
+		end
+	end
+
+	pollNominations = pollNominations + 1
+	cmd = ( 'UPDATE ' .. getTableName(2) .. ' SET '
+					.. 'pollNominations='		.. sqlInt( pollNominations )
+			.. ' WHERE '
+					.. 'resName='				.. sqlString( getResourceName( map ) )
+			 )
+	executeSQLQuery( cmd )
+
+	executeSQLQuery( 'END TRANSACTION' )
+end
 
 ---------------------------------------------------------------------------
 -- g_MapInfoList <-> database
@@ -604,10 +635,20 @@ function sqlInt(value)
 end
 
 function getTableName(value)
+	if (value == 2) then
+		return sqlString( 'race_mapmanager_maps_extras' )
+	end
 	return sqlString( 'race_mapmanager_maps' )
 end
 
-function ensureTableExists()
+function ensureTableExists(value)
+	if (value == 2) then
+		local cmd2 = ( 'CREATE TABLE IF NOT EXISTS ' .. getTableName(2) .. ' ('
+						 .. 'resName TEXT UNIQUE'
+						 .. ', pollNominations INTEGER'
+				.. ')' )
+		executeSQLQuery( cmd2 )
+	end
 	local cmd = ( 'CREATE TABLE IF NOT EXISTS ' .. getTableName() .. ' ('
 					 .. 'resName TEXT UNIQUE'
 					 .. ', infoName TEXT '
@@ -622,12 +663,13 @@ end
 -- Load all rows into g_MapInfoList
 function loadMapInfoAll()
 	ensureTableExists()
-	local rows = executeSQLQuery( 'SELECT * FROM ' .. getTableName() )
+	local mapInfo = nil
 	g_MapInfoList = {}
+	local rows = executeSQLQuery( 'SELECT * FROM ' .. getTableName() )
 	for i,row in ipairs(rows) do
 		local map = getResourceFromName( row.resName )
 		if map then
-			local mapInfo = getMapInfo( map )
+			mapInfo = getMapInfo( map )
 			mapInfo.playedCount = row.playedCount
 			mapInfo.lastTimePlayed = row.lastTimePlayed
 		end
