@@ -13,6 +13,23 @@ function setMarkerVisibility(marker, player)
 	setElementVisibleTo(marker, player, conditionsMet)
 end
 
+function toggleMissionMarkers(player, enabled)
+	for _, m in pairs(MARKERS) do
+		if (enabled) then
+			setMarkerVisibility(m, player)
+		else
+			setElementVisibleTo(m, player, false)
+		end
+	end
+end
+
+function enableFreeroam()
+	setElementData(source, "rsp-onmission", false)
+	toggleMissionMarkers(source, true)
+end
+addEvent("onEnableFreeroam", true)
+addEventHandler("onEnableFreeroam", root, enableFreeroam)
+
 function initialize()
 	local markerTemplates = getElementsByType("markertemplate")
 	for _, m in ipairs(markerTemplates) do
@@ -26,6 +43,7 @@ function initialize()
 		local markerId = "marker_" .. getElementID(m)
 		MARKERS[markerId] = createMarker(x, y, z, markerType, size, r, g, b, a, resourceRoot)
 		for i, d in pairs(getAllElementData(m)) do
+			-- Copy data from the template over to the actual marker
 			setElementData(MARKERS[markerId], i, d)
 		end
 		for _, p in ipairs(getElementsByType("player")) do
@@ -39,6 +57,7 @@ function handleMarkerHit(hitElement, matchingDimension)
 	if (getElementType(hitElement) ~= "player") then return end
 	local conditionsMet = checkConditions(hitElement, source)
 	if (conditionsMet) then
+		toggleFreeroam(hitElement, false)
 		triggerEvent("onStartMissionRequested", root, getElementData(source, "starts"), hitElement) 
 	end
 end
@@ -62,5 +81,6 @@ function checkConditions(player, marker)
 		checkRequirement(player, getElementData(marker, "positiveRequirement3"), true) and
 		checkRequirement(player, getElementData(marker, "negativeRequirement1"), false) and
 		checkRequirement(player, getElementData(marker, "negativeRequirement2"), false) and
-		checkRequirement(player, getElementData(marker, "negativeRequirement3"), false)
+		checkRequirement(player, getElementData(marker, "negativeRequirement3"), false) and
+		getElementData(player, "rsp-onmission") == false
 end

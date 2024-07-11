@@ -38,6 +38,7 @@ function startMission(mission, player)
 	if (resState == "loaded") then
 		startResourceCustom("rsp-"..mission)
 	elseif (resState ~= "running") then
+		-- something is wrong with the resource
 		-- idk what to do here yet
 	else
 		triggerClientEvent(player, "onClientMissionStarted", root, mission)

@@ -1,0 +1,19 @@
+<def name="Remake Story Plot">
+	<element name="vehicleSpawner" friendlyname="Vehicle Spawner" icon="car.png">
+		<data name="position" type="coord3d" default="0,0,0"/>
+		<data name="rotation" type="coord3d" default="0,0,0"/>
+		<marker size="3" type="corona" posZ="1.1" color="#0000ff" editorOnly="true"/>
+		<data name="vehicle" type="vehicleID" default="400" required="true" />
+		<vehicle model="!vehicle!" rotation="!rotation!"/>
+	</element> 
+
+	<element name="bigvehicle" friendlyname="Big Vehicle" icon="none.png">
+		<data name="position" type="coord3d" default="0,0,0"/>
+		<data name="rotation" type="coord3d" default="0,0,0"/>
+		<vehicle model="406" posZ="0.5" editorOnly="true"/>
+		<vehicle model="532" posZ="0.3" editorOnly="true"/>
+		<vehicle model="443" posZ="0.0" editorOnly="true"/>
+		<vehicle model="520" posZ="0.1" editorOnly="true"/>
+		<marker size="3" type="corona" posZ="1.1" color="#0000ff" editorOnly="true"/>
+	</element> 
+</def>

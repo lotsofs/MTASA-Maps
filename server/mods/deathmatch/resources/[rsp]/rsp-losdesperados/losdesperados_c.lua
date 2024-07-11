@@ -40,6 +40,7 @@ end
 
 function passMission()
 	triggerEvent("onClientMissionPassed", localPlayer, MISSION_ID)
+	triggerServerEvent("onEnableFreeroam", localPlayer)
 end
 
 ---------------
