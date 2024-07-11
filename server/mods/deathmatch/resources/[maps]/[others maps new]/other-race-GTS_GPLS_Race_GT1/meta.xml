@@ -1,14 +1,14 @@
 ﻿<meta>
 	<!--<include resource="GTS_bullet"/>
     <include resource="GTS_cheetah"/>-->
-	<info gamemodes="race" type="map" name="GP Los Santos | GT1 | Race" author="Vally, adjusted for the speedrunners' server by Wuzi and S." version="1.0.0">
+	<info gamemodes="race" type="map" name="[R] GP Los Santos | GT1 | Race" author="Vally, adjusted for the speedrunners' server by Wuzi, S, &amp; 123robot. Some of 123robot's changes undone by S." version="1.0.0">
 	</info>
 	<map src="GPLS.map" dimension="0">
 	</map>
 	<settings>
 		<setting name="#skins" value="[ &quot;cj&quot; ]">
 		</setting>
-		<setting name="#maxplayers" value="[ 20 ]">
+		<setting name="#maxplayers" value="[ 128 ]">
 		</setting>
 		<setting name="#gamespeed" value="[ 1 ]">
 		</setting>
@@ -30,8 +30,10 @@
 		</setting>
 		<setting name="#duration" value="[ 2400 ]">
 		</setting>
+		<setting name="#countdownduration" value="[ 6 ]">
+		</setting>
 		   <setting name="#respawn" value='[ &quot;timelimit&quot; ]'></setting>
-		           <setting name="#respawntime" value="[ 1 ]"></setting>
+		           <setting name="#respawntime" value="[ 0 ]"></setting>
 
 	</settings>
 	<file src="lcd.ttf" type="client" />

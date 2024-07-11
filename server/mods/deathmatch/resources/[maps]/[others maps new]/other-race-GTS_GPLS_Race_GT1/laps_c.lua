@@ -31,13 +31,13 @@ function updateDisplay()
     if getElementData(localPlayer, 'race.spectating') then
         target = getVehicleOccupant(getCameraTarget(localPlayer), 0)
     end
-    dxDrawRectangle(x - 151, y - 128, 150, 30, tocolor(10,10,10,150))
-    dxDrawText("000000000", x - 90, y - 125, 40, 30, tocolor(25, 25, 25, 220), 0.6, fontLCD22, "left", "top", false, false, false)
-    dxDrawText("*********", x - 90, y - 125, 40, 30, tocolor(25, 25, 25, 220), 0.6, fontLCD22, "left", "top", false, false, false)
-    dxDrawText("lap "..tostring(getElementData(target, "Lap")).."/5", x - 90, y- 125, 40, 30, tocolor(255, 255, 255, 255), 0.6, fontLCD22, "left", "top", false, false, false)
-    dxDrawRectangle(x - 151, y - 202, 150, 30, tocolor(10,10,10,150))
-    dxDrawText("00000000:00:00:00", x-145, y-199, x-145, y-199, tocolor (25, 25, 25, 220), 0.6, fontLCD22)
-    dxDrawText("********:**:**:**", x-145, y-199, x-145, y-199, tocolor (25, 25, 25, 220), 0.6, fontLCD22)
+    dxDrawRectangle(x - 151, y - 228, 150, 30, tocolor(10,10,10,150))
+    dxDrawText("000000000", x - 90, y - 225, 40, 30, tocolor(25, 25, 25, 220), 0.6, fontLCD22, "left", "top", false, false, false)
+    dxDrawText("*********", x - 90, y - 225, 40, 30, tocolor(25, 25, 25, 220), 0.6, fontLCD22, "left", "top", false, false, false)
+    dxDrawText("lap "..tostring(getElementData(target, "Lap")).."/5", x - 90, y- 225, 40, 30, tocolor(255, 255, 255, 255), 0.6, fontLCD22, "left", "top", false, false, false)
+    dxDrawRectangle(x - 151, y - 302, 150, 30, tocolor(10,10,10,150))
+    dxDrawText("00000000:00:00:00", x-145, y-299, x-145, y-299, tocolor (25, 25, 25, 220), 0.6, fontLCD22)
+    dxDrawText("********:**:**:**", x-145, y-299, x-145, y-299, tocolor (25, 25, 25, 220), 0.6, fontLCD22)
     pos = getElementData(target, "race rank")
     if pos == 1 then
         pstfx = 'st'
@@ -48,20 +48,20 @@ function updateDisplay()
     else
        pstfx = 'th'
     end
-    dxDrawRectangle(x - 151, y - 170, 150, 40, tocolor(10,10,10,150))
-    dxDrawText("00", x - 27, y - 170, x - 27, y - 170, tocolor(25, 25, 25, 220), 1, fontLCD22, "right", "top", false, false, false)
-    dxDrawText("**", x - 27, y - 170, x - 27, y - 170, tocolor(25, 25, 25, 220), 1, fontLCD22, "right", "top", false, false, false)
-    dxDrawText(tostring(pos), x - 27, y - 170, x - 27, y - 170, tocolor(255, 255, 255, 255), 1, fontLCD22, "right", "top", false, false, false)
-    dxDrawText("00", x - 5, y - 166, x - 5, y - 166, tocolor(25, 25, 25, 220), 0.6, fontLCD22, "right", "top", false, false, false)
-    dxDrawText("**", x - 5, y - 166, x - 5, y - 166, tocolor(25, 25, 25, 220), 0.6, fontLCD22, "right", "top", false, false, false)
-    dxDrawText(pstfx, x - 5, y - 166, x - 5, y - 166, tocolor(255, 255, 255, 255), 0.6, fontLCD22, "right", "top", false, false, false)
+    dxDrawRectangle(x - 151, y - 270, 150, 40, tocolor(10,10,10,150))
+    dxDrawText("00", x - 27, y - 270, x - 27, y - 270, tocolor(25, 25, 25, 220), 1, fontLCD22, "right", "top", false, false, false)
+    dxDrawText("**", x - 27, y - 270, x - 27, y - 270, tocolor(25, 25, 25, 220), 1, fontLCD22, "right", "top", false, false, false)
+    dxDrawText(tostring(pos), x - 27, y - 270, x - 27, y - 270, tocolor(255, 255, 255, 255), 1, fontLCD22, "right", "top", false, false, false)
+    dxDrawText("00", x - 5, y - 266, x - 5, y - 266, tocolor(25, 25, 25, 220), 0.6, fontLCD22, "right", "top", false, false, false)
+    dxDrawText("**", x - 5, y - 266, x - 5, y - 266, tocolor(25, 25, 25, 220), 0.6, fontLCD22, "right", "top", false, false, false)
+    dxDrawText(pstfx, x - 5, y - 266, x - 5, y - 266, tocolor(255, 255, 255, 255), 0.6, fontLCD22, "right", "top", false, false, false)
     if getElementData(localPlayer, 'race.spectating') then return end
     if time ~= 0 then
-        dxDrawText("Lap time: "..formatTime(time), x-145, y-199, x-145, y-199, tocolor ( 0, 255, 255, 255 ), 0.6, fontLCD22)
+        dxDrawText("Lap time: "..formatTime(time), x-145, y-299, x-145, y-299, tocolor ( 0, 255, 255, 255 ), 0.6, fontLCD22)
     elseif lap_time == 0 then
-        dxDrawText("Lap time: "..formatTime(0), x-145, y-199, x-145, y-199, tocolor ( 255, 255, 255, 255 ), 0.6, fontLCD22)
+        dxDrawText("Lap time: "..formatTime(0), x-145, y-299, x-145, y-299, tocolor ( 255, 255, 255, 255 ), 0.6, fontLCD22)
     else
-        dxDrawText("Lap time: "..formatTime(getTickCount() - lap_time), x-145, y-199, x-145, y-199, tocolor ( 255, 255, 255, 255 ), 0.6, fontLCD22)
+        dxDrawText("Lap time: "..formatTime(getTickCount() - lap_time), x-145, y-299, x-145, y-299, tocolor ( 255, 255, 255, 255 ), 0.6, fontLCD22)
     end
 end
 

@@ -4,7 +4,7 @@ addEvent("onPlayerReachCheckpoint", true)
 addEventHandler("onPlayerReachCheckpoint", getRootElement(),
     function(cp, time)
         if cp == 24 then
-            triggerEvent("onPlayerFinish", source, 1000, time)
+            -- triggerEvent("onPlayerFinish", source, 1000, time)
             triggerClientEvent(source, "onLapStarted", getRootElement())
             times[source] = getTickCount()
             setElementData(source, "Lap", 2)
@@ -14,7 +14,7 @@ addEventHandler("onPlayerReachCheckpoint", getRootElement(),
             local c_time = getTickCount()
             local l_time = c_time - times[source]
             times[source] = getTickCount()
-            triggerEvent("onPlayerFinish", source, 1000, l_time)
+            -- triggerEvent("onPlayerFinish", source, 1000, l_time)
             triggerClientEvent(source, "onLapStarted", getRootElement())
             setElementData(source, "Lap", 3)
             triggerClientEvent(source, 'onLapTime', getRootElement(), l_time)
@@ -23,7 +23,7 @@ addEventHandler("onPlayerReachCheckpoint", getRootElement(),
             local c_time = getTickCount()
             local l_time = c_time - times[source]
             times[source] = getTickCount()
-            triggerEvent("onPlayerFinish", source, 1000, l_time)
+            -- triggerEvent("onPlayerFinish", source, 1000, l_time)
             triggerClientEvent(source, "onLapStarted", getRootElement())
             setElementData(source, "Lap", 4)
             triggerClientEvent(source, 'onLapTime', getRootElement(), l_time)
@@ -32,7 +32,7 @@ addEventHandler("onPlayerReachCheckpoint", getRootElement(),
             local c_time = getTickCount()
             local l_time = c_time - times[source]
             times[source] = getTickCount()
-            triggerEvent("onPlayerFinish", source, 1000, l_time)
+            -- triggerEvent("onPlayerFinish", source, 1000, l_time)
             triggerClientEvent(source, "onLapStarted", getRootElement())
             setElementData(source, "Lap", 5)
             triggerClientEvent(source, 'onLapTime', getRootElement(), l_time)
@@ -41,7 +41,7 @@ addEventHandler("onPlayerReachCheckpoint", getRootElement(),
             local c_time = getTickCount()
             local l_time = c_time - times[source]
             times[source] = getTickCount()
-            triggerEvent("onPlayerFinish", source, 1000, l_time)
+            -- triggerEvent("onPlayerFinish", source, 1000, l_time)
             triggerClientEvent(source, "onLapStarted", getRootElement())
             setElementData(source, "Lap", 6)
             triggerClientEvent(source, 'onLapTime', getRootElement(), l_time)
@@ -50,7 +50,7 @@ addEventHandler("onPlayerReachCheckpoint", getRootElement(),
             local c_time = getTickCount()
             local l_time = c_time - times[source]
             times[source] = getTickCount()
-            triggerEvent("onPlayerFinish", source, 1000, l_time)
+            -- triggerEvent("onPlayerFinish", source, 1000, l_time)
             triggerClientEvent(source, "onLapStarted", getRootElement())
             setElementData(source, "Lap", 7)
             triggerClientEvent(source, 'onLapTime', getRootElement(), l_time)
@@ -59,7 +59,7 @@ addEventHandler("onPlayerReachCheckpoint", getRootElement(),
             local c_time = getTickCount()
             local l_time = c_time - times[source]
             times[source] = getTickCount()
-            triggerEvent("onPlayerFinish", source, 1000, l_time)
+            -- triggerEvent("onPlayerFinish", source, 1000, l_time)
             triggerClientEvent(source, "onLapStarted", getRootElement())
             setElementData(source, "Lap", 8)
             triggerClientEvent(source, 'onLapTime', getRootElement(), l_time)
@@ -68,7 +68,7 @@ addEventHandler("onPlayerReachCheckpoint", getRootElement(),
             local c_time = getTickCount()
             local l_time = c_time - times[source]
             times[source] = getTickCount()
-            triggerEvent("onPlayerFinish", source, 1000, l_time)
+            -- triggerEvent("onPlayerFinish", source, 1000, l_time)
             triggerClientEvent(source, "onLapStarted", getRootElement())
             setElementData(source, "Lap", 9)
             triggerClientEvent(source, 'onLapTime', getRootElement(), l_time)
@@ -77,7 +77,7 @@ addEventHandler("onPlayerReachCheckpoint", getRootElement(),
             local c_time = getTickCount()
             local l_time = c_time - times[source]
             times[source] = getTickCount()
-            triggerEvent("onPlayerFinish", source, 1000, l_time)
+            -- triggerEvent("onPlayerFinish", source, 1000, l_time)
             triggerClientEvent(source, "onLapStarted", getRootElement())
             setElementData(source, "Lap", 10)
             triggerClientEvent(source, 'onLapTime', getRootElement(), l_time)
@@ -86,7 +86,7 @@ addEventHandler("onPlayerReachCheckpoint", getRootElement(),
             local c_time = getTickCount()
             local l_time = c_time - times[source]
             times[source] = getTickCount()
-            triggerEvent("onPlayerFinish", source, 1000, l_time)
+            -- triggerEvent("onPlayerFinish", source, 1000, l_time)
             triggerClientEvent(source, "onLapStarted", getRootElement())
             setElementData(source, "Lap", 11)
             triggerClientEvent(source, 'onLapTime', getRootElement(), l_time)
@@ -95,7 +95,7 @@ addEventHandler("onPlayerReachCheckpoint", getRootElement(),
             local c_time = getTickCount()
             local l_time = c_time - times[source]
             times[source] = getTickCount()
-            triggerEvent("onPlayerFinish", source, 1000, l_time)
+            -- triggerEvent("onPlayerFinish", source, 1000, l_time)
             triggerClientEvent(source, "onLapStarted", getRootElement())
             setElementData(source, "Lap", 12)
             triggerClientEvent(source, 'onLapTime', getRootElement(), l_time)
@@ -104,7 +104,7 @@ addEventHandler("onPlayerReachCheckpoint", getRootElement(),
             local c_time = getTickCount()
             local l_time = c_time - times[source]
             times[source] = getTickCount()
-            triggerEvent("onPlayerFinish", source, 1000, l_time)
+            -- triggerEvent("onPlayerFinish", source, 1000, l_time)
             triggerClientEvent(source, "onLapStarted", getRootElement())
             setElementData(source, "Lap", 13)
             triggerClientEvent(source, 'onLapTime', getRootElement(), l_time)
@@ -113,7 +113,7 @@ addEventHandler("onPlayerReachCheckpoint", getRootElement(),
             local c_time = getTickCount()
             local l_time = c_time - times[source]
             times[source] = getTickCount()
-            triggerEvent("onPlayerFinish", source, 1000, l_time)
+            -- triggerEvent("onPlayerFinish", source, 1000, l_time)
             triggerClientEvent(source, "onLapStarted", getRootElement())
             setElementData(source, "Lap", 14)
             triggerClientEvent(source, 'onLapTime', getRootElement(), l_time)
@@ -122,7 +122,7 @@ addEventHandler("onPlayerReachCheckpoint", getRootElement(),
             local c_time = getTickCount()
             local l_time = c_time - times[source]
             times[source] = getTickCount()
-            triggerEvent("onPlayerFinish", source, 1000, l_time)
+            -- triggerEvent("onPlayerFinish", source, 1000, l_time)
             triggerClientEvent(source, "onLapStarted", getRootElement())
             setElementData(source, "Lap", 15)
             triggerClientEvent(source, 'onLapTime', getRootElement(), l_time)
