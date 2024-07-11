@@ -138,7 +138,7 @@ function setVehicleColorToRandomHSV(vehicle)
 		components[1] = 255
 		components[2] = 0
 		components[3] = math.random(0, 255)
-		saturation = math.random(0, 75) / 100	-- change 75 to 100 to allow for superbright colors. (don't forget to do so in the other script as well)
+		saturation = math.random(0, 100) / 100
 		value = math.random(0, 100) / 100
 
 		-- this block of code determines which RGB component will be min, which max, and which the other by shuffling them.
@@ -494,7 +494,7 @@ function msToTimeStr(ms)
 		seconds = '0' .. seconds
 	end
 	local minutes = tostring(math.floor(s / 60))
-	return minutes .. ':' .. seconds .. ':' .. centiseconds
+	return minutes .. ':' .. seconds .. '.' .. centiseconds
 end
 
 

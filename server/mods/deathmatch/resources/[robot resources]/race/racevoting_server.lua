@@ -663,13 +663,12 @@ end
 -- Load all rows into g_MapInfoList
 function loadMapInfoAll()
 	ensureTableExists()
-	local mapInfo = nil
-	g_MapInfoList = {}
 	local rows = executeSQLQuery( 'SELECT * FROM ' .. getTableName() )
+	g_MapInfoList = {}
 	for i,row in ipairs(rows) do
 		local map = getResourceFromName( row.resName )
 		if map then
-			mapInfo = getMapInfo( map )
+			local mapInfo = getMapInfo( map )
 			mapInfo.playedCount = row.playedCount
 			mapInfo.lastTimePlayed = row.lastTimePlayed
 		end

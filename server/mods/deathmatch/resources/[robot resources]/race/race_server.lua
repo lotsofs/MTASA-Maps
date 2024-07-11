@@ -1,6 +1,14 @@
 allowRPC('setElementPosition')
 g_MotorBikeIDs = table.create({ 448, 461, 462, 463, 468, 471, 521, 522, 523, 581, 586 }, true)
-g_ArmedVehicleIDs = table.create({ 425, 447, 520, 430, 464, 432 }, true)
+g_ArmedVehicleIDs = table.create({ 
+	425, -- hunter
+	447, -- seaspar
+	520, -- hydra
+	430, -- predator
+	464, -- rcbaron
+	432, -- rhino
+	476 -- rustler (formerly missing) 
+}, true)
 g_AircraftIDs = table.create({ 592, 577, 511, 548, 512, 593, 425, 520, 417, 487, 553, 488, 497, 563, 476, 447, 519, 460, 469, 513 }, true)
 g_RCVehicleIDs = table.create({ 441, 464, 465, 501, 564, 594 }, true)
 g_VehicleClothes = {
@@ -285,7 +293,7 @@ function loadMap(res)
 		if getTotalPlayerCount() > numSpawnPoints then
 			-- unload map xml
 			map:unload()
-			outputRace( (numSpawnPoints).." or less players are required to start '"..tostring(getResourceName(res)).."' if not using ghostmode" )
+			outputRace( (numSpawnPoints).." or fewer players are required to start '"..tostring(getResourceName(res)).."' if not using ghostmode" )
 			return false
 		end
 	end
@@ -944,6 +952,7 @@ addCommandHandler('ghostmode', toggleServerGhostmode)
 function updateGhostmode()
 	for i,player in ipairs(g_Players) do
 		local vehicle = RaceMode.getPlayerVehicle(player)
+		Override.setCollideOthers( "ForGhostCollisions", player, g_MapOptions.ghostmode and 0 or nil )
 		if vehicle then
 			Override.setCollideOthers( "ForGhostCollisions", vehicle, g_MapOptions.ghostmode and 0 or nil )
 			Override.setAlpha( "ForGhostAlpha", {player, vehicle}, g_MapOptions.ghostmode and g_GameOptions.ghostalpha and g_GameOptions.ghostalphalevel or nil )

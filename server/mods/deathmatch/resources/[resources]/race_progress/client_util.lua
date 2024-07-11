@@ -299,3 +299,45 @@ function var_dump(...)
 	return string, output
 end
 
+
+-- Table helpers from race gamemode code
+function table.find(t, ...)
+	local args = { ... }
+	if #args == 0 then
+		for k,v in pairs(t) do
+			if v then
+				return k
+			end
+		end
+		return false
+	end
+
+	local value = table.remove(args)
+	if value == '[nil]' then
+		value = nil
+	end
+	for k,v in pairs(t) do
+		for i,index in ipairs(args) do
+			if type(index) == 'function' then
+				v = index(v)
+			else
+				if index == '[last]' then
+					index = #v
+				end
+				v = v[index]
+			end
+		end
+		if v == value then
+			return k
+		end
+	end
+	return false
+end
+
+function table.merge(t1, t2)
+	local l = #t1
+	for i,v in ipairs(t2) do
+		t1[l+i] = v
+	end
+	return t1
+end

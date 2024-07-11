@@ -68,11 +68,13 @@ addEventHandler ( "onClientRender", root,
 					--Draw our text
 					local r,g,b = 255,255,255
 					local team = getPlayerTeam(player)
+					local display_name = _getPlayerName(player) -- with color codes
 					if team then
 						r,g,b = getTeamColor(team)
+						display_name = getPlayerName(player)  -- without color codes
 					end
 					local offset = (scale) * NAMETAG_TEXT_BAR_SPACE/2
-					dxDrawText ( getPlayerName(player), sx, sy - offset, sx, sy - offset, tocolor(r,g,b,textalpha), textscale*NAMETAG_TEXTSIZE, "default", "center", "bottom", false, false, false )
+					dxDrawText ( display_name, sx, sy - offset, sx, sy - offset, tocolor(r,g,b,textalpha), textscale*NAMETAG_TEXTSIZE, "default", "center", "bottom", false, false, false, true )
 					--We draw three parts to make the healthbar.  First the outline/background
 					local drawX = sx - NAMETAG_WIDTH*scale/2
 					drawY = sy + offset

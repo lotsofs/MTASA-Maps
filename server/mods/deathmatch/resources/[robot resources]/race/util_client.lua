@@ -97,7 +97,7 @@ function msToTimeStr(ms)
 		seconds = '0' .. seconds
 	end
 	local minutes = tostring(math.floor(s / 60))
-	return minutes .. ':' .. seconds .. ':' .. centiseconds
+	return minutes .. ':' .. seconds .. '.' .. centiseconds
 end
 
 function getTickTimeStr()

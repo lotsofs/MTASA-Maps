@@ -1,4 +1,12 @@
-g_ArmedVehicleIDs = table.create({ 425, 447, 520, 430, 464, 432 }, true)
+g_ArmedVehicleIDs = table.create({ 
+	425, -- hunter
+	447, -- seaspar
+	520, -- hydra
+	430, -- predator
+	464, -- rcbaron
+	432, -- rhino
+	476 -- rustler (formerly missing) 
+}, true)
 g_WaterCraftIDs = table.create({ 539, 460, 417, 447, 472, 473, 493, 595, 484, 430, 453, 452, 446, 454 }, true)
 g_ModelForPickupType = { nitro = 2221, repair = 2222, vehiclechange = 2223 }
 g_HunterID = 425
@@ -22,7 +30,7 @@ addEventHandler('onClientResourceStart', resourceRoot,
 			timepassed = dxText:create('0:00:00', screenWidth - 10, screenHeight - 25, false, 'bankgothic', 0.7, 'right'),
 			
 			fileDisplay = dxText:create('File:', 4, screenHeight - 10, false, 'default-bold', 1.2, 'left'),
-			fileDisplayName = dxText:create('FILENAME', 45, screenHeight - 10, false, 'default-bold', 1.2, 'left'),
+			fileDisplayName = dxText:create('<unknown>', 45, screenHeight - 10, false, 'default-bold', 1.2, 'left'),
 
 			mapdisplay = dxText:create('Map:', 4, screenHeight - 30, false, 'default-bold', 1.2, 'left'),
 			mapdisplayName = dxText:create('<unknown>', 45, screenHeight - 30, false, 'default-bold', 1.2, 'left'),
@@ -235,7 +243,7 @@ function TravelScreen.showDetails( details )
 	text6 = text6 .. details.numcheckpoints .. " Checkpoint" .. (details.numcheckpoints ~= 1 and "s" or "") .. "\n"
 	text6 = text6 .. details.numobjects .. " Object" .. (details.numobjects ~= 1 and "s" or "") .. "\n"
 	text6 = text6 .. details.numpickups .. " Pickup" .. (details.numpickups ~= 1 and "s" or "") .. "\n"
-	-- text5 = text5 .. (allowonfoot and "◼ Exiting vehicles\n" or "◻ exiting vehicles\n")
+	-- text5 = text5 .. (allowonfoot and "◼ Exiting vehicles\n" or "◻ Exiting vehicles\n")
 	-- if (allowonfoot) then
 	-- 	text6 = text6 .. (falloffbike and "◼ Fall off bikes\n" or "◻ Fall off bikes\n")
 	-- 	text6 = text6 .. (movementglitches and "◼ Super sprint\n" or "◻ Super sprint\n")
@@ -284,9 +292,9 @@ function initRace(vehicle, checkpoints, objects, pickups, mapoptions, ranked, du
 	g_GameOptions = gameoptions
 	g_MapInfo = mapinfo
     g_PlayerInfo = playerInfo
-	g_dxGUI.mapdisplayName:text(g_MapInfo.name)
-	g_dxGUI.authordisplayName:text(g_MapInfo.author)
-	g_dxGUI.fileDisplayName:text(g_MapInfo.resname)
+	g_dxGUI.mapdisplayName:text(g_MapInfo.name or "<none>")
+	g_dxGUI.authordisplayName:text(g_MapInfo.author or "<none>")
+	g_dxGUI.fileDisplayName:text(g_MapInfo.resname or "<none>")
     triggerEvent('onClientMapStarting', localPlayer, mapinfo )
 
 
@@ -983,7 +991,7 @@ function Spectate._start()
 	if Spectate.savePos then
 		savePosition()
 	end
-	Spectate.setTarget( Spectate.findNewTarget(localPlayer,1) )
+	Spectate.setTarget( Spectate.findRandomTarget() )
 	MovePlayerAway.start()
 	Spectate.setTarget( Spectate.target )
     Spectate.validateTarget(Spectate.target)
@@ -1033,10 +1041,6 @@ function Spectate.next(bGUIFeedback)
 		setGUIComponentsVisible({ specnext = false, specnexthi = true })
 		setTimer(setGUIComponentsVisible, 100, 1, { specnexthi = false, specnext = true })
 	end
-end
-
-function Spectate.random()
-	Spectate.setTarget( Spectate.findRandomTarget() )
 end
 
 ---------------------------------------------
@@ -1197,7 +1201,7 @@ function Spectate.tick()
 		end
 	end
 	if not Spectate.target or ( Spectate.getCameraTargetPlayer() and Spectate.getCameraTargetPlayer() ~= Spectate.target ) or not Spectate.isValidTarget(Spectate.target) then
-		Spectate.random(true)
+		Spectate.previous(false)
 	end
 end
 
@@ -1425,7 +1429,9 @@ function createCheckpoint(i)
 		return
 	end
 	local pos = checkpoint.position
+	local blipSize = checkpoint.blipsize or 2
 	local color = checkpoint.color or cpColorRandom or { 0, 0, 255 }
+	local alpha = blipSize <= 0 and 0 or 255
 	checkpoint.marker = createMarker(pos[1], pos[2], pos[3], checkpoint.type or 'checkpoint', checkpoint.size, color[1], color[2], color[3])
 	if (not checkpoint.type or checkpoint.type == 'checkpoint') and i == #g_Checkpoints then
 		setMarkerIcon(checkpoint.marker, 'finish')
@@ -1433,7 +1439,7 @@ function createCheckpoint(i)
 	if checkpoint.type == 'ring' and i < #g_Checkpoints then
 		setMarkerTarget(checkpoint.marker, unpack(g_Checkpoints[i+1].position))
 	end
-	checkpoint.blip = createBlip(pos[1], pos[2], pos[3], 0, isCurrent and 2 or 1, color[1], color[2], color[3])
+	checkpoint.blip = createBlip(pos[1], pos[2], pos[3], 0, isCurrent and blipSize or 1, color[1], color[2], color[3], alpha)
 	setBlipOrdering(checkpoint.blip, 1)
 	return checkpoint.marker
 end
@@ -1441,12 +1447,14 @@ end
 function makeCheckpointCurrent(i,bOtherPlayer)
 	local checkpoint = g_Checkpoints[i]
 	local pos = checkpoint.position
+	local blipSize = checkpoint.blipsize or 2
 	local color = checkpoint.color or { 255, 0, 0 }
+	local alpha = blipSize == 0 and 0 or 255
 	if not checkpoint.blip then
-		checkpoint.blip = createBlip(pos[1], pos[2], pos[3], 0, 2, color[1], color[2], color[3])
+		checkpoint.blip = createBlip(pos[1], pos[2], pos[3], 0, blipSize, color[1], color[2], color[3], alpha)
 		setBlipOrdering(checkpoint.blip, 1)
 	else
-		setBlipSize(checkpoint.blip, 2)
+		setBlipSize(checkpoint.blip, blipSize)
 	end
 
 	if not checkpoint.type or checkpoint.type == 'checkpoint' then

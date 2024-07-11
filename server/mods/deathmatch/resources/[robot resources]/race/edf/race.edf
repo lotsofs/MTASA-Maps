@@ -2,9 +2,11 @@
 	<setting name="respawn" friendlyname="Respawn type" type="selection:timelimit,none" description="Whether respawn is enabled or not.  If enabled, a timelimit must be specified" default="timelimit" required="true"/>
 	<setting name="duration" friendlyname="Race duration" type="natural" description="The length of the race, in seconds.  Default is 30 minutes." default="1800" required="true"/>
 	<setting name="vehicleweapons" friendlyname="Enabled vehicle weapons" type="selection:true,false" description="Whether vehicle weapons are enabled or not.  Vehicles weapons include Hunter/Hydra/Tank rockets" default="false" required="true"/>
+	<setting name="hunterminigun" friendlyname="Enabled hunter minigun" type="selection:true,false" description="Whether the hunter minigun is enabled or not.  No effect if vehicleweapons is disabled." default="false" required="true"/>
+	
 	<setting name="ghostmode" friendlyname="Ghost mode" type="selection:true,false" description="Whether Ghost Mode is enabled.  This mode allows vehicles to drive through each other during the race." default="true" required="true"/>
 	<setting name="skins" friendlyname="Driver skins" type="selection:cj,random" description="What kind of skins players will spawn as.  CJ means that players will spawn as CJ, with varying motor clothes on.  Random means that random ped skins will be used." default="cj" required="true"/>
-	<setting name="respawntime" friendlyname="Respawn delay" type="natural" description="Time from death to respawn in seconds. Use -1 for gamemode default." default="-1" required="true"/>
+	<setting name="respawntime" friendlyname="Respawn delay" type="integer" description="Time from death to respawn in seconds. Use -1 for gamemode default." default="-1" required="true"/>
 	<setting name="countdownduration" friendlyname="Countdown duration" type="integer" default="-1" description="How long the countdown of the race lasts. Countdown ticks above 3 are silent and invisible. Use -1 for gamemode default." required="false"/>
 	<setting name="timeafterfirstfinish" friendlyname="Time after first finish" type="integer" default="-1" description="The number of seconds the race continues for after someone wins. Use -1 for gamemode/server default." required="false"/>
 
@@ -20,6 +22,7 @@
 		<data name="color" type="color" description="color (#RRGGBBAA hex string)" default="#00F9" />
 		<data name="size" type="number" description="marker size" default="2.25" />
 		<data name="nextid" type="element:checkpoint" description="The next checkpoint after this one" required="false" default="" />
+		<data name="blipsize" type="integer" default="2" description="The size of this checkpoint's blip on the radar. 0 for invisible." />
 		<data name="vehicle" type="vehicleID" required="false"/>
 		<marker color="!color!" type="!type!" size="!size!"/>
 	</element>
