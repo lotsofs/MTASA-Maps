@@ -1,7 +1,6 @@
-<map edf:definitions="edf-strategizer,race,editor_main">
-    <spawnpoint id="spawnpoint (Combine Harvester) (1)" vehicle="443" alpha="255" interior="0" posX="641.5" posY="-2333.3" posZ="2.5" rotX="0" rotY="0" rotZ="139.993"></spawnpoint>
+<map edf:definitions="edf-strategizer,editor_main,race">
     <vehicleSpawner id="vehicleSpawner (16)" posX="602.90002" posY="-2340.7" posZ="2.5" rotX="0" rotY="0" rotZ="270"></vehicleSpawner>
-    <object id="object (multicarpark01_lvS) (1)" breakable="true" interior="0" collisions="true" alpha="255" model="8390" doublesided="false" scale="1" dimension="0" posX="600" posY="-2383.8" posZ="-12.3" rotX="0" rotY="0" rotZ="0"></object>
+    <object id="object (multicarpark01_lvS) (1)" breakable="true" interior="0" collisions="true" alpha="255" model="8390" doublesided="false" scale="1" dimension="0" posX="600" posY="-2383.7998" posZ="-12.3" rotX="0" rotY="0" rotZ="0"></object>
     <vehicleSpawner id="vehicleSpawner (17)" alpha="255" interior="0" posX="602.90002" posY="-2350.1001" posZ="2.5" rotX="0" rotY="0" rotZ="270"></vehicleSpawner>
     <vehicleSpawner id="vehicleSpawner (18)" alpha="255" interior="0" posX="602.90002" posY="-2359.5" posZ="2.5" rotX="0" rotY="0" rotZ="270"></vehicleSpawner>
     <vehicleSpawner id="vehicleSpawner (19)" alpha="255" interior="0" posX="602.90002" posY="-2368.8999" posZ="2.5" rotX="0" rotY="0" rotZ="270"></vehicleSpawner>
@@ -15,17 +14,18 @@
     <vehicleSpawner id="vehicleSpawner (27)" alpha="255" interior="0" posX="637.40002" posY="-2417.5" posZ="2.5" rotX="0" rotY="0" rotZ="90"></vehicleSpawner>
     <vehicleSpawner id="vehicleSpawner (28)" alpha="255" interior="0" posX="637.40002" posY="-2408.1001" posZ="2.5" rotX="0" rotY="0" rotZ="90"></vehicleSpawner>
     <vehicleSpawner id="vehicleSpawner (29)" alpha="255" interior="0" posX="637.40002" posY="-2398.7" posZ="2.5" rotX="0" rotY="0" rotZ="90"></vehicleSpawner>
-    <vehicleSpawner id="vehicleSpawner (30)" alpha="255" interior="0" posX="637.40002" posY="-2389.3" posZ="2.5" rotX="0" rotY="0" rotZ="90"></vehicleSpawner>
-    <checkpoint id="checkpoint () (1)" type="ring" color="#FFFFFF99" size="5" alpha="255" interior="0" nextid="checkpoint () (2)" posX="580" posY="-2484" posZ="50" rotX="0" rotY="0" rotZ="0"></checkpoint>
-    <checkpoint id="checkpoint () (2)" type="ring" color="#FFFFFF99" size="5" alpha="255" interior="0" nextid="checkpoint () (3)" posX="580" posY="-2484" posZ="100" rotX="0" rotY="0" rotZ="0"></checkpoint>
-    <checkpoint id="checkpoint () (3)" type="ring" color="#FFFFFF99" size="5" alpha="255" interior="0" nextid="checkpoint () (4)" posX="580" posY="-2484" posZ="150" rotX="0" rotY="0" rotZ="0"></checkpoint>
-    <checkpoint id="checkpoint () (4)" type="ring" color="#FFFFFF99" size="5" alpha="255" interior="0" nextid="checkpoint () (5)" posX="580" posY="-2484" posZ="200" rotX="0" rotY="0" rotZ="0"></checkpoint>
-    <checkpoint id="checkpoint () (5)" type="ring" color="#FFFFFF99" size="5" alpha="255" interior="0" nextid="checkpoint () (6)" posX="580" posY="-2484" posZ="250" rotX="0" rotY="0" rotZ="0"></checkpoint>
-    <checkpoint id="checkpoint () (6)" type="ring" color="#FFFFFF99" size="5" alpha="255" interior="0" nextid="checkpoint () (7)" posX="580" posY="-2484" posZ="300" rotX="0" rotY="0" rotZ="0"></checkpoint>
-    <checkpoint id="checkpoint () (7)" type="ring" color="#FFFFFF99" size="5" alpha="255" interior="0" nextid="checkpoint () (8)" posX="580" posY="-2484" posZ="350" rotX="0" rotY="0" rotZ="0"></checkpoint>
-    <checkpoint id="checkpoint () (8)" type="ring" color="#FFFFFF99" size="5" alpha="255" interior="0" nextid="checkpoint () (9)" posX="580" posY="-2484" posZ="400" rotX="0" rotY="0" rotZ="0"></checkpoint>
-    <checkpoint id="checkpoint () (9)" type="ring" color="#FFFFFF99" size="5" alpha="255" interior="0" nextid="checkpoint () (10)" posX="580" posY="-2484" posZ="450" rotX="0" rotY="0" rotZ="0"></checkpoint>
-    <checkpoint id="checkpoint () (10)" type="ring" nextid="false" color="#FFFFFF99" size="5" alpha="255" interior="0" posX="580" posY="-2484" posZ="500" rotX="0" rotY="0" rotZ="0"></checkpoint>
+    <vehicleSpawner id="vehicleSpawner (30)" alpha="255" interior="0" posX="637.40039" posY="-2389.2998" posZ="2.5" rotX="0" rotY="0" rotZ="90"></vehicleSpawner>
+    <spawnpoint id="spawnpoint (Packer) (1)" vehicle="443" alpha="255" interior="0" posX="639" posY="-2336" posZ="2.1" rotX="0" rotY="0" rotZ="139.988"></spawnpoint>
+    <checkpoint id="checkpoint () (1)" type="ring" color="#00000000" size="5" alpha="255" interior="0" nextid="checkpoint () (2)" posX="639" posY="-2336" posZ="50" rotX="0" rotY="0" rotZ="0"></checkpoint>
+    <checkpoint id="checkpoint () (2)" type="ring" color="#00000000" size="5" alpha="255" interior="0" nextid="checkpoint () (3)" posX="639" posY="-2336" posZ="100" rotX="0" rotY="0" rotZ="0"></checkpoint>
+    <checkpoint id="checkpoint () (3)" type="ring" color="#00000000" size="5" alpha="255" interior="0" nextid="checkpoint () (4)" posX="639" posY="-2336" posZ="150" rotX="0" rotY="0" rotZ="0"></checkpoint>
+    <checkpoint id="checkpoint () (4)" type="ring" color="#00000000" size="5" alpha="255" interior="0" nextid="checkpoint () (5)" posX="639" posY="-2336" posZ="200" rotX="0" rotY="0" rotZ="0"></checkpoint>
+    <checkpoint id="checkpoint () (5)" type="ring" color="#00000000" size="5" alpha="255" interior="0" nextid="checkpoint () (6)" posX="639" posY="-2336" posZ="250" rotX="0" rotY="0" rotZ="0"></checkpoint>
+    <checkpoint id="checkpoint () (6)" type="ring" color="#00000000" size="5" alpha="255" interior="0" nextid="checkpoint () (7)" posX="639" posY="-2336" posZ="300" rotX="0" rotY="0" rotZ="0"></checkpoint>
+    <checkpoint id="checkpoint () (7)" type="ring" color="#00000000" size="5" alpha="255" interior="0" nextid="checkpoint () (8)" posX="639" posY="-2336" posZ="350" rotX="0" rotY="0" rotZ="0"></checkpoint>
+    <checkpoint id="checkpoint () (8)" type="ring" color="#00000000" size="5" alpha="255" interior="0" nextid="checkpoint () (9)" posX="639" posY="-2336" posZ="400" rotX="0" rotY="0" rotZ="0"></checkpoint>
+    <checkpoint id="checkpoint () (9)" type="ring" color="#00000000" size="5" alpha="255" interior="0" nextid="checkpoint () (10)" posX="639" posY="-2336" posZ="450" rotX="0" rotY="0" rotZ="0"></checkpoint>
+    <checkpoint id="checkpoint () (10)" type="ring" nextid="false" color="#00000000" size="5" alpha="255" interior="0" posX="639" posY="-2336" posZ="500" rotX="0" rotY="0" rotZ="0"></checkpoint>
     <start id="start (1)" posX="2681.9004" posY="-1153" posZ="54.4" rotX="0" rotY="0" rotZ="270"></start>
     <track id="track (1)" name="Las Colinas Downhill" posX="2691.1006" posY="-1161.7002" posZ="54.4" rotX="0" rotY="0" rotZ="0"></track>
     <finish id="finish (1)" size="6" posX="2906.8999" posY="-1133.3" posZ="10.2" rotX="0" rotY="0" rotZ="0"></finish>
@@ -533,8 +533,6 @@
     <start id="start (169)" posX="1243.5" posY="-753.29999" posZ="95" rotX="0" rotY="0" rotZ="6"></start>
     <finish id="finish (169)" size="6" posX="1452.4" posY="-795.40002" posZ="86.9" rotX="0" rotY="0" rotZ="0"></finish>
     <track id="track (169)" name="To The Vinewood Sign" posX="1234" posY="-745.59998" posZ="96.6" rotX="0" rotY="0" rotZ="0"></track>
-    <spawnpoint id="spawnpoint (Packer) (1)" vehicle="443" alpha="255" interior="0" posX="630.5" posY="-2323.8999" posZ="2.5" rotX="0" rotY="0" rotZ="139.993"></spawnpoint>
-    <marker id="marker (checkpoint) (1)" type="checkpoint" color="#FFFFFFFF" size="10" interior="0" dimension="0" alpha="255" posX="580" posY="-2484" posZ="1.4" rotX="0" rotY="0" rotZ="0"></marker>
     <start id="start (170)" posX="-2341" posY="-1606.3" posZ="484.79999" rotX="0" rotY="0" rotZ="220"></start>
     <track id="track (170)" name="Mt Chilliad Jump Down" posX="-2354.5" posY="-1615.2002" posZ="484.29999" rotX="0" rotY="0" rotZ="0"></track>
     <finish id="finish (170)" size="6" posX="-2044.9" posY="-1937.1" posZ="51.7" rotX="0" rotY="0" rotZ="0"></finish>
@@ -1135,4 +1133,57 @@
     <start id="start (369)" posX="253.2" posY="8.3" posZ="3.6" rotX="0" rotY="0" rotZ="12"></start>
     <track id="track (369)" name="Big Red Tank In Blueberry" posX="259.79999" posY="20.1" posZ="3.1" rotX="0" rotY="0" rotZ="0"></track>
     <finish id="finish (369)" size="6" posX="304.39999" posY="-211" posZ="0.5" rotX="0" rotY="0" rotZ="0"></finish>
+    <start id="start (370)" posX="2133" posY="-2542.8999" posZ="14.7" rotX="0" rotY="0" rotZ="90"></start>
+    <track id="track (370)" name="LS Airport Between Runways" posX="2148.2" posY="-2546.5" posZ="14.2" rotX="0" rotY="0" rotZ="0"></track>
+    <finish id="finish (370)" size="6" posX="1396" posY="-2542.8999" posZ="12.6" rotX="0" rotY="0" rotZ="0"></finish>
+    <start id="start (371)" posX="1573.3" posY="-2593.2" posZ="14.7" rotX="0" rotY="0" rotZ="90"></start>
+    <track id="track (371)" name="LS Airport Exit Jump" posX="1572.6" posY="-2572.8" posZ="14.2" rotX="0" rotY="0" rotZ="0"></track>
+    <finish id="finish (371)" size="6" posX="1273.3" posY="-2497.3" posZ="12.1" rotX="0" rotY="0" rotZ="0"></finish>
+    <start id="start (372)" posX="1332.1" posY="-2570.8" posZ="14.5" rotX="0" rotY="0" rotZ="0"></start>
+    <track id="track (372)" name="LS Airport Get In Somehow" posX="1324.2" posY="-2564.8" posZ="14.2" rotX="0" rotY="0" rotZ="0"></track>
+    <finish id="finish (372)" size="6" posX="1371" posY="-2568.3" posZ="12.6" rotX="0" rotY="0" rotZ="0"></finish>
+    <start id="start (373)" posX="2067.3999" posY="-2684.8" posZ="14.5" rotX="0" rotY="0" rotZ="90"></start>
+    <track id="track (373)" name="Through LS Airport Tunnel" posX="2059.8999" posY="-2691.5" posZ="14.1" rotX="0" rotY="0" rotZ="0"></track>
+    <finish id="finish (373)" size="6" posX="1445.9" posY="-2684.8999" posZ="12.4" rotX="0" rotY="0" rotZ="0"></finish>
+    <start id="start (374)" posX="1773.4" posY="-2684.8" posZ="7" rotX="0" rotY="0" rotZ="270"></start>
+    <track id="track (374)" name="Inside LS Airport Tunnel" posX="1781.7" posY="-2691.5" posZ="6.7" rotX="0" rotY="0" rotZ="0"></track>
+    <finish id="finish (374)" size="6" posX="1824.5" posY="-2670.2" posZ="4.9" rotX="0" rotY="0" rotZ="0"></finish>
+    <start id="start (375)" posX="2137.8999" posY="-2693.8999" posZ="14.7" rotX="0" rotY="0" rotZ="110"></start>
+    <track id="track (375)" name="Into LS Airport Tunnel" posX="2150.3999" posY="-2699.8" posZ="18.5" rotX="0" rotY="0" rotZ="0"></track>
+    <finish id="finish (375)" size="6" posX="1891.5" posY="-2685" posZ="4.9" rotX="0" rotY="0" rotZ="0"></finish>
+    <start id="start (376)" posX="2090.5" posY="-2200.5" posZ="14.7" rotX="0" rotY="0" rotZ="78"></start>
+    <track id="track (376)" name="LS Airport Entrance U-Turn" posX="2092.3" posY="-2192.5" posZ="14.2" rotX="0" rotY="0" rotZ="0"></track>
+    <start id="start (377)" posX="2073.1001" posY="-2646.5" posZ="14.7" rotX="0" rotY="0" rotZ="0"></start>
+    <finish id="finish (376)" size="6" posX="2097.8" posY="-2179.8" posZ="12.4" rotX="0" rotY="0" rotZ="0"></finish>
+    <track id="track (377)" name="Across LS Airport" posX="2060.5" posY="-2655.7" posZ="14.2" rotX="0" rotY="0" rotZ="0"></track>
+    <finish id="finish (377)" size="6" posX="2070.8" posY="-2218.6001" posZ="12.6" rotX="0" rotY="0" rotZ="0"></finish>
+    <start id="start (378)" posX="1477.2" posY="-2395.1001" posZ="14.7" rotX="0" rotY="0" rotZ="270"></start>
+    <track id="track (378)" name="LS Airport Inner Fence" posX="1508.1" posY="-2404.6001" posZ="14.2" rotX="0" rotY="0" rotZ="0"></track>
+    <finish id="finish (378)" size="6" posX="1812.5" posY="-2180.7" posZ="12.6" rotX="0" rotY="0" rotZ="0"></finish>
+    <start id="start (379)" posX="1818.8" posY="-2218.8" posZ="29.5" rotX="0" rotY="0" rotZ="90"></start>
+    <finish id="finish (379)" size="6" posX="1587.2" posY="-2223.7" posZ="12.6" rotX="0" rotY="0" rotZ="0"></finish>
+    <track id="track (379)" name="LS Airport Terminal Roof" posX="1827.7" posY="-2229.8999" posZ="29" rotX="0" rotY="0" rotZ="0"></track>
+    <start id="start (380)" posX="1398.9" posY="-2286.3999" posZ="14.5" rotX="0" rotY="0" rotZ="270"></start>
+    <finish id="finish (380)" size="6" posX="1704.7" posY="-2286.3" posZ="-2.2" rotX="0" rotY="0" rotZ="0"></finish>
+    <track id="track (380)" name="Arrive at Los Santos Airport" posX="1392.9" posY="-2300.2" posZ="14.2" rotX="0" rotY="0" rotZ="0"></track>
+    <start id="start (381)" posX="1795.2" posY="-2287.3" posZ="-1.6" rotX="0" rotY="0" rotZ="90"></start>
+    <finish id="finish (381)" size="6" posX="1428.5" posY="-2298.6001" posZ="-3.8" rotX="0" rotY="0" rotZ="0"></finish>
+    <track id="track (381)" name="LS Airport Lower Area" posX="1807.3" posY="-2278.3999" posZ="-1.8" rotX="0" rotY="0" rotZ="0"></track>
+    <start id="start (382)" posX="1576.2" posY="-2286.5" posZ="-1.9" rotX="0" rotY="0" rotZ="90"></start>
+    <track id="track (382)" name="LS Airport Exit Tunnel" posX="1590.9" posY="-2281.1001" posZ="-0.5" rotX="0" rotY="0" rotZ="0"></track>
+    <finish id="finish (382)" size="6" posX="1272.3" posY="-2455.1001" posZ="7.6" rotX="0" rotY="0" rotZ="0"></finish>
+    <start id="start (383)" posX="1498.1" posY="-2259.8" posZ="-1.7" rotX="0" rotY="0" rotZ="228"></start>
+    <track id="track (383)" name="Go Up In LS Airport" posX="1506.8" posY="-2277.7" posZ="-1" rotX="0" rotY="0" rotZ="0"></track>
+    <finish id="finish (383)" size="6" posX="1610.5" posY="-2299.8999" posZ="12.6" rotX="0" rotY="0" rotZ="0"></finish>
+    <start id="start (384)" posX="1338.9" posY="-2378.1001" posZ="22.8" rotX="0" rotY="0" rotZ="90"></start>
+    <finish id="finish (384)" size="6" posX="1331.8" posY="-2356.5" posZ="12.4" rotX="0" rotY="0" rotZ="0"></finish>
+    <track id="track (384)" name="LS Airport Highway Overpass" posX="1338.5" posY="-2366.3999" posZ="21.8" rotX="0" rotY="0" rotZ="0"></track>
+    <start id="start (385)" posX="1530.1" posY="-1875.8" posZ="14.5" rotX="0" rotY="0" rotZ="180"></start>
+    <track id="track (385)" name="Cesar&apos;s Road to Airport" posX="1541.1" posY="-1881.5" posZ="14.2" rotX="0" rotY="0" rotZ="0"></track>
+    <finish id="finish (385)" size="6" posX="1780.3" posY="-2378.2" posZ="12.4" rotX="0" rotY="0" rotZ="0"></finish>
+    <start id="start (386)" posX="1795.8" posY="-2112.8" posZ="14.5" rotX="0" rotY="0" rotZ="270"></start>
+    <track id="track (386)" name="High Stakes, Low Rider" posX="1804.2" posY="-2124.3" posZ="14.6" rotX="0" rotY="0" rotZ="0"></track>
+    <finish id="finish (386)" size="6" posX="1507.5" posY="-1872.4" posZ="12.4" rotX="0" rotY="0" rotZ="0"></finish>
+    <object id="object (vegasplant03b) (1)" breakable="true" interior="0" collisions="false" alpha="255" model="7236" doublesided="false" scale="1" dimension="0" posX="617.70001" posY="-2288.5" posZ="17.5" rotX="0" rotY="90" rotZ="270"></object>
+    <vehicleSpawner id="vehicleSpawner (1)" alpha="255" interior="0" posX="618" posY="-2309.8999" posZ="12.8" rotX="0" rotY="0" rotZ="180"></vehicleSpawner>
 </map>

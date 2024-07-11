@@ -107,10 +107,18 @@ velocities = {}
 rotations = {}
 angularVelocities = {}
 function dumpSpeed(index)
-	vehicle = getPedOccupiedVehicle(localPlayer)
+	local vehicle = getPedOccupiedVehicle(localPlayer)
+	
 	angularVelocities[index] = {getElementAngularVelocity(vehicle)}
-	velocities[index] = {getElementVelocity(vehicle)}
+	
+	-- TODO: Do math on rotation to rotate it the right weay
 	rotations[index] = {getElementRotation(vehicle)}
+	
+	local matrix = getElementMatrix(vehicle, false)
+	local transposedMatrix = transposeMatrix(matrix)
+	local vx,vy,vz = getElementVelocity(vehicle)
+	nvx,nvy,nvz = matrix_mult_vec(transposedMatrix, vx,vy,vz) -- Store this permanently
+	velocities[index] = {nvx,nvy,nvz}
 end
 addEvent("dumpSpeed", true)
 addEventHandler("dumpSpeed", resourceRoot, dumpSpeed)
@@ -367,4 +375,71 @@ for keyName, state in pairs(getBoundKeys("special_control_right")) do
 end
 
 
+function matrix_mult_vec(m, x, y, z)
+	return  x*m[1][1] + y*m[2][1] + z*m[3][1],
+	x*m[1][2] + y*m[2][2] + z*m[3][2],
+	x*m[1][3] + y*m[2][3] + z*m[3][3]
+end
+function transposeMatrix(m)
+	return {{m[1][1], m[2][1], m[3][1]},
+	{m[1][2], m[2][2], m[3][2]},
+	{m[1][3], m[2][3], m[3][3]}}
+end
 
+function twistTest()
+	local vehicle = getPedOccupiedVehicle(localPlayer)
+	local matrix = getElementMatrix(vehicle, false)
+	local transposedMatrix = transposeMatrix(matrix)
+	local vx,vy,vz = getElementVelocity(vehicle)
+	-- local avx,avy,avz = getElementAngularVelocity(vehicle)
+	iprint(matrix)
+
+	nu,nv,nw = matrix_mult_vec(transposedMatrix, u,v,w) -- Store this permanently
+	local ox,oy,oz = unpack(matrix[4])
+	-- iprint(ox,oy,oz)
+	
+	-- 0 1 0, -1 0 0, 0 0 1
+	local testMatrix = {{1, 0, 0, 0},{0, 1, 0, 0},{0, 0, 1, 0},{ox, oy, oz, 1}}
+	local testMatrix = {{-0.707, 0, -0.707, 0},{0, 1, 0, 0},{0.707, 0, -0.707, 0},{ox, oy, oz, 1}}
+	-- local testMatrix = {{0.707, -0.707, 0, 0},{0.707, 0.707, 0, 0},{0, 0, 1, 0},{ox, oy, oz, 1}}
+	-- local testMatrix = {{1, 0, 0, 0},{0, 0.707, 0.707, 0},{0, -0.707, 0.707, 0},{ox, oy, oz, 1}}
+	local x,y,z = unpack(testMatrix[4])
+	local dx,dy,dz = matrix_mult_vec(testMatrix,nu,nv,nw)
+	setElementMatrix(vehicle,testMatrix)
+	-- setElementVelocity(vehicle,dx,dy,dz)
+
+
+	-- local vehicle = getPedOccupiedVehicle(localPlayer)
+	-- local matrix = getElementMatrix(vehicle, false)
+	-- local testMatrix = {{0,1,0,0},{-1,0,0,0},{0,0,1,0},{645, -2335, 2, 1}}
+
+	-- local transposedMatrix = transposeMatrix(matrix)
+	-- local vx, vy, vz = getElementVelocity(vehicle)
+	-- local vx2, vy2, vz2 = matrix_mult_vec(matrix, vx, vy, vz)
+
+	-- local dx, dy, dz = matrix_mult_vec(testMatrix, vx2, vy2, vz2)
+	-- dxDrawLine3D(x,y,z,x+u*20,y+v*20,z+w*20)
+	
+	-- setElementMatrix(vehicle, testMatrix)
+end
+bindKey("I", "down", twistTest)
+
+function drawLineThingy()
+	local vehicle = getPedOccupiedVehicle(localPlayer)
+	local matrix = getElementMatrix(vehicle, false)
+	local transposedMatrix = transposeMatrix(matrix)
+	local u,v,w = getElementAngularVelocity(vehicle)
+	local nu,nv,nw = matrix_mult_vec(transposedMatrix, u,v,w)
+	local ox,oy,oz = unpack(matrix[4])
+	
+	local testMatrix = {{0,1,0,0},{-1,0,0,0},{0,0,1,0},{ox, oy, oz, 1}} -- my current position, but I am facing west
+	local x,y,z = unpack(testMatrix[4])
+	local dx,dy,dz = matrix_mult_vec(testMatrix,nu,nv,nw)
+	dxDrawLine3D(x, y, z, x+dx*20, y+dy*20, z+dz*20)
+
+	-- local vx2, vy2, vz2 = matrix_mult_vec(matrix, u, v, w)
+	-- local transposedTestMatrix = transposeMatrix(testMatrix)
+	-- local dx, dy, dz = matrix_mult_vec(testMatrix, vx2, vy2, vz2) --setElementVelocity
+	-- 	dxDrawLine3D(x,y,z,x+dx*20,y+dy*20,z+dz*20)
+end
+addEventHandler("onClientRender", root, drawLineThingy)

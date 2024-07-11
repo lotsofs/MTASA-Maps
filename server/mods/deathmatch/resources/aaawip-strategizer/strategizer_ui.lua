@@ -46,15 +46,15 @@ function drawHud()
 end
 
 function drawBottomHud()
-	local blurb = "Strategizer Race!!: In this race each player gets the same 10 tracks and the same 10 vehicles. You get 5 minutes to assign one vehicle to each track. After that, the race begins and each player will race the tracks with their chosen vehicles."
-	drawBorderedText(blurb, 1, screenWidth*0.25, screenHeight - 255, 800, 0.9, tocolor(255, 255, 255, 255), 1, "default-bold", "left", "top", false, true, true, false)
-	local controls = "Controls:\n#dbc191"
-	controls = controls .. controlLeft .. "#ffffff & #dbc191" .. controlRight .. "#ffffff: Change Vehicles.\n#dbc191"
-	controls = controls .. controlUp .. "#ffffff & #dbc191" .. controlDown .. "#ffffff: Change Tracks.\n#dbc191"
-	controls = controls .. controlSub .. "#ffffff: Assign current car to current track.\n#dbc191"
-	controls = controls .. "F9#ffffff: View Goal/More Information/Help.\n#dbc191"
-	controls = controls .. "F11#ffffff: View Map."
-	drawBorderedText(controls, 2, screenWidth*0.25, screenHeight - 180, 0.8, 0.9, tocolor(255, 255, 255, 255), 2, "default-bold", "left", "top", false, true, true, true)
+	-- local blurb = "Strategizer Race!!: In this race each player gets the same 10 tracks and the same 10 vehicles. You get 5 minutes to assign one vehicle to each track. After that, the race begins and each player will race the tracks with their chosen vehicles."
+	-- drawBorderedText(blurb, 1, screenWidth*0.25, screenHeight - 255, 800, 0.9, tocolor(255, 255, 255, 255), 1, "default-bold", "left", "top", false, true, true, false)
+	-- local controls = "Controls:\n#dbc191"
+	-- controls = controls .. controlLeft .. "#ffffff & #dbc191" .. controlRight .. "#ffffff: Change Vehicles.\n#dbc191"
+	-- controls = controls .. controlUp .. "#ffffff & #dbc191" .. controlDown .. "#ffffff: Change Tracks.\n#dbc191"
+	-- controls = controls .. controlSub .. "#ffffff: Assign current car to current track.\n#dbc191"
+	-- controls = controls .. "F9#ffffff: View Goal/More Information/Help.\n#dbc191"
+	-- controls = controls .. "F11#ffffff: View Map."
+	-- drawBorderedText(controls, 2, screenWidth*0.25, screenHeight - 180, 0.8, 0.9, tocolor(255, 255, 255, 255), 2, "default-bold", "left", "top", false, true, true, true)
 end
 
 function drawLeftHud()

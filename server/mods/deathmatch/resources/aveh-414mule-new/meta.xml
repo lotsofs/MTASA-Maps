@@ -1,14 +1,11 @@
 <meta>
-    <script src="ui_client.lua" type="client" validate="true"></script>
-    <script src="aveh-414mule_c.lua" type="client" validate="true"></script>
-    <script src="aveh-414mule_s.lua" type="server"></script>
-    <info gamemodes="race" type="map" name="[MG] Pack Mule" author="LotsOfS" version="1.0.0" description="
-	You are the companion of an RPG protagonist. They specced all their points into neat abilities like invisibility, phasing, and flight. But they didn't spec any points at all into carry capacity. As their faithful companion, you get to carry all their stuff!
-
-	Atypical race. There is only one checkpoint, and you must chase it and stick as close to it as possible. The Mule isn't fast, but you won't need it. Its sturdiness and difficulty at flipping will prove far more useful.
+    <info gamemodes="race" type="map" name="[R] Qhapaq Ñan" author="LotsOfS" version="1.0.0" description="
+	Historical reenactment of part of the journey along the ancient Inca trading route. Factual information: This road system spanned almost the entire American continent, running from modern day San Andreas all the way down to what is now known as Villa Las Estrellas, Chile. It was commonly traversed by Mule (as in this reenactment), but also often on foot and sometimes on camelback.
+	
+	The Mule isn't fast, but you won't need speed on this race. Its sturdiness and difficulty at flipping will prove far more useful on this mostly off-road track.
 
     MULE (414/611) edition of an &quot;a map for every vehicle&quot; challenge."></info>
-    <map src="aveh-414mule.map" dimension="0"></map>
+    <map src="aveh-414mule-new.map" dimension="0"></map>
     <settings>
         <setting name="#skins" value='[ &quot;random&quot; ]'></setting>
         <setting name="#gamespeed" value="[ 1 ]"></setting>

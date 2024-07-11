@@ -12,20 +12,42 @@ MARKER_MOVE_ANGLE = 0
 MARKER_MOVE_SPEED = TICK_RATE / 1000 * 12
 
 RACE_ONGOING = false
+RACE_DURATION = 0
+RACE_STUCK = false
+
+RANDOM_VEHICLE = 414
+HEIGHT_OFFSET = 0
 
 function teleportPlayers()
+	local stuck = true
+	RACE_DURATION = RACE_DURATION + 1
 	for i, p in pairs(getElementsByType("player")) do
 		local v = getPedOccupiedVehicle(p)
 		if (v and isElementWithinColShape(v, STARTING_AREA)) then
 			if (START_Z > 0) then
-				setElementPosition(v, START_X, START_Y, START_Z)
+				setElementModel(v, RANDOM_VEHICLE)
+				setElementPosition(v, START_X, START_Y, START_Z + HEIGHT_OFFSET)
 				setElementRotation(v, 0, 0, START_R)
 				if (RACE_ONGOING) then
 					triggerClientEvent(root, "onRaceHasBegun", resourceRoot)
 				end
 			end
 		end
+		-- Hack for bad spawn
+		if (not isPedDead(p) and v and RACE_ONGOING and RACE_DURATION > 7 and not isElementWithinColShape(v, STARTING_AREA)) then
+			local xc, yx, zc = getElementPosition(v)
+			local dist = getDistanceBetweenPoints3D(xc, yx, zc, START_X, START_Y, START_Z + HEIGHT_OFFSET)
+			if (RACE_STUCK and dist <= 5) then
+				setElementPosition(v, START_X, START_Y, -105)
+			end
+			if (dist > 5) then
+				stuck = false
+			end
+		else
+			stuck = false
+		end
 	end
+	RACE_STUCK = stuck
 end
 setTimer(teleportPlayers, 1000, 0)
 
@@ -33,17 +55,13 @@ function raceStateChanged(newState, oldState)
 	if (newState == "Running") then
 		triggerClientEvent(root, "onRaceHasBegun", resourceRoot)
 		RACE_ONGOING = true
+		RACE_DURATION = 0
 	elseif (newState == "GridCountdown") then
 		setTimer(moveMarker, TICK_RATE, 0)
 	end
 end
 addEvent("onRaceStateChanging", true)
 addEventHandler("onRaceStateChanging", root, raceStateChanged)
-
-function teleportPlayer(theVehicle, seat)
-	iprint(theVehicle)
-end
-addEventHandler("onPedVehicleEnter", root, teleportPlayer)
 
 function moveMarker()
 	oldX,oldY,_ = getElementPosition(END_MARKER_C)
@@ -81,6 +99,8 @@ function startMap()
 	setElementPosition(END_MARKER_C, START_X, START_Y, 500)
 	MARKER_MOVE_ANGLE = math.random(0, 359)
 	MARKER_MOVE_ANGLE = MARKER_MOVE_ANGLE * 0.0174533
+
+	RANDOM_VEHICLE, HEIGHT_OFFSET = selectVehicle()
 end
 addEventHandler("onMapStarting", root, startMap)
 

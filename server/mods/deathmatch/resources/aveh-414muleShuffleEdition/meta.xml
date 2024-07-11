@@ -2,15 +2,11 @@
     <script src="ui_client.lua" type="client" validate="true"></script>
     <script src="aveh-414mule_c.lua" type="client" validate="true"></script>
     <script src="aveh-414mule_s.lua" type="server"></script>
-    <info gamemodes="race" type="map" name="[MG] Pack Mule" author="LotsOfS" version="1.0.0" description="
-	You are the companion of an RPG protagonist. They specced all their points into neat abilities like invisibility, phasing, and flight. But they didn't spec any points at all into carry capacity. As their faithful companion, you get to carry all their stuff!
-
-	Atypical race. There is only one checkpoint, and you must chase it and stick as close to it as possible. The Mule isn't fast, but you won't need it. Its sturdiness and difficulty at flipping will prove far more useful.
-
-    MULE (414/611) edition of an &quot;a map for every vehicle&quot; challenge."></info>
+    <script src="randomcars.lua" type="server"></script>
+    <info gamemodes="race" type="map" name="Pack ???" author="LotsOfS" version="1.0.0" description='It&apos;s Pack Mule, but not as a Mule'></info>
     <map src="aveh-414mule.map" dimension="0"></map>
     <settings>
-        <setting name="#skins" value='[ &quot;random&quot; ]'></setting>
+        <setting name="#skins" value='[ &quot;cj&quot; ]'></setting>
         <setting name="#gamespeed" value="[ 1 ]"></setting>
         <setting name="#ghostmode" value='[ &quot;true&quot; ]'></setting>
         <setting name="#vehicleweapons" value='[ &quot;false&quot; ]'></setting>
@@ -21,12 +17,13 @@
         <setting name="#maxplayers" value="[ 128 ]"></setting>
         <setting name="#useLODs" value="[ false ]"></setting>
         <setting name="#time" value="6:15"></setting>
+        <setting name="#timeafterfirstfinish" value="[ -1 ]"></setting>
         <setting name="#gravity" value="[ 0.0080000004 ]"></setting>
         <setting name="#weather" value="[ 0 ]"></setting>
-        <setting name="#timeafterfirstfinish" value="[ -1 ]"></setting>
+        <setting name="#hunterminigun" value='[ &quot;false&quot; ]'></setting>
         <setting name="#locked_time" value="[ false ]"></setting>
-        <setting name="#countdownduration" value="[ 6 ]"></setting>
-        <setting name="#respawntime" value="[ 0 ]"></setting>
+        <setting name="#countdownduration" value="[ -1 ]"></setting>
+        <setting name="#respawntime" value="[ -1 ]"></setting>
     </settings>
     <script src="mapEditorScriptingExtension_s.lua" type="server"></script>
     <script src="mapEditorScriptingExtension_c.lua" type="client" validate="false"></script>

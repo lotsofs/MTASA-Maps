@@ -19,7 +19,7 @@ MULTIPLIER = 1
 
 function text()
 	if (SHOW_START) then
-		drawBorderedTextScreenRelative(STARTTEXT, 2, 0.1, 0.15, 0.9, 0.9, tocolor(130, 27, 184, 255), 4.9, "default", "center", "top", false, true, true, false)
+		drawBorderedTextScreenRelative(STARTTEXT, 1.9, 0.1, 0.15, 0.9, 0.9, tocolor(130, 27, 184, 255), 5, "default", "center", "top", false, true, true, false)
 	end
 
 	if (SHOW_POINTS) then
@@ -38,7 +38,7 @@ function text()
 		end
 
 		
-		drawBorderedTextScreenRelative(POINTSTEXT, 2, 0.1, 0.05, 0.85, 0.85, tocolor(255, 255, 255, 255), 2, "default", "right", "top", false, true, true, false)
+		drawBorderedTextScreenRelative(POINTSTEXT, 1.9, 0.1, 0.05, 0.85, 0.85, tocolor(255, 255, 255, 255), 2, "default", "right", "top", false, true, true, false)
 	end
 end
 addEventHandler ( "onClientRender", root, text ) -- keep the text visible with onClientRender.
