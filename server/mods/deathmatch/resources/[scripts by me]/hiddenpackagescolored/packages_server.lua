@@ -10,8 +10,9 @@ CUT_PACKAGE_LIST = {
     "packageCustom21","packageCustom44","packageCustom46","packageCustom52",
     "packageCustom54","packageCustom59"},
     -- 2: 2024-03-25 Package that sticked out through the floor and was automatically picked up
-    {"packageCustom7"}
-    -- 3
+    {"packageCustom7"},
+    -- 3: 2024-04-29 Package changes to Shanty 8-Track Randomiser
+	{"packageCustom181","packageCustom182"}
     -- {} -- DONT FORGET TO PUT TRAILING COMMAS
     -- {} -- DONT FORGET TO PUT TRAILING COMMAS
     -- {} -- DONT FORGET TO PUT TRAILING COMMAS
@@ -209,7 +210,6 @@ function onResourceStart(startedResource)
             for i=resetHistory+1,#CUT_PACKAGE_LIST do
                 for j, v in ipairs(CUT_PACKAGE_LIST[i]) do
                     if (packages[v]) then
-                        iprint(account, v, packages[v], "Cut content. Resetting collection status.")
                         packages[v] = nil
                     end
                 end
@@ -267,7 +267,6 @@ function onPlayerLogin(thePreviousAccount, theCurrentAccount)
         for i=resetHistory+1,#CUT_PACKAGE_LIST do
             for j, v in ipairs(CUT_PACKAGE_LIST[i]) do
                 if (packages[v]) then
-                    iprint(theCurrentAccount, v, packages[v], "Cut content. Resetting collection status.")
                     packages[v] = nil
                 end
             end
@@ -321,6 +320,6 @@ function OnMapStarting()
     local currentMap = call(getResourceFromName("mapmanager"), "getRunningGamemodeMap")
     local currentMapFile = getResourceName(currentMap)
     local currentMapName = getResourceInfo(currentMap,"name")
-    triggerClientEvent(root, "changeMapPackages", resourceRoot, currentMapFile, currentMapName)
+	triggerClientEvent(root, "changeMapPackages", resourceRoot, currentMapFile, currentMapName)
 end
 addEventHandler("onMapStarting",root,OnMapStarting)

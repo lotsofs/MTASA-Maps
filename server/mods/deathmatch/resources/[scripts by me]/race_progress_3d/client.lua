@@ -153,37 +153,40 @@ end
 -- @return  table       Properly ordered list of checkpoints
 -- ]]
 function sortCheckpoints(cps)
-	if #cps == 0 then
-		return {}
-	end
-	local result = {}
-	local index = 1
-	while index do
-		-- Checkpoint found, so remove it from the input and add it to the result
-		local cp = cps[index]
-		table.remove(cps, index)
-		table.insert(result, cp)
-		index = false
-		-- Find index of next checkpoint
-		if cp.nextid then
-			for k,v in ipairs(cps) do
-				if v.id == cp.nextid then
-					index = k
+	-- sort checkpoints
+	local chains = {}		-- a chain is a list of checkpoints that immediately follow each other
+	local prevchainnum, chainnum, nextchainnum
+	for i,checkpoint in ipairs(cps) do
+		-- any chain we can place this checkpoint after?
+		chainnum = table.find(chains, '[last]', 'nextid', checkpoint.id)
+		if chainnum then
+			table.insert(chains[chainnum], checkpoint)
+			if checkpoint.nextid then
+				nextchainnum = table.find(chains, 1, 'id', checkpoint.nextid)
+				if nextchainnum then
+					table.merge(chains[chainnum], chains[nextchainnum])
+					table.remove(chains, nextchainnum)
 				end
 			end
+		elseif checkpoint.nextid then
+			-- any chain we can place it before?
+			chainnum = table.find(chains, 1, 'id', checkpoint.nextid)
+			if chainnum then
+				table.insert(chains[chainnum], 1, checkpoint)
+				prevchainnum = table.find(chains, '[last]', 'nextid', checkpoint.id)
+				if prevchainnum then
+					table.merge(chains[prevchainnum], chains[chainnum])
+					table.remove(chains, chainnum)
+				end
+			else
+				-- new chain
+				table.insert(chains, { checkpoint })
+			end
+		else
+			table.insert(chains, { checkpoint })
 		end
 	end
-	
-	-- Debug info to be able to compare this to the number of checkpoints race outputs.
-	-- (Any remaining in "cps" haven't been used in the result, so they aren't properly connected.)
-	if s("debug") then
-		outputChatBox(string.format("[Progress3D] Loaded %d checkpoints (and %d unconnected)", #result, #cps))
-		for _,v in ipairs(cps) do
-			outputConsole(string.format("[Progress3D] Unconnected: %s (-> %s)", v.id, tostring(v.nextid)))
-		end
-	end
-
-	return result
+	return chains[1] or {}
 end
 
 --[[
@@ -1008,3 +1011,4 @@ end
 keyInfo.drawFunction = function(fade)
 	drawText(toggleSettingsGuiKey.." (press/hold)", g_left, g_top + g_size + 5, tocolor(255,255,255), tocolor(0,0,0,120), true)
 end
+

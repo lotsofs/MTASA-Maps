@@ -442,6 +442,7 @@ function checkForMilestones()
 	end
 	packType = getElementType(LAST_PACKAGE)
 	name = PACKAGE_DATA[packType].name
+	hex = PACKAGE_DATA[packType].hex
 	
 	collected = 0
 	total = 0
@@ -489,6 +490,7 @@ function checkForMilestones()
 end
 
 function toggleOverlay()
+	iprint("[Packages] Toggling UI", CURRENT_MAPID, CURRENT_MAPNAME)
 	SHOW_PACKAGE_COUNTER = not SHOW_PACKAGE_COUNTER 
 	if (SHOW_PACKAGE_COUNTER) then
 		enablePackagesIfDisabled()
@@ -565,6 +567,7 @@ function setLeftText()
 end
 
 function setRightText()
+	iprint("[Packages] UI. Right text changing:", CURRENT_MAPID, CURRENT_MAPNAME, TOTAL_PACKAGES_THIS_MAP, getElementData(CURRENT_REGION, "friendlyname"))
 	-- local mapN = "Current Map:\n" .. (CURRENT_MAPNAME or "<unknown>")
 	local mapN = CURRENT_MAPNAME or "<unknown map>"
 	local suggestedMap = CURRENT_MAPNAME
@@ -744,7 +747,7 @@ function onClientResourceStart(startedResource)
 	getRadarZones()
 
 	enablePackages()
-	iprint("changeMapPackages because onClientResourceStart")
+	iprint("[Packages] changeMapPackages because onClientResourceStart")
 	changeMapPackages(nil, nil)
 end
 addEventHandler("onClientResourceStart", resourceRoot, onClientResourceStart)
@@ -763,10 +766,12 @@ addEventHandler("reloadPackages", root, reloadPackages)
 -- Custom packages specific
 
 function changeMapPackages(mapName, mapFriendly) 
+	iprint("[Packages] Attempting change map packages")
 	if not packagesEnabled() then
+		iprint("[Packages] FAILED")
 		return
 	end
-	iprint("Changing Map Packages", mapName, mapFriendly)
+	iprint("[Packages] Changing Map Packages", mapName, mapFriendly)
 	CURRENT_MAPID = mapName
 	CURRENT_MAPNAME = mapFriendly
 
@@ -781,20 +786,16 @@ function changeMapPackages(mapName, mapFriendly)
 			PACKAGE_CORONAS[id] = nil
 		end
 		if (PACKAGE_PICKUPS[id]) then
-			iprint("Destroying", id)
 			destroyElement(PACKAGE_PICKUPS[id])
 			PACKAGE_PICKUPS[id] = nil
 		end
 		
 		-- get information about package
 		local mapAssignment = getElementData(pack, "mapAssignment")
-		if (SHOW_PACKAGE_COUNTER) then
-			iprint("PROCESS PACKAGE", i, mapAssignment, mapName)
-		end
 		if (mapName == mapAssignment) then
 			TOTAL_PACKAGES_THIS_MAP = TOTAL_PACKAGES_THIS_MAP + 1
 			collected = COLLECTED_PACKAGES[id]
-			iprint("Found a package for this map", mapAssignment, id, collected)
+			iprint("[Packages] Found a package for this map", mapAssignment, id, collected)
 			if (not collected or collected == false) then
 				local x, y, z = getElementPosition(pack)
 				local model = PACKAGE_DATA[typeName].model
