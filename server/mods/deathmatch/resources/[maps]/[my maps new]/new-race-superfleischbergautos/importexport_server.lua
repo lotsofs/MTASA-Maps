@@ -393,19 +393,22 @@ function startRacePoll()
 	POLL_ACTIVE = true
 	-- poll thing, half of which I dont understand what it means
 	poll = exports.votemanager:startPoll {
-	--start settings (dictionary part)
-	title="Choose the map length:",
-	percentage=100,
-	timeout=CUTSCENE_LENGTH_IN_SECONDS,
-	allowchange=true,
+		--start settings (dictionary part)
+		title="Choose the map length:",
+		percentage=100,
+		timeout=CUTSCENE_LENGTH_IN_SECONDS,
+		allowchange=true,
 
-	--start options (array part)
-	[1]={"A Basic Race (1)", "pollFinished" , resourceRoot, 1},		
-	[2]={"Bite Sized Chunk (5)", "pollFinished" , resourceRoot, 5},		
-	[3]={"One List (10)", "pollFinished" , resourceRoot, 10},			
-	[4]={"Classic (30)", "pollFinished" , resourceRoot, 30},			
-	[5]={"Extended (100)", "pollFinished", resourceRoot, 100},
-	[6]={"Full Experience (212)", "pollFinished", resourceRoot, 212},
+		--start options (array part)
+		[1]={"A Basic Race (1)", "pollFinished" , resourceRoot, 1},		
+		[2]={"Double It Up (2)", "pollFinished" , resourceRoot, 2},		
+		[3]={"Post SSA Instadeliveries (3)", "pollFinished" , resourceRoot, 3},		
+		[4]={"Tetrad (4)", "pollFinished" , resourceRoot, 4},		
+		[5]={"Bite Sized Chunk (5)", "pollFinished" , resourceRoot, 5},		
+		--[6]={"One List (10)", "pollFinished" , resourceRoot, 10},			
+		--[7]={"Classic (30)", "pollFinished" , resourceRoot, 30},			
+		--[8]={"Extended (100)", "pollFinished", resourceRoot, 100},
+		--[9]={"Full Experience (212)", "pollFinished", resourceRoot, 212},
 	}
 	if not poll then
 		applyPollResult(1)
@@ -419,6 +422,12 @@ function applyPollResult(pollResult)
 	local customMapName = getMapName()
 	if (pollResult == 1) then
 		customMapName = customMapName .. " (A Basic Race)"
+	elseif (pollResult == 2) then
+		customMapName = customMapName .. " (Double It Up)"
+	elseif (pollResult == 3) then
+		customMapName = customMapName .. " (Post SSA Instadeliveries)"
+	elseif (pollResult == 4) then
+		customMapName = customMapName .. " (Tetrad)"
 	elseif (pollResult == 5) then
 		customMapName = customMapName .. " (Bite Sized Chunk)"
 	elseif (pollResult == 10) then

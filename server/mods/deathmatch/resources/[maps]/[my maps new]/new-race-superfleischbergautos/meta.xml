@@ -11,7 +11,7 @@
     <script src="ui_client.lua" type="client" validate="true"></script>
     <script src="util_client.lua" type="client" validate="true"></script>
     <script src="vehicle_names.lua" type="client" validate="true"></script>
-    <info gamemodes="race" type="map" version="1.0.1" name="Super FleischBerg© Autos" author="S." description="The FleischBerg© CEO is threatening to fire you from your job at the brewery! Luckily for you, she is a vehicle aficionado and she is throwing a birthday party at your workplace soon! Collect all the vehicles before the party is over to impress her and maybe keep your job!"></info>
+    <info gamemodes="race" type="map" version="1.0.1" name="[R] Super FleischBerg© Autos" author="S." description="The FleischBerg© CEO is threatening to fire you from your job at the brewery! Luckily for you, she is a vehicle aficionado and she is throwing a birthday party at your workplace soon! Collect all the vehicles before the party is over to impress her and maybe keep your job!"></info>
     <min_mta_version server="1.5.8-9.20957"></min_mta_version>
     <map src="new-race-superfleischbergautos.map" dimension="0"></map>
     <settings>
@@ -30,8 +30,9 @@
         <setting name="#locked_time" value="[ false ]"></setting>
         <setting name="#duration" value="[ 172800 ]"></setting>
         <setting name="#respawn" value='[ &quot;timelimit&quot; ]'></setting>
-        <setting name="#timeafterfirstfinish" value='[ 172800 ]'></setting>
+        <setting name="#timeafterfirstfinish" value='[ -1 ]'></setting>
         <setting name="#countdownduration" value='[ 6 ]'></setting>
+		<setting name="#disableraceghosts" value='[ true ]'></setting>
     </settings>
     <script src="mapEditorScriptingExtension_s.lua" type="server"></script>
     <script src="mapEditorScriptingExtension_c.lua" type="client" validate="false"></script>
