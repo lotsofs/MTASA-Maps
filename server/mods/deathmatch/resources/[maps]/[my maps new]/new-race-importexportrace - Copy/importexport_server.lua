@@ -4,6 +4,10 @@ CHECKPOINTS = getElementsByType("checkpoint")
 REQUIRED_CHECKPOINTS = -1
 POLL_ACTIVE = false
 
+MARKER_START = getElementByID("_MARKER_GAME_START")
+
+CUTSCENE_LENGTH_IN_SECONDS = 29
+
 CHOSEN_CARS = {}
 SHUFFLED_INDICES_PER_PLAYER = {}
 PLAYER_PROGRESS = {}
@@ -14,18 +18,7 @@ LEFT_PLAYERS_PROGRESS = {}
 LEFT_PLAYERS_SHUFFLED_CARS = {}
 
 DATABASE = dbConnect("sqlite", ":/mapImportExportRace.db")
-
-SPAWNCARS = {
-	[438] = true, -- cabbie
-	[420] = true, -- taxi
-	[522] = true, -- nrg500
-	[589] = true, -- club
-	[507] = true, -- elegant
-	[558] = true, -- uranus
-	[504] = true  -- bloodring
-	[586] = true  -- wayfarer
-}
-
+	
 ------------------------------------------------------ Start of race ------------------------------------------------------
 
 function selectCars()
@@ -104,6 +97,32 @@ function shuffleCarsPerPlayer(whose)
 	colorGenerator(whose)
 end
 
+-- function newJoineeMarkerHit(markerHit, matchingDimension, dumpVariable)
+-- 	if (markerHit ~= MARKER_START and marketHit ~= nil) then
+-- 		return
+-- 	end
+-- 	if (getElementType(source) ~= "player") then
+-- 		return
+-- 	end
+
+-- 	-- if (#CHOSEN_CARS == 0) then
+-- 	-- 	-- Race hasn't started yet
+-- 	-- 	return
+-- 	-- end
+-- 	local sipp = SHUFFLED_INDICES_PER_PLAYER[source]
+-- 	if (sipp ~= nil and #sipp > 0) then
+-- 		-- This player is not new
+-- 		-- shuffleCarsPerPlayer(source)
+-- 		return
+-- 	end
+
+-- 	triggerClientEvent ( source, "gridCountdownStarted", resourceRoot )
+-- 	setTimer(function(whom)
+-- 		shuffleCarsPerPlayer(whom)
+-- 	end, (CUTSCENE_LENGTH_IN_SECONDS+0.5)*1000, 1, source)
+-- end
+-- addEventHandler("onPlayerMarkerHit", root, newJoineeMarkerHit)
+
 function teleportToNext(progress, player)
 	-- get our destination
 	element = CHOSEN_CARS[SHUFFLED_INDICES_PER_PLAYER[player][progress]]
@@ -143,11 +162,13 @@ function updateProgress(target)
 		triggerClientEvent(client, "finishRace", client)
 	else
 		if (progress == REQUIRED_CHECKPOINTS) then
+			iprint("HELLO? BROTHER? ")
 			triggerClientEvent(client, "lastCar", resourceRoot)
 		end
 		PLAYER_PROGRESS[client] = progress
 		teleportToNext(progress, client)
 		triggerClientEvent(client, "updateTarget", client, progress)
+		iprint("2", progress, REQUIRED_CHECKPOINTS)
 	end
 end
 addEvent("updateProgress", true)
@@ -192,14 +213,14 @@ function startRacePoll()
 		--start settings (dictionary part)
 		title="Choose the map length:",
 		percentage=100,
-		timeout=10,
+		timeout=11,
 		allowchange=true,
 
 		--start options (array part)
 		[1]={"A Basic Race (1)", "pollFinished" , resourceRoot, 1},		
 		[2]={"Shortened (5)", "pollFinished" , resourceRoot, 5},		
 		[3]={"Full Experience (30)", "pollFinished", resourceRoot, 30},
-		-- [4]={"DEBUG MODE (2)", "pollFinished" , resourceRoot, 2},		
+		[4]={"DEBUG MODE (2)", "pollFinished" , resourceRoot, 2},		
 	}
 	if not poll then
 		applyPollResult(1)
@@ -232,7 +253,6 @@ function applyPollResult(pollResult)
 	stuff.name = customMapName
 	stuff.statsKey = nil
 
-	triggerClientEvent ( root, "pollEnded", resourceRoot )
 	if raceInfo and timesManager then
 		triggerEvent("onMapStarting", timesManager, stuff, stuff, stuff)
 	end
@@ -375,13 +395,13 @@ function enableControlsInCountdown(car, driver)
 	-- toggleAllControls(driver, false, true, false)
 end
 
--- function playerEnteredVehicle(theVehicle, seat, jacked)
--- 	local vehicleModel = getElementModel(theVehicle)
---     if (SPAWNCARS[vehicleModel]) then
--- 		enableControlsInCountdown(theVehicle, source)
--- 	end
--- end
--- addEventHandler("onPlayerVehicleEnter", root, enableControlsInCountdown)
+function playerEnteredVehicle(theVehicle, seat, jacked)
+	local m = getElementModel(theVehicle)
+	if (m == 522 or m == 438 or m == 420) then
+		enableControlsInCountdown(theVehicle, source)
+	end
+end
+addEventHandler("onPlayerVehicleEnter", root, enableControlsInCountdown)
 
 function makePeopleDrive() 
 	for i, v in pairs(getElementsByType("player")) do
@@ -393,20 +413,7 @@ function makePeopleDrive()
 end
 FUN_TIMER = setTimer(makePeopleDrive, 1000, 0)
 
-function newJoineeMarkerHit(theVehicle)
-	if (REQUIRED_CHECKPOINTS == -1) then
-		-- Race hasnt started yet
-		return
-	end
-	if (not SPAWNCARS[getElementModel(theVehicle)]) then
-		iprint("SPAWNED")
-		-- Entered a race car. Everything is fine.
-		return
-	end
-	triggerClientEvent ( source, "gridCountdownStarted", resourceRoot )
-	shuffleCarsPerPlayer(source)
-end
-addEventHandler("onPlayerVehicleEnter", root, newJoineeMarkerHit)
+
 
 
 
