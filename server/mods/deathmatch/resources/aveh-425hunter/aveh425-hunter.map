@@ -1,0 +1,13 @@
+<map edf:definitions="editor_main,race">
+    <spawnpoint id="spawnpoint (Hunter) (1)" vehicle="425" posX="-1459.9" posY="354.79999" posZ="8" rotX="0" rotY="0" rotZ="270"></spawnpoint>
+    <spawnpoint id="spawnpoint (Hunter) (2)" vehicle="425" alpha="255" interior="0" posX="-1459.7" posY="391.20001" posZ="8" rotX="0" rotY="0" rotZ="270"></spawnpoint>
+    <spawnpoint id="spawnpoint (Hunter) (3)" vehicle="425" alpha="255" interior="0" posX="-1459.4" posY="426.70001" posZ="8" rotX="0" rotY="0" rotZ="270"></spawnpoint>
+    <checkpoint id="checkpoint () (1)" type="checkpoint" color="#2DAAEB99" blipsize="2" size="44" nextid="checkpoint () (2)" posX="-1172.7" posY="421" posZ="7.3" rotX="0" rotY="0" rotZ="0"></checkpoint>
+    <checkpoint id="checkpoint () (2)" type="checkpoint" color="#2DAAEB99" blipsize="2" size="44" alpha="255" interior="0" nextid="checkpoint () (3)" posX="-682.5" posY="907.70001" posZ="11.2" rotX="0" rotY="0" rotZ="0"></checkpoint>
+    <checkpoint id="checkpoint () (3)" type="ring" color="#2DAAEB99" blipsize="2" size="16" alpha="255" interior="0" nextid="checkpoint () (4)" posX="-566.5" posY="1195" posZ="6.4" rotX="0" rotY="0" rotZ="0"></checkpoint>
+    <checkpoint id="checkpoint () (4)" type="ring" color="#2DAAEB99" blipsize="2" size="16" alpha="255" interior="0" nextid="checkpoint () (5)" posX="-457.29999" posY="1585.1" posZ="56.7" rotX="0" rotY="0" rotZ="0"></checkpoint>
+    <checkpoint id="checkpoint () (5)" type="ring" color="#2DAAEB99" blipsize="2" size="16" alpha="255" interior="0" nextid="checkpoint () (6)" posX="-206.89999" posY="1896.8" posZ="143.5" rotX="0" rotY="0" rotZ="0"></checkpoint>
+    <checkpoint id="checkpoint () (6)" type="checkpoint" color="#2DAAEB99" blipsize="2" size="44" alpha="255" interior="0" nextid="checkpoint () (7)" posX="117.5" posY="1899.3" posZ="55.7" rotX="0" rotY="0" rotZ="0"></checkpoint>
+    <checkpoint id="checkpoint () (7)" type="ring" color="#2DAAEB99" blipsize="2" size="5" alpha="255" interior="0" nextid="checkpoint () (10)" posX="268.89999" posY="1884" posZ="17.2" rotX="0" rotY="0" rotZ="0"></checkpoint>
+    <checkpoint id="checkpoint () (10)" type="corona" color="#302BEC99" blipsize="2" size="5" alpha="255" interior="0" nextid="checkpoint () (9)" posX="268.89999" posY="1884" posZ="-25.5" rotX="0" rotY="0" rotZ="0"></checkpoint>
+</map>

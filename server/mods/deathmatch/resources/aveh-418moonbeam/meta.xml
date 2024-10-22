@@ -1,0 +1,32 @@
+<meta>
+    <script src="start.lua" type="server"></script>
+    <script src="objectlod.lua" type="client"></script>
+    <info gamemodes="race" type="map" name="O Luna, Enlighten Us" author="LotsOfS" version="1.0.0" description="It is a busy night at the Fort Carson hospital tonight. So busy, the nurses are praying to the Moon Goddess for help. Answer their prayers, be cast down from the moon, and go and help out these fine people.
+
+A slow vehicle, but it handles quite well. This short track should therefore be easy, if it weren't for the massive slam dunk at the start. But the ball-approximate shape of this car should make correction for any unwanted rotations quite doable.
+
+ESPERANT (418/611) edition of an &quot;a map for every vehicle&quot; challenge."></info>
+    <map src="aveh-418moonbeam.map" dimension="0"></map>
+    <settings>
+        <setting name="#skins" value='[ &quot;random&quot; ]'></setting>
+        <setting name="#gamespeed" value="[ 1 ]"></setting>
+        <setting name="#ghostmode" value='[ &quot;true&quot; ]'></setting>
+        <setting name="#vehicleweapons" value='[ &quot;false&quot; ]'></setting>
+        <setting name="#minplayers" value="[ 0 ]"></setting>
+        <setting name="#waveheight" value="[ 0 ]"></setting>
+        <setting name="#timeafterfirstfinish" value="[ -1 ]"></setting>
+        <setting name="#respawn" value='[ &quot;timelimit&quot; ]'></setting>
+        <setting name="#maxplayers" value="[ 128 ]"></setting>
+        <setting name="#useLODs" value="[ false ]"></setting>
+        <setting name="#time" value="4:0"></setting>
+        <setting name="#duration" value="[ 1800 ]"></setting>
+        <setting name="#gravity" value="[ 0.0080000004 ]"></setting>
+        <setting name="#weather" value="[ 13 ]"></setting>
+        <setting name="#hunterminigun" value='[ &quot;false&quot; ]'></setting>
+        <setting name="#locked_time" value="[ true ]"></setting>
+        <setting name="#countdownduration" value="[ 10 ]"></setting>
+        <setting name="#respawntime" value="[ -1 ]"></setting>
+    </settings>
+    <script src="mapEditorScriptingExtension_s.lua" type="server"></script>
+    <script src="mapEditorScriptingExtension_c.lua" type="client" validate="false"></script>
+</meta>

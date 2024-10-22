@@ -1,0 +1,30 @@
+<meta>
+    <info gamemodes="race" type="map" name="Money Run" author="LotsOfS" version="1.0.0" description="You are an honest money transport driver. Go collect the money from the Atrium Building, the County General Hospital, the Crack Boss, Lolita&apos;s Mexican Food Market, the Max Max 98 Cent Store, the Recycling Center, an Old Factory, the LSX Hotdog Vendor, the Oil Refinery, The Skates and Surfboards Shop, the Stadium, a Harbor Warehouse, the Russian Warehouse, The Nude XXX Shop, Ugaladajara Jewelry Plaza, Unity Station, and the Police Department; then bring it back to the Maze Bank! A vast array of different business, and we are pleased to keep their money secure in our bank!
+
+	The high-speed section with wide and open turns in the middle of this track is being weaved over and under by the rest of the track. Ironically, those wide and open turns might prove more difficult than the sharp ones, as higher speeds only highlight this vehicle&apos;s lackluster turning capabilities.
+	
+	SECURICA (428/611) edition of an &quot;a map for every vehicle&quot; challenge."></info>
+    <map src="aveh-428securicar.map" dimension="0"></map>
+    <settings>
+        <setting name="#skins" value='[ &quot;random&quot; ]'></setting>
+        <setting name="#gamespeed" value="[ 1 ]"></setting>
+        <setting name="#ghostmode" value='[ &quot;true&quot; ]'></setting>
+        <setting name="#vehicleweapons" value='[ &quot;false&quot; ]'></setting>
+        <setting name="#minplayers" value="[ 0 ]"></setting>
+        <setting name="#waveheight" value="[ 0 ]"></setting>
+        <setting name="#duration" value="[ 1800 ]"></setting>
+        <setting name="#respawn" value='[ &quot;timelimit&quot; ]'></setting>
+        <setting name="#maxplayers" value="[ 128 ]"></setting>
+        <setting name="#useLODs" value="[ false ]"></setting>
+        <setting name="#time" value="9:4"></setting>
+        <setting name="#timeafterfirstfinish" value="[ -1 ]"></setting>
+        <setting name="#gravity" value="[ 0.0080000004 ]"></setting>
+        <setting name="#weather" value="[ 1 ]"></setting>
+        <setting name="#hunterminigun" value='[ &quot;false&quot; ]'></setting>
+        <setting name="#locked_time" value="[ false ]"></setting>
+        <setting name="#countdownduration" value="[ -1 ]"></setting>
+        <setting name="#respawntime" value="[ -1 ]"></setting>
+    </settings>
+    <script src="mapEditorScriptingExtension_s.lua" type="server"></script>
+    <script src="mapEditorScriptingExtension_c.lua" type="client" validate="false"></script>
+</meta>

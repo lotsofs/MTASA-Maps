@@ -1,8 +1,12 @@
 <meta>
-    <info gamemodes="race" type="map" name="Very Important Person" author="LotsOfS" version="1.0.0" description='You&apos;re a limo driver. Drive your boss from his private plane to the country club, stat!&#x0A;&#x0A;The Stretch is perfectly qualified for this particular track, despite the fact that limousines are made to be comfortable for the passenger and not the driver. It features mostly full speed straights with only the end being particularly heavy on the turning.&#x0A;&#x0A;STRETCH (409/611) edition of an &quot;a race for every car&quot; challenge.'></info>
-    <map src="aveh-409stretch.map" dimension="0"></map>
+    <info gamemodes="race" type="map" name="Base to Base" author="LotsOfS" version="1.0.0" description="Alert. The Army needs one of our military helicopters. Not sure those noobs know how to use a high-end helicopter from the Navy, but the president told us we are not allowed to question it. Let&apos;s deliver it to them, pronto, and make sure they really know it has arrived.
+	
+A speedy helicopter with excellent capabilities in every regard. However, while the track is mostly open flying, the squeezes at the start and end might prove challenging for a helicopter of this size.
+	
+HUNTER (425/611) edition of an &quot;a map for every vehicle&quot; challenge."></info>
+    <map src="aveh425-hunter.map" dimension="0"></map>
     <settings>
-        <setting name="#skins" value='[ &quot;cj&quot; ]'></setting>
+        <setting name="#skins" value='[ &quot;random&quot; ]'></setting>
         <setting name="#gamespeed" value="[ 1 ]"></setting>
         <setting name="#ghostmode" value='[ &quot;true&quot; ]'></setting>
         <setting name="#vehicleweapons" value='[ &quot;false&quot; ]'></setting>
@@ -12,10 +16,10 @@
         <setting name="#respawn" value='[ &quot;timelimit&quot; ]'></setting>
         <setting name="#maxplayers" value="[ 128 ]"></setting>
         <setting name="#useLODs" value="[ false ]"></setting>
-        <setting name="#time" value="11:45"></setting>
+        <setting name="#time" value="23:0"></setting>
         <setting name="#timeafterfirstfinish" value="[ -1 ]"></setting>
         <setting name="#gravity" value="[ 0.0080000004 ]"></setting>
-        <setting name="#weather" value="[ 18 ]"></setting>
+        <setting name="#weather" value="[ 11 ]"></setting>
         <setting name="#hunterminigun" value='[ &quot;false&quot; ]'></setting>
         <setting name="#locked_time" value="[ false ]"></setting>
         <setting name="#countdownduration" value="[ -1 ]"></setting>
