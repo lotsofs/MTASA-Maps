@@ -1,5 +1,4 @@
 local thisResource = getThisResource()
-local thisResourceRoot = getResourceRootElement(thisResource)
 local g_suspendedCamera = {}
 local g_screenX, g_screenY = guiGetScreenSize ()
 
@@ -36,7 +35,6 @@ local CROSSHAIR_WORLD = 2
 local CROSSHAIR_WATER = 3
 local CROSSHAIR_MOUSEOVER = 4
 local CROSSHAIR_SENSITIVE = 5
-local g_crosshairState
 local g_showLabels = true
 local g_showCrosshair = true
 
@@ -57,6 +55,8 @@ local DRAG_CAMERA_MINIMAL_DISTANCE = 2
 
 local g_lastClick = { tick=getTickCount() }
 local DOUBLE_CLICK_MAX_DELAY = 500 -- In ticks
+
+local g_lock = {}
 
 setCloudsEnabled(false) -- We don't need clouds.
 setAmbientSoundEnabled("gunfire", false) -- We don't need random gun shots.
@@ -143,14 +143,13 @@ local specialIntersections = {
 
 function startWhenLoaded()
 	engineSetAsynchronousLoading ( false, true )
-	if getElementData(thisResourceRoot,"g_in_test") then
+	if getElementData(resourceRoot,"g_in_test") then
 		setElementData ( localPlayer, "waitingToStart", true, false )
 		return
-	else
-		setElementData ( localPlayer, "waitingToStart", nil, false )
 	end
 	if isInterfaceLoaded() then
 		removeEventHandler("onClientResourceStart", root, startWhenLoaded)
+		loadRotationFixXML()
 		startEditor()
 	end
 end
@@ -165,7 +164,7 @@ addEventHandler("doSelectElement", root,
 
 addEventHandler("onClientRender", root,
 	function ()
-		if g_suspended or getElementData(thisResourceRoot,"g_in_test") then
+		if g_suspended or getElementData(resourceRoot,"g_in_test") then
 			return
 		end
 		--
@@ -193,7 +192,7 @@ addEventHandler("onClientRender", root,
 			return
 		end
 		if g_dragElement and not g_selectedElement then
-			local camX, camY, camZ, lookX, lookY, lookZ = getCameraMatrix()
+			local camX2, camY2, camZ2, lookX, lookY, lookZ = getCameraMatrix()
 			local distance = math.sqrt((g_dragPosition.x - lookX)^2 +
 									   (g_dragPosition.y - lookY)^2 +
 				 (g_dragPosition.z and (g_dragPosition.z - lookZ)^2 or 0))
@@ -211,8 +210,8 @@ addEventHandler("onClientRender", root,
 				g_targetedElement = edf.edfGetAncestor(targetElement)
 			end
 
-			local camX, camY, camZ = getCameraMatrix()
-			local distance = math.sqrt( (targetX - camX)^2 + (targetY - camY)^2 + (targetZ - camZ)^2 )
+			local camX2, camY2, camZ2 = getCameraMatrix()
+			local distance = math.sqrt( (targetX - camX2)^2 + (targetY - camY2)^2 + (targetZ - camZ2)^2 )
 			local roundedDistance = string.format("%." .. (DISTANCE_DECIMAL_PLACES) .. "f", distance)
 			createHighlighterText ( labelCenterX,labelCenterY,
 							getElementID(g_targetedElement) or "",
@@ -232,20 +231,20 @@ addEventHandler("onClientRender", root,
             local line1 = ( not g_RemoveWorldBuildingMode_main and "[SELECT WORLD OBJECT]" or "[REMOVE WORLD OBJECT]" )
             local line2 = ""
             local line3 = ""
-     		if not targetElement and buildingInfo then
-    			local camX, camY, camZ = getCameraMatrix()
-    			local distance = math.sqrt( (targetX - camX)^2 + (targetY - camY)^2 + (targetZ - camZ)^2 )
-    			local roundedDistance = string.format("%." .. (DISTANCE_DECIMAL_PLACES) .. "f", distance)
-    			local modelName = tostring( engineGetModelNameFromID( buildingInfo.id ) )
+			if not targetElement and buildingInfo then
+				local camX2, camY2, camZ2 = getCameraMatrix()
+				local distance = math.sqrt( (targetX - camX2)^2 + (targetY - camY2)^2 + (targetZ - camZ2)^2 )
+				local roundedDistance = string.format("%." .. (DISTANCE_DECIMAL_PLACES) .. "f", distance)
+				local modelName = tostring( engineGetModelNameFromID( buildingInfo.id ) )
 				if ( buildingInfo.LODid ~= nil ) then
-    				line1 = buildingInfo.id .. " (" .. modelName .. ")" .. " LOD: " .. buildingInfo.LODid
+					line1 = buildingInfo.id .. " (" .. modelName .. ")" .. " LOD: " .. buildingInfo.LODid
 				else
-    				line1 = buildingInfo.id .. " (" .. modelName .. ")"
+					line1 = buildingInfo.id .. " (" .. modelName .. ")"
 				end
 				line2 = "[world]"
 				line3 = roundedDistance .. " m"
-    			g_worldBuildingInfo = buildingInfo
-    		end
+				g_worldBuildingInfo = buildingInfo
+			end
 			createHighlighterText ( labelCenterX,labelCenterY, line1, line2, line3 )
         end
 
@@ -327,6 +326,8 @@ function startEditor()
 			end
 		end
 	end
+	loadColPatchArchive()
+	loadColPatchPlacements()
 end
 
 function stopEditor()
@@ -334,7 +335,7 @@ function stopEditor()
 	engineSetAsynchronousLoading ( true, false )
 	resetWorldSounds()
 end
-addEventHandler("onClientResourceStop", thisResourceRoot, stopEditor)
+addEventHandler("onClientResourceStop", resourceRoot, stopEditor)
 
 function toggleMode(key, keyState)
 	if (g_mode == CAMERA_MODE) then
@@ -424,14 +425,14 @@ function processFreecamClick(key, keyState)
 	local drop
 	if (not g_suspended) then
 		local clickedElement, targetX, targetY, targetZ = getTargetedElement()
-
+		
 		local camX, camY, camZ, lookX, lookY, lookZ = getCameraMatrix()
 		local distance = math.sqrt((targetX - camX)^2 + (targetY - camY)^2 + (targetZ - camZ)^2)
 
-		if (distance > g_maxSelectDistance) then
+		if clickedElement and (distance > g_maxSelectDistance) then
+			local elementType = (isElement(clickedElement) == true and ": " .. getElementType(clickedElement)) or ""
+			outputDebugString("Cannot select out of range element" .. elementType .. " at distance: " .. distance)
 			clickedElement = nil
-			outputDebugString("Cannot select out of range element: " .. getElementType(clickedElement))
-			outputDebugString(" distance: " .. distance)
 		end
 		processClick ( clickedElement, key, keyState, lookX, lookY, lookZ )
 	end
@@ -485,6 +486,11 @@ function processClick ( clickedElement, key, keyState, lookX, lookY, lookZ )
 			end
 		end
 
+		if g_selectedElement ~= clickedElement and g_lock[edf.edfGetAncestor(clickedElement)] then
+			editor_gui.outputMessage("This element is locked, Press '"..cc["lock_selected_element"]:upper().."' to unlock it.", 255,255,255)
+			return false
+		end
+
 		if (key == "select_target_mouse") then
 			selectElement(clickedElement, MOUSE_SUBMODE, false, g_selectedElement, g_selectedElement)
 		elseif (key == "select_target_keyboard") then
@@ -508,6 +514,12 @@ end
 
 function processDoubleClick ( clickedElement, key )
 	if not clickedElement then return end
+
+	if g_selectedElement ~= clickedElement and g_lock[edf.edfGetAncestor(clickedElement)] then
+		editor_gui.outputMessage("This element is locked, Press '"..cc["lock_selected_element"]:upper().."' to unlock it.", 255,255,255)
+		return false
+	end
+
 	if triggerEvent ( "onClientElementDoubleClick", clickedElement, key ) then
 		if key == "select_target_keyboard" then
 			if ( selectElement(clickedElement, KEYBOARD_SUBMODE) ) then
@@ -591,7 +603,6 @@ function setCrosshairState(state)
 		color = tocolor(255,0,0,255)
 	end
 	dxDrawImage ( g_screenX/2 - 16, g_screenY/2 - 16, 32, 32, "client/images/crosshair.png",0,0,0,color,false)
-	g_crosshairState = state
 end
 
 function setCursorCrosshairState(state)
@@ -607,7 +618,6 @@ function setCursorCrosshairState(state)
 	end
 	local x,y = getCursorPosition()
 	dxDrawImage ( g_screenX*x - 2, g_screenY*y - 1, 15, 15,  "client/images/cursor.png", 0,0,0,color,true )
-	-- g_crosshairState = state
 end
 
 function makeVehicleStatic(vehicle)
@@ -616,13 +626,13 @@ function makeVehicleStatic(vehicle)
 	setElementFrozen(vehicle, true)
 	setElementCollisionsEnabled(vehicle, false)
 end
-addEventHandler("doSetVehicleStatic", getRootElement(), makeVehicleStatic)
+addEventHandler("doSetVehicleStatic", root, makeVehicleStatic)
 
 function makePedStatic(ped)
 	ped = ped or source
 	setElementCollisionsEnabled ( ped, false )
 end
-addEventHandler("doSetPedStatic", getRootElement(), makePedStatic)
+addEventHandler("doSetPedStatic", root, makePedStatic)
 
 function setRepresentationCollisionsEnabled(element, state)
 	for k, child in ipairs(getElementChildren(element)) do
@@ -671,7 +681,8 @@ function processCursorClick(button, keyState,cursorX, cursorY, worldX, worldY, w
 		local hitX, hitY, hitZ = targetX, targetY, targetZ--worldX, worldY, worldZ
 		local distance = math.sqrt((hitX - camX)^2 + (hitY - camY)^2 + (hitZ - camZ)^2)
 		if (distance > g_maxSelectDistance) then
-			outputDebugString("Cannot select out of range element: " .. getElementType(clickedElement) .. " at distance: " .. distance)
+			local elementType = (isElement(clickedElement) == true and ": " .. getElementType(clickedElement)) or ""
+			outputDebugString("Cannot select out of range element" .. elementType .. " at distance: " .. distance)
 			clickedElement = nil
 		end
 	end
@@ -719,11 +730,13 @@ function disableGameHUD()
 end
 
 -- PUBLIC
-function selectElement(element, submode, shortcut, dropreleaseLock, dropclonedrop)
+function selectElement(element, submode, shortcut, dropreleaseLock, dropclonedrop, ignoreProperties)
 	local openProperties
 	submode = submode or g_submode
 
 	if not isElement(element) then return end
+	
+	if isColPatchObject(element) then return end
 
 	if getElementType(element) == "vehicle" and getVehicleType(element) == "Train" then
 		setTrainDerailed(element, true)
@@ -757,9 +770,6 @@ function selectElement(element, submode, shortcut, dropreleaseLock, dropclonedro
 
 	assert(handle == nil or isElement(handle), "Bad handle ["..tostring(handle).."] for element: "..getElementType(element))
 
-	-- temporarily disable collisions for all parts
-	setRepresentationCollisionsEnabled(element, false)
-
 	-- if we can position this element, grab it and add the markers
 	if handle then
 		local move_resource
@@ -770,6 +780,8 @@ function selectElement(element, submode, shortcut, dropreleaseLock, dropclonedro
 				move_resource = move_cursor
 			end
 			move_resource.setMaxMoveDistance(g_moveDistance)
+			-- if we're dragging the object, disable collisions for all parts so the cursor can point through it
+			setRepresentationCollisionsEnabled(element, false)
 		elseif (submode == KEYBOARD_SUBMODE) then
 			move_resource = move_keyboard
 		else
@@ -790,14 +802,19 @@ function selectElement(element, submode, shortcut, dropreleaseLock, dropclonedro
 			createArrowMarker(handle)
 		end
 	else
-		editor_gui.openPropertiesBox( element, false, shortcut )
-		openProperties = true
+		if not ignoreProperties then
+			editor_gui.openPropertiesBox( element, false, shortcut )
+			openProperties = true
+		end
 	end
 
-	triggerServerEvent("doLockElement", element)
-
-	-- trigger server selection events
-	triggerServerEvent("onElementSelect", element)
+	-- fix for local elements
+	if not isElementLocal(element) then
+		triggerServerEvent("doLockElement", element)
+	
+		-- trigger server selection events
+		triggerServerEvent("onElementSelect", element)
+	end
 
 	--Emulate a fake mouse  move to get the element to position properly
 	-- if not openProperties then
@@ -858,11 +875,20 @@ function dropElement(releaseLock,clonedrop)
 	end
 
 	if releaseLock then
-		triggerServerEvent("doUnlockElement", g_selectedElement)
+		-- fix for local elements
+		if not isElementLocal(g_selectedElement) then
+			triggerServerEvent("doUnlockElement", g_selectedElement)
+		end
 	end
 
-	-- trigger server selection events
-	triggerServerEvent("onElementDrop", g_selectedElement)
+	-- fix for local elements
+	if not isElementLocal(g_selectedElement) then
+		-- trigger server selection events
+		triggerServerEvent("onElementDrop", g_selectedElement)
+	end
+	
+	-- Clear rotation as it can be rotated by other players
+	clearElementQuat(g_selectedElement)
 
 	local droppedElement = g_selectedElement
 	g_selectedElement = false
@@ -881,6 +907,10 @@ end
 function setMode(newMode)
 	if g_suspended then
 		return
+	end
+	
+	if not isElement(g_selectedElement) then
+		g_selectedElement = nil
 	end
 
 	if newMode == CAMERA_MODE then
@@ -942,7 +972,7 @@ end
 
 -- sets the maximum distance at which an element can be selected
 function setMaxSelectDistance(distance)
-	assert((distance >= 0), "Distance must be a positive number")
+	assert((distance >= 0), "Distance must be a positive number.")
 	g_maxSelectDistance = distance
 	return true
 end
@@ -963,10 +993,20 @@ function getMaxSelectDistance()
 	return g_maxSelectDistance
 end
 
-function destroySelectedElement()
+function destroySelectedElement(key)
+	if key then
+		editor_gui.restoreSelectedElement()
+	end
 	if g_selectedElement then
 		local element = g_selectedElement
 		dropElement(false)
+		
+		-- fix for local elements
+		if isElementLocal(element) then
+			outputDebugString("Cannot destroy local element.")
+			return false
+		end
+		
 		return triggerServerEvent("doDestroyElement", element)
 	end
 end
@@ -988,6 +1028,33 @@ function cloneSelectedElement()
 	end
 end
 
+function lockSelectedElement(element,state)
+	local targetElement = isElement(element) and element or getTargetedElement()
+	if targetElement then
+		if isElementLocked(targetElement) == state then return end
+		if g_lock[targetElement] then
+			g_lock[targetElement] = nil
+			editor_gui.outputMessage("You have unlocked this element.", 50,255,50)
+		else
+			g_lock[targetElement] = true
+			editor_gui.outputMessage("You have locked this element.", 50,255,50)
+		end
+	end
+end
+
+function isElementLocked(element)
+	if isElement(element) then
+		return g_lock[element] or false
+	end
+end
+
+addEventHandler("onClientElementDestroy",resourceRoot,
+function ()
+	if g_lock[source] then
+		g_lock[source] = nil
+	end
+end)
+
 function showCrosshair(status,labelStatus)
 	g_showCrosshair = status
 	-- g_showLabels = labelStatus
@@ -1000,12 +1067,16 @@ end
 
 function setWorkingInterior( interior )
 	setCameraInterior( interior )
-	setElementInterior(getLocalPlayer(), interior)
+	setElementInterior(localPlayer, interior)
 	g_workingInterior = interior
 	return true
 end
 
 function suspend(leavePlayersAttached)
+	if g_suspended then
+		return false
+	end
+
 	outputConsole("Suspending editor_main.")
 
 	local move_resource
@@ -1039,6 +1110,10 @@ function suspend(leavePlayersAttached)
 end
 
 function resume(dontEnableMove)
+	if (not g_suspended) then
+		return false
+	end
+
 	outputConsole("Resuming editor_main.")
 
 	local move_resource
@@ -1082,6 +1157,7 @@ function bindInput(commandsOnly)
 	addCommandHandler("create", createElement_cmd)
 	addCommandHandler("destroy", destroySelectedElement)
 	addCommandHandler("delete", destroySelectedElement)
+	addCommandHandler("lock", lockSelectedElement)
 	if ( commandsOnly ) then
 		return true
 	end
@@ -1094,6 +1170,7 @@ function bindInput(commandsOnly)
 	bindControl("undo", "down", keyboardUndo)
 	bindControl("redo", "down", keyboardRedo)
 	bindControl("high_sensitivity_mode", "down", toggleSensitivityMode)
+	bindControl("lock_selected_element", "down", lockSelectedElement)
 end
 
 function unbindInput(commandsOnly)
@@ -1101,6 +1178,7 @@ function unbindInput(commandsOnly)
 	removeCommandHandler("create", createElement_cmd)
 	removeCommandHandler("destroy", destroySelectedElement)
 	removeCommandHandler("delete", destroySelectedElement)
+	removeCommandHandler("lock", lockSelectedElement)
 
 	if ( commandsOnly ) then
 		return true
@@ -1113,6 +1191,7 @@ function unbindInput(commandsOnly)
 	unbindControl("undo", "down", keyboardUndo)
 	unbindControl("redo", "down", keyboardRedo)
 	unbindControl("high_sensitivity_mode", "down", toggleSensitivityMode)
+	unbindControl("lock_selected_element", "down", lockSelectedElement)
 end
 
 -- get the point and element targeted by the camera
@@ -1123,8 +1202,16 @@ function processCameraLineOfSight()
 	local surfaceFound, targetX, targetY, targetZ, targetElement,
             nx, ny, nz, material, lighting, piece,
             buildingId, bx, by, bz, brx, bry, brz, buildingLOD
-		= processLineOfSight(camX, camY, camZ, endX, endY, endZ, true, true, true, true, true, true, false, true, localPlayer, true)
-
+		= processLineOfSight(camX, camY, camZ, endX, endY, endZ, true, true, true, true, true, false, false, false, localPlayer, true)
+	
+	-- Is this a collision patch object
+	if targetElement and isColPatchObject(targetElement) then
+		local cp = isColPatchObject(targetElement)
+		-- Make it look like we hit a world model
+		buildingId, bx, by, bz, brx, bry, brz = cp.id, cp.x, cp.y, cp.z, cp.rx, cp.ry, cp.rz
+		targetElement = nil
+	end
+	
 	-- if there is none, use the end point of the vector as the collision point
 	if not surfaceFound then
 	    targetX, targetY, targetZ = endX, endY, endZ
@@ -1146,7 +1233,15 @@ function processCursorLineOfSight()
 	local surfaceFound, targetX, targetY, targetZ, targetElement,
             nx, ny, nz, material, lighting, piece,
             buildingId, bx, by, bz, brx, bry, brz, buildingLOD
-        = processLineOfSight(camX, camY, camZ, endX, endY, endZ, true, true, true, true, true, true, false, true, localPlayer, true)
+        = processLineOfSight(camX, camY, camZ, endX, endY, endZ, true, true, true, true, true, false, false, false, localPlayer, true)
+
+	-- Is this a collision patch object
+	if targetElement and isColPatchObject(targetElement) then
+		local cp = isColPatchObject(targetElement)
+		-- Make it look like we hit a world model
+		buildingId, bx, by, bz, brx, bry, brz = cp.id, cp.x, cp.y, cp.z, cp.rx, cp.ry, cp.rz
+		targetElement = nil
+	end
 
 	-- if there is none, use the end point of the vector as the collision point
 	if not surfaceFound then
@@ -1179,7 +1274,7 @@ end
 function updateArrowMarker( element )
 	if not g_arrowMarker then return end
 
-	local element = element or g_selectedElement
+	element = element or g_selectedElement
 	if not element then return end
 
 	local radius = edf.edfGetElementRadius(element) or 1
@@ -1209,8 +1304,10 @@ function setMovementType( movementType )
 	if g_arrowMarker then
 		if movementType == "move" then
 			setMarkerColor(g_arrowMarker, 255, 255, 0)
-		elseif movementType == "rotate" then
+		elseif movementType == "rotate" or movementType == "rotate_world" then
 			setMarkerColor(g_arrowMarker, 0, 255, 0)
+		elseif movementType == "rotate_local" then
+			setMarkerColor(g_arrowMarker, 0, 255, 255)
 		end
 	end
 end
@@ -1276,6 +1373,9 @@ function handleWorldBuildingMode(keyState)
 					creationParameters.radius = radius
 					creationParameters.position = { g_worldBuildingInfo.x, g_worldBuildingInfo.y, g_worldBuildingInfo.z }
 					creationParameters.interior = g_workingInterior
+					if creationParameters.interior == 0 then
+						creationParameters.interior = -1
+					end
 					triggerServerEvent ( "doCreateElement", localPlayer, "removeWorldObject", "editor_main", creationParameters, false )
 				else
 					creationParameters = {}
@@ -1284,7 +1384,7 @@ function handleWorldBuildingMode(keyState)
 					creationParameters.rotation = { g_worldBuildingInfo.rx, g_worldBuildingInfo.ry, g_worldBuildingInfo.rz }
 					doCreateElement("object", "editor_main", creationParameters)
 				end
-        	end
+			end
 			g_SelectWorldBuildingMode_main = false
 			g_RemoveWorldBuildingMode_main = false
 			return true

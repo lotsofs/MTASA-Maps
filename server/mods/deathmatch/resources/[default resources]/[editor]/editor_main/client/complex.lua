@@ -71,18 +71,18 @@ function complex.to( num )
 					imag = _retminusone
 				end
 			elseif sign == "+" then
-				imag = loadstring("return tonumber("..imag..")")
+				imag = tonumber(imag)
 			else
-				imag = loadstring("return tonumber("..sign..imag..")")
+				imag = tonumber(sign..imag)
 			end
-			real = loadstring("return tonumber("..real..")")
+			real = tonumber(real)
 			if real and imag then
 				return setmetatable( { real(),imag() }, complex_meta )
 			end
 			return
 		end
 		-- check for complex
-		local imag = string.match( num,"^([%-%+%*%^%d%./Ee]*)i$" )
+		imag = string.match( num,"^([%-%+%*%^%d%./Ee]*)i$" )
 		if imag then
 			if imag == "" then
 				return setmetatable( { 0,1 }, complex_meta )
@@ -90,7 +90,7 @@ function complex.to( num )
 				return setmetatable( { 0,-1 }, complex_meta )
 			end
 			if string.lower(string.sub(imag,1,1)) ~= "e" then
-				imag = loadstring("return tonumber("..imag..")")
+				imag = tonumber(imag)
 				if imag then
 					return setmetatable( { 0,imag() }, complex_meta )
 				end
@@ -98,9 +98,9 @@ function complex.to( num )
 			return
 		end
 		-- should be real
-		local real = string.match( num,"^(%-*[%d%.][%-%+%*%^%d%./Ee]*)$" )
+		real = string.match( num,"^(%-*[%d%.][%-%+%*%^%d%./Ee]*)$" )
 		if real then
-			real = loadstring( "return tonumber("..real..")" )
+			real = tonumber(real)
 			if real then
 				return setmetatable( { real(),0 }, complex_meta )
 			end
@@ -335,19 +335,19 @@ end
 --// metatable functions
 
 complex_meta.__add = function( cx1,cx2 )
-	local cx1,cx2 = complex.to( cx1 ),complex.to( cx2 )
+	cx1,cx2 = complex.to( cx1 ),complex.to( cx2 )
 	return complex.add( cx1,cx2 )
 end
 complex_meta.__sub = function( cx1,cx2 )
-	local cx1,cx2 = complex.to( cx1 ),complex.to( cx2 )
+	cx1,cx2 = complex.to( cx1 ),complex.to( cx2 )
 	return complex.sub( cx1,cx2 )
 end
 complex_meta.__mul = function( cx1,cx2 )
-	local cx1,cx2 = complex.to( cx1 ),complex.to( cx2 )
+	cx1,cx2 = complex.to( cx1 ),complex.to( cx2 )
 	return complex.mul( cx1,cx2 )
 end
 complex_meta.__div = function( cx1,cx2 )
-	local cx1,cx2 = complex.to( cx1 ),complex.to( cx2 )
+	cx1,cx2 = complex.to( cx1 ),complex.to( cx2 )
 	return complex.div( cx1,cx2 )
 end
 complex_meta.__pow = function( cx,num )

@@ -35,13 +35,13 @@ function elementIcons_Clicked ( source, mouseButton )
 	if mouseButton == "left" then
 		local elementType = elementIcons[source]["elementName"]
 		local resourceName = elementIcons[source]["resource"]
-		--triggerServerEvent ( "edfCreateElement", getRootElement(), elementType, resourceName )
+		--triggerServerEvent ( "edfCreateElement", root, elementType, resourceName )
 		local shortcut = resourceElementDefinitions[resourceName][elementType].shortcut -- E.g. immediately open model browser
 		call(getResourceFromName("editor_main"),"doCreateElement", elementType, resourceName, false, true, shortcut )
 	elseif mouseButton == "middle" then
 		local elementType = elementIcons[source]["elementName"]
 		local resourceName = elementIcons[source]["resource"]
-		--triggerServerEvent ( "edfCreateElement", getRootElement(), elementType, resourceName )
+		--triggerServerEvent ( "edfCreateElement", root, elementType, resourceName )
 		call(getResourceFromName("editor_main"),"doCreateElement", elementType, resourceName )
 	elseif mouseButton == "right" then
 		local showing = isCurrentBrowserShowing()
@@ -55,27 +55,28 @@ function elementIcons_Clicked ( source, mouseButton )
 	end
 end
 
+function newCallback(callbackResult)
+	if callbackResult == "YES" then
+		editor_main.newResource()
+	end
+
+	guiSetInputEnabled(false)
+end
+
 --These are individual functions for each topmenu button
 function topMenuClicked.new ()
 	editor_main.dropElement ()
 	guiSetInputEnabled(true)
-	local yes,no = guiShowMessageBox ( "Are you sure you want to create a new map?\nAny unsaved data will be lost.", "info", "New", true, "Yes", "No" )
-	addEventHandler ( "onClientGUIClick",yes,function()
-		editor_main.newResource()
-		guiSetInputEnabled(false)
-	end,false )
-	addEventHandler ( "onClientGUIClick",no,function()
-		guiSetInputEnabled(false)
-	end,false )
+	exports.dialogs:messageBox("New", "Are you sure you want to create a new map? Any unsaved data will be lost.", "newCallback", "QUESTION", "YESNO")
 end
 
 function topMenuClicked.open ()
 	editor_main.dropElement ()
-	triggerServerEvent ( "loadsave_getResources", getLocalPlayer(), "open" )
+	triggerServerEvent ( "loadsave_getResources", localPlayer, "open" )
 end
 
 function topMenuClicked.save ()
-	triggerServerEvent ( "quickSaveResource", getLocalPlayer() )
+	triggerServerEvent ( "quickSaveResource", localPlayer )
 end
 
 function topMenuClicked.options ()
@@ -94,12 +95,12 @@ end
 
 function topMenuClicked.undo ()
 	if ( editor_main.getSelectedElement() ) then playSoundFrontEnd(32) return end
-	triggerServerEvent ( "callServerside", getLocalPlayer(), "editor_main", "undo" )
+	triggerServerEvent ( "callServerside", localPlayer, "editor_main", "undo" )
 end
 
 function topMenuClicked.redo ()
 	if ( editor_main.getSelectedElement() ) then playSoundFrontEnd(32) return end
-	triggerServerEvent ( "callServerside", getLocalPlayer(), "editor_main", "redo" )
+	triggerServerEvent ( "callServerside", localPlayer, "editor_main", "redo" )
 end
 
 
@@ -144,5 +145,5 @@ topMenuClicked.definitions = function ()
 end
 
 topMenuClicked["save as"] = function ()
-	triggerServerEvent ( "loadsave_getResources", getLocalPlayer(), "saveAs" )
+	triggerServerEvent ( "loadsave_getResources", localPlayer, "saveAs" )
 end

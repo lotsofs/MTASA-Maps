@@ -1,6 +1,5 @@
 function addResourceMap ( resource, filename, dimension )
 	if not resource then return false end
-	dimension = dimension or 0
 	local currentFiles = getResourceFiles ( resource, "map" )
 	for k,path in ipairs(currentFiles) do
 		if path == filename then
@@ -54,6 +53,15 @@ function clearResourceMeta ( resource, quick ) --removes settings and info nodes
 			break
 		end
 	end
+	--Destroy leftover OOP nodes
+	while true do
+		local oopNode = xmlFindChild(metaNode, 'oop', 0)
+		if oopNode then
+			xmlDestroyNode(oopNode)
+		else
+			break
+		end
+	end
 	--Destroy any other nodes
 	local nodes = xmlNodeGetChildren ( metaNode )
 	for key, node in ipairs(nodes) do
@@ -81,7 +89,7 @@ function getResourceFiles ( resource, fileType )
 		end
 	end
 	if (not resourceExists) then return false, "no resource" end
-	local resource = getResourceName(resource)
+	resource = getResourceName(resource)
 	if (not resource) then return false, "no resource" end
 	local meta = xmlLoadFile ( ':' .. resource .. '/' .. "meta.xml" )
 	if not meta then return false, "no meta" end
@@ -93,8 +101,12 @@ function getResourceFiles ( resource, fileType )
 		local file = xmlNodeGetAttribute ( node, "src" )
 		local otherAttributes = xmlNodeGetAttributes ( node )
 		otherAttributes.src = nil
-		fileAttributes[file] = otherAttributes
-		table.insert ( files, file )
+		if fileAttributes[file] then
+			outputDebugString("getResourceFiles: Found duplicate meta entry in '".. resource .."' (".. fileType .. " - ".. file .. ")")
+		else
+			fileAttributes[file] = otherAttributes
+			table.insert ( files, file )
+		end
 		i = i + 1
 	end
 	xmlUnloadFile ( meta )
@@ -110,10 +122,15 @@ function copyResourceFiles ( fromResource, targetResource )
 		local paths, attr = getResourceFiles(fromResource, fileType)
 		if paths then
 			for j,filePath in ipairs(paths) do
-				fileCopy ( ":" .. getResourceName(fromResource) .. "/" .. filePath, ":" .. getResourceName(targetResource) .. "/" .. filePath, false )
-				local data = attr[filePath]
-				data.src = filePath
-				table.insert ( targetPaths[fileType], data )
+				local copyPath, copyTarget = ":" .. getResourceName(fromResource) .. "/" .. filePath, ":" .. getResourceName(targetResource) .. "/" .. filePath
+				if fileExists(copyTarget) then
+					outputDebugString("copyResourceFiles: File '".. copyTarget .."' has duplicate meta entries, cannot overwrite.")
+				else
+					fileCopy ( copyPath, copyTarget, false )
+					local data = attr[filePath]
+					data.src = filePath
+					table.insert ( targetPaths[fileType], data )
+				end
 			end
 		else
 			outputDebugString("copyResourceFiles: getResourceFiles returned "..tostring(paths).." and "..tostring(attr).." for "..tostring(fromResource).." and "..tostring(fileType))
@@ -132,7 +149,7 @@ end
 
 function flattenTree ( baseElement, newParent, newEditorParent, resourceTable )
 	local tick = getTickCount()
-	local resourceTable = resourceTable or {}
+	resourceTable = resourceTable or {}
 
 	for i, element in ipairs(getElementChildren(baseElement)) do
 		flattenTreeRuns = ( flattenTreeRuns or 0 ) + 1

@@ -10,10 +10,28 @@ propertyGetters = {
 		end,
 		scale = getObjectScale,
 		breakable = function(element) return tostring(isObjectBreakable(element)) end,
+		collisions = function(element)
+			local collisions = getElementData(element, "collisions")
+			if collisions == "true" or collisions == false then
+				return "true"
+			else
+				return "false"
+			end
+		end
 	},
 	ped = {
 		model = getElementModel,
 		rotZ = getPedRotation,
+		health = getElementHealth,
+		armor = getPedArmor,
+		collisions = function(element)
+			local collisions = getElementData(element, "collisions")
+			if collisions == "true" or collisions == false then
+				return "true"
+			else
+				return "false"
+			end
+		end
 	},
 	vehicle = {
 		model = getElementModel,
@@ -36,9 +54,19 @@ propertyGetters = {
 		upgrades = getVehicleUpgrades,
 		plate = getVehiclePlateText,
 		sirens = function(vehicle)
-				return getVehicleSirensOn(vehicle) and "true" or "false"
-			end,
+			return getVehicleSirensOn(vehicle) and "true" or "false"
+		end,
+		health = getElementHealth,
 		paintjob = function(vehicle) return tostring(getVehiclePaintjob(vehicle)) end,
+		landingGearDown = function(element) return tostring(getVehicleLandingGearDown(element)) end,
+		collisions = function(element)
+			local collisions = getElementData(element, "collisions")
+			if collisions == "true" or collisions == false then
+				return "true"
+			else
+				return "false"
+			end
+		end
 	},
 	marker = {
 		type = getMarkerType,
@@ -124,7 +152,7 @@ propertySetters = {
 		end,
 		breakable = function(element, breakable)
 			return setObjectBreakable(element, breakable == "true")
-		end,
+		end
 	},
 	ped = {
 		model = function(element, model)
@@ -135,6 +163,11 @@ propertySetters = {
 			if tonumber(rot) then return setElementRotation(element, 0, 0, rot)
 			else return false end
 		end,
+		health = setElementHealth,
+		armor = setPedArmor,
+		collisions = function(element, state)
+			return setElementCollisionsEnabled(element, state == "true")
+		end
 	},
 	vehicle = {
 		model = function(element, model)
@@ -143,7 +176,7 @@ propertySetters = {
 		end,
 		color1 = function(element, colorsTable)
 			if colorsTable then
-				local colorsTable = {getColorFromString(colorsTable)}
+				colorsTable = {getColorFromString(colorsTable)}
 				local otherColors = {getVehicleColor(element, true)}
 				return setVehicleColor(element, colorsTable[1], colorsTable[2], colorsTable[3], otherColors[4], otherColors[5], otherColors[6], otherColors[7], otherColors[8], otherColors[9], otherColors[10], otherColors[11], otherColors[12])
 			else
@@ -152,7 +185,7 @@ propertySetters = {
 		end,
 		color2 = function(element, colorsTable)
 			if colorsTable then
-				local colorsTable = {getColorFromString(colorsTable)}
+				colorsTable = {getColorFromString(colorsTable)}
 				local otherColors = {getVehicleColor(element, true)}
 				return setVehicleColor(element, otherColors[1], otherColors[2], otherColors[3], colorsTable[1], colorsTable[2], colorsTable[3], otherColors[7], otherColors[8], otherColors[9], otherColors[10], otherColors[11], otherColors[12])
 			else
@@ -161,7 +194,7 @@ propertySetters = {
 		end,
 		color3 = function(element, colorsTable)
 			if colorsTable then
-				local colorsTable = {getColorFromString(colorsTable)}
+				colorsTable = {getColorFromString(colorsTable)}
 				local otherColors = {getVehicleColor(element, true)}
 				return setVehicleColor(element, colorsTable[1], colorsTable[2], colorsTable[3], otherColors[4], otherColors[5], otherColors[6], colorsTable[1], colorsTable[2], colorsTable[3], otherColors[10], otherColors[11], otherColors[12])
 			else
@@ -170,7 +203,7 @@ propertySetters = {
 		end,
 		color4 = function(element, colorsTable)
 			if colorsTable then
-				local colorsTable = {getColorFromString(colorsTable)}
+				colorsTable = {getColorFromString(colorsTable)}
 				local otherColors = {getVehicleColor(element, true)}
 				return setVehicleColor(element, colorsTable[1], colorsTable[2], colorsTable[3], otherColors[4], otherColors[5], otherColors[6], otherColors[7], otherColors[8], otherColors[9], colorsTable[1], colorsTable[2], colorsTable[3])
 			else
@@ -197,6 +230,13 @@ propertySetters = {
 		plate = setVehiclePlateText,
 		sirens = function(vehicle, bon)
 			return setVehicleSirensOn(vehicle, bon == "true" and true or false)
+		end,
+		health = setElementHealth,
+		landingGearDown = function(element, state)
+			return setVehicleLandingGearDown(element, state == "true")
+		end,
+		collisions = function(element, state)
+			return setElementCollisionsEnabled(element, state == "true")
 		end
 	},
 	marker = {

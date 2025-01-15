@@ -5,7 +5,6 @@
 local edf = {}
 local edfStarted = {}
 local thisResource = getThisResource()
-local rootElement = getRootElement()
 createResourceCallInterface("mapmanager")
 addEvent"onElementPropertyChanged"
 
@@ -26,8 +25,20 @@ end
 
 -- basic element create functions table (cdata holds creation parameters)
 local edfCreateBasic = {
-	object = function(cdata)
-		return createObject(cdata.model, cdata.position[1], cdata.position[2], cdata.position[3], cdata.rotation[1], cdata.rotation[2], cdata.rotation[3])
+	object = function(cdata, editorMode)
+		local object = createObject(cdata.model, cdata.position[1], cdata.position[2], cdata.position[3], cdata.rotation[1], cdata.rotation[2], cdata.rotation[3])
+		setObjectScale(object, cdata.scale)
+		-- Create object's LOD if editing a map in Map Editor & LODs are enabled in the map's settings
+		if editorMode and exports.editor_main:getMapSettingValue("useLODs") then
+			local lodModel = exports.editor_main:getLODModelFromObjectModel(cdata.model)
+			if lodModel then
+				local lodObject = createObject(lodModel, cdata.position[1], cdata.position[2], cdata.position[3], cdata.rotation[1], cdata.rotation[2], cdata.rotation[3], true)
+				setObjectScale(lodObject, cdata.scale)
+				setLowLODElement(object, lodObject)
+				setElementParent(lodObject, object)
+			end
+		end
+		return object
 	end,
 	vehicle = function(cdata)
 		local vehicle = createVehicle(cdata.model, cdata.position[1], cdata.position[2], cdata.position[3], cdata.rotation[1], cdata.rotation[2], cdata.rotation[3], cdata.plate)
@@ -89,14 +100,14 @@ local edfCreateBasic = {
 		return createRadarArea(cdata.posX, cdata.posY, cdata.sizeX, cdata.sizeY, cdata.colorR, cdata.colorG, cdata.colorB, cdata.colorA)
 	end,
 	colshape = function(cdata)
-		if cdata.type == "sphere" then
+		if cdata.type == "sphere" or cdata.type == "colsphere" then
 			return createColSphere(cdata.position[1], cdata.position[2], cdata.position[3], cdata.radius)
-		elseif cdata.type == "tube" then
+		elseif cdata.type == "tube" or cdata.type == "coltube" then
 			return createColTube(cdata.position[1], cdata.position[2], cdata.position[3], cdata.radius, cdata.height)
-		elseif cdata.type == "rectangle" then
+		elseif cdata.type == "rectangle" or cdata.type == "colrectangle" then
 			return createColRectangle(cdata.position[1], cdata.position[2], cdata.position[3], cdata.width, cdata.depth)
-		elseif cdata.type == "cube" or cdata.type == "cuboid" then
-			return createColCube(cdata.position[1], cdata.position[2], cdata.position[3], cdata.width, cdata.depth, cdata.height)
+		elseif cdata.type == "cube" or cdata.type == "cuboid" or cdata.type == "colcube" or cdata.type == "colcuboid" then
+			return createColCuboid(cdata.position[1], cdata.position[2], cdata.position[3], cdata.width, cdata.depth, cdata.height)
 		end
 	end,
 	ped = function(cdata)
@@ -121,7 +132,7 @@ local createdRepresentations = {}
 addEvent("onEDFLoad")
 addEvent("onEDFUnload")
 
-addEventHandler("onResourceStart", rootElement,
+addEventHandler("onResourceStart", root,
 	function (resource)
 		--stop here if the resource disables edf checking
 		if getResourceInfo(resource,"edf:represent") == "false" then
@@ -139,7 +150,7 @@ addEventHandler("onResourceStart", rootElement,
 				if edf[gamemode] then
 					for k, map in ipairs(startedResourceMaps) do
 						local mapElements = getElementChildren(map)
-						for k, element in ipairs(mapElements) do
+						for k2, element in ipairs(mapElements) do
 							edfRepresentElement(element, gamemode)
 						end
 					end
@@ -162,7 +173,7 @@ addEventHandler("onResourceStart", rootElement,
 	end
 )
 
-addEventHandler("onResourceStop", rootElement,
+addEventHandler("onResourceStop", root,
 	function (resource)
 		if edfStarted[resource] then return end
 		edfUnloadDefinition(resource)
@@ -336,7 +347,7 @@ function edfLoadDefinition(fromResource, inResource, alreadyLoaded)
 	until false
 	readScripts(serverScripts,clientScripts,fromResource)
 	--if we've reached this point, trigger the load event
-	local triggerFrom = rootElement
+	local triggerFrom = root
 	if getResourceState(fromResource) == "running" then
 		triggerFrom = getResourceRootElement(fromResource)
 	end
@@ -375,7 +386,7 @@ function edfUnloadDefinition(resource)
 	end
 	edf[resource] = nil
 
-	triggerEvent("onEDFUnload",rootElement,resource)
+	triggerEvent("onEDFUnload",root,resource)
 
 	return true
 end
@@ -404,7 +415,7 @@ function edfRepresentElement(theElement, resource, parentData, editorMode, restr
 	end
 
 	-- check all defined fields for validity and stores them in a parent data table
-	local parentData = parentData or {}
+	parentData = parentData or {}
 	for dataField, dataDefinition in pairs(elementDefinition.data) do
 		local checkedData = edfCheckElementData(theElement, dataField, dataDefinition)
 		if checkedData == nil then
@@ -497,7 +508,7 @@ function edfRepresentElement(theElement, resource, parentData, editorMode, restr
 					end
 
 					-- create our basic element
-					component = edfCreateBasic[definedChild.type](childData)
+					component = edfCreateBasic[definedChild.type](childData, editorMode)
 
 					componentHandle = component
 
@@ -530,9 +541,6 @@ function edfRepresentElement(theElement, resource, parentData, editorMode, restr
 								string.sub(dataValue, -1) == '!'
 							then
 								inherited[string.sub(dataValue,2,-2)] = true
-								-- get it from the parent data table
-								local parentDataField = string.sub(dataValue,2,-2)
-								dataValue = parentData[parentDataField]
 							end
 							subParentData[dataField] = dataField
 						end
@@ -598,7 +606,7 @@ function edfCreateElement(elementType, creatorClient, fromResource, parametersTa
 			childData[property] = parametersTable[property] or propertyData.default
 		end
 
-		theElement = edfCreateBasic[elementType](childData)
+		theElement = edfCreateBasic[elementType](childData, editorMode)
 
 		setElementInterior(theElement, parametersTable.interior)
 		setElementDimension(theElement, parametersTable.dimension)
@@ -620,9 +628,14 @@ function edfCreateElement(elementType, creatorClient, fromResource, parametersTa
 			if dataField == "position" then
 				edfSetElementPosition(newElement, dataValue[1], dataValue[2], dataValue[3])
 			elseif dataField == "rotation" then
-				edfSetElementRotation(newElement, dataValue[1], dataValue[2], dataValue[3])
+				edfSetElementRotation(newElement, dataValue[1], dataValue[2], dataValue[3], dataValue[4])
 			elseif dataField == "interior" then
-				setElementInterior(newElement, dataValue)
+				if dataValue == -1 then
+					setElementInterior(newElement, 0) -- Interior -1 only works on removeWorldModel (But element data must be set to -1)
+				else
+					setElementInterior(newElement, dataValue)
+				end
+				setElementData(newElement, dataField, dataValue)
 			elseif dataField == "dimension" then
 				setElementDimension(newElement, dataValue)
 			elseif dataField == "alpha" then
@@ -672,14 +685,11 @@ function edfCloneElement(theElement, editorMode )
 	parametersTable.alpha = edfGetElementAlpha(theElement) or 255
 
 	if isBasic[elementType] then
-		local childData = {}
 		for property, propertyData in pairs(edf[creatorResource]["elements"][elementType].data) do
 			--try to get the given value in target datatype
 			if convert[propertyData.datatype] then
 				parametersTable[property] = convert[propertyData.datatype](parametersTable[property])
 			end
-			--store the value, or its default
-			childData[property] = parametersTable[property] or propertyData.default
 		end
 
 		local oldElement = theElement
@@ -903,25 +913,24 @@ function edfSetElementPosition(element, px, py, pz)
 end
 
 --Sets an element's rotation, or its rotX/Y/Z element data
-function edfSetElementRotation(element, rx, ry, rz)
+function edfSetElementRotation(element, rx, ry, rz, rotOrder)
 	local ancestor = edfGetAncestor(element) or element
-	setElementData(ancestor, "rotation", {rx, ry, rz})
-
+	setElementData(ancestor, "rotation", {rx, ry, rz, rotOrder})
 	local etype = getElementType(element)
 	if etype == "object" or etype == "vehicle" then
-		if rx and ry and rz and setElementRotation(element, rx, ry, rz) then
+		if rx and ry and rz and setElementRotation(element, rx, ry, rz, rotOrder) then
 			triggerEvent ( "onElementPropertyChanged", ancestor, "rotation" )
 			return true
 		end
 	elseif etype == "player" or etype == "ped" then
-		if setElementRotation(element, 0, 0, rz) then
+		if setElementRotation(element, 0, 0, rz, rotOrder) then
 			triggerEvent ( "onElementPropertyChanged", ancestor, "rotation" )
 			return true
 		end
 	else
 		local handle = edfGetHandle(element)
 		if handle then
-			if setElementRotation(handle, rx, ry, rz) then
+			if setElementRotation(handle, rx, ry, rz, rotOrder) then
 				triggerEvent ( "onElementPropertyChanged", ancestor, "rotation" )
 				return true
 			end
@@ -1132,6 +1141,10 @@ function edfAddElementNodeData(node, resource)
 				-- update the data field description
 				dataFields[dname].description = xmlNodeGetAttribute(subnode,"description")
 												 or dataFields[dname].description
+				-- update the valid models value
+				local validModels = xmlNodeGetAttribute(subnode, "validModels")
+				dataFields[dname].validModels = validModels and split(validModels, ",") or dataFields[dname].validModels
+
 				-- update the required flag (default: true)
 				local requiredAttribute = xmlNodeGetAttribute(subnode,"required")
 				if requiredAttribute then

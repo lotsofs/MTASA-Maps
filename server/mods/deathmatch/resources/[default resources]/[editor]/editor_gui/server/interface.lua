@@ -7,11 +7,12 @@ local interface = {
 
 local interface_mt = {
 	__index = function(t, k)
+		if getUserdataType(t.res) ~= "resource-data" or getResourceState(t.res) ~= "running" then return end
 		return function(...) return call(t.res, k, ...) end
 	end
 }
 
-addEventHandler("onResourceStart", getRootElement(),
+addEventHandler("onResourceStart", root,
 	function(resource)
 		local name = getResourceName(resource)
 		if interface[name] then
@@ -21,7 +22,7 @@ addEventHandler("onResourceStart", getRootElement(),
 	end
 )
 
-addEventHandler("onResourceStart", getResourceRootElement(getThisResource()),
+addEventHandler("onResourceStart", resourceRoot,
 	function()
 		for name in pairs(interface) do
 			local resource = getResourceFromName(name)

@@ -10,7 +10,7 @@ local function syncElementRotation(element, value)
 	else --XYZ rotation
 		rx, ry, rz = unpack(value)
 	end
-	edf.edfSetElementRotation(element, rx, ry, rz)
+	edf.edfSetElementRotation(element, rx, ry, rz, "ZYX")
 end
 
 local function syncElementDimension(element, dim)
@@ -80,7 +80,7 @@ function syncProperty(property, value, element)
 		end
 	end
 end
-addEventHandler("syncProperty", getRootElement(), syncProperty)
+addEventHandler("syncProperty", root, syncProperty)
 
 function syncProperties(oldProperties, newProperties, element, undoredo)
 	local locked = element or getLockedElement(client)
@@ -127,4 +127,4 @@ function syncProperties(oldProperties, newProperties, element, undoredo)
 		end
 	end
 end
-addEventHandler("syncProperties", getRootElement(), syncProperties)
+addEventHandler("syncProperties", root, syncProperties)

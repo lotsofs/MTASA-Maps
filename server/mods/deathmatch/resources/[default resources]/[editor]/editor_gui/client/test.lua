@@ -4,6 +4,7 @@ local hideDialog
 local g_suspended
 local inBasicTest = false
 local lastTestGamemode
+local g_colPatchSetting
 
 function createTestDialog()
 	testDialog.window = guiCreateWindow ( screenX/2 - 110, screenY/2 - 145, 220, 290, "TEST", false )
@@ -31,7 +32,7 @@ function quickTest()
 	if tutorialVars.blockQuickTest then return end
 	if lastTestGamemode == "<None>" then lastTestGamemode = false end
 	editor_main.dropElement()
-	triggerServerEvent ( "testResource",localPlayer, text )
+	triggerServerEvent ( "testResource",localPlayer, lastTestGamemode )
 	unbindControl ( "toggle_test", "down", quickTest )
 	if tutorialVars.test then tutorialNext() end
 end
@@ -52,10 +53,10 @@ function testShowDialog()
 	local row = guiGridListAddRow ( testDialog.gamemodesList )
 	guiGridListSetItemText ( testDialog.gamemodesList, row, 1, "<None>", false, false )
 	for key,gamemodeName in ipairs(currentMapSettings.addedGamemodes) do
-		local row = guiGridListAddRow ( testDialog.gamemodesList )
-		guiGridListSetItemText ( testDialog.gamemodesList, row, 1, gamemodeName, false, false )
+		local row2 = guiGridListAddRow ( testDialog.gamemodesList )
+		guiGridListSetItemText ( testDialog.gamemodesList, row2, 1, gamemodeName, false, false )
 		if gamemodeName == lastTestGamemode then
-			set = row
+			set = row2
 		end
 	end
 	guiGridListSetSelectedItem(testDialog.gamemodesList,set,1)
@@ -114,7 +115,7 @@ addEventHandler("resumeGUI", root, resumeGUI)
 
 function stopTest()
 	--[[for k,player in ipairs(getElementsByType("player")) do
-		if player ~= getLocalPlayer() then
+		if player ~= localPlayer then
 			setElementDimension(player, editor_main.getWorkingDimension())
 		end
 	end]]
@@ -131,6 +132,26 @@ function testHideDialog()
 	setWorldClickEnabled ( true )
 	guiSetVisible ( testDialog.window, false )
 	bindControl ( "toggle_test", "down", quickTest )
+end
+
+function disableColPatchInTesting()
+	-- Store the current setting
+	g_colPatchSetting = sx_getOptionData("enableColPatch")
+	-- Already disabled?
+	if not g_colPatchSetting then return end
+	
+	-- Disable
+	guiCheckBoxSetSelected(dialog.enableColPatch.GUI.checkbox, false)
+	doActions()
+end
+
+function enableColPatchAfterTesting()
+	-- Wasnt enabled?
+	if not g_colPatchSetting then return end
+	
+	-- Enable
+	guiCheckBoxSetSelected(dialog.enableColPatch.GUI.checkbox, true)
+	confirmSettings()
 end
 
 function testStart()
@@ -161,8 +182,16 @@ local function freeroamStarting(resource)
 	setElementInterior(localPlayer,workingInterior)
 	setCameraInterior(workingInterior)
 	bindControl ( "toggle_test", "down", stopTest )
+	disableColPatchInTesting()
 end
 addEventHandler("onClientResourceStart", root, freeroamStarting)
+
+function freeroamStopping(resource)
+	if resource ~= getResourceFromName("freeroam") then return end
+	
+	enableColPatchAfterTesting()
+end
+addEventHandler("onClientResourceStop", root, freeroamStopping)
 
 function basicTest()
 	if (g_suspended) then return end
@@ -188,6 +217,8 @@ function basicTest()
 		for i, obj in pairs(getElementsByType("object")) do
 			setElementCollisionsEnabled(obj, true)
 		end
+		
+		enableColPatchAfterTesting()
 	else
 		editor_main.dropElement()
 		guiSetVisible(testDialog.window, false)
@@ -212,9 +243,19 @@ function basicTest()
 				setElementCollisionsEnabled(obj, false)
 			end
 		end
+		
+		disableColPatchInTesting()
 	end
 end
 
 function noDamageInBasicTest()
 	cancelEvent()
 end
+
+addEventHandler ( "saveloadtest_return", root,
+	function ( command )
+		if command == "new" or command == "open" then
+			lastTestGamemode = nil
+		end
+	end
+)
