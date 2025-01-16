@@ -1,0 +1,36 @@
+<meta>
+    <info name="Hidden Packages" longname="Hidden Packages (Colored Packages)" description="Hides many hidden packages around the map of San Andreas" author="S." packType="script" version="0.1"></info>
+	
+	<file src="icons/Red.png"/>
+	<file src="icons/Green.png"/>
+	<file src="icons/Yellow.png"/>
+	<file src="icons/Blue.png"/>
+	<file src="icons/White.png"/>
+	<file src="icons/Orange.png"/>
+	<file src="icons/Black.png"/>
+
+	<script src="accounts_server.lua" type="server"></script>
+	<script src="blipHandler_client.lua" type="client" validate="true"></script>
+	<script src="convert_server.lua" type="server"></script>
+	<script src="database_server.lua" type="server"></script>
+	<config src="help.xml" type="client"></config>
+	<script src="maphandler_server.lua" type="server"></script>
+	<script src="maphandler_client.lua" type="client" validate="true"></script>
+	<!-- meta.xml -->
+	<script src="packages_client.lua" type="client" validate="true"></script>
+	<script src="packages_shared.lua" type="shared" validate="true"></script>
+    <map src="packages.map" dimension="0"></map>
+	<script src="progression_client.lua" type="client" validate="true"></script>
+	<script src="progression_server.lua" type="server"></script>
+	<script src="radarZones_client.lua" type="client" validate="true"></script>
+	<script src="regions_client.lua" type="client" validate="true"></script>
+	<script src="regionHandler_client.lua" type="client" validate="true"></script>
+	<script src="reset_client.lua" type="client" validate="true"></script>
+	<script src="reset_server.lua" type="server"></script>
+	<script src="resource_client.lua" type="client" validate="true"></script>
+	<script src="resource_server.lua" type="server"></script>
+	<script src="uiBig_client.lua" type="client" validate="true"></script>
+	<script src="uiHandler_client.lua" type="client" validate="true"></script>
+	<script src="uiSmall_client.lua" type="client" validate="true"></script>
+
+</meta>

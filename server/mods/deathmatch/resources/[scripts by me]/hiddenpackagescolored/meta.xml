@@ -1,8 +1,0 @@
-<meta>
-    <info version="1.0.0"></info>
-	<info name="Hidden Packages" longname="Hidden Packages (Colored Packages)" description="Lets people play a Multiplayer mod by themselves" author="S." type="script" version="0.1" />
-    <map src="amisc-packages3.map" dimension="0"></map>
-    <script src="packages_client.lua" type="client" validate="true"></script>
-    <script src="packages_server.lua" type="server"></script>
-	<config src="help.xml" type="client" />
-</meta>

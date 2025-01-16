@@ -1,0 +1,20 @@
+<def name="Import Export">
+
+	<element name="exportable" friendlyname="Exportable" icon="exportable.png">
+		<data name="position" type="coord3d" default="0,0,0"/>
+		<data name="rotation" type="coord3d" default="0,0,0"/>
+		<data name="vehicle" type="vehicleID" default="400" required="true" />
+		<vehicle model="!vehicle!" editorOnly="true"/>
+	</element>
+
+	<element name="cameraposition" friendlyname="Camera Position" icon="camera.png">
+		<data name="position" type="coord3d" default="0,0,0"/>
+		<marker size="1" type="corona" posZ="0" color="#00ffffff" editorOnly="true"/>
+	</element>
+
+	<element name="cameratarget" friendlyname="Camera Target" icon="cameratarget.png">
+		<data name="position" type="coord3d" default="0,0,0"/>
+		<marker size="1" type="corona" posZ="0" color="#ff0000ff" editorOnly="true"/>
+	</element>
+
+</def>

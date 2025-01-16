@@ -1,0 +1,57 @@
+<help>Various Hidden Packages have been hidden around San Andreas, waiting for you to collect them. Can you collect them all?
+
+New areas are added periodically.
+
+~~~Colors~~~
+The hidden packages come in various colors, each with different meanings:
+White: Regular packages, accessible by most ground vehicles.
+Blue: Water packages, accessible by boats only.
+Orange: Sky packages, accessible by aircraft only.
+Green: Narrow packages, accessible by bikes only.
+Yellow: Difficult packages. These are harder to find or get to.
+Red: Extreme packages. These are harder to find and get to.
+Black: These are only available in specific races, set in customly built maps.
+
+~~~Commands~~~
+To help you look for packages, the following commands are available to enable/disable useful features:
+
+/toggleRadar
+This will mark areas on the map, coloring them based on the number of packages you've collected. A black area means you've found no packages there, a white area means you've found all of them. For anything in between use color mixing principles: More red means more red and yellow collected packages, more green means more white and green collected packages, and more blue means more blue and orange collected packages. Areas that have not been colored do not have any packages in them.
+
+/toggleBlips
+This will show blips on your map for each package you've already found.
+
+/toggleUI
+This will display a panel with statistics on your collected packages, helping you keep track of how many you've already found.
+
+/toggleBigUI
+(Experimental) This will display a large panel showing a square for each package: Unfilled for uncollected, filled for collected previously, half-filled for collected recently. Use arrow keys to switch pages.
+
+/togglePackages
+In case you wish to opt out of the Hidden Package hunting program, you may disable them using this command. They won't show up for you anymore.
+
+/resetPackages
+This will reset your progress of collected packages. You must specify which packages to reset, using &apos;all&apos; to reset all your progress: &quot;/resetPackages all&quot;. See the Advanced Package Resetting section for other ways to use this feature.
+
+Pro-tip: You can bind these commands to a key using /bind
+
+~~~Advanced Package Resetting~~~
+Typing this command by its own does nothing. You must specify which packages to reset, using &apos;all&apos; to reset all your progress:
+&quot;/resetPackages all&quot;
+
+You can also specify a list of specific packages to reset with each package in the format &apos;X999&apos; where X is a shorthand color code and 999 is the package number.
+Shorthand color codes are: W(hite), G(reen), B(lue), O(range), Y(ellow), R(ed), (blac)K
+Package numbers are their numbers as found on the Big UI. 
+Separate multiple packages with spaces
+For example: &quot;/resetPackages W12 Y128&quot; will reset white package number 12 (the one found in Bayside Mountains), and yellow package number 128 (the one in Blueberry).
+
+You can also specify region or map names to reset all packages in that region or map. Region names are to be typed in all lowercase without spaces or special characters. Maps use their file or folder name.
+For example: &quot;/resetPackages kaccmilitaryfuels CC24TreetopTown&quot; to reset all packages in region K.A.C.C. Military Fuels and on the map CC24 - Treetop Town.
+
+Warning: there will be no confirmation prompt, and this can't be undone. Use with caution.
+
+~~~Closing Thoughts~~~
+Note: Login is required in order to save progress.
+
+Happy Searching! :)
+</help>

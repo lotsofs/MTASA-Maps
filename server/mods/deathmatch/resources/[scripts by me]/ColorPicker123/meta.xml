@@ -1,0 +1,15 @@
+<meta>
+	<info name="Color Picker 123" longname="Color Picker 123" description="" author="LotsOfS" type="script" version="2.1" />
+	<script src="server.lua" type="server" />
+	<script src="colorpicker.lua" type="client" />
+	<script src="client_util.lua" type="client" />
+	<script src="xml.lua" type="client" />
+	<script src="infoText.lua" type="client" />
+	<script src="defaultSettings.lua" type="client" />
+	<script src="settings.lua" type="client" />
+	<script src="gui.lua" type="client" />
+	<script src="script.lua" type="client" />
+	<file src="palette.png" />
+	<file src="alpha.png" />
+	<config src="help.xml" type="client" />
+</meta>
