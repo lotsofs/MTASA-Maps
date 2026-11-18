@@ -1,0 +1,113 @@
+diff --git a/[gameplay]/achievements/achievements_list.lua b/[gameplay]/achievements/achievements_list.lua
+index cc60f048..61d5b077 100644
+--- a/[gameplay]/achievements/achievements_list.lua
++++ b/[gameplay]/achievements/achievements_list.lua
+@@ -39,6 +39,8 @@ achievementsList = {
+ 		{ "general_36.png", "Lucky One", 			50, "Collect every horseshoe\nin the Las Venturas" },
+ 		{ "general_37.png", "Annihilator", 			100, "Gain 100 kills on derby\n maps" },
+ 		{ "general_38.png", "Finally Got Over It", 	3, "Finish all Getting over it\nwith BMX maps" }
++		-- { ID = "prophuntProps25",		name = "Prop Professional",			stages = 25,	description = "Find original count of 25\nunique Props on Prop Hunt"},
++		{ ID = "prophuntProps40",		name = "Prop Predator",				stages = 40,	description = "Find all 40 unique Props\non Prop Hunt"},
+ 	},
+ 	["disco"] = {
+ 		{ "disco_1.png", "Come Fly With Me", 		1, "Finish Squalo II map with\nSkimmer plane" },
+diff --git a/[gameplay]/achievements/meta.xml b/[gameplay]/achievements/meta.xml
+index 68f90e41..439787b4 100644
+--- a/[gameplay]/achievements/meta.xml
++++ b/[gameplay]/achievements/meta.xml
+@@ -59,6 +59,7 @@
+ 	<file src="icons/general_36.png" type="client"></file>
+ 	<file src="icons/general_37.png" type="client"></file>
+ 	<file src="icons/general_38.png" type="client"></file>
++	<file src="icons/prophuntProps40.png" type="client"></file>
+ 	
+ 	<file src="icons/gray/disco_1.png" type="client"></file>
+ 	<file src="icons/gray/disco_2.png" type="client"></file>
+@@ -117,6 +118,7 @@
+ 	<file src="icons/gray/general_37.png" type="client"></file>
+ 	<file src="icons/gray/general_38.png" type="client"></file>
+ 	
++	<file src="icons/gray/prophuntProps40.png" type="client"></file>
+ 	
+ 	
+ 	<file src="s.mp3" type="client"></file>
+diff --git a/[maps]/[MG]/PropHunt/ph_server.lua b/[maps]/[MG]/PropHunt/ph_server.lua
+index 0f9c1af0..54bb6590 100644
+--- a/[maps]/[MG]/PropHunt/ph_server.lua
++++ b/[maps]/[MG]/PropHunt/ph_server.lua
+@@ -1,32 +1,48 @@
+ 
+ props = {
+-    {['model'] = 3243, ['resize'] = 1,    ['zoffset'] = 0.34, ['description'] = 'a TeePee'                   },
+-    {['model'] = 3615, ['resize'] = 1,    ['zoffset'] = 2.53, ['description'] = 'a beach hut'                },
+-    {['model'] = 3426, ['resize'] = 0.25, ['zoffset'] = 0.27, ['description'] = 'an oil pump'                },
+-    {['model'] = 3175, ['resize'] = 1,    ['zoffset'] = 0.34, ['description'] = 'a trailer'                  },
+-    {['model'] = 1454, ['resize'] = 1,    ['zoffset'] = 1.14, ['description'] = 'a hay bale'                 },
+-    {['model'] = 3337, ['resize'] = 1,    ['zoffset'] = 0.34, ['description'] = 'a green sign'               },
+-    {['model'] = 3244, ['resize'] = 1,    ['zoffset'] = 0.34, ['description'] = 'a big power pylon'          },
+-    {['model'] = 3269, ['resize'] = 0.25, ['zoffset'] = 0.34, ['description'] = 'an airplane wreck'          },
+-    {['model'] = 3350, ['resize'] = 1,    ['zoffset'] = 0.34, ['description'] = "Mike's Mic"                 },
+-    {['model'] = 3524, ['resize'] = 1,    ['zoffset'] = 1.98, ['description'] = 'a flaming skull'            },
+-    {['model'] = 1349, ['resize'] = 1,    ['zoffset'] = 0.91, ['description'] = 'a shopping cart'            },
+-    {['model'] = 1280, ['resize'] = 1,    ['zoffset'] = 0.73, ['description'] = 'a park bench'               },
+-    {['model'] = 1211, ['resize'] = 1,    ['zoffset'] = 0.94, ['description'] = 'a fire hydrant'             },
+-    {['model'] = 3594, ['resize'] = 1,    ['zoffset'] = 1.05, ['description'] = 'a car wreck'                },
+-    {['model'] = 712 , ['resize'] = 1,    ['zoffset'] = 9.45, ['description'] = 'a small palm tree'          },
+-    {['model'] = 1341, ['resize'] = 1,    ['zoffset'] = 1.35, ['description'] = 'an ice cream cart'          },
+-    {['model'] = 1676, ['resize'] = 1,    ['zoffset'] = 1.92, ['description'] = 'a gas pump'                 },
+-    {['model'] = 1373, ['resize'] = 1,    ['zoffset'] = 2.90, ['description'] = 'a railroad crossing sign'   },
+-    {['model'] = 3853, ['resize'] = 1,    ['zoffset'] = 4.22, ['description'] = 'a fabulous lamp post'       },
+-    {['model'] = 1369, ['resize'] = 1,    ['zoffset'] = 0.97, ['description'] = 'a rusty wheelchair'         },
+-    {['model'] = 1461, ['resize'] = 1,    ['zoffset'] = 1.14, ['description'] = 'a personal flotation device'},
+-    {['model'] = 1215, ['resize'] = 1,    ['zoffset'] = 0.91, ['description'] = 'a bollard light'            },
+-    {['model'] = 1319, ['resize'] = 1,    ['zoffset'] = 0.89, ['description'] = 'a striped bollard'          },
+-    {['model'] = 973 , ['resize'] = 1,    ['zoffset'] = 1.37, ['description'] = 'a road barrier'             },
+-    {['model'] = 3281, ['resize'] = 1,    ['zoffset'] = 1.36, ['description'] = 'an xtreme pro-laps sign'    },
+-    {['model'] = 1256, ['resize'] = 1,    ['zoffset'] = 1.00, ['description'] = 'a stone bench'              },
+--- [7981] -- small radar
++	{['model'] = 3243, ['resize'] = 1,    ['zoffset'] = 0.34, ['description'] = 'a TeePee'                   },
++	{['model'] = 3615, ['resize'] = 1,    ['zoffset'] = 2.53, ['description'] = 'a beach hut'                },
++	{['model'] = 3426, ['resize'] = 0.25, ['zoffset'] = 0.27, ['description'] = 'an oil pump'                },
++	{['model'] = 3175, ['resize'] = 1,    ['zoffset'] = 0.34, ['description'] = 'a trailer'                  },
++	{['model'] = 1454, ['resize'] = 1,    ['zoffset'] = 1.14, ['description'] = 'a hay bale'                 },
++	{['model'] = 3337, ['resize'] = 1,    ['zoffset'] = 0.34, ['description'] = 'a green sign'               },
++	{['model'] = 3244, ['resize'] = 1,    ['zoffset'] = 0.34, ['description'] = 'a big power pylon'          },
++	{['model'] = 3269, ['resize'] = 0.25, ['zoffset'] = 0.34, ['description'] = 'an airplane wreck'          },
++	{['model'] = 3350, ['resize'] = 1,    ['zoffset'] = 0.34, ['description'] = "Mike's Mic"                 },
++	{['model'] = 3524, ['resize'] = 1,    ['zoffset'] = 1.98, ['description'] = 'a flaming skull'            },
++	{['model'] = 1349, ['resize'] = 1,    ['zoffset'] = 0.91, ['description'] = 'a shopping cart'            },
++	{['model'] = 1280, ['resize'] = 1,    ['zoffset'] = 0.73, ['description'] = 'a park bench'               },
++	{['model'] = 1211, ['resize'] = 1,    ['zoffset'] = 0.94, ['description'] = 'a fire hydrant'             },
++	{['model'] = 3594, ['resize'] = 1,    ['zoffset'] = 1.05, ['description'] = 'a car wreck'                },
++	{['model'] = 712 , ['resize'] = 1,    ['zoffset'] = 9.45, ['description'] = 'a small palm tree'          },
++	{['model'] = 1341, ['resize'] = 1,    ['zoffset'] = 1.35, ['description'] = 'an ice cream cart'          },
++	{['model'] = 1676, ['resize'] = 1,    ['zoffset'] = 1.92, ['description'] = 'a gas pump'                 },
++	{['model'] = 1373, ['resize'] = 1,    ['zoffset'] = 2.90, ['description'] = 'a railroad crossing sign'   },
++	{['model'] = 3853, ['resize'] = 1,    ['zoffset'] = 4.22, ['description'] = 'a fabulous lamp post'       },
++	{['model'] = 1369, ['resize'] = 1,    ['zoffset'] = 0.97, ['description'] = 'a rusty wheelchair'         },
++	{['model'] = 1461, ['resize'] = 1,    ['zoffset'] = 1.14, ['description'] = 'a personal flotation device'},
++	{['model'] = 1215, ['resize'] = 1,    ['zoffset'] = 0.91, ['description'] = 'a bollard light'            },
++	{['model'] = 1319, ['resize'] = 1,    ['zoffset'] = 0.89, ['description'] = 'a striped bollard'          },
++	{['model'] = 973 , ['resize'] = 1,    ['zoffset'] = 1.2, ['description'] = 'a road barrier'             },
++	{['model'] = 3281, ['resize'] = 1,    ['zoffset'] = 1.36, ['description'] = 'an xtreme pro-laps sign'    },
++	{['model'] = 1256, ['resize'] = 1,    ['zoffset'] = 1.00, ['description'] = 'a stone bench'              },
++	{['model'] = 1216, ['resize'] = 1,    ['zoffset'] = 1.00, ['description'] = 'a payphone'                 },
++	{['model'] = 1257, ['resize'] = 1,    ['zoffset'] = 1.625, ['description'] = 'a bus stop shelter'         },
++	{['model'] = 1219, ['resize'] = 1,    ['zoffset'] = 0.61, ['description'] = 'a wooden pallet'            },
++	{['model'] = 1267, ['resize'] = 0.5,  ['zoffset'] = 8.4, ['description'] = 'a double billboard'         },
++	{['model'] = 1285, ['resize'] = 1,    ['zoffset'] = 0.9, ['description'] = 'a yellow newspaper stand'   },
++	{['model'] = 1300, ['resize'] = 1,    ['zoffset'] = 0.69, ['description'] = 'a rectangular bin'          },
++	{['model'] = 1415, ['resize'] = 1,    ['zoffset'] = 0.47, ['description'] = 'a wood filled dumpster'     },
++	{['model'] = 1690, ['resize'] = 1,    ['zoffset'] = 1.01, ['description'] = 'a pair of small roof vents' },
++	{['model'] = 1498, ['resize'] = 1,    ['zoffset'] = 0.34, ['description'] = 'a white door'               },
++	{['model'] = 956,  ['resize'] = 1,    ['zoffset'] = 0.75, ['description'] = 'a candy vending machine'    },
++	{['model'] = 1365, ['resize'] = 1,    ['zoffset'] = 1.5, ['description'] = 'a large waste container'    },
++	{['model'] = 1503, ['resize'] = 1,    ['zoffset'] = 0.75, ['description'] = 'a small makeshift ramp'     },
++	{['model'] = 3852, ['resize'] = 1,    ['zoffset'] = 1.9, ['description'] = 'a concrete utility shed'    },
++	{['model'] = 3458, ['resize'] = 0.6,  ['zoffset'] = 1.25, ['description'] = 'a car shade'                },
++	-- [7981] -- small radar
++	-- [963]  -- a ticket machine
++    -- [955]  -- a soda vending machine
+ }
+ 
+ offsets = { {80, -80},
