@@ -24,6 +24,9 @@
       <object name="resource.admin2" />
       <object name="resource.webadmin" />
       <object name="resource.acpanel" />
+      <object name="resource.mapratings" />
+      <object name="resource.mapsearcher" />
+      <object name="user.asdf" />
    </group>
    <group name="Console">
       <acl name="Moderator" />
@@ -67,7 +70,7 @@
       <right name="command.refreshall" access="false" />
       <right name="command.addaccount" access="false" />
       <right name="command.delaccount" access="false" />
-      <right name="command.debugscript" access="false" />
+      <right name="command.debugscript" access="true" />
       <right name="command.chgpass" access="false" />
       <right name="command.loadmodule" access="false" />
       <right name="command.unloadmodule" access="false" />
