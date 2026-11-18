@@ -1,3 +1,8 @@
 [submodule "mta-annotations"]
 	path = mta-annotations
 	url = https://gitlab.com/IIYAMA12/mta-annotations-for-lua-language-server.git
+[submodule "external/robot-mta-server"]
+	path = external/robot-mta-server
+	url = https://gitlab.com/The123robot/robot-mta-server.git
+	branch = develop
+	ignore = dirty
