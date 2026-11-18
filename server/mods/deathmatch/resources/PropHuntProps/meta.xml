@@ -1,0 +1,33 @@
+<meta>
+    <min_mta_version server="1.5.8-9.20957"></min_mta_version>
+    <script src="ph_client.lua" type="client"></script>
+    <script src="ph_server.lua" type="server"></script>
+    <script src="customMapEditorScriptingExtension_s.lua" type="server"></script>
+    <info gamemodes="race" type="map" name="Prop Hunt" author="Ali Digitali" version="1.0.0" description="ImPROPer PROPrietary PROPellant PROPerties PROPaganda PROPosed PROPhetic PROPonents PROPagate PROPortionally misapPROPiately."></info>
+    <map src="PropHuntProps.map" dimension="0"></map>
+    <settings>
+        <setting name="#skins" value='[ &quot;random&quot; ]'></setting>
+        <setting name="#shufflespawns" value='[ &quot;false&quot; ]'></setting>
+        <setting name="#gamespeed" value="[ 1 ]"></setting>
+        <setting name="#countdownduration" value="[ -1 ]"></setting>
+        <setting name="#vehicleweapons" value='[ &quot;false&quot; ]'></setting>
+        <setting name="#minplayers" value="[ 0 ]"></setting>
+        <setting name="#waveheight" value="[ 0 ]"></setting>
+        <setting name="#firewater" value='[ &quot;false&quot; ]'></setting>
+        <setting name="#duration" value="[ 1800 ]"></setting>
+        <setting name="#respawn" value='[ &quot;timelimit&quot; ]'></setting>
+        <setting name="#maxplayers" value="[ 128 ]"></setting>
+        <setting name="#useLODs" value="[ true ]"></setting>
+        <setting name="#time" value="12:0"></setting>
+        <setting name="#autopimp" value='[ &quot;true&quot; ]'></setting>
+        <setting name="#hunterminigun" value='[ &quot;false&quot; ]'></setting>
+        <setting name="#ghostmode" value='[ &quot;true&quot; ]'></setting>
+        <setting name="#allowonfoot" value='[ &quot;false&quot; ]'></setting>
+        <setting name="#gravity" value="[ 0.0080000004 ]"></setting>
+        <setting name="#weather" value="[ 0 ]"></setting>
+        <setting name="#respawntime" value="[ 1 ]"></setting>
+        <setting name="#locked_time" value="[ true ]"></setting>
+        <setting name="#timeafterfirstfinish" value="[ -1 ]"></setting>
+        <setting name="#classicchangez" value='[ &quot;false&quot; ]'></setting>
+    </settings>
+</meta>
