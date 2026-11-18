@@ -381,46 +381,132 @@ function matrix_mult_vec(m, x, y, z)
 	x*m[1][3] + y*m[2][3] + z*m[3][3]
 end
 function transposeMatrix(m)
-	return {{m[1][1], m[2][1], m[3][1]},
-	{m[1][2], m[2][2], m[3][2]},
-	{m[1][3], m[2][3], m[3][3]}}
+	return {
+		{m[1][1], m[2][1], m[3][1], m[1][4]},
+		{m[1][2], m[2][2], m[3][2], m[2][4]},
+		{m[1][3], m[2][3], m[3][3], m[3][4]},
+		{m[4][1], m[4][2], m[4][3], m[4][4]},
+	}
+end
+
+-- vehicleMatrix is the column-major 4x4 matrix, a 3x3 rotation with translation in the fourth column. (Basically homogeneous but not using all features.)
+-- desiredDirection is a 2-vector {x, y}. Something like {x, y, z} is tolerated but gets z ignored.
+-- The matrix has its heading changed in place and is returned.
+function makeVehicleFaceHeading(vehicleMatrix, desiredDirection)
+    local parallel = desiredDirection[1] * vehicleMatrix[2][1] + desiredDirection[2] * vehicleMatrix[2][2]
+    local perpendicular = desiredDirection[1] * vehicleMatrix[2][2] - desiredDirection[2] * vehicleMatrix[2][1]
+    local lengthSquared = parallel * parallel + perpendicular * perpendicular
+    if lengthSquared > 0 then -- When facing straight up or down, there is no sense of heading. Don't do anything in that case.
+        local length = math.sqrt(lengthSquared)
+        parallel = parallel / length
+        perpendicular = perpendicular / length
+        for i = 1, 3 do -- Only do 3 to rotate around the vehicle's origin, not the world's origin.
+            vehicleMatrix[i][1], vehicleMatrix[i][2] =
+                parallel * vehicleMatrix[i][1] + perpendicular * vehicleMatrix[i][2],
+                parallel * vehicleMatrix[i][2] - perpendicular * vehicleMatrix[i][1]
+        end
+    end
+    return vehicleMatrix
+end
+
+function rotateMatrixByAngle(m,a) 
+	local cos = math.cos(a)
+	local sin = math.sin(a)
+	local msin = sin * -1
+	return { 
+		{cos*m[1][1]+msin*m[2][1],cos*m[1][2]+msin*m[2][2], m[1][3], m[1][4]},
+		{sin*m[1][1]+cos*m[2][1],sin*m[1][2]+cos*m[2][2], m[2][3], m[2][4]},
+		{m[3][1], m[3][2], m[3][3], m[3][4]},
+		{m[4][1], m[4][2], m[4][3], m[4][4]}
+	}
+end
+
+function getAngleWithXAxis(x,y)
+	return getAngleAtOrigin(1,0,x,y)
+end
+
+function getAngleAtOrigin(aX,aY,bX,bY)
+	if ((aX == 0 and aY == 0) or (bX == 0 and bY == 0)) then
+		-- One dot is the origin. We'll pretend the angle is 0
+		return 0
+	end
+	dotProduct = aX*bX+aY*bY
+	magnitudeA = math.sqrt(aX*aX+aY*aY)
+	magnitudeB = math.sqrt(bX*bX+bY*bY)
+	cosineTheta = dotProduct/(magnitudeA*magnitudeB)
+	theta = math.acos(cosineTheta)
+
+	crossProduct = aX*bY-aY*bX
+	if (crossProduct < 0) then
+		return (math.pi*2)-theta
+	else
+		return theta
+	end
 end
 
 function twistTest()
+	-- iprint(getElementMatrix(vehicle))
+	
 	local vehicle = getPedOccupiedVehicle(localPlayer)
+	local velocityX, velocityY, velocityZ = getElementVelocity(vehicle)
+	local velocityAngle = getAngleWithXAxis(velocityX,velocityY)
+	local basicMatrix = {{1, 0, 0, 0},{0, 1, 0, 0},{0, 0, 1, 0},{0, 0, 0, 1}}
+	local rotatedMatrix = rotateMatrixByAngle(basicMatrix, velocityAngle)
+	local newVelocityX, newVelocityY, newVelocityZ = matrix_mult_vec(rotatedMatrix, velocityX, velocityY, velocityZ)
+	setElementVelocity(vehicle, newVelocityX, newVelocityY, newVelocityZ)
+
 	local matrix = getElementMatrix(vehicle, false)
-	local transposedMatrix = transposeMatrix(matrix)
-	local vx,vy,vz = getElementVelocity(vehicle)
-	-- local avx,avy,avz = getElementAngularVelocity(vehicle)
-	iprint(matrix)
+	local rotationX, rotationY, rotationZ = matrix_mult_vec(rotatedMatrix, 1, 1, 1)
+	local rotationAngle = getAngleWithXAxis(matrix[2][2],matrix[1][2])
+	-- standard rotation points us north. We want to point east to align with world rotation.
+	-- When upside down, it will point us 180 the wrong direction. Compensate.
+	local offset = math.pi/2
+	if (matrix[3][3] < 0) then
+		offset = offset * -1
+	end
+	local rotatedTransposedMatrix = rotateMatrixByAngle(matrix, rotationAngle+offset)
+	setElementMatrix(vehicle,rotatedTransposedMatrix)
 
-	nu,nv,nw = matrix_mult_vec(transposedMatrix, u,v,w) -- Store this permanently
-	local ox,oy,oz = unpack(matrix[4])
-	-- iprint(ox,oy,oz)
-	
-	-- 0 1 0, -1 0 0, 0 0 1
-	local testMatrix = {{1, 0, 0, 0},{0, 1, 0, 0},{0, 0, 1, 0},{ox, oy, oz, 1}}
-	local testMatrix = {{-0.707, 0, -0.707, 0},{0, 1, 0, 0},{0.707, 0, -0.707, 0},{ox, oy, oz, 1}}
-	-- local testMatrix = {{0.707, -0.707, 0, 0},{0.707, 0.707, 0, 0},{0, 0, 1, 0},{ox, oy, oz, 1}}
-	-- local testMatrix = {{1, 0, 0, 0},{0, 0.707, 0.707, 0},{0, -0.707, 0.707, 0},{ox, oy, oz, 1}}
-	local x,y,z = unpack(testMatrix[4])
-	local dx,dy,dz = matrix_mult_vec(testMatrix,nu,nv,nw)
-	setElementMatrix(vehicle,testMatrix)
-	-- setElementVelocity(vehicle,dx,dy,dz)
-
-
-	-- local vehicle = getPedOccupiedVehicle(localPlayer)
+	-- setElementRotation(vehicle, 1, 0, 0)
 	-- local matrix = getElementMatrix(vehicle, false)
-	-- local testMatrix = {{0,1,0,0},{-1,0,0,0},{0,0,1,0},{645, -2335, 2, 1}}
-
 	-- local transposedMatrix = transposeMatrix(matrix)
-	-- local vx, vy, vz = getElementVelocity(vehicle)
-	-- local vx2, vy2, vz2 = matrix_mult_vec(matrix, vx, vy, vz)
+	-- local vx,vy,vz = getElementVelocity(vehicle)
+	-- -- local avx,avy,avz = getElementAngularVelocity(vehicle)
+	-- iprint(matrix)
 
-	-- local dx, dy, dz = matrix_mult_vec(testMatrix, vx2, vy2, vz2)
-	-- dxDrawLine3D(x,y,z,x+u*20,y+v*20,z+w*20)
+	-- nu,nv,nw = matrix_mult_vec(transposedMatrix, vx, vy, vz) -- Store this permanently
+	-- local ox,oy,oz = unpack(matrix[4]) -- Destination position coordinates
+	-- iprint(nu,nv,nw)
+	-- local velocityMatrix = {{vx, 0, 0, 0},{0, vy, 0, 0},{0, 0, vz, 0},{ox, oy, oz, 1}}
 	
-	-- setElementMatrix(vehicle, testMatrix)
+	-- -- 0 1 0, -1 0 0, 0 0 1
+	-- local testMatrix = {{1, 0, 0, 0},{0, 1, 0, 0},{0, 0, 1, 0},{ox, oy, oz, 1}}
+	-- -- local testMatrix = {{-0.707, 0, -0.707, 0},{0, 1, 0, 0},{0.707, 0, -0.707, 0},{ox, oy, oz, 1}}
+	-- -- local testMatrix = {{0.707, -0.707, 0, 0},{0.707, 0.707, 0, 0},{0, 0, 1, 0},{ox, oy, oz, 1}}
+	-- -- local testMatrix = {{1, 0, 0, 0},{0, 0.707, 0.707, 0},{0, -0.707, 0.707, 0},{ox, oy, oz, 1}}
+	-- local x,y,z = unpack(testMatrix[4])
+	-- local dx,dy,dz = matrix_mult_vec(testMatrix,nu,nv,nw)
+	-- setElementMatrix(vehicle,testMatrix)
+
+	
+	-- local newVelocityX, newVelocityY, newVelocityZ = matrix_mult_vec(testMatrix, velocityMatrix[1][1], velocityMatrix[2][2], velocityMatrix[3][3])
+	-- -- local newVelocityX, newVelocityY, newVelocityZ = velocityMatrix[1][1], velocityMatrix[2][2], velocityMatrix[3][3]
+	-- setElementVelocity(vehicle,newVelocityX, newVelocityY, newVelocityZ)
+	-- -- setElementVelocity(vehicle,dx,dy,dz)
+	-- -- makeVehicleFaceHeading(matrix, testMatrix)
+
+	-- -- local vehicle = getPedOccupiedVehicle(localPlayer)
+	-- -- local matrix = getElementMatrix(vehicle, false)
+	-- -- local testMatrix = {{0,1,0,0},{-1,0,0,0},{0,0,1,0},{645, -2335, 2, 1}}
+
+	-- -- local transposedMatrix = transposeMatrix(matrix)
+	-- -- local vx, vy, vz = getElementVelocity(vehicle)
+	-- -- local vx2, vy2, vz2 = matrix_mult_vec(matrix, vx, vy, vz)
+
+	-- -- local dx, dy, dz = matrix_mult_vec(testMatrix, vx2, vy2, vz2)
+	-- -- dxDrawLine3D(x,y,z,x+u*20,y+v*20,z+w*20)
+	
+	-- -- setElementMatrix(vehicle, testMatrix)
 end
 bindKey("I", "down", twistTest)
 

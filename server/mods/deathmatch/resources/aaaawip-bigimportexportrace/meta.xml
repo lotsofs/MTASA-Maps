@@ -1,0 +1,42 @@
+<meta>
+    <script src="importexport_client.lua" type="client" validate="true"></script>
+    <script src="importexport_server.lua" type="server"></script>
+    <script src="at400_ramp_client.lua" type="client" validate="true"></script>
+    <script src="cheats_server.lua" type="server"></script>
+    <script src="cheats_client.lua" type="client" validate="true"></script>
+    <script src="crane_client.lua" type="client" validate="true"></script>
+    <script src="griefprotection_client.lua" type="client" validate="true"></script>
+    <script src="poll_server.lua" type="server"></script>
+    <script src="racegamemodehandler_client.lua" type="client" validate="true"></script>
+    <script src="tropic_bridgeprotection_client.lua" type="client" validate="true"></script>
+    <script src="ui_client.lua" type="client" validate="true"></script>
+    <script src="util_client.lua" type="client" validate="true"></script>
+    <script src="vehicle_names.lua" type="shared" validate="true"></script>
+	<script src="vehicles_scoreboard_c.lua" type="client" validate="true"></script>
+    <script src="vehicles_scoreboard_s.lua" type="server"></script>
+    <min_mta_version server="1.5.8"></min_mta_version>
+    <info gamemodes="race" type="map" name="[R] Big Import/Export Race" author="S." version="1.0.1" description="Big"></info>
+    <map src="new-race-superfleischbergautos.map" dimension="0"></map>
+    <settings>
+        <setting name="#skins" value='[ &quot;random&quot; ]'></setting>
+        <setting name="#gamespeed" value="[ 1 ]"></setting>
+        <setting name="#ghostmode" value='[ &quot;true&quot; ]'></setting>
+        <setting name="#vehicleweapons" value='[ &quot;true&quot; ]'></setting>
+        <setting name="#minplayers" value="[ 0 ]"></setting>
+        <setting name="#waveheight" value="[ 0 ]"></setting>
+        <setting name="#timeafterfirstfinish" value="[ -1 ]"></setting>
+        <setting name="#respawn" value='[ &quot;timelimit&quot; ]'></setting>
+        <setting name="#maxplayers" value="[ 128 ]"></setting>
+        <setting name="#useLODs" value="[ true ]"></setting>
+        <setting name="#time" value="6:0"></setting>
+        <setting name="#disableraceghosts" value="[ true ]"></setting>
+        <setting name="#gravity" value="[ 0.0080000004 ]"></setting>
+        <setting name="#weather" value="[ 7 ]"></setting>
+        <setting name="#respawntime" value="[ 0 ]"></setting>
+        <setting name="#locked_time" value="[ false ]"></setting>
+        <setting name="#duration" value="[ 172800 ]"></setting>
+        <setting name="#countdownduration" value="[ 6 ]"></setting>
+    </settings>
+    <script src="mapEditorScriptingExtension_s.lua" type="server"></script>
+    <script src="mapEditorScriptingExtension_c.lua" type="client" validate="false"></script>
+</meta>
