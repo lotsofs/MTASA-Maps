@@ -40,13 +40,13 @@ GitHub PR #6 ("Upgrade to 64-bit MTA server with modernized config", by SpeedyFo
 
 ## EMP — Resource folders with no meta.xml
 
-These folders in `server/mods/deathmatch/resources` have no `meta.xml`: `af-bikeorwalk`, `af-johnbull`, `atrash`, `aveh-426enforcer` and `RADADAnDADADomiser` are empty, and git doesn't track them. `aawip-newteamworkscripts` holds only a `Teamwork.lua` (see [TWK](wip.md#twk--teamwork-stadium-map)). `[maps]/[classics]/overlays` and `[maps]/[classics]/tools` are empty too. MTA treats every folder outside a `[...]` group as a resource, so each one should show up as a failed load when the server starts.
+These folders in `server/mods/deathmatch/resources` have no `meta.xml`: `af-bikeorwalk`, `af-johnbull`, `atrash`, `aveh-426enforcer` and `RADADAnDADADomiser` are empty, and git doesn't track them. `aawip-newteamworkscripts` holds only a `Teamwork.lua` (see [TWK](wip.md#twk--teamwork-stadium-map)). `[maps]/[classics]/overlays` and `[maps]/[classics]/tools` are empty too. The server skips them without complaint, so they're clutter, not a fault.
 
-**Evidence:** read 2026-11-19. A script that walks the folders the way MTA does found these, and found no duplicate resource names. The server wasn't started to see its messages.
+**Evidence:** read 2026-11-19. A script that walks the folders the way MTA does found these, and found no duplicate resource names. Reproduced 2026-11-19: with all of them present, the server's start in `server.log` reported "Resources: 9056 loaded, 0 failed" and named none of them.
 
 **Plan:** delete the empty folders. Move `aawip-newteamworkscripts/Teamwork.lua` into `aawip-newteamwork` under another name, or delete it once TWK has its notes.
 
-**Verify:** start the server and check that it reports no failed loads for these names.
+**Verify:** the folders are gone, and the server still reports 0 failed loads.
 
 **Docs when done:** none.
 

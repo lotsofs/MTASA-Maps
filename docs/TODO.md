@@ -13,7 +13,7 @@ Detail in [tasks.md](tasks.md).
 | [RDM](tasks.md#rdm--readme-source-link-is-broken) | readme | The readme's Super FleischBerg Autos "Folder Download / Source Code" link returns 404; the map's folder left this repo on 2024-10-22 and now lives in the 123robot repo | Medium |
 | [KEY](tasks.md#key--server-identity-key-and-registry-are-tracked-in-git) | server | `server-id.keys` (the server's identity key) and the 37 MB `registry.db` the server rewrites are committed to the public repo | Medium |
 | [PRS](tasks.md#prs--pull-request-6-is-superseded) | server | GitHub PR #6 (64-bit server upgrade) is still open, though commits on master made the same upgrade; take any config it has that master lacks, then close it | Low |
-| [EMP](tasks.md#emp--resource-folders-with-no-metaxml) | resources | Five empty folders and `aawip-newteamworkscripts` (a lone `Teamwork.lua`) sit among the resources with no `meta.xml`, so the server tries to load them and fails | Low |
+| [EMP](tasks.md#emp--resource-folders-with-no-metaxml) | resources | Five empty folders and `aawip-newteamworkscripts` (a lone `Teamwork.lua`) sit among the resources with no `meta.xml`; the server ignores them, so this is tidying only | Low |
 | [CPK](tasks.md#cpk--colorpicker123-gui-rebuild-is-dead-code) | ColorPicker123 | ColorPicker123's handler for rebuilding its GUI when `gamecenter` stops is commented out, and `recreateGui` is unused and noted as not working | Low |
 
 ## Work-in-progress maps
